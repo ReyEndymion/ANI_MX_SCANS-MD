@@ -20,10 +20,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/BrunoSobrino/TheMystic-Bot-MD.git"
+        "url": "git+https://github.com/ReyEndymion/ANI_MX_SCANS-MD.git"
     },
     "bugs": {
-        "url": "https://github.com/BrunoSobrino/TheMystic-Bot-MD/issues"
+        "url": "https://github.com/ReyEndymion/ANI_MX_SCANS-MD/issues"
     },
     "license": "MIT",
     "dependencies": {
