@@ -10,7 +10,7 @@ UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO BRUNO SOBRINO QUÉ ME AYUDÓ A DARLE
 ### `—◉ 👑 PARA CUALQUIER DUDA QUE PUEDA SURGIR CON ESTAS EDICIONES DEL BOT (INCLUYENDO FALTAS DE ORTOGRAFIA :v), CONTACTANOS 👑`
 <a href="http://wa.me/5219992095479" target="blank"><img src="https://img.shields.io/badge/BRUNO_SOBRINO_MAESTRO-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 
-<a href="http://wa.me/5215533827255" target="blank"><img src="https://img.shields.io/badge/BRUNO_SOBRINO_MAESTRO-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
+<a href="http://wa.me/5215533827255" target="blank"><img src="https://img.shields.io/badge/𝓡𝓮𝔂_𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 
 ### `—◉ 💰 DONAR 💰`
 - AGRADECE CON UNA DONACION VOLUNTARIA A MI MAESTRO 👺🤙🏻 [Aqui](https://www.paypal.me/TheShadowBrokers133)
