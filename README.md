@@ -1,5 +1,5 @@
 # 🌎 ANI MX SCANS 🌏
-Bot promocional del proyecto ANI MX SCANS
+Bot promocional del proyecto ANI MX SCANS by ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺
 
 UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO BRUNO SOBRINO QUÉ ME AYUDÓ A DARLE VIDA A MIS BOTS.
 (El otro bot es privado solo este se conoce entrando a los siguientes grupos:
