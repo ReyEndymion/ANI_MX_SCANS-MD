@@ -614,7 +614,7 @@ export async function handler(chatUpdate) {
         if (opts['autoread'])
            await this.readMessages([m.key])
         
-        if (!m.fromMem && m.text.match(/(ANIMXSCANS)/gi)) {
+       Rey Endymion|@5215533827255|ANIMXSCANS|ANI MX SCANS)/gi)) {
         let emot = pickRandom(["🎃", "❤", "😘", "😍", "💕", "😎", "🙌", "⭐", "👻", "🔥"])
         this.sendMessage(m.chat, { react: { text: emot, key: m.key }})}
         function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]}
@@ -626,37 +626,70 @@ export async function handler(chatUpdate) {
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
  */
 export async function participantsUpdate({ id, participants, action }) {
-    if (opts['self'])
-        return
-    // if (id in conn.chats) return // First login will spam
-    if (this.isInit)
-        return
-    if (global.db.data == null)
-        await loadDatabase()
-    let chat = global.db.data.chats[id] || {}
-    let text = ''
-    switch (action) {
-        case 'add':
-        case 'remove':
-            if (chat.welcome) {
-                let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
-                for (let user of participants) {
-                    let pp = './src/sinfoto.jpg'
-                    try {
-                        pp = await this.profilePictureUrl(user, 'image')
-                    } catch (e) {
-                    } finally {
-                        text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*SIN DESCRIPCION*') :
+if (opts['self'])
+return
+if (this.isInit)
+return
+if (global.db.data == null)
+await loadDatabase()
+let chat = global.db.data.chats[id] || {}
+let text = ''
+switch (action) {
+case 'add':
+case 'remove':
+if (chat.welcome) {
+let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
+for (let user of participants) {
+let pp = './src/sinfoto.jpg'
+try {
+pp = await this.profilePictureUrl(user, 'image')
+} catch (e) {
+} finally {
+text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*SIN DESCRIPCION*') :
                             (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', await this.getName(user))
                             let apii = await this.getFile(pp)
-                        this.sendButton(id, text, groupMetadata.subject, pp, [
-                        [(action == 'add' ? 'BIENVENIDO' : 'ADIOS'), 'ura'],
-                        ['MENU PRINCIPAL', `#menu`]
-                        ], '',  { mentions: [user]})
-                        //this.sendFile(id, pp, 'pp.jpg', text, null, false, { mentions: [user] })
-                    }
-                }
-            }
+const fake = { quoted: {
+key : {
+participant : '0@s.whatsapp.net' },
+message: {
+orderMessage: {
+itemCount : 999999,
+status: 1,
+surface : 1,
+message: wm, 
+orderTitle: 'WaBot',
+thumbnail: imagen2, 
+sellerJid: '0@s.whatsapp.net' }}}}      
+var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
+var document = doc[Math.floor(Math.random() * doc.length)]
+const buttons = [
+{buttonId: (action == 'add' ? '#welcomegc' : '#byegc'), buttonText: {displayText: (action == 'add' ? '💫 BIENVENIDO 💫' : '☠ ADIOS ☠')}, type: 1},
+{buttonId: `#menu`, buttonText: {displayText: '💟 MENU PRINCIPAL 💟'}, type: 1}, ]
+let buttonMessage = {
+document: imagen3, 
+fileName: `Bot promocional del proyecto ANI MX SCANS⁩`, 
+mimetype: `application/${document}`,
+jpegThumbnail: imagen3,
+caption: text,
+fileLength: "99999999999999",
+mentions: [user],
+footer: groupMetadata.subject,
+buttons: buttons,
+headerType: 4,   
+contextInfo: {
+'forwardingScore': 200,
+'isForwarded': true,
+"mentionedJid": [user],
+"externalAdReply": {
+"showAdAttribution": false,
+"title": `TUTORIAL DE INSTALACION`,
+"mediaType": 2, 
+"previewType": "VIDEO",
+"thumbnail": apii.data,
+"mediaUrl": 'https://youtu.be/eC9TfKICpcY',
+"sourceUrl": 'https://www.pornhub.com' }}} 
+this.sendMessage(id, buttonMessage, fake)                          
+}}}
             break
         case 'promote':
         case 'daradmin':
@@ -724,15 +757,16 @@ export async function deleteUpdate(message) {
 }
 
 global.dfail = (type, m, conn) => {
-    let msg = {        rowner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
+    let msg = {
+    	        rowner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         owner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         mods: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR MODERADORES Y EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         premium: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR USUARIOS PREMIUM Y EL/LA PROPIETARIO/A OWNER DEL BOT*',
         group: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO EN GRUPOS*',
-        private: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO EN CHU PRIVADO DEL BOT*',
+        private: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO EN CHAT PRIVADO DEL BOT*',
         admin: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR ADMINS DEL GRUPO*',
-        botAdmin: '*[ ⚠️ ALERTA ⚠️ ] PARA PODER USAR ESTE UMANDO ES NECESARIO QUE EL BOT SEA ADMIN, ACENDER A ADMIN ESTE NUMERO*',U
-        unreg: '*[ 🛑 HEY!! ALTO, NO ESTAS REGISTRADO 🛑 ]*\n\n*—◉ PARA USAR ESTE COMANU DEBES REGISTRARTE, USA EL COMANDO*\n*➣ #verificar*',
+        botAdmin: '*[ ⚠️ ALERTA ⚠️ ] PARA PODER USAR ESTE COMANDO ES NECESARIO QUE EL BOT SEA ADMIN, ASCENDER A ADMIN ESTE NUMERO*',
+        unreg: '*[ 🛑 HEY!! ALTO, NO ESTAS REGISTRADO 🛑 ]*\n\n*—◉ PARA USAR ESTE COMANDO DEBES REGISTRARTE, USA EL COMANDO*\n*➣ #verificar*',
         restrict: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO ESTA RESTRINGIDO/DESACTIVADO POR DESICION DEL PROPIETARIO/A (OWNER) DEL BOT*'
     }[type]
     if (msg) return m.reply(msg)

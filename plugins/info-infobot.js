@@ -18,30 +18,30 @@ let old = performance.now()
 let neww = performance.now()
 let speed = neww - old
 let info = `
-╠═〘 𝐈𝐍𝐅𝐎 𝐃𝐄𝐋 𝐁𝐎𝐓 〙 ═
+╠═〘 INFO DEL BOT 〙 ═
 ╠
-╠➥ [🤴🏻] 𝙲𝚁𝙴𝙰𝙳𝙾𝚁: *𝙱𝚛𝚞𝚗𝚘 𝚂𝚘𝚋𝚛𝚒𝚗𝚘*
-╠➥ [#️⃣] 𝙽𝙾° 𝙳𝙴𝙻 𝙲𝚁𝙴𝙰𝙳𝙾𝚁: *+52 1 999 209 5479*
-╠➥ [🎳] 𝙿𝚁𝙴𝙵𝙸𝙹𝙾: *${usedPrefix}*
-╠➥ [🔐] 𝙲𝙷𝙰𝚃𝚂 𝙿𝚁𝙸𝚅𝙰𝙳𝙾𝚂: *${chats.length - groups.length}*
-╠➥ [🦜] 𝙲𝙷𝙰𝚃𝚂 𝙳𝙴 𝙶𝚁𝚄𝙿𝙾𝚂: *${groups.length}* 
-╠➥ [💡] 𝙲𝙷𝙰𝚃𝚂 𝚃𝙾𝚃𝙰𝙻𝙴𝚂: *${chats.length}* 
-╠➥ [🚀] 𝙰𝙲𝚃𝙸𝚅𝙸𝙳𝙰𝙳: *${uptime}*
-╠➥ [🎩] 𝚄𝚂𝚄𝙰𝚁𝙸𝙾𝚂: *${totalreg} 𝚗𝚞𝚖𝚎𝚛𝚘𝚜*
-╠➥ [👨‍🦯] 𝚅𝙴𝙻𝙾𝙲𝙸𝙳𝙰𝙳: 
+╠➥ [🤴🏻] CREADOR: *𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷*
+╠➥ [#️⃣] No. DEL CREADOR: *wa.me/5215517489568*
+╠➥ [🎳] PREFIJO: *${usedPrefix}*
+╠➥ [🔐] CHATS PRIVADOS: *${chats.length - groups.length}*
+╠➥ [🦜] CHATS DE GRUPOS: *${groups.length}* 
+╠➥ [💡] CHATS TOTALES: *${chats.length}* 
+╠➥ [🚀] ACTIVIDAD: *${uptime}*
+╠➥ [🎩] USUARIOS: *${totalreg} NUMEROS*
+╠➥ [👨‍🦯] VELOCIDAD: 
 ╠  *${speed}* 
-╠  *𝚖𝚒𝚕𝚒𝚜𝚎𝚐𝚞𝚗𝚍𝚘𝚜*
-╠➥ [☑️] 𝙰𝚄𝚃𝙾𝚁𝙴𝙰𝙳: ${autoread ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
-╠➥ [❗] 𝚁𝙴𝚂𝚃𝚁𝙸𝙲𝚃: ${restrict ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'} 
+╠  *MILISEGUNDOS*
+╠➥ [☑️] AUTOREAD: ${autoread ? '*ACTIVADO*' : '*DESACTIVADO*'}
+╠➥ [❗] RESTRICT: ${restrict ? '*ACTIVADO*' : '*DESACTIVADO*'} 
 ╠
-╠═〘 𝐓𝐡𝐞 𝐌𝐲𝐬𝐭𝐢𝐜 - 𝐁𝐨𝐭 〙 ═
+╠═〘 🌎ANI MX SCANS🌏 〙 ═
 `.trim() 
 conn.reply(m.chat, info, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
-title: '𝙸𝙽𝙵𝙾 𝙳𝙴𝙻 𝙱𝙾𝚃',
-body: 'ᴛʜᴇ ᴍʏsᴛɪᴄ ﹣ ʙᴏᴛ',         
+title: 'INFO DEL BOT',
+body: '🌎ANI MX SCANS🌏',         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD`}}})
+sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']

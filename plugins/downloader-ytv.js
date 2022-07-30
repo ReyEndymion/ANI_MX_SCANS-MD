@@ -3,13 +3,13 @@ import fs from 'fs'
 import fetch from 'node-fetch'
 import { youtubedl, youtubedlv2, youtubedlv3 } from '@bochilteam/scraper';
 let handler = async (m, { conn, args, isPrems, isOwner, usedPrefix, command }) => {
-if (!args || !args[0]) throw `*[❗𝐈𝐍𝐅𝐎❗] 𝙸𝙽𝚂𝙴𝚁𝚃𝙴 𝙴𝙻 𝙲𝙾𝙼𝙰𝙽𝙳𝙾 𝙼𝙰𝚂 𝙴𝙻 𝙴𝙽𝙻𝙰𝙲𝙴 / 𝙻𝙸𝙽𝙺 𝙳𝙴 𝚄𝙽 𝚅𝙸𝙳𝙴𝙾 𝙳𝙴 𝚈𝙾𝚄𝚃𝚄𝙱𝙴*`
-conn.reply(m.chat, `*_⏳Sᴇ ᴇsᴛᴀ ᴘʀᴏᴄᴇsᴀɴᴅᴏ Sᴜ ᴠɪᴅᴇᴏ...⏳_*\n\n*◉ Sɪ Sᴜ ᴠɪᴅᴇᴏ ɴᴏ ᴇs ᴇɴᴠɪᴀᴅᴏ, ᴘʀᴜᴇʙᴇ ᴄᴏɴ ᴇʟ ᴄᴏᴍᴀɴᴅᴏ #playdoc ᴏ #play.2 ᴏ #ytmp4doc ◉*`, m, {
+if (!args || !args[0]) throw `*[❗INFO❗] INSERTE EL COMANDO MAS EL ENLACE / LINK DE UN VIDEO DE YOUTUBE*`
+conn.reply(m.chat, `*_⏳SE ESTA PROCESANDO SU VIDEO...⏳_*\n\n*◉ SI SU VIDEO NO Es ENVIADO, PRUEBE CON EL COMANDO #playdoc O #play.2 O #ytmp4doc ◉*`, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
-title: '𝚁𝙴𝙿𝚁𝙾𝙳𝚄𝙲𝚃𝙾𝚁 𝙳𝙴 𝚅𝙸𝙳𝙴𝙾',
-body: 'ʙʏ ᴛʜᴇ ᴍʏsᴛɪᴄ ﹣ ʙᴏᴛ',         
+title: 'REPRODUCTOR DE VIDEO',
+body: '🌎ANI MX SCANS🌏',         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD`}}})
+sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})
 let chat = global.db.data.chats[m.chat]
 const isY = /y(es)/gi.test(args[1])
 const { thumbnail, video: _video, title } = await youtubedl(args[0]).catch(async _ => await youtubedlv2(args[0])).catch(async _ => await youtubedlv3(args[0]))
@@ -30,13 +30,13 @@ if (source instanceof ArrayBuffer) break
 video = source = link = null
 lastError = e
 }}
-if ((!(source instanceof ArrayBuffer) || !link || !res.ok) && !isLimit) throw '*[❗] 𝙴𝚁𝚁𝙾𝚁: ' + (lastError || '𝙽𝙾 𝙵𝚄𝙴 𝙿𝙾𝚂𝙸𝙱𝙻𝙴 𝙳𝙴𝚂𝙲𝙰𝚁𝙶𝙰𝚁 𝙴𝙻 𝚅𝙸𝙳𝙴𝙾*')
+if ((!(source instanceof ArrayBuffer) || !link || !res.ok) && !isLimit) throw '*[❗] ERROR: ' + (lastError || 'NO FUE POSIBLE DESCARGAR EL VIDEO*')
 let _thumb = {}
 try { _thumb = { thumbnail: await (await fetch(thumbnail)).buffer() } }
 catch (e) { }
 conn.sendFile(m.chat, link, title + '.mp4', `
-*🔥 𝚃𝙸𝚃𝚄𝙻𝙾:* ${title}
-*📁 𝙿𝙴𝚂𝙾 𝙳𝙴𝙻 𝚅𝙸𝙳𝙴𝙾:* ${video.fileSizeH}
+*🔥 TITULO:* ${title}
+*📁 PESO DEL VIDEO:* ${video.fileSizeH}
 `.trim(), m, false, {
 ..._thumb,
 asDocument: chat.useDocument

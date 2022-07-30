@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks'
 let handler = async (m, { conn, text }) => {
-let start = `*☠ ¡¡𝙸𝙽𝙸𝙲𝙸𝙰𝙽𝙳𝙾 𝙳𝙾𝚇𝚇𝙴𝙾!! ☠*`
+let start = `*☠ ¡¡INICIANDO DOXXEO!! ☠*`
 let boost = `*${pickRandom(['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'])}%*`
 let boost2 = `*${pickRandom(['21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40'])}%*`
 let boost3 = `*${pickRandom(['41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60'])}%*`
@@ -13,9 +13,9 @@ await m.reply(boost5)
 let old = performance.now()
 let neww = performance.now()
 let speed = `${neww - old}`
-let doxeo = `*[ ✔ ] 𝙿𝙴𝚁𝚂𝙾𝙽𝙰 𝙳𝙾𝚇𝚇𝙴𝙰𝙳𝙰 𝙲𝙾𝙽 𝙴𝚇𝙸𝚃𝙾*\n*⏳ 𝙳𝙾𝚇𝚇𝙴𝙰𝙳𝙾 𝙴𝙽: ${speed} 𝚜𝚎𝚐𝚞𝚗𝚍𝚘𝚜!*
+let doxeo = `*[ ✔ ] PERSONA DOXXEADA CON EXITO*\n*⏳ DOXXEADO EN: ${speed} se𝚐undos!*
 
-*𝚁𝙴𝚂𝚄𝙻𝚃𝙰𝙳𝙾𝚂 𝙾𝙱𝚃𝙴𝙽𝙸𝙳𝙾𝚂:*
+*RESULTADOS OBTENIDOS:*
 
 *Nombre:* ${text}
 *Ip:* 92.28.211.234
@@ -53,7 +53,7 @@ Sof02s32inf14.1e100.net
 *Tcp:* 192.168.629-->92.28.211.167:8615
 *EXTERNAL MAC:* 6U:77:89:ER:O4
 *MODEM JUMPS:* 64`
-conn.reply(m.chat, doxeo, m)
+m.reply(doxeo, null, { mentions: conn.parseMention(doxeo) })
 }
 handler.help = ['doxear <nombre> | <@tag>']
 handler.tags = ['fun']

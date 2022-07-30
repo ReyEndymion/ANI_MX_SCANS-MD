@@ -1,20 +1,25 @@
 import fetch from 'node-fetch'
-let handler = async (m, {command, conn, text, args}) => {
-if (!text) throw `*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙽𝙻𝙰𝙲𝙴 𝙳𝙴 𝚃𝙸𝙺𝚃𝙾𝙺 𝙵𝙰𝙻𝚃𝙰𝙽𝚃𝙴, 𝙿𝙾𝚁 𝙵𝙰𝚅𝙾𝚁 𝙸𝙽𝙶𝚁𝙴𝚂𝙴 𝙴𝙽 𝙴𝙽𝙻𝙰𝙲𝙴/𝙻𝙸𝙽𝙺 𝙳𝙴 𝙰𝙻𝙶𝚄𝙽 𝚅𝙸𝙳𝙴𝙾 𝙳𝙴 𝚃𝙸𝙺𝚃𝙾𝙺*\n\n*—◉ 𝙴𝙹𝙴𝙼𝙿𝙻𝙾:*\n*#tiktok https://vm.tiktok.com/ZML42vSnn/*`
-if (command == 'tiktokaudio') {
-let espera = '*[❗𝐈𝐍𝐅𝐎❗] 𝙰𝙶𝚄𝙰𝚁𝙳𝙴 𝚄𝙽 𝙼𝙾𝙼𝙴𝙽𝚃𝙾 𝙴𝙽 𝙻𝙾 𝚀𝚄𝙴 𝙴𝙽𝚅𝙸𝙾 𝚂𝚄 𝙰𝚄𝙳𝙸𝙾 𝙳𝙴 𝚃𝙸𝙺𝚃𝙾𝙺*'
-m.reply(espera)
-let res = await fetch("https://api.dhamzxploit.my.id/api/tiktod/?url="+args[0])
-let json = await res.json()
-conn.sendFile(m.chat, json.result.audio, 'error.mp3', null, m, false, { mimetype: 'audio/mp4' })}
-if (command == 'tiktok') {
-let espera = '*[❗𝐈𝐍𝐅𝐎❗] 𝙰𝙶𝚄𝙰𝚁𝙳𝙴 𝚄𝙽 𝙼𝙾𝙼𝙴𝙽𝚃𝙾 𝙴𝙽 𝙻𝙾 𝚀𝚄𝙴 𝙴𝙽𝚅𝙸𝙾 𝚂𝚄 𝚅𝙸𝙳𝙴𝙾 𝙳𝙴 𝚃𝙸𝙺𝚃𝙾𝙺*'
-m.reply(espera)
-let res = await fetch("https://api.dhamzxploit.my.id/api/tiktod/?url="+args[0])
-let json = await res.json()
-conn.sendFile(m.chat, json.result.nowatermark, 'error.mp4', `_𝐓𝐡𝐞 𝐌𝐲𝐬𝐭𝐢𝐜 - 𝐁𝐨𝐭_`, m)}
-}
-handler.help = ['tiktok' , 'tiktokaudio'].map(v => v + ' <link>')
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+if (!text) throw `*[❗INFO❗] ENLACE DE TIKTOK FALTANTE, POR FAVOR INGRESE EN ENLACE/LINK DE ALGUN VIDEO DE TIKTOK*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} https://vm.tiktok.com/ZML42vSnn/*`
+if (!/(?:https:?\/{2})?(?:w{3}|vm|vt|t)?\.?tiktok.com\/([^\s&]+)/gi.test(text)) throw `*[❗INFO❗] ENLACE DE TIKTOK INCORRECTO, POR FAVOR INGRESE UN ENLACE/LINK DE ALGÚN VÍDEO DE TIKTOK*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} https://vm.tiktok.com/ZML42vSnn/*`
+let url = (await fetch(text)).url
+let res = await (await fetch(`https://api2.musical.ly/aweme/v1/aweme/detail/?aweme_id=${url.split('?')[0].split('/')[5]}`)).json()
+let data = res.aweme_detail.video.play_addr.url_list
+if (!data.length) throw '*[❗INFO❗] LO LAMENTO, OCURRIÓ UN ERROR AL DESCARGAR SU VIDEO, POR FAVOR VUELVA A INTENTARLO*'
+let meta = await getInfo(url).catch(_ => {})
+await m.reply('*[❗INFO❗] AGUARDE UN MOMENTO EN LO QUE ENVIO SU AUDIO DE TIKTOK*')
+let buttons = [{ buttonText: { displayText: 'AUDIO' }, buttonId: `${usedPrefix}tomp3` }]
+conn.sendMessage(m.chat, { video: { url: data[data.length - 1] }, caption: '_🌎ANI MX SCANS🌏_', footer: await shortUrl(data[data.length - 1]), buttons }, { quoted: m })}
+
+handler.help = ['tiktok']
 handler.tags = ['downloader']
-handler.command = ['tiktok', 'tiktokaudio']
+handler.alias = ['tiktok', 'tikdl', 'tiktokdl', 'tiktoknowm']
+handler.command = /^(tt|tiktok)(dl|nowm)?$/i
 export default handler
+
+async function getInfo(url) {
+let id = url.split('?')[0].split('/')
+let res = await (await fetch(`https://www.tiktok.com/node/share/video/${id[3]}/${id[5]}/`)).json()
+return res?.seoProps?.metaParams}
+async function shortUrl(url) {
+return await (await fetch(`https://tinyurl.com/api-create.php?url=${url}`)).text()}

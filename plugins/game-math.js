@@ -1,28 +1,28 @@
 global.math = global.math ? global.math : {}
 let handler  = async (m, { conn, args, usedPrefix, command }) => {
 let mat =`
-*[❗𝐈𝐍𝐅𝐎❗] 𝙸𝙽𝙶𝚁𝙴𝚂𝙴 𝙻𝙰 𝙳𝙸𝙵𝙸𝙲𝚄𝙻𝚃𝙰𝙳𝙾 𝙲𝙾𝙽 𝙻𝙰 𝚀𝚄𝙴 𝙳𝙴𝚂𝙴𝙰 𝙹𝚄𝙶𝙰𝚁*
+*[❗INFO❗] INGRESE LA DIFICULTADO CON LA QUE DESEA JUGAR*
 
-*𝙳𝙸𝙵𝙸𝙲𝚄𝙻𝚃𝙰𝙳𝙴𝚂 𝙳𝙸𝚂𝙿𝙾𝙽𝙸𝙱𝙻𝙴𝚂: ${Object.keys(modes).join(' | ')}*
-*𝙴𝙹𝙴𝙼𝙿𝙻𝙾 𝙳𝙴 𝚄𝚂𝙾: ${usedPrefix}mates medium*
+*DIFICULTADES DISPONIBLES: ${Object.keys(modes).join(' | ')}*
+*EJEMPLO DE USO: ${usedPrefix}mates medium*
 `.trim()
 if (args.length < 1) return conn.sendHydrated(m.chat, mat, author, null, null, null, null, null, [
-['𝙼𝙰𝚃𝙴𝚂 𝙴𝙰𝚂𝚈', `${usedPrefix + command} easy`], 
-['𝙼𝙰𝚃𝙴𝚂 𝙼𝙴𝙳𝙸𝚄𝙼', `${usedPrefix + command} medium`], 
-['𝙼𝙰𝚃𝙴𝚂 𝙷𝙰𝚁𝙳', `${usedPrefix + command} hard`]], m)
+['MATES EASY', `${usedPrefix + command} easy`], 
+['MATES MEDIUM', `${usedPrefix + command} medium`], 
+['MATES HARD', `${usedPrefix + command} hard`]], m)
 let mode = args[0].toLowerCase()
 if (!(mode in modes)) return conn.sendHydrated(m.chat, mat, author, null, null, null, null, null, [
-['𝙼𝙰𝚃𝙴𝚂 𝙴𝙰𝚂𝚈', `${usedPrefix + command} easy`], 
-['𝙼𝙰𝚃𝙴𝚂 𝙼𝙴𝙳𝙸𝚄𝙼', `${usedPrefix + command} medium`], 
-['𝙼𝙰𝚃𝙴𝚂 𝙷𝙰𝚁𝙳', `${usedPrefix + command} hard`]], m)
+['MATES EASY', `${usedPrefix + command} easy`], 
+['MATES MEDIUM', `${usedPrefix + command} medium`], 
+['MATES HARD', `${usedPrefix + command} hard`]], m)
 let id = m.chat
-if (id in global.math) return conn.reply(m.chat, '*[❗𝐈𝐍𝐅𝐎❗] 𝚃𝙾𝙳𝙰𝚅𝙸𝙰 𝙷𝙰𝚈 𝙿𝚁𝙴𝙶𝚄𝙽𝚃𝙰𝚂 𝚂𝙸𝙽 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴𝚁 𝙴𝙽 𝙴𝚂𝚃𝙴 𝙲𝙷𝙰𝚃!*', global.math[id][0])
+if (id in global.math) return conn.reply(m.chat, '*[❗INFO❗] TODAVIA HAY PREGUNTAS SIN RESPONDER EN ESTE CHAT!*', global.math[id][0])
 let math = genMath(mode)
 global.math[id] = [
-await conn.reply(m.chat, `𝙲𝚄𝙰𝙽𝚃𝙾 𝙴𝚂 𝙴𝙻 𝚁𝙴𝚂𝚄𝙻𝚃𝙰𝙳𝙾 𝙳𝙴 *${math.str}*?\n\n*⏳ 𝚃𝙸𝙴𝙼𝙿𝙾: ${(math.time / 1000).toFixed(2)} 𝚜𝚎𝚐𝚞𝚗𝚍𝚘𝚜*\n*🏆 𝙶𝙰𝙽𝙰 𝙷𝙰𝚂𝚃𝙰: ${math.bonus} 𝚇𝙿*`, m),
+await conn.reply(m.chat, `CUANTO ES EL RESULTADO DE *${math.str}*?\n\n*⏳ TIEMPO: ${(math.time / 1000).toFixed(2)} _segundos_*\n*🏆 GANA HASTA: ${math.bonus} XP*`, m),
 math, 4,
 setTimeout(() => { 
-if (global.math[id]) conn.sendButton(m.chat, `*[❗𝐈𝐍𝐅𝐎❗] 𝚂𝙴 𝙰𝙷 𝙵𝙸𝙽𝙰𝙻𝙸𝚉𝙰𝙳𝙾 𝙴𝙻 𝚃𝙸𝙴𝙼𝙿𝙾 𝙿𝙰𝚁𝙰 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴𝚁*\n\n*𝙻𝙰 𝚁𝙴𝚂𝙿𝚄𝙴𝚂𝚃𝙰 𝙴𝚂 ${math.result}*`, author, null, [['𝚅𝙾𝙻𝚅𝙴𝚁 𝙰 𝙸𝙽𝚃𝙴𝙽𝚃𝙰𝚁', `${usedPrefix + command} ${math.mode}`]], global.math[id][0])
+if (global.math[id]) conn.sendButton(m.chat, `*[❗INFO❗] SE HA FINALIZADO EL TIEMPO PARA RESPONDER*\n\n*LA RESPUESTA ES ${math.result}*`, author, null, [['VOLVER A INTENTAR', `${usedPrefix + command} ${math.mode}`]], global.math[id][0])
 delete global.math[id]
 }, math.time)
 ]}

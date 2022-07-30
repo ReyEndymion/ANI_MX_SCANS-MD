@@ -1,28 +1,28 @@
 let handler = async (m) => {
     m.reply(
     `
-    *ɴᴏᴍʙʀᴇ*:
+    *NOMBRE*:
     
     
-     *ᴇᴅᴀᴅ*:
+     *EDAD*:
     
     
-     *ᴘᴀÍꜱ* :
+     *PAÍS* :
     
     
-     *ᴡᴀɪꜰᴜ ᴏ ʜᴜsʙᴀɴᴅᴏ*:
+     *WAIFU O HUSBANDO*:
     
     
-     *ᴀɴɪᴍᴇ ꜰᴀᴠᴏʀɪᴛᴏ*: 
+     *ANIME FAVORITO*: 
     
     
-      *ᴍᴀɴɢᴀ ꜰᴀᴠᴏʀɪᴛᴏ* :
+      *MANGA FAVORITO* :
     
     
-     *ᴅᴇꜱᴅᴇ ʜᴀᴄᴇ ᴄᴜÁɴᴛᴏ ᴇʀᴇꜱ ᴏᴛᴀᴋᴜ*:
+     *DESDE HACE CUÁNTO ERES OTAKU*:
     
     
-     *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*:
+     *FOTO o MENSAJE DE VOZ*:
     
     
     **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**

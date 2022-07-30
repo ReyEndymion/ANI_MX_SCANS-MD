@@ -59,17 +59,18 @@ level, limit, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg, r
 readmore: readMore
 }
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
- 
-    
+  
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender    
+let userm = `@${who.replace(/@.+/, '')}` 
+        
 
 let str = `
-*ミ💖 𝙷𝙾𝙻𝙰 ✨${name}✨, 𝙰𝚀𝚄𝙸 𝙴𝚂𝚃𝙰 𝙴𝙻 𝙼𝙴𝙽𝚄 𝙲𝙾𝙼𝙿𝙻𝙴𝚃𝙾 𝙳𝙴 𝚃𝙷𝙴 𝙼𝚈𝚂𝚃𝙸𝙲 - 𝙱𝙾𝚃 💖彡*
+*HOLA ✨${userm}✨, ESTE ES EL MENU DE INICIO DE 🌎ANI MX SCANS🌏*
+*📅 FECHA: ${week}, ${date}*
+*📈 TIEMPO ACTIVO: ${uptime}*
+*📊 USUARIOS: ${rtotalreg}*
 
-*📅 𝙵𝙴𝙲𝙷𝙰: ${week}, ${date}*
-*📈 𝚃𝙸𝙴𝙼𝙿𝙾 𝙰𝙲𝚃𝙸𝚅𝙾: ${uptime}*
-*📊 𝚄𝚂𝚄𝙰𝚁𝙸𝙾𝚂: ${rtotalreg}*
-
-*<𝕀ℕ𝔽𝕆ℝ𝕄𝔸ℂ𝕀𝕆ℕ 𝔻𝔼𝕃 𝔹𝕆𝕋/>*
+*<INFORMACION DEL BOT/> + <UNE UN BOT A TU GRUPO/>*
 
 ° ඬ ⃟ 💟 _${usedPrefix}grupos_
 ° ඬ ⃟ 💟 _${usedPrefix}estado_
@@ -78,11 +79,12 @@ let str = `
 ° ඬ ⃟ 💟 _${usedPrefix}grouplist_
 ° ඬ ⃟ 💟 _${usedPrefix}owner_
 ° ඬ ⃟ 💟 _${usedPrefix}script_
-° ඬ ⃟ 💟 _Bot_ (𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)
+° ඬ ⃟ 💟 _Bot_ (uso sin pre𝑓i𝑗o)
 
 *<𝕌ℕ𝔼 𝕌ℕ 𝔹𝕆𝕋 𝔸 𝕋𝕌 𝔾ℝ𝕌ℙ𝕆/>*
 
 ° ඬ⃟👽 _${usedPrefix}join *<enlace / link / url>*_
+
 
 *<𝕁𝕌𝔼𝔾𝕆𝕊/>*
 
@@ -105,13 +107,16 @@ let str = `
 ° ඬ⃟🎖️ _${usedPrefix}slot *<apuesta>*_
 ° ඬ⃟🎖️ _${usedPrefix}pvp *<@tag>*_
 ° ඬ⃟🎖️ _${usedPrefix}simi *<texto>*_
+° ඬ⃟🎖️ _${usedPrefix}top *<texto>*_
 ° ඬ⃟🎖️ _${usedPrefix}topgays_
 ° ඬ⃟🎖️ _${usedPrefix}topotakus_
 ° ඬ⃟🎖️ _${usedPrefix}formarpareja_
 ° ඬ⃟🎖️ _${usedPrefix}verdad_
 ° ඬ⃟🎖️ _${usedPrefix}reto_
+° ඬ⃟🎖️ _${usedPrefix}cancion_
+° ඬ⃟🎖️ _${usedPrefix}pista_
 
-*<𝔸ℂ𝕋𝕀𝕍𝔸ℝ 𝕆 𝔻𝔼𝕊𝔸ℂ𝕋𝕀𝕍𝔸ℝ/>*
+*<ACTIVAR O DESACTIVAR/>*
 
 ° ඬ⃟☑️ _${usedPrefix}enable *welcome*_
 ° ඬ⃟☑️ _${usedPrefix}disable *welcome*_
@@ -127,19 +132,25 @@ let str = `
 ° ඬ⃟☑️ _${usedPrefix}disable *audios*_
 ° ඬ⃟☑️ _${usedPrefix}enable *autosticker*_
 ° ඬ⃟☑️ _${usedPrefix}disable *autosticker*_
+° ඬ⃟☑️ _${usedPrefix}enable *antiviewonce*_
+° ඬ⃟☑️ _${usedPrefix}disable *antiviewonce*_
 
-*<ℝ𝔼ℙ𝕆ℝ𝕋𝔼𝕊 𝔻𝔼 𝔽𝔸𝕃𝕃𝕆𝕊/>*
+*<REPORTES DE FALLOS/>*
 
 ° ඬ⃟🔰 _${usedPrefix}reporte *<texto>*_
 
-*<𝔻𝔼𝕊ℂ𝔸ℝ𝔾𝔸𝕊/>*
+*<DESCARGAS/>*
 
 ° ඬ⃟📥 _${usedPrefix}facebook *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}instagram *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}mediafire *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}instagram *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}gitclone *<enlace / link / url>*_
+° ඬ⃟📥 _${usedPrefix}stickerpack *<enlace / link / url>*_
+° ඬ⃟📥 _${usedPrefix}gdrive *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}tiktok *<enlace / link / url>*_
+° ඬ⃟📥 _${usedPrefix}xnxxdl *<enlace / link / url>*_
+° ඬ⃟📥 _${usedPrefix}xvideosdl *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}ytmp3 *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}ytmp4 *<enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}ytmp3doc *<enlace / link / url>*_
@@ -148,7 +159,10 @@ let str = `
 ° ඬ⃟📥 _${usedPrefix}play.2 *<texto / enlace / link / url>*_
 ° ඬ⃟📥 _${usedPrefix}play *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}playdoc *<texto>*_
-° ඬ⃟📥 _${usedPrefix}spotify *<texto>*_
+° ඬ⃟📥 _${usedPrefix}playlist *<texto>*_
+° ඬ⃟📥 _${usedPrefix}playlist2 *<texto>*_
+° ඬ⃟📥 _${usedPrefix}ringtone *<texto>*_
+° ඬ⃟📥 _${usedPrefix}soundcloud *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}imagen *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}pinteret *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}wallpaper *<texto>*_
@@ -158,14 +172,14 @@ let str = `
 ° ඬ⃟📥 _${usedPrefix}igstory *<nombre de usuario>*_
 ° ඬ⃟📥 _${usedPrefix}tiktokstalk *<nombre de usuario>*_
 
-*<𝔾ℝ𝕌ℙ𝕆𝕊/>* 
+*<GRUPOS/>* 
 
 ° ඬ⃟💎 _${usedPrefix}add *<numero>*_
 ° ඬ⃟💎 _${usedPrefix}kick *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}grupo *<abrir / cerrar>*_
 ° ඬ⃟💎 _${usedPrefix}promote *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
-° ඬ⃟💎 _admins *<texto>*_ (𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)
+° ඬ⃟💎 _admins *<texto>*_ (uso sin pre𝑓i𝑗o)
 ° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}infogroup_
 ° ඬ⃟💎 _${usedPrefix}link_
@@ -176,27 +190,35 @@ let str = `
 ° ඬ⃟💎 _${usedPrefix}setbye *<texto>*_
 ° ඬ⃟💎 _${usedPrefix}hidetag *<texto>*_
 
-*<ℂ𝕆ℕ𝕍𝔼ℝ𝕋𝕀𝔻𝕆ℝ𝔼𝕊/>*
+*<CONVERTIDORES/>*
 
 ° ඬ⃟🧧 _${usedPrefix}toimg *<responde a un sticker>*_
 ° ඬ⃟🧧 _${usedPrefix}tomp3 *<responde a un video / nota de voz>*_
 ° ඬ⃟🧧 _${usedPrefix}toptt *<responde a un video / audio>*_
-° ඬ⃟🧧 _${usedPrefix}tovideo *<responde a un audio>*_
+° ඬ⃟🧧 _${usedPrefix}tovideo *<responde a un sticker>*_
 ° ඬ⃟🧧 _${usedPrefix}tourl *<responde a un video / imagen / audio>*_
 ° ඬ⃟🧧 _${usedPrefix}tts es *<texto>*_
 
-*<𝔼𝔽𝔼ℂ𝕋𝕆𝕊 𝕐 𝕃𝕆𝔾𝕆𝕊/>*
+*<EFECTOS Y LOGOS/>*
 
 ° ඬ⃟🖍️ _${usedPrefix}logos *<efecto> <texto>*_
+° ඬ⃟🖍️ _${usedPrefix}logocorazon *<texto>*_
+° ඬ⃟🖍️ _${usedPrefix}logochristmas *<texto>*_
 ° ඬ⃟🖍️ _${usedPrefix}simpcard *<@tag>*_
 ° ඬ⃟🖍️ _${usedPrefix}hornycard *<@tag>*_
 ° ඬ⃟🖍️ _${usedPrefix}lolice *<@tag>*_
 ° ඬ⃟🖍️ _${usedPrefix}ytcomment *<texto>*_
+° ඬ⃟🖍️ _${usedPrefix}phmaker *<opcion><responder a imagen>*_
 ° ඬ⃟🖍️ _${usedPrefix}itssostupid_
 ° ඬ⃟🖍️ _${usedPrefix}pixelar_
 ° ඬ⃟🖍️ _${usedPrefix}blur_
 
-*<ℝ𝔸ℕ𝔻𝕆𝕄/>*
+*<𝔽ℝ𝔸𝕊𝔼𝕊/>*
+
+° ඬ⃟🥀 _${usedPrefix}consejo_
+° ඬ⃟🥀 _${usedPrefix}fraseromantica_
+
+*<RANDOM/>*
 
 ° ඬ⃟👾 _${usedPrefix}cristianoronaldo_
 ° ඬ⃟👾 _${usedPrefix}messi_
@@ -208,6 +230,24 @@ let str = `
 ° ඬ⃟👾 _${usedPrefix}loli_
 ° ඬ⃟👾 _${usedPrefix}navidad_
 ° ඬ⃟👾 _${usedPrefix}ppcouple_
+° ඬ⃟👾 _${usedPrefix}wpmontaña_
+° ඬ⃟👾 _${usedPrefix}pubg_
+° ඬ⃟👾 _${usedPrefix}wpgaming_
+° ඬ⃟👾 _${usedPrefix}wpaesthetic_
+° ඬ⃟👾 _${usedPrefix}wpaesthetic2_
+° ඬ⃟👾 _${usedPrefix}wprandom_
+° ඬ⃟👾 _${usedPrefix}wallhp_
+° ඬ⃟👾 _${usedPrefix}wpvehiculo_
+° ඬ⃟👾 _${usedPrefix}wpmoto_
+° ඬ⃟👾 _${usedPrefix}coffee_
+° ඬ⃟👾 _${usedPrefix}pentol_
+° ඬ⃟👾 _${usedPrefix}caricatura_
+° ඬ⃟👾 _${usedPrefix}ciberespacio_
+° ඬ⃟👾 _${usedPrefix}technology_
+° ඬ⃟👾 _${usedPrefix}doraemon_
+° ඬ⃟👾 _${usedPrefix}hacker_
+° ඬ⃟👾 _${usedPrefix}planeta_
+° ඬ⃟👾 _${usedPrefix}randomprofile_
 ° ඬ⃟👾 _${usedPrefix}neko_
 ° ඬ⃟👾 _${usedPrefix}waifu_
 ° ඬ⃟👾 _${usedPrefix}akira_
@@ -246,7 +286,7 @@ let str = `
 ° ඬ⃟👾 _${usedPrefix}sakura_
 ° ඬ⃟👾 _${usedPrefix}cosplay_
 
-*<ℂ𝕆𝕄𝔸ℕ𝔻𝕆𝕊 +𝟙𝟠/>*
+*<COMANDOS +𝟙𝟠/>*
 
 ° ඬ⃟🔞 _${usedPrefix}pack_
 ° ඬ⃟🔞 _${usedPrefix}pack2_
@@ -269,7 +309,6 @@ let str = `
 ° ඬ⃟🔞 _${usedPrefix}yuri2_
 ° ඬ⃟🔞 _${usedPrefix}trapito_
 ° ඬ⃟🔞 _${usedPrefix}hentai_
-° ඬ⃟🔞 _${usedPrefix}pies_
 ° ඬ⃟🔞 _${usedPrefix}nsfwloli_
 ° ඬ⃟🔞 _${usedPrefix}nsfworgy_
 ° ඬ⃟🔞 _${usedPrefix}nsfwfoot_
@@ -280,8 +319,8 @@ let str = `
 ° ඬ⃟🔞 _${usedPrefix}nsfwfemdom_
 ° ඬ⃟🔞 _${usedPrefix}nsfwglass_
 
-*<𝔼𝔽𝔼ℂ𝕋𝕆𝕊 𝔻𝔼 𝔸𝕌𝔻𝕀𝕆𝕊/>*
-*- 𝚁𝙴𝚂𝙿𝙾𝙽𝙳𝙴 𝙰 𝚄𝙽 𝙰𝚄𝙳𝙸𝙾 𝙾 𝙽𝙾𝚃𝙰 𝙳𝙴 𝚅𝙾𝚉*
+*<EFECTOS DE AUDIOS/>*
+*RESPONDE A UN AUDIO O NOTA DE VOZ*
 
 ° ඬ⃟🎤 _${usedPrefix}bass_
 ° ඬ⃟🎤 _${usedPrefix}blown_
@@ -296,23 +335,35 @@ let str = `
 ° ඬ⃟🎤 _${usedPrefix}smooth_
 ° ඬ⃟🎤 _${usedPrefix}tupai_
 
-*<ℂℍ𝔸𝕋 𝔸ℕ𝕆ℕ𝕀𝕄𝕆/>*
+*<CHAT ANONIMO/>*
 
 ° ඬ⃟📳 _${usedPrefix}start_
 ° ඬ⃟📳 _${usedPrefix}next_
 ° ඬ⃟📳 _${usedPrefix}leave_
 
-*<𝔹𝕌𝕊ℂ𝔸𝔻𝕆ℝ𝔼𝕊/>*
+*<BUSCADORES/>*
 
+° ඬ⃟🔍 _${usedPrefix}stickersearch *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}xnxxsearch *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}animeinfo *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}google *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}letra *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}wikipedia *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}ytsearch *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}apkdone *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}apkgoogle *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}apkmody *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}apkshub *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}happymod *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}hostapk *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}revdl *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}toraccino *<texto>*_
+° ඬ⃟🔍 _${usedPrefix}uapkpro *<texto>*_
 
-*<𝔸𝕌𝔻𝕀𝕆𝕊/>* 
-*- 𝙴𝚂𝙲𝚁𝙸𝙱𝙴 𝙻𝙰𝚂 𝚂𝙸𝙶𝚄𝙸𝙴𝙽𝚃𝙴𝚂 𝙿𝙰𝙻𝙰𝙱𝚁𝙰𝚂 𝙾 𝙵𝚁𝙰𝚂𝙴𝚂 𝚂𝙸𝙽 𝙽𝙸𝙽𝙶𝚄𝙽 𝙿𝚁𝙴𝙵𝙸𝙹𝙾 (#, /, *, .)* 
-_(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
+
+*<AUDIOS/>* 
+*- ESCRIBE LAS SIGUIENTES PALABRAS O FRASES SIN NINGUN PREFIJO (#, /, *, .)* 
+_(uso sin prefijo)_
 
 ° ඬ⃟🔊 _Quien es tu sempai botsito 7w7_
 ° ඬ⃟🔊 _Te diagnostico con gay_
@@ -334,6 +385,7 @@ _(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
 ° ඬ⃟🔊 _Marica quien_
 ° ඬ⃟🔊 _Murio el grupo_
 ° ඬ⃟🔊 _Oh me vengo_
+° ඬ⃟🔊 _tio que rico_
 ° ඬ⃟🔊 _Viernes_
 ° ඬ⃟🔊 _Baneado_
 ° ඬ⃟🔊 _Sexo_
@@ -353,19 +405,21 @@ _(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
 ° ඬ⃟🔊 _:c_
 ° ඬ⃟🔊 _a_
 
-*<ℍ𝔼ℝℝ𝔸𝕄𝕀𝔼ℕ𝕋𝔸𝕊/>*
+*<HERRAMIENTAS/>*
 
 ° ඬ⃟🛠️ _${usedPrefix}afk *<motivo>*_
+° ඬ⃟🛠️ _${usedPrefix}ocr *<responde a imagen>*_
 ° ඬ⃟🛠️ _${usedPrefix}acortar *<enlace / link / url>*_
 ° ඬ⃟🛠️ _${usedPrefix}calc *<operacion math>*_
 ° ඬ⃟🛠️ _${usedPrefix}del *<respondre a mensaje del Bot>*_
+° ඬ⃟🛠️ _${usedPrefix}whatmusic *<responde a un audio>*_
 ° ඬ⃟🛠️ _${usedPrefix}qrcode *<texto>*_
 ° ඬ⃟🛠️ _${usedPrefix}readmore *<texto1| texto2>*_
 ° ඬ⃟🛠️ _${usedPrefix}spamwa *<numero|texto|cantidad>*_
 ° ඬ⃟🛠️ _${usedPrefix}styletext *<texto>*_
 ° ඬ⃟🛠️ _${usedPrefix}traducir *<texto>*_
 
-*<ℝℙ𝔾 - 𝕃𝕀𝕄𝕀𝕋𝔼𝕊 - 𝔼ℂ𝕆ℕ𝕆𝕄𝕀𝔸/>*
+*<RPG - LIMITES - ECONOMIA/>*
 
 ° ඬ⃟💵 _${usedPrefix}balance_
 ° ඬ⃟💵 _${usedPrefix}claim_
@@ -381,25 +435,32 @@ _(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
 ° ඬ⃟💵 _${usedPrefix}verificar_
 ° ඬ⃟💵 _${usedPrefix}unreg *<numero de serie>*_
 
-*<𝕊𝕋𝕀ℂ𝕂𝔼ℝ𝕊/>*
+*<STICKERS/>*
 
 ° ඬ⃟👽 _${usedPrefix}sticker *<responder a imagen o video>*_
 ° ඬ⃟👽 _${usedPrefix}sticker *<enlace / link / url>*_
 ° ඬ⃟👽 _${usedPrefix}s *<responder a imagen o video>*_
 ° ඬ⃟👽 _${usedPrefix}s *<enlace / link / url>*_
 ° ඬ⃟👽 _${usedPrefix}emojimix *<emoji 1>&<emoji 2>*_
+° ඬ⃟👽 _${usedPrefix}scircle *<responder a imagen>*_
+° ඬ⃟👽 _${usedPrefix}sremovebg *<responder a imagen>*_
 ° ඬ⃟👽 _${usedPrefix}semoji *<tipo> <emoji>*_
 ° ඬ⃟👽 _${usedPrefix}attp *<texto>*_
+° ඬ⃟👽 _${usedPrefix}attp2 *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}ttp *<texto>*_
+° ඬ⃟👽 _${usedPrefix}ttp2 *<texto>*_
+° ඬ⃟👽 _${usedPrefix}ttp3 *<texto>*_
+° ඬ⃟👽 _${usedPrefix}ttp4 *<texto>*_
+° ඬ⃟👽 _${usedPrefix}ttp5 *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}pat *<@tag>*_
-° ඬ⃟👽 _${usedPrefix}slap *<@tag>_
+° ඬ⃟👽 _${usedPrefix}slap *<@tag>*_
 ° ඬ⃟👽 _${usedPrefix}kiss *<@tag>*_
 ° ඬ⃟👽 _${usedPrefix}dado_
 ° ඬ⃟👽 _${usedPrefix}wm *<packname> <author>*_
 ° ඬ⃟👽 _${usedPrefix}stickermarker *<efecto> <responder a imagen>*_
 ° ඬ⃟👽 _${usedPrefix}stickerfilter *<efecto> <responder a imagen>*_
 
-*<𝕆𝕎ℕ𝔼ℝ 𝕐 𝕄𝕆𝔻𝔼ℝ𝔸𝔻𝕆ℝ𝔼𝕊/>*
+*<OWNER Y MODERADORES/>*
 
 ° ඬ⃟👑 _${usedPrefix}cajafuerte_
 ° ඬ⃟👑 _${usedPrefix}enable *restrict*_
@@ -427,21 +488,25 @@ _(𝑢𝑠𝑜 𝑠𝑖𝑛 𝑝𝑟𝑒𝑓𝑖𝑗𝑜)_
 ° ඬ⃟👑 _${usedPrefix}delprem *<@tag>*_
 ° ඬ⃟👑 _${usedPrefix}listprem_
 `.trim()
-conn.sendHydrated(m.chat, str, wm, pp, 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD', '𝙶𝙸𝚃𝙷𝚄𝙱', null, null, [
-['📮 𝙳𝙾𝙽𝙰𝚁 📮', '/donasi'],
-['🌹 𝙾𝚆𝙽𝙴𝚁 🌹', '/owner'],
-['🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾', '/infobot']
-], m,)
-//await conn.sendFile(m.chat, vn, 'menu.mp3', null, m, true, {
-//type: 'audioMessage', 
-//ptt: true})
+let mentionedJid = [who]
+conn.sendButton(m.chat, str, wm, pp, 
+/*conn.sendHydrated2(m.chat, str, wm, pp, 'https://www.facebook.com/ANIMxSCANS', 'FACEBOOK', 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD', 'GITHUB', */[
+['📮 DONAR 📮', '/donasi'],
+['🌹 OWNER 🌹', '/owner'],
+['🐾 INFOBOT 🐾', '/infobot']
+], '', { contextInfo: { mentionedJid }})
+
+    
+    
+/*await conn.sendFile(m.chat, vn, 'menu.mp3', null, m, true, {
+type: 'audioMessage', 
+ptt: true})*/
+
 } catch (e) {
-conn.reply(m.chat, '*[❗𝐈𝐍𝐅𝐎❗] 𝙴𝙻 𝙼𝙴𝙽𝚄 𝚃𝙸𝙴𝙽𝙴 𝚄𝙽 𝙴𝚁𝚁𝙾𝚁 𝚈 𝙽𝙾 𝙵𝚄𝙴 𝙿𝙾𝚂𝙸𝙱𝙻𝙴 𝙴𝙽𝚅𝙸𝙰𝚁𝙻𝙾, 𝚁𝙴𝙿𝙾𝚁𝚃𝙴𝙻𝙾 𝙰𝙻 𝙿𝚁𝙾𝙿𝙸𝙴𝚃𝙰𝚁𝙸𝙾 𝙳𝙴𝙻 𝙱𝙾𝚃*', m)
+conn.reply(m.chat, '*[❗INFO❗] EL MENU TIENE UN ERROR Y NO FUE POSIBLE ENVIARLO, REPORTELO AL PROPIETARIO DEL BOT*', m)
 throw e
 }}
-handler.help = ['menu', 'help', '?']
-handler.tags = ['main']
-handler.command = /^(menucompleto|menu|menú|memu|memú|help|info|comandos|allmenu|2help|menu1.2|ayuda|commands|commandos|m|\?)$/i
+handler.command = /^(menu|menú|memu|memú|help|info|comandos|allmenu|2help|menu1.2|ayuda|commands|commandos)$/i
 handler.exp = 50
 handler.fail = null
 export default handler

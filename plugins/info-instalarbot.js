@@ -1,7 +1,7 @@
 import fs from 'fs'
 let handler  = async (m, { conn, command, args, usedPrefix, DevMode }) => {
 let text = `
-*—◉ 𝚃𝚄𝚃𝙾𝚁𝙸𝙰𝙻 𝙱𝙾𝚇𝙼𝙸𝙽𝙴 𝙷𝙾𝚂𝚃*
+*—◉ TUTORIAL BOXMINE HOST*
 > Tutorial: https://youtu.be/eC9TfKICpcY
 > Pagina Oficial: https://boxmineworld.com
 > Dashboard: https://dash.boxmineworld.com/home
@@ -9,7 +9,7 @@ let text = `
 
 ------------------------------------
 
-*—◉ 𝙲𝙾𝙼𝙰𝙽𝙳𝙾𝚂 𝚃𝙴𝚁𝙼𝚄𝚇*
+*—◉ COMANDOS TERMUX*
 > cd
 > termux-setup-storage
 > apt update 
@@ -20,8 +20,7 @@ let text = `
 > pkg install imagemagick -y
 > pkg install yarn
 > git clone https://github.com/ReyEndymion/ANI_MX_SCANS-MD
-> cd TheMystic-Bot-MD
-> npm install
+> cd ANI_MX_SCANS-MD
 > yarn install 
 > npm install
 > npm update
@@ -29,10 +28,10 @@ let text = `
 `.trim()   
 conn.reply(m.chat, text, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
-title: '𝙸𝙽𝙵𝙾𝚁𝙼𝙰𝙲𝙸𝙾𝙽 - 𝙸𝙽𝚂𝚃𝙰𝙻𝙰𝚁𝙱𝙾𝚃',
-body: 'ᴛʜᴇ ᴍʏsᴛᴄ ﹣ ʙᴏᴛ',         
+title: 'INFORMACION - INSTALARBOT',
+body: '🌎ANI MX SCANS🌏',         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD`}}})   
+sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})   
 }
 handler.command = /^(instalarbot)/i
 export default handler

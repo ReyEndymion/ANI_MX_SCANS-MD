@@ -18,7 +18,7 @@ import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 import store from './lib/store.js'
-const { useSingleFileAuthState, DisconnectReason, useMultiFileAuthState } = await import('@adiwajshing/baileys')
+const { useSingleFileAuthState, DisconnectReason } = await import('@adiwajshing/baileys')
 const { CONNECTING } = ws
 const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
@@ -68,18 +68,14 @@ global.db.chain = chain(global.db.data)
 }
 loadDatabase()
 
-global.authFile = `ANI_MX_SCANS`
-const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile)
+global.authFile = `${opts._[0] || 'session'}.data.json`
+const { state, saveState } = useSingleFileAuthState(global.authFile)
 
 const connectionOptions = {
 printQRInTerminal: true,
 auth: state,
 logger: P({ level: 'silent'}),
-browser: ['ANI MX SCANS','Edge','1.0.0']
-/*msgRetryCounterMap,
-getMessage : async (key) => {
-let remoteJidxd = key.remoteJid.includes(":") ? key.remoteJid.split(":")[0] + "@s.whatsapp.net" : key.remoteJid
-return await store.loadMessage(remoteJidxd, key.id)}*/
+browser: ['🌎ANI MX SCANS🌏','Edge','1.0.0']
 }
 
 global.conn = makeWASocket(connectionOptions)
@@ -145,7 +141,7 @@ conn.ev.off('creds.update', conn.credsUpdate)
 }
   
 conn.welcome = '*╔══════════════*\n*╟❧ @subject*\n*╠══════════════*\n*╟❧ @user*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* @desc\n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*'
-  conn.bye = '┏━━━━━━━━━━━━\n┃──〘 *ADIÓS* 〙───\n┃━━━━━━━━━━━━\n┃ *_☠ Se fue @user_* \n┃ *_Si no regresa..._* \n┃ *_Nadie l@ va a extrañar 😇👍🏼_*\n┗━━━━━━━━━━'
+  conn.bye = '╔══════════════*\n*║〘 *ADIÓS* 〙*\n*╠══════════════*\n║*_☠ Se fue @user_*\n║*_Si no regresa..._*\n║ *_Nadie l@ va a extrañar 😇👍🏼_*\n*╚══════════════*'
   conn.spromote = '*@user SE SUMA AL GRUPO DE ADMINS!!*'
   conn.sdemote = '*@user ABANDONA EL GRUPO DE ADMINS !!*'
   conn.sDesc = '*SE HA MODIFICADO LA DESCRIPCIÓN DEL GRUPO*\n\n*NUEVA DESCRIPCIÓN:* @desc'
@@ -153,21 +149,20 @@ conn.welcome = '*╔══════════════*\n*╟❧ @subjec
   conn.sIcon = '*SE HA CAMBIADO LA FOTO DEL GRUPO!!*'
   conn.sRevoke = '*SE HA ACTUALIZADO EL LINK DEL GRUPO!!*\n*LINK NUEVO:* @revoke'
 
-  conn.handler = handler.handler.bind(global.conn)
-  conn.participantsUpdate = handler.participantsUpdate.bind(global.conn)
-  conn.groupsUpdate = handler.groupsUpdate.bind(global.conn)
-  conn.onDelete = handler.deleteUpdate.bind(global.conn)
-  conn.connectionUpdate = connectionUpdate.bind(global.conn)
-  conn.credsUpdate = saveState.bind(global.conn, true)
-
-  conn.ev.on('messages.upsert', conn.handler)
-  conn.ev.on('group-participants.update', conn.participantsUpdate)
-  conn.ev.on('groups.update', conn.groupsUpdate)
-  conn.ev.on('message.delete', conn.onDelete)
-  conn.ev.on('connection.update', conn.connectionUpdate)
-  conn.ev.on('creds.update', conn.credsUpdate)
-  isInit = false
-  return true
+conn.handler = handler.handler.bind(global.conn)
+conn.participantsUpdate = handler.participantsUpdate.bind(global.conn)
+conn.groupsUpdate = handler.groupsUpdate.bind(global.conn)
+conn.onDelete = handler.deleteUpdate.bind(global.conn)
+conn.connectionUpdate = connectionUpdate.bind(global.conn)
+conn.credsUpdate = saveState.bind(global.conn, true)
+conn.ev.on('messages.upsert', conn.handler)
+conn.ev.on('group-participants.update', conn.participantsUpdate)
+conn.ev.on('groups.update', conn.groupsUpdate)
+conn.ev.on('message.delete', conn.onDelete)
+conn.ev.on('connection.update', conn.connectionUpdate)
+conn.ev.on('creds.update', conn.credsUpdate)
+isInit = false
+return true
 }
 
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
@@ -238,5 +233,5 @@ var a = await clearTmp()
 console.log(chalk.cyanBright(`\n▣────────[ AUTOCLEARTMP ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 180000)
 _quickTest()
-.then()
+.then(() => conn.logger.info(`CARGANDO．．．\n`))
 .catch(console.error)
