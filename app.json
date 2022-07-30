@@ -1,0 +1,21 @@
+{
+  "name": "ANI-MX-SCANS",
+  "description": "Bot promocional del proyecto ANI MX SCANS",
+  "repository": "https://github.com/ReyEndymion/ANI_MX_SCANS-MD",
+  "logo": "https://raw.githubusercontent.com/ReyEndymion/ANI_MX_SCANS-MD/master/Menu2.jpg",
+  "keywords": ["java", "bot", "whatsapp-bot", "whatsapp-automation"],
+  "buildpacks": [
+  {
+    "url": "heroku/nodejs"
+  },
+  {
+    "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+  },
+  {
+    "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick.git"
+  },
+  {
+    "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+  }    
+ ]
+}
