@@ -3,6 +3,7 @@ Bot promocional del proyecto ANI MX SCANS by ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ�
 
 UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO BRUNO SOBRINO QUÉ ME AYUDÓ A DARLE VIDA A MIS BOTS.
 (El otro bot es privado solo este se conoce entrando a los siguientes grupos:
+
 *_1.-_* <a href="https://chat.whatsapp.com/L4VRAzaYc11D4LSpt8rB9W" target="blank"><img src="https://img.shields.io/badge/𝕃𝕠𝕓𝕓𝕪_𝕕𝕖_𝕆𝕥𝕒𝕜𝕦𝕤_𝕋𝕠𝕘𝕖𝕥𝕙𝕖𝕣-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
 
 *_2.-_* <a href="https://chat.whatsapp.com/H0SheP7ippc1dF9uxL04Gt" target="blank"><img src="https://img.shields.io/badge/ℂ𝕒𝕗𝕖𝕔𝕚𝕥𝕠_ℍ𝕠𝕣𝕚_𝕊𝕒𝕟𝕕𝕚𝕒🍉☕🥢-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
