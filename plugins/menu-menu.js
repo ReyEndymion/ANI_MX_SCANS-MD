@@ -79,7 +79,7 @@ let str = `
 ° ඬ ⃟ 💟 _${usedPrefix}grouplist_
 ° ඬ ⃟ 💟 _${usedPrefix}owner_
 ° ඬ ⃟ 💟 _${usedPrefix}script_
-° ඬ ⃟ 💟 _Bot_ (uso sin pre𝑓i𝑗o)
+° ඬ ⃟ 💟 _Bot_ (uso sin prefi𝑗o)
 
 *<𝕌ℕ𝔼 𝕌ℕ 𝔹𝕆𝕋 𝔸 𝕋𝕌 𝔾ℝ𝕌ℙ𝕆/>*
 
@@ -105,7 +105,8 @@ let str = `
 ° ඬ⃟🎖️ _${usedPrefix}doxear *<nombre / @tag>*_
 ° ඬ⃟🎖️ _${usedPrefix}pregunta *<texto>*_
 ° ඬ⃟🎖️ _${usedPrefix}slot *<apuesta>*_
-° ඬ⃟🎖️ _${usedPrefix}pvp *<@tag>*_
+° ඬ⃟🎖️ _${usedPrefix}ttt *<nombre sala>*_
+° ඬ⃟🎖️ _${usedPrefix}delttt_
 ° ඬ⃟🎖️ _${usedPrefix}simi *<texto>*_
 ° ඬ⃟🎖️ _${usedPrefix}top *<texto>*_
 ° ඬ⃟🎖️ _${usedPrefix}topgays_
@@ -178,7 +179,7 @@ let str = `
 ° ඬ⃟💎 _${usedPrefix}kick *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}grupo *<abrir / cerrar>*_
 ° ඬ⃟💎 _${usedPrefix}promote *<@tag>*_
-° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
+° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_f
 ° ඬ⃟💎 _admins *<texto>*_ (uso sin pre𝑓i𝑗o)
 ° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}infogroup_
@@ -292,6 +293,7 @@ let str = `
 ° ඬ⃟🔞 _${usedPrefix}pack2_
 ° ඬ⃟🔞 _${usedPrefix}pack3_
 ° ඬ⃟🔞 _${usedPrefix}videoxxx_
+° ඬ⃟🔞 _${usedPrefix}tiktokxxx_
 ° ඬ⃟🔞 _${usedPrefix}tetas_
 ° ඬ⃟🔞 _${usedPrefix}booty_
 ° ඬ⃟🔞 _${usedPrefix}ecchi_
@@ -360,7 +362,6 @@ let str = `
 ° ඬ⃟🔍 _${usedPrefix}toraccino *<texto>*_
 ° ඬ⃟🔍 _${usedPrefix}uapkpro *<texto>*_
 
-
 *<AUDIOS/>* 
 *- ESCRIBE LAS SIGUIENTES PALABRAS O FRASES SIN NINGUN PREFIJO (#, /, *, .)* 
 _(uso sin prefijo)_
@@ -423,7 +424,7 @@ _(uso sin prefijo)_
 
 ° ඬ⃟💵 _${usedPrefix}balance_
 ° ඬ⃟💵 _${usedPrefix}claim_
-° ඬ⃟💵 _${usedPrefix}top_
+° ඬ⃟💵 _${usedPrefix}lb_
 ° ඬ⃟💵 _${usedPrefix}levelup_
 ° ඬ⃟💵 _${usedPrefix}myns_
 ° ඬ⃟💵 _${usedPrefix}perfil_

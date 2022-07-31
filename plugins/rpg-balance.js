@@ -9,7 +9,7 @@ m.reply(`
 ▢ *Diamantes:* ${global.db.data.users[who].limit}💎
 └──────────────
 *NOTA:* 
-*Puedes comprar diamantes 💎  usando los comandos*
+*Puedes comprar diamantes 💎 usando los comandos*
 ❏ *${usedPrefix}buy <cantidad>*
 ❏ *${usedPrefix}buyall*`)
 }

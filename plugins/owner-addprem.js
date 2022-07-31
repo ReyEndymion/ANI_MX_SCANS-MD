@@ -5,10 +5,9 @@ else who = m.chat
 if (!who) throw `*[❗INFO❗] INGRESA EL @tag DE LA PERSONA QUE DESEA AGREGAR A LOS USUARIOS PREMIUM*`
 if (global.prems.includes(who.split`@`[0])) throw '*[❗INFO❗] EL USUARIO REGISTRADO YA ES USUARIO PREMIUM*'
 global.prems.push(`${who.split`@`[0]}`)
-conn.reply(m.chat, `*[❗INFO❗] @${who.split`@`[0]} AHORA YA ES UN USUARIO PREMIUM, NO TENDRÁ LÍMITES AL USAR EL BOT*`, m, {
-contextInfo: {
-mentionedJid: [who]
-}})}
+let textprem = `*[❗INFO❗] @${who.split`@`[0]} AHORA YA ES UN USUARIO PREMIUM, NO TENDRÁ LÍMITES AL USAR EL BOT*`
+m.reply(textprem, null, { mentions: conn.parseMention(textprem) })
+}
 handler.help = ['addprem <@user>']
 handler.tags = ['owner']
 handler.command = /^(add|\+)prem$/i

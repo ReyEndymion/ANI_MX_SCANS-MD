@@ -6,10 +6,9 @@ if (!who) throw `*[❗INFO❗] INGRESA EL @tag DE LA PERSONA QUE DESEE ELIMINAR 
 if (!global.prems.includes(who.split`@`[0])) throw '*[❗INFO❗] EL USUARIO INGRESADO NO ES USUARIO PREMIUM*'
 let index = global.prems.findIndex(v => (v.replace(/[^0-9]/g, '') + '@s.whatsapp.net') === (who.replace(/[^0-9]/g, '') + '@s.whatsapp.net'))
 global.prems.splice(index, 1)
-conn.reply(m.chat, `*[❗INFO❗] @${who.split`@`[0]} AHORA YA NO FORMA PARTE DE LOS USUARIOS PREMIUM*`, m, {
-contextInfo: {
-mentionedJid: [who]
-}})}
+let textdelprem = `*[❗INFO❗] @${who.split`@`[0]} AHORA YA NO FORMA PARTE DE LOS USUARIOS PREMIUM*`
+m.reply(textdelprem, null, { mentions: conn.parseMention(textdelprem) })
+}
 handler.help = ['delprem <@user>']
 handler.tags = ['owner']
 handler.command = /^(remove|-|del)prem$/i

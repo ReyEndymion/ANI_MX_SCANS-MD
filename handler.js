@@ -612,9 +612,9 @@ export async function handler(chatUpdate) {
             console.log(m, m.quoted, e)
         }
         if (opts['autoread'])
-           await this.readMessages([m.key])
+            await this.readMessages([m.key])
         
-       Rey Endymion|@5215533827255|ANIMXSCANS|ANI MX SCANS)/gi)) {
+       if (!m.fromMem && m.text.match(/(Rey Endymion|@5215533827255|ANIMXSCANS|ANI MX SCANS)/gi)) {
         let emot = pickRandom(["🎃", "❤", "😘", "😍", "💕", "😎", "🙌", "⭐", "👻", "🔥"])
         this.sendMessage(m.chat, { react: { text: emot, key: m.key }})}
         function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]}
@@ -646,8 +646,8 @@ pp = await this.profilePictureUrl(user, 'image')
 } catch (e) {
 } finally {
 text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*SIN DESCRIPCION*') :
-                            (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', await this.getName(user))
-                            let apii = await this.getFile(pp)
+(chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
+let apii = await this.getFile(pp)
 const fake = { quoted: {
 key : {
 participant : '0@s.whatsapp.net' },

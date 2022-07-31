@@ -71,7 +71,7 @@ global.author = '★🌎ANI MX SCANS🌏★'
 
 global.wm = '★🌎ANI MX SCANS🌏★'
 global.igfg = '★🌎ANI MX SCANS🌏★'
-global.wait = '*⌛ _Cargando..._ ▬▬▬▭*'
+global.wait = '*⌛ _Cargando, aguarde un momento..._ ▬▬▬▭*'
 
 global.imagen1 = fs.readFileSync('./Menu2.jpg')
 global.imagen2 = fs.readFileSync('./src/nuevobot.jpg') 

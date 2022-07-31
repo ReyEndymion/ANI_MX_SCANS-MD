@@ -12,7 +12,7 @@ case 'video': return `
 `.trim()
 case 'channel': return `
 📌 *${v.channelName}* (${v.url})
-🧑‍🤝‍🧑 _${v.subscriberH} s𝚞scri𝚙tores_
+🧑‍🤝‍🧑 _${v.subscriberH} suscri𝚙tores_
 🎥 ${v.videoCount} videos
 `.trim()
 }
