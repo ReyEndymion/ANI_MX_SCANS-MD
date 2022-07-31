@@ -1,7 +1,7 @@
 let handler = m => m
 handler.all = async function (m) {
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let conn = this
+
 
 if (/^buen día|^buen dia|^hola|^Buenos días|^qué tal|^𝐇𝐨𝐥𝐚$/i.test(m.text)) {
     let text = 	`Hola @${who.split("@s.whatsapp.net")[0]} en un momento te respondemos...
