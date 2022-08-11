@@ -2,6 +2,7 @@ node_modules/
 Moviles/
 ANI_MX_SCANS/
 /.git/
+tmp/
 creds.json
 database.json
 BotComedia.data.json
