@@ -1,9 +1,13 @@
 node_modules/
 Moviles/
 ANI_MX_SCANS/
+ANIMXSCANS/
+SessionsBackUp/
 /.git/
 tmp/
 creds.json
 database.json
 BotComedia.data.json
 session.data.json
+ANI_MX_SCANS-MD.zip
+package-lock.json
