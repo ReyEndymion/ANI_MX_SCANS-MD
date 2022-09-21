@@ -91,9 +91,8 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 ```
 
 ## `COLABORADORES DEL BOT` 
-<a href="https://github.com/BrunoSobrino"><img src="https://github.com/BrunoSobrino.png" width="300" height="300" alt="BrunoSobrino"/></a>
-
-<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="100" height="100" alt="theh2so4"/></a>
+<a href="https://github.com/BrunoSobrino"><img src="https://github.com/BrunoSobrino.png" width="250" height="250" alt="BrunoSobrino"/></a>
+<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="250" height="250" alt="theh2so4"/></a>
 
 ## `EDITOR Y PROPIETARIO DEL BOT` 
 <a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="BrunoSobrino"/></a>
