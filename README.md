@@ -62,7 +62,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 ```
 
 ### `—◉ 🔥 ACTIVAR EN BOXMINEHOST 🔥`
-<a href="https://boxmineworld.com"><img src="https://raw.githubusercontent.com/BrunoSobrino/ANI_MX_SCANS-MD/master/src/Pre%20Bot%20Publi.png" width="450" height="240" alt="JPG"/></a>
+<a href="https://boxmineworld.com"><img src="https://raw.githubusercontent.com/ReyEndymion/ANI_MX_SCANS-MD/master/src/Pre%20Bot%20Publi.png" width="450" height="240" alt="JPG"/></a>
 <p>> Pagina Oficial:
 <a href="https://boxmineworld.com">https://boxmineworld.com</a>
 <p>> Dashboard:
@@ -88,13 +88,17 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 ## `COLABORADORES DEL BOT` 
 <a href="https://github.com/BrunoSobrino"><img src="https://github.com/BrunoSobrino.png" width="300" height="300" alt="BrunoSobrino"/></a>
 
+<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="300" height="300" alt="theh2so4"/></a>
+
 ## `EDITOR Y PROPIETARIO DEL BOT` 
 <a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="300" height="300" alt="BrunoSobrino"/></a>
 
 `ANI_MX_SCANS-MD _ By Rey Endymion`
 
-POWERED BY BRUNO SOBRINO & The Shadow Brokers
+POWERED BY BRUNO SOBRINO & TheH2SO4
 
 https://github.com/BrunoSobrino
 
 https://github.com/BrunoSobrino/TheMystic-Bot-MD
+
+https://github.com/theh2so4
