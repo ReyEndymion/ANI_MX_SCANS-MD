@@ -1,3 +1,4 @@
+#| Folders |#
 node_modules/
 Moviles/
 ANI_MX_SCANS/
@@ -5,6 +6,7 @@ ANIMXSCANS/
 SessionsBackUp/
 /.git/
 tmp/
+#| Files |#
 creds.json
 database.json
 BotComedia.data.json
