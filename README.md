@@ -73,7 +73,12 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <a href="https://youtu.be/eC9TfKICpcY">https://youtu.be/eC9TfKICpcY</a>
 <p>> Dudas UNICAMENTE SOBRE EL HOST:
 <a href="https://discord.gg/84qsr4v">https://discord.gg/84qsr4v</a> (Preguntar por Vicemi)
-</p>
+  
+### `—◉ 💥 ACTIVAR EN ACIDICNODES 💥`
+<a href="https://billing.acidicnodes.ml/register?ref=ADII104p"><img src="https://billing.acidicnodes.ml/storage/icon.png" width="100" height="100" alt="acidicnodes"/></a>
+- TUTORIAL: [https://youtu.be/nbjvreJ0tUk](https://youtu.be/nbjvreJ0tUk)
+- PAGINA: [https://billing.acidicnodes.ml/register?ref=ADII104p](https://billing.acidicnodes.ml/register?ref=ADII104p)
+- SOPORTE: [https://whatsapp.acidicnodes.com](https://whatsapp.acidicnodes.com)
 
 ### `—◉ 📝 NOTAS 📝`
 ```bash
@@ -88,10 +93,10 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 ## `COLABORADORES DEL BOT` 
 <a href="https://github.com/BrunoSobrino"><img src="https://github.com/BrunoSobrino.png" width="300" height="300" alt="BrunoSobrino"/></a>
 
-<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="300" height="300" alt="theh2so4"/></a>
+<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="100" height="100" alt="theh2so4"/></a>
 
 ## `EDITOR Y PROPIETARIO DEL BOT` 
-<a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="300" height="300" alt="BrunoSobrino"/></a>
+<a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="BrunoSobrino"/></a>
 
 `ANI_MX_SCANS-MD _ By Rey Endymion`
 
