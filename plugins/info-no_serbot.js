@@ -12,15 +12,15 @@ let buttonMessage= {
 'fileLength': 99999999999999,
 'pageCount': 200,
 'contextInfo': {
-'forwardingScore': 200,
-'isForwarded': true,
+'forwardingScore': 0,
+'isForwarded': false,
 'externalAdReply': {
 'mediaUrl': 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD',
 'mediaType': 2,
-'previewType': 'pdf', 
+'previewType': 'pdf',
 'title': 'Bot promocional del proyecto 🌎ANI MX SCANS🌏 ⁩',
 'body': '🌎ANI MX SCANS🌏',
-'thumbnail': fs.readFileSync("./Menu2.jpg"),
+'thumbnail': imagen1,
 'sourceUrl': 'https://www.facebook.com/ANIMxSCANS'}},
 'caption': text,
 'footer': wm,
@@ -28,7 +28,6 @@ let buttonMessage= {
 {buttonId: `${usedPrefix}instalarbot`, buttonText: {displayText: 'INSTALARBOT'}, type: 1}],
 'headerType': 6 }
 conn.sendMessage(m.chat, buttonMessage, { quoted: m })}
-
 handler.command = /^(jadibot|serbot|bots|subbots|getcode)/i
 export default handler
 

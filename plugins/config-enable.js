@@ -16,18 +16,17 @@ rows: [
 {title: "💬 | PCONLY", description: "EL BOT SOLO RESPONDERA A LOS COMANDOS SI ES UN CHAT PRIVADO", rowId: `${usedPrefix + command} pconly`},
 {title: "🏢 | GCONLY", description: "EL BOT SOLO RESPONDERA A LOS COMANDOS SI ES UN GRUPO", rowId: `${usedPrefix + command} gconly`},
 {title: "❌ | ANTIVIEWONCE", description: "ACTIVA O DESACTIVA EL ANTI VER UNA SOLA VEZ", rowId: `${usedPrefix + command} antiviewonce`},
+{title: "📵 | ANTILLAMADA", description: "ACTIVA O DESACTIVA EL ANTI LLAMADA", rowId: `${usedPrefix + command} anticall`},
+{title: "💬 | ANTIPRIVADO", description: "EL BOT BLOQUEARA A LOS USUARIOS QUE LE HABLEN AL PRIVADO", rowId: `${usedPrefix + command} antiprivado`},
+{title: "🤬 | ANTITOXIC", description: "ACTIVA O DESACTIVA EL ANTI MALAS PALABRAS", rowId: `${usedPrefix + command} antitoxic`},
+{title: "🕸️ | ANTITRABAS", description: "ACTIVA O DESACTIVA EL ANTI BINARIOS O TRABAS", rowId: `${usedPrefix + command} antitraba`},
+{title: "🥸 | ASISTENTE", description: "ACTIVA O DESACTIVA EL ASISTENTE DE GRUPOS 🥸", rowId: `${usedPrefix + command} asistente`},
+{title: "🎭 | ASISTENTE GRUPOSROL", description: "ACTIVA O DESACTIVA EL ASISTENTE DE GRUPOS DE ROL", rowId: `${usedPrefix + command} gruposrol`},
 ]}, ]
-let name = await conn.getName(m.sender)
+//let name = await conn.getName(m.sender)
 const listMessage = {
 text: ' ',
-footer: `╭══〘 ✯✯✯✯✯✯✯✯ 〙═╮
-║≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-║➤ *✨HOLA, ${name}!!*
-║≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-╰══╡✯✯✯✯✯✯✯✯╞══╯
-┏━━━━━━━━━━━━━┓
-┣❧ *SELECCIONA UNA DE LAS OPCIONES QUE SALEN EN LA SIGUIENTE LISTA O DA CLICK EN ALGUN BOTON DE ESTE MENSAJE*
-┃≡≡≡≡≡≡≡≡≡≡≡≡≡≡
+footer: `┏━━━━━━━━━━━━━┓
 ┣ ඬ⃟ℹ️ _${usedPrefix}enable *welcome*_
 ┣ ඬ⃟ℹ️ _${usedPrefix}disable *welcome*_
 ┣ ඬ⃟ℹ️ _${usedPrefix}enable *public*_
@@ -54,10 +53,21 @@ footer: `╭══〘 ✯✯✯✯✯✯✯✯ 〙═╮
 ┣ ඬ⃟ℹ️ _${usedPrefix}disable *antiviewonce*_
 ┣ ඬ⃟ℹ️ _${usedPrefix}enable *autosticker*_
 ┣ ඬ⃟ℹ️ _${usedPrefix}disable *autosticker*_
-┗━━━━━━━━━━━━━┛
-${author}`,
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *anticall*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *anticall*_
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *antiprivado*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *antiprivado*_
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *antitoxic*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *antitoxic*_
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *antitraba*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *antitraba*_
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *asistente*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *asistente*_
+┣ ඬ⃟ℹ️ _${usedPrefix}enable *gruposrol*_
+┣ ඬ⃟ℹ️ _${usedPrefix}disable *gruposrol*_
+┗━━━━━━━━━━━━━┛`,
 title: null,
-buttonText: "SELECCIONE AQUI",
+buttonText: "*SELECCIONE AQUÍ*",
 sections }
 
 let isEnable = /true|enable|(turn)?on|1/i.test(command)
@@ -214,14 +224,61 @@ throw false
 }
 global.opts['swonly'] = isEnable
 break
+case 'anticall':
+isAll = true
+if (!isROwner) {
+global.dfail('rowner', m, conn)
+throw false
+}
+bot.antiCall = isEnable
+break
+case 'antiprivado':
+isAll = true
+if (!isROwner) {
+global.dfail('rowner', m, conn)
+throw false
+}
+bot.antiPrivate = isEnable
+break
+case 'antitoxic':
+if (m.isGroup) {
+if (!(isAdmin || isOwner)) {
+global.dfail('admin', m, conn)
+throw false
+}}
+chat.antiToxic = isEnable
+break
+case 'antitraba':
+if (m.isGroup) {
+if (!(isAdmin || isOwner)) {
+global.dfail('admin', m, conn)
+throw false
+}}
+chat.antiTraba = isEnable
+break
+case 'asistente':
+if (m.isGroup) {
+if (!(isAdmin || isOwner)) {
+global.dfail('admin', m, conn)
+throw false
+}}
+chat.asistente = isEnable
+break
+case 'gruposrol':
+if (m.isGroup) {
+if (!(isAdmin || isOwner)) {
+global.dfail('admin', m, conn)
+throw false
+}}
+chat.gruposrol = isEnable
+break
 default:
 if (!/[01]/.test(command)) return await conn.sendMessage(m.chat, listMessage)
 throw false
 }
-conn.sendButton(m.chat, `🗂️ OPCION: ${type} 
-🎚️ ESTADO: ${isEnable ? 'ACTIVADO' : 'DESACTIVADO'}
-📣 PARA: ${isAll ? 'ESTE BOT' : isUser ? '' : 'ESTE CHAT'}`, author, null, [[`${isEnable ? '✖️ DESACTIVAR ✖️' : '✔️ ACTIVAR ✔️'}`, `${isEnable ? `.off ${type}` : `.on ${type}`}`], ['👾 MENU PRINCIPAL 👾', '.menu']],m)}
-
+conn.sendButton(m.chat, `🗂️ OPCIÓN: ${type} 
+🎚️ ESTADO: ${isEnable ? '𝙰𝙲𝚃𝙸𝚅𝙰𝙳𝙾' : '𝙳𝙴𝚂𝙰𝙲𝚃𝙸𝚅𝙰𝙳𝙾'}
+📣 PARA: ${isAll ? '𝙴𝚂𝚃𝙴 𝙱𝙾𝚃' : isUser ? '' : '𝙴𝚂𝚃𝙴 𝙲𝙷𝙰𝚃'}`, author, null, [[`${isEnable ? '✖️ 𝙳𝙴𝚂𝙰𝙲𝚃𝙸𝚅𝙰𝚁 ✖️' : '✔️ 𝙰𝙲𝚃𝙸𝚅𝙰𝚁 ✔️'}`, `${isEnable ? `#disable ${type}` : `#enable ${type}`}`], ['👾 𝙼𝙴𝙽𝚄 𝙿𝚁𝙸𝙽𝙲𝙸𝙿𝙰𝙻 👾', '#menu']], m)}
 handler.help = ['en', 'dis'].map(v => v + 'able <option>')
 handler.tags = ['group', 'owner']
 handler.command = /^((en|dis)able|(tru|fals)e|(turn)?[01])$/i

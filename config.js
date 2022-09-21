@@ -10,8 +10,17 @@ global.owner = [
   ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true],
   ['5215561717728', '🌎ANI MX SCANS🌏 - BOT DE PROMOCIÓN 🌎', true]
 ] // Cambia los numeros que quieras
-global.mods = [] 
+
 global.prems = [] 
+global.packname = '(☞ﾟ∀ﾟ)☞'
+global.author = '★🌎ANI MX SCANS🌏★'
+global.wm = '★🌎ANI MX SCANS🌏★'
+global.igfg = '★🌎ANI MX SCANS🌏★'
+global.wait = '*⌛ _Cargando, aguarde un momento..._ ▬▬▬▭*'
+global.keysZens = ['fiktod', 'c2459db922', 'BF39D349845E', '675e34de8a', '37CC845916', '0b917b905e6f', '6fb0eff124']
+global.keysxxx = keysZens[Math.floor(keysZens.length * Math.random())]
+global.lolkeys = ['2e0da1f78d1721134b21816d', '902c3bc9d8c08b0dcf8f5373', '808693688ecc695293359089', '85faf717d0545d14074659ad']
+global.lolkeysapi = lolkeys[Math.floor(lolkeys.length * Math.random())]
 
 global.APIs = { // API Prefix
   // name: 'https://website'
@@ -65,44 +74,27 @@ global.APIKeys = { // APIKey Here
   'https://violetics.pw': 'beta'
 }
 
-// Sticker WM
-global.packname = '(☞ﾟ∀ﾟ)☞'
-global.author = '★🌎ANI MX SCANS🌏★'
-
-global.wm = '★🌎ANI MX SCANS🌏★'
-global.igfg = '★🌎ANI MX SCANS🌏★'
-global.wait = '*⌛ _Cargando, aguarde un momento..._ ▬▬▬▭*'
-
 global.imagen1 = fs.readFileSync('./Menu2.jpg')
 global.imagen2 = fs.readFileSync('./src/nuevobot.jpg') 
 global.imagen3 = fs.readFileSync('./src/Pre Bot Publi.png')
 
-global.keysZens = ['fiktod', 'c2459db922', 'BF39D349845E', '675e34de8a', '37CC845916', '0b917b905e6f', '6fb0eff124']
-global.keysxxx = keysZens[Math.floor(keysZens.length * Math.random())]
-
-global.lolkeys = ['2e0da1f78d1721134b21816d', '902c3bc9d8c08b0dcf8f5373', '808693688ecc695293359089', '85faf717d0545d14074659ad']
-global.lolkeysapi = lolkeys[Math.floor(lolkeys.length * Math.random())]
+global.mods = [] 
 
 global.multiplier = 9999 
-
 global.rpg = {
-  emoticon(string) {
-    string = string.toLowerCase()
-    let emot = {
-      level: '🏆',
-      limit: '💎',
-      exp: '🕹️'
-    }
-    let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string))
-    if (!results.length) return ''
-    else return emot[results[0][0]]
-  }
+emoticon(string) {
+string = string.toLowerCase()
+let emot = {
+level: '🏆',
+limit: '💎',
+exp: '🕹️'
 }
-
-
+let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string))
+if (!results.length) return ''
+else return emot[results[0][0]]
+}}
 let file = fileURLToPath(import.meta.url)
 watchFile(file, () => {
-  unwatchFile(file)
-  console.log(chalk.redBright("Update 'config.js'"))
-  import(`${file}?update=${Date.now()}`)
-})
+unwatchFile(file)
+console.log(chalk.redBright("Update 'config.js'"))
+import(`${file}?update=${Date.now()}`)})

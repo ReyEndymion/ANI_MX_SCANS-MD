@@ -79,12 +79,11 @@ let str = `
 ° ඬ ⃟ 💟 _${usedPrefix}grouplist_
 ° ඬ ⃟ 💟 _${usedPrefix}owner_
 ° ඬ ⃟ 💟 _${usedPrefix}script_
-° ඬ ⃟ 💟 _Bot_ (uso sin prefi𝑗o)
+° ඬ ⃟ 💟 _Bot_ (uso sin prefijo)
 
 *<𝕌ℕ𝔼 𝕌ℕ 𝔹𝕆𝕋 𝔸 𝕋𝕌 𝔾ℝ𝕌ℙ𝕆/>*
 
 ° ඬ⃟👽 _${usedPrefix}join *<enlace / link / url>*_
-
 
 *<𝕁𝕌𝔼𝔾𝕆𝕊/>*
 
@@ -104,6 +103,7 @@ let str = `
 ° ඬ⃟🎖️ _${usedPrefix}love *<nombre / @tag>*_
 ° ඬ⃟🎖️ _${usedPrefix}doxear *<nombre / @tag>*_
 ° ඬ⃟🎖️ _${usedPrefix}pregunta *<texto>*_
+° ඬ⃟🎖️ _${usedPrefix}suitpvp *<@tag>*_
 ° ඬ⃟🎖️ _${usedPrefix}slot *<apuesta>*_
 ° ඬ⃟🎖️ _${usedPrefix}ttt *<nombre sala>*_
 ° ඬ⃟🎖️ _${usedPrefix}delttt_
@@ -135,6 +135,12 @@ let str = `
 ° ඬ⃟☑️ _${usedPrefix}disable *autosticker*_
 ° ඬ⃟☑️ _${usedPrefix}enable *antiviewonce*_
 ° ඬ⃟☑️ _${usedPrefix}disable *antiviewonce*_
+° ඬ⃟☑️ _${usedPrefix}enable *antitoxic*_
+° ඬ⃟☑️ _${usedPrefix}disable *antitoxic*_
+° ඬ⃟☑️ _${usedPrefix}enable *antitraba*_
+° ඬ⃟☑️ _${usedPrefix}disable *antitraba*_
+° ඬ⃟☑️ _${usedPrefix}enable *antiarabes*_
+° ඬ⃟☑️ _${usedPrefix}disable *antiarabes*_
 
 *<REPORTES DE FALLOS/>*
 
@@ -162,6 +168,7 @@ let str = `
 ° ඬ⃟📥 _${usedPrefix}playdoc *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}playlist *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}playlist2 *<texto>*_
+° ඬ⃟📥 _${usedPrefix}spotify *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}ringtone *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}soundcloud *<texto>*_
 ° ඬ⃟📥 _${usedPrefix}imagen *<texto>*_
@@ -179,8 +186,8 @@ let str = `
 ° ඬ⃟💎 _${usedPrefix}kick *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}grupo *<abrir / cerrar>*_
 ° ඬ⃟💎 _${usedPrefix}promote *<@tag>*_
-° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_f
-° ඬ⃟💎 _admins *<texto>*_ (uso sin pre𝑓i𝑗o)
+° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
+° ඬ⃟💎 _admins *<texto>*_ (uso sin prefijo)
 ° ඬ⃟💎 _${usedPrefix}demote *<@tag>*_
 ° ඬ⃟💎 _${usedPrefix}infogroup_
 ° ඬ⃟💎 _${usedPrefix}link_
@@ -190,9 +197,12 @@ let str = `
 ° ඬ⃟💎 _${usedPrefix}setwelcome *<texto>*_
 ° ඬ⃟💎 _${usedPrefix}setbye *<texto>*_
 ° ඬ⃟💎 _${usedPrefix}hidetag *<texto>*_
+° ඬ⃟💎 _${usedPrefix}fantasmas_
+° ඬ⃟💎 _${usedPrefix}destraba_
 
 *<CONVERTIDORES/>*
 
+° ඬ⃟🧧 _${usedPrefix}togifaud *<responde a un video>*_
 ° ඬ⃟🧧 _${usedPrefix}toimg *<responde a un sticker>*_
 ° ඬ⃟🧧 _${usedPrefix}tomp3 *<responde a un video / nota de voz>*_
 ° ඬ⃟🧧 _${usedPrefix}toptt *<responde a un video / audio>*_
@@ -214,10 +224,11 @@ let str = `
 ° ඬ⃟🖍️ _${usedPrefix}pixelar_
 ° ඬ⃟🖍️ _${usedPrefix}blur_
 
-*<𝔽ℝ𝔸𝕊𝔼𝕊/>*
+*<FRASES Y TEXTOS/>*
 
 ° ඬ⃟🥀 _${usedPrefix}consejo_
 ° ඬ⃟🥀 _${usedPrefix}fraseromantica_
+° ඬ⃟🥀 _${usedPrefix}historiaromantica_
 
 *<RANDOM/>*
 
@@ -287,7 +298,7 @@ let str = `
 ° ඬ⃟👾 _${usedPrefix}sakura_
 ° ඬ⃟👾 _${usedPrefix}cosplay_
 
-*<COMANDOS +𝟙𝟠/>*
+*<COMANDOS +18/>*
 
 ° ඬ⃟🔞 _${usedPrefix}pack_
 ° ඬ⃟🔞 _${usedPrefix}pack2_
@@ -401,6 +412,8 @@ _(uso sin prefijo)_
 ° ඬ⃟🔊 _Onichan_
 ° ඬ⃟🔊 _Mierda de Bot_
 ° ඬ⃟🔊 _Siuuu_
+° ඬ⃟🔊 _Epico_
+° ඬ⃟🔊 _Shitpost_
 ° ඬ⃟🔊 _Rawr_
 ° ඬ⃟🔊 _UwU_
 ° ඬ⃟🔊 _:c_
@@ -419,6 +432,7 @@ _(uso sin prefijo)_
 ° ඬ⃟🛠️ _${usedPrefix}spamwa *<numero|texto|cantidad>*_
 ° ඬ⃟🛠️ _${usedPrefix}styletext *<texto>*_
 ° ඬ⃟🛠️ _${usedPrefix}traducir *<texto>*_
+° ඬ⃟🛠️ _${usedPrefix}nowa *<numero>*_
 
 *<RPG - LIMITES - ECONOMIA/>*
 
@@ -442,12 +456,14 @@ _(uso sin prefijo)_
 ° ඬ⃟👽 _${usedPrefix}sticker *<enlace / link / url>*_
 ° ඬ⃟👽 _${usedPrefix}s *<responder a imagen o video>*_
 ° ඬ⃟👽 _${usedPrefix}s *<enlace / link / url>*_
+° ඬ⃟👽 _${usedPrefix}sfull *<responder a imagen o video>*_
 ° ඬ⃟👽 _${usedPrefix}emojimix *<emoji 1>&<emoji 2>*_
 ° ඬ⃟👽 _${usedPrefix}scircle *<responder a imagen>*_
 ° ඬ⃟👽 _${usedPrefix}sremovebg *<responder a imagen>*_
 ° ඬ⃟👽 _${usedPrefix}semoji *<tipo> <emoji>*_
 ° ඬ⃟👽 _${usedPrefix}attp *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}attp2 *<texto>*_
+° ඬ⃟👽 _${usedPrefix}attp3 *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}ttp *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}ttp2 *<texto>*_
 ° ඬ⃟👽 _${usedPrefix}ttp3 *<texto>*_
@@ -463,7 +479,11 @@ _(uso sin prefijo)_
 
 *<OWNER Y MODERADORES/>*
 
+° ඬ⃟👑 > *<funcion>*
+° ඬ⃟👑 => *<funcion>*
+° ඬ⃟👑 $ *<funcion>*
 ° ඬ⃟👑 _${usedPrefix}cajafuerte_
+° ඬ⃟👑 _${usedPrefix}blocklist_
 ° ඬ⃟👑 _${usedPrefix}enable *restrict*_
 ° ඬ⃟👑 _${usedPrefix}disable *restrict*_
 ° ඬ⃟👑 _${usedPrefix}enable *autoread*_
@@ -474,6 +494,11 @@ _(uso sin prefijo)_
 ° ඬ⃟👑 _${usedPrefix}disable *pconly*_
 ° ඬ⃟👑 _${usedPrefix}enable *gconly*_
 ° ඬ⃟👑 _${usedPrefix}disable *gconly*_
+° ඬ⃟👑 _${usedPrefix}enable *anticall*_
+° ඬ⃟👑 _${usedPrefix}disable *anticall*_
+° ඬ⃟👑 _${usedPrefix}enable *antiprivado*_
+° ඬ⃟👑 _${usedPrefix}disable *antiprivado*_
+° ඬ⃟👑 _${usedPrefix}msg *<texto>*_
 ° ඬ⃟👑 _${usedPrefix}banchat_
 ° ඬ⃟👑 _${usedPrefix}unbanchat_
 ° ඬ⃟👑 _${usedPrefix}banuser *<@tag>*_
@@ -485,6 +510,7 @@ _(uso sin prefijo)_
 ° ඬ⃟👑 _${usedPrefix}cleartpm_
 ° ඬ⃟👑 _${usedPrefix}restart_
 ° ඬ⃟👑 _${usedPrefix}update_
+° ඬ⃟👑 _${usedPrefix}traba1_ 
 ° ඬ⃟👑 _${usedPrefix}addprem *<@tag>*_
 ° ඬ⃟👑 _${usedPrefix}delprem *<@tag>*_
 ° ඬ⃟👑 _${usedPrefix}listprem_
@@ -496,18 +522,14 @@ conn.sendButton(m.chat, str, wm, pp,
 ['🌹 OWNER 🌹', '/owner'],
 ['🐾 INFOBOT 🐾', '/infobot']
 ], '', { contextInfo: { mentionedJid }})
-
-    
-    
 /*await conn.sendFile(m.chat, vn, 'menu.mp3', null, m, true, {
 type: 'audioMessage', 
 ptt: true})*/
-
 } catch (e) {
 conn.reply(m.chat, '*[❗INFO❗] EL MENU TIENE UN ERROR Y NO FUE POSIBLE ENVIARLO, REPORTELO AL PROPIETARIO DEL BOT*', m)
 throw e
 }}
-handler.command = /^(menu|menú|memu|memú|help|info|comandos|allmenu|2help|menu1.2|ayuda|commands|commandos)$/i
+handler.command = /^(menu|menú|memu|memú|help|info|comandos|allmenu|2help|menu1.2|ayuda|commands|commandos|cmd)$/i
 handler.exp = 50
 handler.fail = null
 export default handler

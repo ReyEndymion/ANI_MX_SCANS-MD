@@ -1,4 +1,3 @@
-import fs from 'fs'
 let handler  = async (m, { conn, command, args, usedPrefix, DevMode }) => {
 let text = `
 *—◉ TUTORIAL BOXMINE HOST*
@@ -6,6 +5,13 @@ let text = `
 > Pagina Oficial: https://boxmineworld.com
 > Dashboard: https://dash.boxmineworld.com/home
 > Panel: https://panel.boxmineworld.com
+
+------------------------------------
+
+*—◉ TUTORIAL ACIDICNODES HOST*
+> Tutorial: https://youtu.be/nbjvreJ0tUk
+> Pagina: https://billing.acidicnodes.ml/register?ref=ADII104p
+> Soporte: https://whatsapp.acidicnodes.com
 
 ------------------------------------
 
@@ -25,8 +31,10 @@ let text = `
 > npm install
 > npm update
 > npm start
+> npm install 
+> npm start  
 `.trim()   
-conn.reply(m.chat, text, m, {
+m.reply(m.chat, text, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
 title: 'INFORMACION - INSTALARBOT',
 body: '🌎ANI MX SCANS🌏',         

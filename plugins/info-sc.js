@@ -9,17 +9,17 @@ let buttonMessage= {
 'fileLength': 99999999999999,
 'pageCount': 200,
 'contextInfo': {
-'forwardingScore': 200,
-'isForwarded': true,
+'forwardingScore': 0,
+'isForwarded': false,
 'externalAdReply': {
 'mediaUrl': 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD',
 'mediaType': 2,
-'previewType': 'pdf', thumbnail: fs.readFileSync("./Menu2.jpg"),
+'previewType': 'pdf',
 'title': 'Bot promocional del proyecto 🌎ANI MX SCANS🌏 ⁩',
 'body': '🌎ANI MX SCANS🌏',
 'thumbnail': imagen1,
 'sourceUrl': 'https://www.facebook.com/ANIMxSCANS' }},
-'caption': texto1,
+'caption': texto,
 'footer': wm,
 'buttons':[
 {buttonId: `${usedPrefix}menu`, buttonText: {displayText: 'MENU'}, type: 1}, 

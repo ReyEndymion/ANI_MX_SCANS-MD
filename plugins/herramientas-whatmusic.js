@@ -24,7 +24,7 @@ RESULTADOS DE LA BUSQUEDA
 • 👨‍🎤 ARTISTA: ${artists !== undefined ? artists.map(v => v.name).join(', ') : 'No encontrado'}
 • 💾 ALBUM: ${album.name || 'No encontrado'}
 • 🌐 GENERO: ${genres !== undefined ? genres.map(v => v.name).join(', ') : 'No encontrado'}
-• 📆 FEC𝙷A DE LAN𝚉AMIENTO: ${release_date || 'No encontrado'}
+• 📆 FECHA DE LANZAMIENTO: ${release_date || 'No encontrado'}
 `.trim()
 fs.unlinkSync(`./tmp/${m.sender}.${ext}`)
 m.reply(txt)

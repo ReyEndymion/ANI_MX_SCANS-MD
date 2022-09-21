@@ -2,7 +2,7 @@ import { googleImage } from '@bochilteam/scraper'
 import fetch from 'node-fetch'
 import fs from 'fs'
 let handler = async (m, {text, usedPrefix, command, conn}) => {
-if (!text) throw `*[❗] INGREESE EL NOMBRE DE LA APK QUE QUIERA BUSCAR*`
+if (!text) throw `*[❗] INGRESE EL NOMBRE DE LA APK QUE QUIERA BUSCAR*`
 const res = await googleImage(text)
 let image = res.getRandom()
 let link = image
@@ -15,7 +15,7 @@ for (let x of jsons.result) {
 caption += `
 *NOMBRE:* *${x.apps_name}*
 *LINK:* ${x.apps_linkdl}
-*VERSION:* ${x.apps_version}
+*VERSIÓN:* ${x.apps_version}
 `}
 await conn.sendFile(m.chat, link, 'error.mp3', caption, m)}
 //await conn.reply(m.chat, caption, m)}

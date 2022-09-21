@@ -13,7 +13,7 @@ await m.reply(boost5)
 let old = performance.now()
 let neww = performance.now()
 let speed = `${neww - old}`
-let doxeo = `*[ ✔ ] PERSONA DOXXEADA CON EXITO*\n*⏳ DOXXEADO EN: ${speed} se𝚐undos!*
+let doxeo = `*[ ✔ ] PERSONA DOXXEADA CON EXITO*\n*⏳ DOXXEADO EN: ${speed} segundos!*
 
 *RESULTADOS OBTENIDOS:*
 

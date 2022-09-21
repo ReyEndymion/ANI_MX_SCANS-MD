@@ -1,6 +1,6 @@
 {
-    "name": "ANI-MX-SCANS",
-    "version": "1.0.0",
+    "name": "ani_mx_scans-md",
+    "version": "1.2.0",
     "description": "Bot promocional del proyecto 🌎ANI MX SCANS🌏",
     "main": "index.js",
     "type": "module",
@@ -11,8 +11,8 @@
     },
     "scripts": {
         "start": "node index.js",
-        "cli": "node . --optimize_for_size --max_old_space_size=460 index.js",
-        "db": "node . --autocleartmp --db 'mongodb+srv://BrunoSobrino:Akhmad6825@cluster0.mflne.mongodb.net/TheMystic-Bot-MD?retryWrites=true&w=majority'"
+        "test": "node test.js",
+        "test2": "nodemon index.js"
     },
     "homepage": "https://www.facebook.com/ANIMxSCANS",
     "author": {
@@ -25,10 +25,10 @@
     "bugs": {
         "url": "https://github.com/ReyEndymion/ANI_MX_SCANS-MD/issues"
     },
-    "license": "MIT",
+    "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@adiwajshing/baileys": "^4.3.0",
-        "@bochilteam/scraper": "^2.0.0",
+        "@adiwajshing/baileys": "^4.4.0",
+        "@bochilteam/scraper": "^3.0.0",
         "acrcloud": "^1.4.0",
         "awesome-phonenumber": "^2.68.0",
         "axios": "^0.24.0",
@@ -38,15 +38,19 @@
         "colors": "1.4.0",
         "emoji-api": "^1.0.2",
         "express": "^4.17.3",
+        "fg-ig": "^0.0.1",
         "file-type": "^17.1.1",
         "fluent-ffmpeg": "^2.1.2",
+        "fs": "^0.0.1-security",
         "formdata-node": "^4.3.2",
+        "glob-fs": "^0.1.7",
         "human-readable": "^0.2.1",
         "hxz-api": "^1.0.1",
         "jsdom": "^19.0.0",
         "link-preview-js": "^2.1.13",
         "lodash": "^4.17.21",
         "lowdb": "^3.0.0",
+        "moment-timezone": "^0.5.34",
         "mongoose": "^6.3.3",
         "node-fetch": "^3.2.0",
         "node-gtts": "^2.0.2",

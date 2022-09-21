@@ -6,7 +6,7 @@ let handler = async (m, { conn, args }) => {
 if (!args[0]) throw '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*' 
 try {
 GDriveDl(args[0]).then(async (res) => {
-conn.reply(m.chat, 'Descargando su archivo, espere un momento...\n\nEl tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado', m)
+conn.reply(m.chat, '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado', m)
 if (!res) throw res
 conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })})
 }catch(e){

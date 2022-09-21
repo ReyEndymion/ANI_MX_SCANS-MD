@@ -1,3 +1,4 @@
+import { generateWAMessageFromContent } from '@adiwajshing/baileys'
 import os from 'os'
 import util from 'util'
 import sizeFormatter from 'human-readable'
@@ -12,8 +13,8 @@ const chats = Object.entries(conn.chats).filter(([id, data]) => id && data.isCha
 const groupsIn = chats.filter(([id]) => id.endsWith('@g.us'))
 const groups = chats.filter(([id]) => id.endsWith('@g.us'))
 const used = process.memoryUsage()
-const { restrict } = global.db.data.settings[conn.user.jid] || {}
-const { autoread } = global.opts
+const { restrict, antiCall, antiprivado } = global.db.data.settings[conn.user.jid] || {}
+const { autoread, gconly, pconly, self } = global.opts || {}
 let old = performance.now()
 let neww = performance.now()
 let speed = neww - old
@@ -28,11 +29,14 @@ let info = `
 ╠➥ [💡] CHATS TOTALES: *${chats.length}* 
 ╠➥ [🚀] ACTIVIDAD: *${uptime}*
 ╠➥ [🎩] USUARIOS: *${totalreg} NUMEROS*
-╠➥ [👨‍🦯] VELOCIDAD: 
-╠  *${speed}* 
-╠  *MILISEGUNDOS*
-╠➥ [☑️] AUTOREAD: ${autoread ? '*ACTIVADO*' : '*DESACTIVADO*'}
-╠➥ [❗] RESTRICT: ${restrict ? '*ACTIVADO*' : '*DESACTIVADO*'} 
+╠➥ [☑️] AUTOREAD: ${autoread ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
+╠➥ [❗] RESTRICT: ${restrict ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'} 
+╠➥ [💬] ANTIPRIVADO: ${antiprivado ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
+╠➥ [📵] ANTILLAMADA: ${antiCall ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
+╠➥ [💬] PCONLY: ${pconly ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
+╠➥ [🏢] GCONLY: ${gconly ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
+╠➥ [🌎] MODO: ${self ? '*𝚙𝚛𝚒𝚟𝚊𝚍𝚘*' : '*𝚙𝚞𝚋𝚕𝚒𝚌𝚘*'}
+╠➥ [👨‍🦯] VELOCIDAD:  *${speed} MILISEGUNDOS*
 ╠
 ╠═〘 🌎ANI MX SCANS🌏 〙 ═
 `.trim() 

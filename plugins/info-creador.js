@@ -28,10 +28,10 @@ let buttonMessage= {
 {buttonId: `${usedPrefix}donar`, buttonText: {displayText: 'DONAR'}, type: 1}],
 'headerType': 6 }
 conn.sendMessage(m.chat, buttonMessage, { quoted: m })
-let vcard = `BEGIN:VCARD\nVERSION:3.0\nN:;𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑;;;\nFN:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nORG:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nTITLE:\nitem1.TEL;waid=5215517489568:+5215533827255\nitem1.X-ABLabel:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷\nX-WA-BIZ-DESCRIPTION:[❗] CONTACTA A EsTE NUM PARA COsAs IMPORTANTEs.\nX-WA-BIZ-NAME:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nEND:VCARD`
-await conn.sendMessage(m.chat, { contacts: { displayName: 'Rey Endymion 👑', contacts: [{ vcard }] }}, {quoted: m})
+//let vcard = `BEGIN:VCARD\nVERSION:3.0\nN:;𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑;;;\nFN:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nORG:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nTITLE:\nitem1.TEL;waid=5215517489568:+5215533827255\nitem1.X-ABLabel:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷\nX-WA-BIZ-DESCRIPTION:[❗] CONTACTA A ESTE NUM PARA COSAS IMPORTANTES.\nX-WA-BIZ-NAME:𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 👑\nEND:VCARD`
+//await conn.sendMessage(m.chat, { contacts: { displayName: 'Rey Endymion 👑', contacts: [{ vcard }] }}, {quoted: m})
 const data = global.owner.filter(([id, isCreator]) => id && isCreator)
-await conn.sendContact(m.chat, data.map(([id, name]) => [id, name]), m)
+//await conn.sendContact(m.chat, data.map(([id, name]) => [id, name]), m)
 }
 handler.help = ['owner', 'creator']
 handler.tags = ['info']

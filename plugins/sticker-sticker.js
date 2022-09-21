@@ -30,7 +30,7 @@ stiker = await sticker(false, out, global.packname, global.author)
 } else if (args[0]) {
 if (isUrl(args[0])) stiker = await sticker(false, args[0], global.packname, global.author)
 
-else return m.reply('*[❗INFO❗] EL ENLACE/URL/LINK DEBE SER .jpg, EJEMPLO: #s https://telegra.ph/file/0dc687c61410765e98de2.jpg*')
+else return m.reply('*[❗INFO❗] EL ENLACE/URL/ LINK NO ES VALIDA, LA TERMINACION DEL ENLACE/URL/ LINK DEBE SER .jpg, EJEMPLO: #s https://telegra.ph/file/0dc687c61410765e98de2.jpg*')
   
 }
 } catch (e) {

@@ -19,5 +19,5 @@ else throw '*[❗INFO❗] LO SIENTO, ALGO FALLO.. CORROBORE QUE HAYA RESPONDIDO 
 }}
 handler.help = ['wm <packname>|<author>']
 handler.tags = ['sticker']
-handler.command = /^wm$/i
+handler.command = /^robar|wm$/i
 export default handler

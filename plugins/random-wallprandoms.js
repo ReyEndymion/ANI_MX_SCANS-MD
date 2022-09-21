@@ -6,7 +6,7 @@
 
 import axios from "axios"
 let handler = async (m, {command, conn}) => {
-let fgif = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "6289643739077-1613049930@g.us" } : {})},message: {"videoMessage": { "title":`️u`, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': `🧿 🌎ANI MX SCANS🌏 🔮`, 'jpegThumbnail': false }}}
+let fgif = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "5215532867844-1600616542@g.us" } : {})},message: {"videoMessage": { "title":`️u`, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': `🧿 🌎ANI MX SCANS🌏 🔮`, 'jpegThumbnail': false }}}
 let apikey = keysxxx
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let user = global.db.data.users[who]
