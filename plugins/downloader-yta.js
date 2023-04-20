@@ -12,9 +12,15 @@ const ttl = await yt.title
 const size = await yt.audio[q].fileSizeH
 await conn.sendFile(m.chat, dl_url, ttl + '.mp3', null, m, false, { mimetype: 'audio/mp4' })
 } catch {
-await conn.reply(m.chat, '*[❗] NO FUE POSIBLE DESCARGAR EL AUDIO*', m)}
-}
-handler.command = /^getaud|yt(a|mp3)$/i
+try {
+let lolhuman = await fetch(`https://api.lolhuman.xyz/api/ytaudio2?apikey=85faf717d0545d14074659ad&url=${args[0]}`)    
+let lolh = await lolhuman.json()
+let n = lolh.result.title || 'error'
+await conn.sendFile(m.chat, lolh.result.link, `${n}.mp3`, null, m, false, { mimetype: 'audio/mp4' })    
+} catch {
+await conn.reply(m.chat, '*[❗] ERROR NO FUE POSIBLE DESCARGAR EL AUDIO*', m)}
+}}
+handler.command = /^fgmp3|dlmp3|getaud|yt(a|mp3)$/i
 export default handler
 
 /*let limit = 50

@@ -1,7 +1,10 @@
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler  = async (m, { conn, usedPrefix, command }) => {
 if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*'   
-let res = pickRandom(asupan)
-conn.sendHydrated(m.chat, null, null, res, null, null, null, null, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)}
+let res = await pickRandom(asupan)
+conn.sendFile (m.chat, res, null, '*DISFRUTA DEL VIDEO 🥵*', m, null, {viewOnce: true})
+    await delay(1 * 10000)
+conn.sendButton(m.chat, wm, res, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)}
 handler.help = ['videoxxx']
 handler.tags = ['random']
 handler.command = /^videoxxx|vídeoxxx$/i

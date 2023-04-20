@@ -7,8 +7,8 @@ for (let id of chats) {
 conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + wm, fs.readFileSync('./src/avatar_contact.png'), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { 
 contextInfo: { externalAdReply: {
 title: '*COMUNICADO OFICIAL A LOS CHATS PRIVADOS*',
- body: 'BY 🌎ANI MX SCANS🌏', 
-sourceUrl: `https://www.facebook.com/ANIMxSCANS`, 
+ body: igfg, 
+sourceUrl: hp_animxscans, 
 thumbnail: fs.readFileSync('./Menu2.jpg') }}})}
 m.reply(`*[❗INFO❗] MENSAJE ENVIADO A ${chats.length} CHATS PRIVADOS*\n\n*NOTA: ES POSIBLE QUE ESTE COMANDO TENGA FALLOS Y NO SÉ ENVIÉ A TODOS LOS CHATS, DISCULPE POR EL MOMENTO*`)
 }

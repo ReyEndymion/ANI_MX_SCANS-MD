@@ -5,6 +5,7 @@ let text = `
 > Pagina Oficial: https://boxmineworld.com
 > Dashboard: https://dash.boxmineworld.com/home
 > Panel: https://panel.boxmineworld.com
+> Soporte: https://discord.gg/84qsr4v 
 
 ------------------------------------
 
@@ -30,16 +31,14 @@ let text = `
 > yarn install 
 > npm install
 > npm update
-> npm start
 > npm install 
-> npm start  
-`.trim()   
-m.reply(m.chat, text, m, {
+> npm start` 
+m.reply(text/*, m.chat, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
 title: 'INFORMACION - INSTALARBOT',
 body: '🌎ANI MX SCANS🌏',         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})   
+sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}}*/)   
 }
 handler.command = /^(instalarbot)/i
 export default handler

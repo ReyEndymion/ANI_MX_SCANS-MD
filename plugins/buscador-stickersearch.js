@@ -1,13 +1,20 @@
-/* Created By https://github.com/ALBERTO9883 */
-import fetch from 'node-fetch'
+/*By https://github.com/ALBERTO9883 */
 import fs from 'fs'
+import fetch from 'node-fetch'
+import { googleImage } from '@bochilteam/scraper'
 let handler = async (m, {text, usedPrefix, command, conn}) => {
-let sfoto = fs.readFileSync('./Menu2.jpg')
+try {  
+const res2 = await googleImage(text)
+let sfoto = res2.getRandom()
 if (!text) throw `*[❗] INGRESE EL NOMBRE DEL PAQUETE QUE DESEE BUSCAR*`
-let json = await fetch(`https://api.zacros.my.id/search/sticker?query=${text}`)
+let json = await fetch(`https://api.akuari.my.id/search/sticker?query=${text}`)
 let jsons = await json.json()
-  let res = jsons.result.map((v, index) => `*🪴 • RESULTADO:* ${1 + index}\n*🌵 • NOMBRE:* ${v.title}\n*🍂 • URL:* ${v.url}`).join`\n\n─────────────────────\n\n`
-var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
+let res = jsons.result.map((v, index) => `*🪴 • Resultado:* ${1 + index}\n*🌵 • Nombre:* ${v.title}\n*🍂 • Url:* ${v.url}`).join`\n\n───\n\n`
+await conn.sendFile(m.chat, sfoto, 'error.jpg', res, m)
+} catch {
+await m.reply('*[❗] 𝙴𝚁𝚁𝙾𝚁, 𝙿𝙾𝚁 𝙵𝙰𝚅𝙾𝚁 𝚅𝚄𝙴𝙻𝚅𝙰 𝙰 𝙸𝙽𝚃𝙴𝚁𝙽𝚃𝙰𝚁𝙻𝙾*')}}
+handler.tags = ['sticker', 'search']
+/*var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
 var document = doc[Math.floor(Math.random() * doc.length)]    
 let buttonMessage= {
 'document': { url: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD` },
@@ -32,6 +39,6 @@ let buttonMessage= {
 {buttonId: `${usedPrefix}menu`, buttonText: {displayText: 'MENU'}, type: 1}],
 'headerType': 6 }
 conn.sendMessage(m.chat, buttonMessage, { quoted: m })
-}
+}*/
 handler.command = ['stickersearch', 'searchsticker', 'stickerssearch', 'searchstickers']
 export default handler

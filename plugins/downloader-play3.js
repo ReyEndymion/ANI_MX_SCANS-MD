@@ -14,7 +14,7 @@ conn.sendHydrated(m.chat, `
 📆 *PUBLICADO:* ${publishedTime}
 ⌚ *DURACION:* ${durationH}
 👀 *VISTAS:* ${viewH}
-`.trim(), author, thumbnail, `${url}`, 'URL', null, null, [
+`.trim(), wm, thumbnail, `${url}`, 'URL', null, null, [
 ['AUDIO', `${usedPrefix}yta.2 ${url}`],
 ['VIDEO', `${usedPrefix}ytv.2 ${url}`]
 ], m)

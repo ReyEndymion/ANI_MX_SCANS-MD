@@ -6,7 +6,7 @@ let handler = async (m, { command, usedPrefix, text }) => {
     let msgs = global.db.data.msgs
     if (text in msgs) throw `*[❗INFO❗] '${text}' SE HA REGISTRADO EN LA LISTA DE MENSAJES`
     msgs[text] = M.toObject(await m.getQuotedObj())
-    m.reply(`*[❗INFO❗] MENSAJE AGREGADO EXITOSAMENTE COMO '${text}'*\n*ACCEDE CON ${usedPrefix}ver${which} ${text}*`)
+    m.reply(`*[❗INFO❗] MENSAJE AGREGADO EXITOSAMENTE A LA LISTA DE MENSAJES COMO '${text}'*\n*ACCEDE CON ${usedPrefix}ver${which} ${text}*`)
 }
 handler.help = ['vn', 'msg', 'video', 'audio', 'img', 'sticker'].map(v => 'add' + v + ' <text>')
 handler.tags = ['database']

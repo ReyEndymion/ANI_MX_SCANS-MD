@@ -10,7 +10,7 @@ let soundcloudt = `❒═══❬ *SOUNDCLOUD* ❭═══╾❒
 ├‣✨ *TÍTULO:* ${json.result.title}
 ┴
 ┬
-├‣💚 *URL DIRECTO:* ${shortUrl}\n┴\n\n*- _Enviando música..._*\n\n_﹫ᴛʜᴇ ᴍʏsᴛɪᴄ ﹣ ʙᴏᴛ_`
+├‣💚 *URL DIRECTO:* ${shortUrl}\n┴\n\n*- _Enviando música..._*\n\n_﹫ANI_MX_SCANS_`
 conn.sendFile(m.chat, json.result.thumbnail, '', soundcloudt, m)
 conn.sendFile(m.chat, json.result.download, 'error.mp3', null, m, false, { mimetype: 'audio/mp4' })
 } catch (e) {

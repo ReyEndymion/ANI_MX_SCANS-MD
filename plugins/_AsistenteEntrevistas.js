@@ -1,10 +1,10 @@
 let handler = m => m
-handler.all = async function (m) {
+handler.before = async function (m) {
     let chat = global.db.data.chats[m.chat]
 	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender    
 
-    if (/^aclaración$/i.test(m.text) && chat.asistente && !chat.isBanned) {
- m.reply(`🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
+    if (/aclaración$/i.test(m.text) && chat.asistente && !chat.isBanned) {
+ let resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
       *ㄖㄒ卂Ҡ凵丂*  
       *ㄒㄖᎶ乇ㄒ卄乇尺.*
       *Ser Otaku en Latinoamérica no es lo mismo que ser un Otaku nipón. Quien quiera estar en el grupo principal lo único que se les pide es lo siguiente:*
@@ -34,7 +34,20 @@ handler.all = async function (m) {
       *Con nosotros pueden formar amistades y también contamos con un grupo de aportes sin tener que estar obligados a compartir contenido ya que tenemos más de 10 aportadores oficiales con contenido de anime y otro tipo de contenidos, también pueden formar parte de la asociación de grupos.*
       
       *También pueden hacer 10 mensajes a la semana para evitar ser eliminados... En algunos grupos el mínimo son 30 mensajes a la semana además de estar obligados a compartir contenido así que les conviene la propuesta de este grupo...*
-      🚨🚨🚨🚨🚨🚨🚨🚨🚨`)
+      🚨🚨🚨🚨🚨🚨🚨🚨🚨`.trim()
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 20));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+
       } 
 
     if (/^ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
@@ -65,8 +78,8 @@ handler.all = async function (m) {
       
       **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`)
       } 
-      if (/^Moonficha| Sailorficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
- m.reply(	`💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
+      if (/^Moonficha| Sailorficha|moon ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
+ let resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
       
       
       1.💜 *ɴᴏᴍʙʀᴇ* 💜:
@@ -90,14 +103,39 @@ handler.all = async function (m) {
       7.💜 *ᴅᴇꜱᴅᴇ ʜᴀᴄᴇ ᴄᴜÁɴᴛᴏ ᴇʀᴇꜱ ᴏᴛᴀᴋᴜ*💜:
       
       
-      8.💜 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*💜:`)
+      8.💜 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*💜:`.trim()
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 20));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+
       } 
     
     if (/^No gracias$/i.test(m.text) && chat.asistente && !chat.isBanned) {
-      let text = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
-    await conn.reply(m.chat, text, m, { mentions: this.parseMention(text) })
+      let resp = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
+    
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+
     }   
    
-return !0
 }
 export default handler

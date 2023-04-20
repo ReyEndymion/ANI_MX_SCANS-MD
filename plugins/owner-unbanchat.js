@@ -5,5 +5,5 @@ m.reply('*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*')
 handler.help = ['unbanchat']
 handler.tags = ['owner']
 handler.command = /^unbanchat$/i
-handler.rowner = true
+handler.owner = true
 export default handler

@@ -439,7 +439,7 @@ if (!text) return m.reply(`*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
 ° ඬ⃟💫 ${usedPrefix + command} woven-sketch
 ° ඬ⃟💫 ${usedPrefix + command} xmas_tree
 ° ඬ⃟💫 ${usedPrefix + command} yellow_wall`)
-m.reply('*[❗] REALIZANDO DIsEÑO, AGUARDE UN MOMENTO...*')
+m.reply('*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*')
 let img = await q.download?.()
 let url = await uploadImage(img)
 let images = `https://violetics.pw/api/photomaker/${encodeURIComponent(text)}?apikey=beta&image=${encodeURIComponent(url)}`

@@ -1,8 +1,11 @@
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 import fetch from 'node-fetch'
 let handler = async (m, { conn, command }) => {
 if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[ ⚠️ ] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMINISTRADOR DE ESTE GRUPO Y DESEA ACTIVARLOS ESCRIBA #enable modohorny*'
 let url = packmen[Math.floor(Math.random() * packmen.length)]
-conn.sendButton(m.chat, `_🥵 Pack 3 🥵_`, author, url, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+conn.sendFile (m.chat, url, null, '*_🥵 Pack 3 🥵_*', null, null, {viewOnce: true}, m)
+    await delay(1 * 2000)
+conn.sendButton(m.chat, `_🥵 Pack 3 🥵_`, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
 }
 handler.help = ['pack3']
 handler.tags = ['internet']

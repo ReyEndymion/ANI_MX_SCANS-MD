@@ -17,10 +17,12 @@ let estado =`
 │ *=> TIEMPO ACTIVO: ${uptime}*
 ╰───────────────
 `.trim()
-
+conn.sendButton(m.chat, estado, wm, picture, [['https://www.facebook.com/ANIMxSCANS', 'FACEBOOK'], 
+['MENU PRINCIPAL', '/menu']]/*,
+ '')}
 conn.sendHydrated(m.chat, estado, wm, picture, 'https://www.facebook.com/ANIMxSCANS', 'FACEBOOK', null, null, [
 ['MENU PRINCIPAL', '/menu']
-], m)}
+]*/, m)}
 
 handler.help = ['estado']
 handler.tags = ['main']

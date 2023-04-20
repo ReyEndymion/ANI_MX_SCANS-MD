@@ -5,7 +5,7 @@ import sizeFormatter from 'human-readable'
 import MessageType from '@adiwajshing/baileys'
 import fs from 'fs'
 import { performance } from 'perf_hooks'
-let handler = async (m, { conn, usedPrefix }) => {
+let handler = async (m, { conn, usedPrefix }, jid) => {
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 
 let totalreg = Object.keys(global.db.data.users).length
@@ -38,14 +38,10 @@ let info = `
 ╠➥ [🌎] MODO: ${self ? '*𝚙𝚛𝚒𝚟𝚊𝚍𝚘*' : '*𝚙𝚞𝚋𝚕𝚒𝚌𝚘*'}
 ╠➥ [👨‍🦯] VELOCIDAD:  *${speed} MILISEGUNDOS*
 ╠
-╠═〘 🌎ANI MX SCANS🌏 〙 ═
+╠═〘 *${wm}* 〙 ═
 `.trim() 
-conn.reply(m.chat, info, m, {
-contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
-title: 'INFO DEL BOT',
-body: '🌎ANI MX SCANS🌏',         
-previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})
+const res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(m.chat)}}}, {userJid: conn.user.jid, quoted: m})
+conn.relayMessage(m.chat, res.message, {})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']

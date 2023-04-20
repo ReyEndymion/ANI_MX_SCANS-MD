@@ -1,6 +1,5 @@
 let handler = async (m, { conn, usedPrefix, command, paypal }) => {
-conn.sendHydrated(m.chat, paypal, null, null, 'https://www.paypal.me/AMxScan/', 'PAYPAL', null, null,[
-], m)
+conn.sendMessage(m.chat, {text:'https://www.paypal.me/AMxScan/'},  { quoted: m })
 }
 handler.help = ['pagina']
 handler.tags = ['info']

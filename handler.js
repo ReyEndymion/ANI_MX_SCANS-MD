@@ -103,9 +103,12 @@ export async function handler(chatUpdate) {
                 if (!('antiToxic' in chat)) chat.antiToxic = false
                 if (!('antiTraba' in chat)) chat.antiTraba = false
                 if (!('antiArab' in chat)) chat.antiArab = false
+                if (!('modoadmin' in chat)) chat.modoadmin = false
+				if (!('simi' in chat)) chat.simi = false     
+                if (!('stickers' in chat)) chat.stickers = false     
                 if (!('asistente' in chat)) chat.asistente = false
                 if (!('gRol' in chat)) chat.gruposRol = false
-                if (!isNumber(chat.expired)) chat.expired = 0
+                if (!isNumber(chat.expired)) chat.expired = 1
             } else
                 global.db.data.chats[m.chat] = {
                     isBanned: false,
@@ -125,6 +128,9 @@ export async function handler(chatUpdate) {
                     antiToxic: false,
                     antiTraba: false,
                     antiArab: false,
+                    modoadmin: false,
+	            	simi: false,
+                    stickers: true,
                     asistente: false,
                     gruposRol: false,
                     expired: 0,
@@ -137,12 +143,14 @@ export async function handler(chatUpdate) {
                 if (!('restrict' in settings)) settings.restrict = false
                 if (!('antiCall' in settings)) settings.antiCall = false
                 if (!('antiPrivate' in settings)) settings.antiPrivate = false
+	        if (!('modejadibot' in settings)) settings.modejadibot = true   
             } else global.db.data.settings[this.user.jid] = {
                 self: false,
                 autoread: false,
                 restrict: false,
                 antiCall: false,
-                antiPrivate: false
+                antiPrivate: false,
+                modejadibot: true,
             }
         } catch (e) {
             console.error(e)
@@ -211,7 +219,7 @@ export async function handler(chatUpdate) {
                     for (let [jid] of global.owner.filter(([number, _, isDeveloper]) => isDeveloper && number)) {
                         let data = (await conn.onWhatsApp(jid))[0] || {}
                         if (data.exists)
-                            m.reply(`*[REPORTE DE COMANDO CON FALLOS]*\n\n*PLUGIN:* ${name}\n*USUARIO:* ${m.sender}\n*COMANDO:* ${m.text}\n\n*ERROR:*\n\`\`\`${format(e)}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCIÓN, PUEDE USAR EL COMANDO #reporte*`.trim(), data.jid)
+                            m.reply(`*[REPORTE DE COMANDO CON FALLOS]*\n\n*PLUGIN:* ${name}\n*USUARIO:* ${sender.map((oT) => oT.replace(/[^0-9]/g, '') + '@s.whatsapp.net'.includes(m.sender))}\n*COMANDO:* ${m.text}\n\n*ERROR:*\n\`\`\`${format(e)}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCIÓN, PUEDE USAR EL COMANDO #reporte*`.trim(), data.jid)
                     }
                 }
             }
@@ -287,6 +295,11 @@ export async function handler(chatUpdate) {
                     if (name != 'owner-unbanuser.js' && user?.banned)
                         return
                 }
+	        let hl = _prefix 
+                let adminMode = global.db.data.chats[m.chat].modoadmin
+                let animxscans = `${plugin.botAdmin || plugin.admin || plugin.group || plugin || noPrefix || hl ||  m.text.slice(0, 1) == hl || plugin.command}`
+                if (adminMode && !isOwner && !isROwner && m.isGroup && !isAdmin && animxscans) return   
+		    
                 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
                     fail('owner', m, this)
                     continue
@@ -336,7 +349,7 @@ export async function handler(chatUpdate) {
                     continue // Limit habis
                 }
                 if (plugin.level > _user.level) {
-                    this.reply(m.chat, `*¡SE REQUIERE EL NIVEL! ${plugin.level} PARA USAR ESTE COMANDO. TU NIVEL ES ${_user.level}*`, m)
+                    this.reply(m.chat, `*[❗INFO ❗] SE REQUIERE EL NIVEL ${plugin.level} PARA USAR ESTE COMANDO. TU NIVEL ES ${_user.level}*`, m)
                     continue // If the level has not been reached
                 }
                 let extra = {
@@ -462,59 +475,99 @@ export async function handler(chatUpdate) {
  * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
  */
 export async function participantsUpdate({ id, participants, action }) {
-    if (opts['self'])
-        return
+    if (opts['self']) return;
+    if (this.isInit) return;
     // if (id in conn.chats) return // First login will spam
-    if (this.isInit)
-        return
-    if (global.db.data == null)
-        await loadDatabase()
-    let chat = global.db.data.chats[id] || {}
-    let text = ''
+    if (global.db.data == null) await loadDatabase();
+  
+    let chat = global.db.data.chats[id] || {};
+    let text = '';
+  
     switch (action) {
-        case 'add':
-        case 'remove':
-            if (chat.welcome) {
-                let groupMetadata = await this.groupMetadata(id) || (conn.chats[id] || {}).metadata
-                for (let user of participants) {
-                    let pp = './src/avatar_contact.png'
-                    try {
-                        pp = await this.profilePictureUrl(user, 'image')
-                    } catch (e) {
-                    } finally {
-                        text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*SIN DESCRIPCION*') :
-                            (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
-                            let apii = await this.getFile(pp)
-                        this.sendButton(id, text, groupMetadata.subject, pp, [
-                        [(action == 'add' ? 'BIENVENIDO' : 'ADIOS'), (action == 'add' ? '#welcomegc' : '#byegc')],
-                        ['MENU PRINCIPAL', `#menu`]
-                        ], '',  { mentions: [user]})
-                        //this.sendFile(id, pp, 'pp.jpg', text, null, false, { mentions: [user] })
-                    }
-                }
-            }
-            break
-        case 'promote':
-        case 'daradmin':
-        case 'darpoder':
-            text = (chat.sPromote || this.spromote || conn.spromote || '@user ```is now Admin```')
-        case 'demote':
-        case 'quitarpoder':
-        case 'quitaradmin':
-            if (!text)
-                text = (chat.sDemote || this.sdemote || conn.sdemote || '@user ```is no longer Admin```')
-            text = text.replace('@user', '@' + participants[0].split('@')[0])
-            if (chat.detect)
-                this.sendMessage(id, { text, mentions: this.parseMention(text) })
-            break
+      case 'add':
+      case 'remove':
+      case 'leave':
+        if (chat.welcome) {
+          let groupMetadata =
+            (await this.groupMetadata(id)) || (conn.chats[id] || {}).metadata;
+  
+          for (let user of participants) {
+            let pp = './src/avatar_contact.png';
+  
+            try {
+              pp = await this.profilePictureUrl(user, 'image');
+            } catch (e) {}
+  
+            text = (action === 'add'
+              ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc?.toString() || '*SIN DESCRIPCION*')
+              : (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0]);
+  
+            let apii = await this.getFile(pp);
+            this.sendButton(
+              id,
+              text,
+              groupMetadata.subject,
+              pp,
+              [
+                [
+                  action == 'add' ? '*BIENVENIDO*' : '*LE FALTO ODIO*',
+                  action == 'add' ? '#welcomegc' : '#byegc',
+                ],
+                ['*MENU PRINCIPAL*', `#menu`],
+              ],
+              '',
+              { mentions: [user] }
+            );
+  
+            const espadmins = global.espadmins;
+            if (action === 'add' && espadmins.map((oT) => oT.toString().replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(user)) {
+              await delay(1 * 2000);
+              await conn.groupParticipantsUpdate(id, [user], 'promote');
+              
+            } //else {
+             // await this.reply('*[❗] ERROR, NO FUE POSIBLE DARLE ADMIN*');
+            //}
+          }
+        }
+        break;
+      case 'promote':
+      case 'daradmin':
+      case 'darpoder':
+        text =
+          chat.sPromote ||
+          this.spromote ||
+          conn.spromote ||
+          '@user ```is now Admin```';
+      case 'demote':
+      case 'quitarpoder':
+      case 'quitaradmin':
+        if (!text)
+          text =
+            chat.sDemote ||
+            this.sdemote ||
+            conn.sdemote ||
+            '@user ```is no longer Admin```';
+        text = text.replace('@user', '@' + participants[0].split('@')[0]);
+        if (chat.detect) {
+          this.sendMessage(id, { text, mentions: this.parseMention(text) });
+        }
+        break;
+      case 'autoadmin':
+        if (
+          action === 'add' &&
+          espadmins.map((oT) => oT.toString().replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(participants[0])
+        ) {
+          await conn.groupParticipantsUpdate(id, [participants[0]], 'promote');
+        }
+        break;
     }
-}
-
-/**
- * Handle groups update
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate 
- */
-export async function groupsUpdate(groupsUpdate) {
+  }
+  
+  /**
+   * Handle groups update
+   * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate
+   */
+  export async function groupsUpdate(groupsUpdate) {
     if (opts['self'])
         return
     for (const groupUpdate of groupsUpdate) {
@@ -530,20 +583,56 @@ export async function groupsUpdate(groupsUpdate) {
         await this.sendMessage(id, { text, mentions: this.parseMention(text) })
     }
 }
+  
 
-export async function callUpdate(callUpdate) {
+export async function callUpdate(callUpdate, conn,  isAdmin, isBotAdmin, isOwner, isROwner, participants) {
+    function sort(property, ascending = true) {
+        if (property) return (...args) => args[ascending & 1][property] - args[!ascending & 1][property]
+        else return (...args) => args[ascending & 1] - args[!ascending & 1]
+      }
+      
+      function toNumber(property, _default = 0) {
+        if (property) return (a, i, b) => {
+          return {...b[i], [property]: a[property] === undefined ? _default : a[property]}
+        }
+        else return a => a === undefined ? _default : a
+      }
+      
+      try {
+    let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+    let espadm = global.espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+    let ow = owners.map(toNumber('')).sort(sort(''))
+    let adms = espadm.map(toNumber('')).sort(sort(''))
+    let adm = `${adms.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join`, `}`
+    console.log(some);
+    let sender = `@${m.sender.split`@`[0]}`;
+    if (adm.includes(sender)) {
+            console.log(`Este remitente ${sender} está en la lista, no lo puedo bloquear.`);
+     } else {
+     console.log(`Bloqueando usuario ${sender} con la función antiprivate.`)
+     }        
     let isAnticall = global.db.data.settings[this.user.jid].antiCall
     if (!isAnticall) return
     for (let nk of callUpdate) {
     if (nk.isGroup == false) {
-    if (nk.status == "offer") {
-    let callmsg = await this.reply(nk.from, `Hola *@${nk.from.split('@')[0]}*, las ${nk.isVideo ? 'videollamadas' : 'llamadas'} no están permitidas, serás bloqueado.\n-\nSi accidentalmente llamaste póngase en contacto con mi creador para que te desbloquee!`, false, { mentions: [nk.from] })
+    if (nk.status == "offer")
+    if (adm.includes(sender)) return !0
+    {
+    let callmsg =  `Hola *@${nk.from.split('@')[0]}*, las ${nk.isVideo ? 'videollamadas' : 'llamadas'} no están permitidas, serás bloqueado.\n-\nSi accidentalmente llamaste póngase en contacto con mi creador ${ow.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `} para que te desbloquee!`
+    await this.reply(nk.from, callmsg, false, { mentions: conn.parseMention(callmsg) })
+
+
     //let data = global.owner.filter(([id, isCreator]) => id && isCreator)
     //await this.sendContact(nk.from, data.map(([id, name]) => [id, name]), false, { quoted: callmsg })
+    let vcard = `BEGIN:VCARD\nVERSION:3.0\nN:;ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃;;;\nFN:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nORG:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nTITLE:\nitem1.TEL;waid=5215517489568:+521 5517489568\nitem1.X-ABLabel:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nX-WA-BIZ-DESCRIPTION:[❗] ᴄᴏɴᴛᴀᴄᴛᴀ ᴀ ᴇsᴛᴇ ɴᴜᴍ ᴘᴀʀᴀ ᴄᴏsᴀs ɪᴍᴘᴏʀᴛᴀɴᴛᴇs.\nX-WA-BIZ-NAME:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nEND:VCARD`
+    await this.sendMessage(nk.from, { contacts: { displayName: 'ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃', contacts: [{ vcard }] }}, {quoted: callmsg})
     await this.updateBlockStatus(nk.from, 'block')
     }
     }
     }
+} catch (error) {
+    console.log(error)
+  }
 }
 
 export async function deleteUpdate(message) {
@@ -576,7 +665,7 @@ export async function deleteUpdate(message) {
 
 global.dfail = (type, m, conn) => {
     let msg = {
-    	        rowner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
+        rowner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         owner: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         mods: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR MODERADORES Y EL/LA PROPIETARIO/A (OWNER) DEL BOT*',
         premium: '*[ ⚠️ *ALERTA* ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR USUARIOS PREMIUM Y EL/LA PROPIETARIO/A OWNER DEL BOT*',
@@ -584,7 +673,7 @@ global.dfail = (type, m, conn) => {
         private: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO EN CHAT PRIVADO DEL BOT*',
         admin: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO SOLO PUEDE SER UTILIZADO POR ADMINS DEL GRUPO*',
         botAdmin: '*[ ⚠️ ALERTA ⚠️ ] PARA PODER USAR ESTE COMANDO ES NECESARIO QUE EL BOT SEA ADMIN, ASCENDER A ADMIN ESTE NUMERO*',
-        unreg: '*[ 🛑 HEY!! ALTO, NO ESTAS REGISTRADO 🛑 ]*\n\n*—◉ PARA USAR ESTE COMANDO DEBES REGISTRARTE, USA EL COMANDO*\n*➣ #verificar*',
+        unreg: '*[ 🛑 HEY!! ALTO, NO ESTAS REGISTRADO 🛑 ]*\n\n*—◉ PARA USAR ESTE COMANDO DEBES REGISTRARTE, USA EL COMANDO*\n*➣ #verificar nombre.edad*',
         restrict: '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO ESTA RESTRINGIDO/DESACTIVADO POR DESICION DEL PROPIETARIO/A (OWNER) DEL BOT*'
     }[type]
     if (msg) return m.reply(msg)
@@ -593,6 +682,6 @@ global.dfail = (type, m, conn) => {
 let file = global.__filename(import.meta.url, true)
 watchFile(file, async () => {
     unwatchFile(file)
-    console.log(chalk.redBright("Update 'handler.js'"))
+    console.log(chalk.redBright("Se actualizo 'handler.js'"))
     if (global.reloadHandler) console.log(await global.reloadHandler())
 })

@@ -8,7 +8,7 @@ let chat = global.db.data.chats[m.chat]
 
 if (/^bot$/i.test(m.text) && !chat.isBanned) { 
 conn.sendPresenceUpdate('recording', m.chat)    
-conn.sendButton(m.chat, '*HOLA, ¿COMO TE PUEDO AYUDAR?*', wm, [['MENU DE COMANDOS', `#menu`]], 'conversation', { sendEphemeral: true, quoted: estilo })
+conn.sendButton(m.chat, '*HOLA, ¿COMO TE PUEDO AYUDAR?*', wm, [['MENU DE COMANDOS', `#menu`]], 'conversation', { sendEphemeral: true, quoted: m /*estilo*/ })
 conn.sendFile(m.chat, vn, 'bot.mp3', null, m, true, { type: 'audioMessage', seconds: '4556', ptt: true, sendEphemeral: true, quoted: m /*estiloaudio*/})}
 return !0
 }

@@ -49,7 +49,7 @@ export async function before(m, { conn, isAdmin, isBotAdmin }) {
             includeStarred: false
         }).catch(console.log)
     }
-        await conn.sendButton(m.chat, `*Trabas detectadas!*${isBotAdmin ? '' : '\n\n_El bot no es admin, no puede eliminar_'}`, author, ['Desactivar antitraba', '.disable antitraba'], m)
+        await conn.sendButton(m.chat, `*Trabas detectadas!*${isBotAdmin ? '' : '\n\n_El bot no es admin, no puede eliminar_'}`, wm, ['Desactivar antitraba', '.disable antitraba'], m)
         if (isBotAdmin && bot.restrict) {
        return m.reply('Ok!')
         await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')

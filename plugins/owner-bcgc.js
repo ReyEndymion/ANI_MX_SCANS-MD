@@ -8,7 +8,7 @@ conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${t
 contextInfo: { externalAdReply: {
 title: '*COMUNICADO OFICIAL A GRUPOS*',
 body: ' BY 🌎ANI MX SCANS🌏', 
-sourceUrl: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD`, 
+sourceUrl: md, 
 thumbnail: fs.readFileSync('./Menu2.jpg') }}})}
 m.reply(`*[❗INFO❗] MENSAJE ENVIADO A ${groups.length} GRUPO/S*\n\n*NOTA: ES POSIBLE QUE ESTE COMANDO TENGA FALLOS Y NO SÉ ENVIÉ A TODOS LOS CHATS, DISCULPE POR EL MOMENTO*`)
 }

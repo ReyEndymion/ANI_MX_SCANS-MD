@@ -22,7 +22,7 @@ let str = `*NOMBRE:* ${username} ${registered ? '(' + name + ') ': ''}
 *PREMIUM:* ${prem ? 'Si' : 'No'}
 *NUMERO DE SERIE:* 
 ${sn}`
-conn.sendButton(m.chat, str, author, pp, [['MENU PRINCIPAL', '/menu']], m)}}
+conn.sendButton(m.chat, str, wm, pp, [['MENU PRINCIPAL', '/menu']], m)}}
 handler.help = ['profile [@user]']
 handler.tags = ['xp']
 handler.command = /^perfil|profile?$/i
