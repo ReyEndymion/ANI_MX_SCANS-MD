@@ -1,7 +1,7 @@
 # 🌎 🌎ANI MX SCANS🌏 🌏
 Bot promocional del proyecto 🌎ANI MX SCANS🌏 by ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺
 
-UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO BRUNO SOBRINO QUÉ ME AYUDÓ A DARLE VIDA A MIS BOTS.
+UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO [@BrunoSobrino](https://github.com/BrunoSobrino) QUÉ ME AYUDÓ A DARLE VIDA A MIS BOTS.
 (El otro bot es privado solo este se conoce entrando a los siguientes grupos y contestando una pequeña entrevista dentro de ellos para entrar al grupo principal:
 
 *_1.-_* <a href="https://chat.whatsapp.com/L4VRAzaYc11D4LSpt8rB9W" target="blank"><img src="https://img.shields.io/badge/𝕃𝕠𝕓𝕓𝕪_𝕕𝕖_𝕆𝕥𝕒𝕜𝕦𝕤_𝕋𝕠𝕘𝕖𝕥𝕙𝕖𝕣-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" />
