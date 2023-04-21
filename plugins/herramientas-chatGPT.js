@@ -11,7 +11,7 @@ Se te pedirá que proporciones tu nombre, dirección de correo electrónico y un
 Una vez que hayas iniciado sesión en tu cuenta, ve a la página de "API Tokens" (https://beta.openai.com/account/api-keys).
 Haz clic en "Create New API Key".
 Se te pedirá que proporciones un nombre para tu clave API y selecciones las capacidades que deseas que tenga. También se te proporcionará una vista previa de la cantidad de créditos que se utilizarán para cada capacidad. Haz clic en "Create API Key".
-Se te proporcionará una clave API. Copia y pega esta clave en tu proyecto para usar la API de OpenAI.
+Se te proporcionará una clave API. Copia y pega esta clave remplazando lo que esta entre las comillas [const configuration = new Configuration({ apiKey: `remplaza por tu apikey segun el tutorial`})] en este plugin para usar la API de OpenAI.
 ¡Y eso es todo! Ahora puedes usar la API de OpenAI en tus proyectos de programación sin fines de lucro. Asegúrate de revisar los términos y condiciones de OpenAI para asegurarte de cumplir con los requisitos de uso.
 `.trim()
 try {
