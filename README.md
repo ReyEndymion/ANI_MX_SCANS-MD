@@ -95,7 +95,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="250" height="250" alt="theh2so4"/></a>
 
 ## `EDITOR Y PROPIETARIO DEL BOT` 
-<a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="BrunoSobrino"/></a>
+<a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="ReyEndymion"/></a>
 
 `ANI_MX_SCANS-MD _ By Rey Endymion`
 
