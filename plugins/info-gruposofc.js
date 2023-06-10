@@ -1,4 +1,4 @@
-import { generateWAMessageFromContent, prepareWAMessageMedia} from "@adiwajshing/baileys"
+import { generateWAMessageFromContent, prepareWAMessageMedia} from '@whiskeysockets/baileys'
 import url from 'url'
 import fetch from 'node-fetch'
 import fs from 'fs'

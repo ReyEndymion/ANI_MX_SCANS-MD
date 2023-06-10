@@ -18,7 +18,7 @@ import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/bailey')
+const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys')
 const { CONNECTING } = ws
 const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
@@ -384,13 +384,17 @@ Object.freeze(global.support)
 }
 
 function clearTmp() {
-  const tmp = [tmpdir(), join(__dirname, './tmp')]
-  const filename = []
-  tmp.forEach(dirname => readdirSync(dirname).forEach(file => filename.push(join(dirname, file))))
-  return filename.map(file => {
-      const stats = statSync(file)
-      if (stats.isFile() && (Date.now() - stats.mtimeMs >= 1000 * 60 * 3)) return unlinkSync(file) // 3 minutes
-      return false })
+  const tmpPath = join(__dirname, './tmp');
+  const filenames = readdirSync(tmpPath);
+
+  filenames.forEach((filename) => {
+    const filePath = join(tmpPath, filename);
+    const stats = statSync(filePath);
+
+    if (stats.isFile() && Date.now() - stats.mtimeMs >= 1000 * 60 * 3) {
+      unlinkSync(filePath); // Borra el archivo si ha pasado más de 3 minutos
+    }
+  });
   }
   
   function purgeSession() {

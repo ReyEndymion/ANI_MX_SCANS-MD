@@ -2,7 +2,8 @@
 node_modules/
 Moviles/
 ANI_MX_SCANS/
-SessionsBackUp/
+ANIMXSCANS/
+sesionRespaldo/
 /.git/
 #| Files |#
 creds.json

@@ -1,4 +1,4 @@
-import { WAMessageStubType } from '@whiskeysockets/bailey'
+import { WAMessageStubType } from '@whiskeysockets/baileys'
 
 export async function before(m, { conn }) {
     let chat = global.db.data.chats[m.chat] || {};

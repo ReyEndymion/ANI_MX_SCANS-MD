@@ -16,10 +16,8 @@ const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
-let lenins = global.lenin.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
 //let espadm = espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
      let ow = owners.map(toNumber('')).sort(sort(''))
-     let yos = lenins.map(toNumber('')).sort(sort(''))
      //let adm = espadm.map(toNumber('')).sort(sort(''))
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')

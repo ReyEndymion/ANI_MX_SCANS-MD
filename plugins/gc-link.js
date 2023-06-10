@@ -1,4 +1,4 @@
-const { generateWAMessageFromContent } = (await import('@whiskeysockets/bailey')).default
+const { generateWAMessageFromContent } = (await import('@whiskeysockets/baileys')).default
 import fetch from 'node-fetch'
 import path, { join } from 'path'
 import fs from 'fs'

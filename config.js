@@ -1,12 +1,15 @@
 import { watchFile, unwatchFile } from 'fs'
 import chalk from 'chalk'
-import { fileURLToPath } from 'url'
 import fs from 'fs'
 import cheerio from 'cheerio'
 import fetch from 'node-fetch'
 import axios from 'axios'
+import path, { join } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
 import moment from 'moment-timezone' 
-
+import { platform } from 'process'
+global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString() }; global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) }; global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
+const __dirname = global.__dirname(import.meta.url)
 global.owner = [
    ['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
     ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
@@ -18,11 +21,13 @@ global.wm = '★🌎ANI MX SCANS🌏★'
 global.igfg = '🌎ANI MX SCANS🌏'
 global.paypal = `https://www.paypal.me/AMxScan`
 global.urlgofc = 'https://www.facebook.com/groups/otakustogether'
-global.nomorown = ['5215561717728']
-global.animxscans = [['5215518739237', 'Bot principal  - ANI MX SCANS', true]]
+global.namerepre = `「 Traducciones de Manga 」`
+global.animxscans = [['5215578247312', 'Bot principal - ANI MX SCANS', true]]
 global.hp_animxscans = 'https://www.facebook.com/ANIMxSCANS' 
 global.md = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
 global.animxscansmd = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
+global.suppbot = 'https://chat.whatsapp.com/DpcgpFF2RO16wFG9SIZemG'
+global.gofwhabot = 'https://chat.whatsapp.com/DpcgpFF2RO16wFG9SlZemG'
 global.gt = '(☞ﾟ∀ﾟ)☞'
 global.botcomedia = '𝓑𝓸𝓽 𝓒𝓸𝓶𝓮𝓭𝓲𝓪 👺👍'
 global.botcomediamd = 'https://github.com/ReyEndymion/Bot-Comedia-MD'
@@ -58,6 +63,11 @@ global.APIKeys = {
   'https://api.botcahx.biz.id': 'Admin'
 }
 
+global.raiz = './'
+global.aniD = 'ANI_MX_SCANS/'
+global.dirP = raiz//+aniD
+global.media = raiz+'media/'
+global.jadibts = join(__dirname, 'jadibts/')
 global.imagen1 = fs.readFileSync('./Menu2.jpg')
 global.imagen2 = fs.readFileSync('./src/nuevobot.jpg') 
 global.imagen3 = fs.readFileSync('./src/Pre Bot Publi.png')

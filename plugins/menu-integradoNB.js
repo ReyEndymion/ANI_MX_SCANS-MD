@@ -735,7 +735,7 @@ case `gadmin`:
     *📊 Registrados: ${rtotalreg}*
 * 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-┣ *MENU \nUsar asi: *${usedPrefix}SOLO ADMINS de ${wm} powered by*\n*${igfg}*
+┣ *MENU \nUsar asi: *${usedPrefix}SOLO ADMINS de ${wm} powered by*\n*${namerepre}*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *LISTA DE OPCIONES*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -1259,7 +1259,7 @@ try {
     *📅 ${gt} Fecha: ${week}, ${date}*
     *📈 Tiempo activo ${gt}: ${uptime}*
     *📊 Registrados: ${rtotalreg}*
-    *MENU ${wm} powered by*\n*${igfg}*
+    *MENU ${wm} powered by*\n*${namerepre}*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *MENU PRINCIPAL DEL ${wm} 
 ┣ *bot*\nDescripcion: menu de ayuda (uso sin prefijo)bot|Bot* 

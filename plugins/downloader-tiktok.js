@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { generateWAMessageFromContent } from '@whiskeysockets/bailey'
+import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import { tiktokdl, tiktokdlv2 } from '@bochilteam/scraper'
 let handler = async (m, { conn, text, usedPrefix, command, args }) => {
 if (!text) throw `*[❗INFO❗] ENLACE DE TIKTOK FALTANTE, POR FAVOR INGRESE EN ENLACE/LINK DE ALGUN VIDEO DE TIKTOK*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} https://vm.tiktok.com/ZML42vSnn/*`

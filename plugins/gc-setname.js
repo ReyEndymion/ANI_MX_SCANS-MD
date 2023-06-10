@@ -1,4 +1,4 @@
-import Presence from '@whiskeysockets/bailey'
+import Presence from '@whiskeysockets/baileys'
 let handler  = async (m, { conn, args, text }) => {
 if (!text && !m.quoted) throw `*[❗INFO❗] INGRESE EL NOMBRE QUE DESEA QUE SEA EL NUEVO NOMBRE DEL GRUPO O CONTESTE A UN MENSAJE QUE TENGA UN TAG Y SEA COMPATIBLE CON LA CANTIDAD DE 25 CARÁCTERES*`
 try {

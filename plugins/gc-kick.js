@@ -1,4 +1,4 @@
-import { areJidsSameUser } from '@whiskeysockets/bailey'
+import { areJidsSameUser } from '@whiskeysockets/baileys'
 let handler = async (m, { conn, args, participants, command, usedPrefix }) => {
     try {
 if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
