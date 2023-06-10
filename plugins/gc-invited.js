@@ -1,4 +1,4 @@
-const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@adiwajshing/baileys')).default
+const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/bailey')).default
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 import fetch from 'node-fetch'
 import fs from 'fs'
@@ -93,7 +93,7 @@ export default handler
 
 
 /*
-const { generateWAMessageFromContent } = (await import('@adiwajshing/baileys')).default
+const { generateWAMessageFromContent } = (await import('@whiskeysockets/bailey')).default
 import fetch from 'node-fetch'
 import fs from 'fs'
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -155,7 +155,7 @@ handler.admin = handler.group = handler.botAdmin = true
 export default handler
 */
 /*
-const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@adiwajshing/baileys')).default;
+const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/bailey')).default;
 import fetch from 'node-fetch';
 import fs from 'fs';
 
@@ -209,7 +209,7 @@ export default handler;
 */
 
 /*
-let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@adiwajshing/baileys')).default
+let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/bailey')).default
 import fetch from 'node-fetch'
 let handler = async (m, { conn, text, participants, usedPrefix, command, args }) => {
   if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'

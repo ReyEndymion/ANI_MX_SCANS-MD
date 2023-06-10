@@ -1,21 +1,85 @@
+import path, { join } from 'path'
+import fetch from 'node-fetch';
+import Jimp from 'jimp';
+import fs from 'fs'
 let handler = async (m, { conn, text, command, usedPrefix }) => {
-let pp = './src/warn.jpg'
+let pp = fs.readFileSync(join(dirP, 'src/warn.jpg'))
 let who
 if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text
 else who = m.chat
 let user = global.db.data.users[who]
 let bot = global.db.data.settings[conn.user.jid] || {}
-let warntext = `*[❗] ETIQUETE A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ADVERTIR AL USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${global.suittag}*`
-if (conn.user.jid == who) throw 'No puedo advertirme a mi mismo'
-if (!who) throw m.reply(warntext, m.chat, { mentions: conn.parseMention(warntext)}) 
-user.warn += 1
-  
-await conn.sendButton(m.chat,`${user.warn == 1 ? `*@${who.split`@`[0]}*` : `*@${who.split`@`[0]}*`} RECIBIO UNA ADVERTENCIA EN ESTE GRUPO!`, `*ADVERTENCIAS ${user.warn}/3*\n\n${wm}`, pp, [['📋 LISTA DE ADVERTENCIAS 📋', '#listwarn']], m, { mentions: [who] })
-	
-if (user.warn >= 3) {
-if (!bot.restrict) return m.reply('*[❗INFO❗] EL PROPIETARIO DEL BOT NO TIENE HABILITADO LAS RESTRICCIONES (#enable restrict) CONTACTE CON EL PARA QUE LO HABILITE*')        
+let warntext = `*[❗] ETIQUETE A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ADVERTIR AL USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${global.botcomedia[0][0]}*`
+if (conn.user.jid == who) { 
+let resp = 'No puedo advertirme a mi mismo'
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    return 0
+}
+if (!who)  {
+let txt = '';
+let count = 0;
+    for (const c of warntext) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+        txt += c;
+        count++;
+        if (count % 10 === 0) {
+            conn.sendPresenceUpdate('composing' , m.chat);
+        }
+    }
+        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+}
+user.warn += 1 
+{
+let what = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `*@${who.split`@`[0]}*`} RECIBIO UNA ADVERTENCIA EN ESTE GRUPO!\n\n*ADVERTENCIAS ${user.warn}/3*\n\n${wm}\n\n📋 LISTA DE ADVERTENCIAS 📋\n => *${usedPrefix}listwarn*`
+let txt = '';
+let count = 0;
+for (const c of what) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { image: pp, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+	} 
+     if (user.warn >= 3) {
+if (!bot.restrict) {
+    let resp = '*[❗INFO❗] EL PROPIETARIO DEL BOT NO TIENE HABILITADO LAS RESTRICCIONES (#enable restrict) CONTACTE CON EL PARA QUE LO HABILITE*'
+    let txt = '';
+    let count = 0;
+        for (const c of resp) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+        txt += c;
+        count++;
+        if (count % 10 === 0) {
+            conn.sendPresenceUpdate('composing' , m.chat);
+        }
+    }
+        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+}        
 user.warn = 0
-await m.reply(`TE LO ADVERTI VARIAS VECES!!\n*@${who.split`@`[0]}* SUPERASTE LAS *3* ADVERTENCIAS, AHORA SERAS ELIMINADO/A 👽`, null, { mentions: [who]})
+let kill = `TE LO ADVERTI VARIAS VECES!!\n*@${who.split`@`[0]}* SUPERASTE LAS *3* ADVERTENCIAS, AHORA SERAS ELIMINADO/A 👽`
+for (const c of kill) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+
 //user.banned = true
 await conn.groupParticipantsUpdate(m.chat, [who], 'remove') 
 } 
@@ -26,4 +90,3 @@ handler.group = true
 handler.admin = true
 handler.botAdmin = true
 export default handler
-//arreglos en la linea 9 por https://github.com/SinNombre999

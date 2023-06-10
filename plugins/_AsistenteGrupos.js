@@ -15,8 +15,12 @@ handler.before = async (m, { conn, text, participants }) => {
 const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).map(toNumber('')).sort(sort('')).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `;
-let espadm = global.espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).map(toNumber('')).sort(sort('')).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `;
+let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+let lenins = global.lenin.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+//let espadm = espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+     let ow = owners.map(toNumber('')).sort(sort(''))
+     let yos = lenins.map(toNumber('')).sort(sort(''))
+     //let adm = espadm.map(toNumber('')).sort(sort(''))
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
 
@@ -42,7 +46,7 @@ for (const c of resp) {
 
     }
 if (!chat.isBanned && chat.asistente && m.text.match(/^Quién eres?$/gi)) {
-	let resp = `K.I.R.R. la inteligencia artificial programada por ${owners}`
+	let resp = `K.I.R.R. la inteligencia artificial programada por ${ow.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `}`
   let int = '';
 let count = 0;
 for (const c of resp) {
@@ -79,7 +83,7 @@ for (const c of resp) {
 
   }     
 if (!chat.isBanned && chat.asistente && m.text.match(/Lenin|creador$/gi)) {
-    let resp = `${owners}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
+    let resp = `${yos.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
 let int = '';
 let count = 0;
 for (const c of resp) {
@@ -97,7 +101,7 @@ for (const c of resp) {
 
     }     
 if (!chat.isBanned && chat.asistente && m.text.match(/Quién es Rey Endymion$/gi)) {
-  let resp = `${owners} el admin superior de este grupo\n☝️😌\n\n@${who.split("@s.whatsapp.net")[0]} te recomiendo que lo invoques para más dudas que tengas`
+  let resp = `${yos.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `} el admin superior de este grupo\n☝️😌\n\n@${who.split("@s.whatsapp.net")[0]} te recomiendo que lo invoques para más dudas que tengas`
        let int = '';
 let count = 0;
 for (const c of resp) {

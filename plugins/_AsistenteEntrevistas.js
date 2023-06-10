@@ -46,12 +46,12 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
       } 
 
     if (/^ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
- m.reply(	
+let resp = 	
 `*ɴᴏᴍʙʀᴇ*:
 
 
@@ -76,7 +76,19 @@ for (const c of resp) {
 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*:
       
       
-      **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`)
+      **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
+      let txt = '';
+      let count = 0;
+      for (const c of resp) {
+          await new Promise(resolve => setTimeout(resolve, 20));
+          txt += c;
+          count++;
+      
+          if (count % 10 === 0) {
+              conn.sendPresenceUpdate('composing' , m.chat);
+          }
+      }
+          await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
       } 
       if (/^Moonficha| Sailorficha|moon ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
  let resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
@@ -115,7 +127,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
       } 
     
@@ -133,7 +145,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
     }   
    

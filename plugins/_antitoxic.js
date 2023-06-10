@@ -12,13 +12,39 @@ export async function before(m, { isAdmin, isBotAdmin, isOwner }) {
     
     if (isToxic && chat.antiToxic && !isOwner && !isAdmin) {
        user.warn += 1
-       if (!(user.warn >= 5)) await m.reply(`${user.warn == 1 ? `Hola *@${m.sender.split`@`[0]}*` : `*@${m.sender.split`@`[0]}*`}, decir la palabra (${isToxic}) está prohibido en este bot *${user.warn}/5* advertencia`, false, { mentions: [m.sender] })
-    }
+       if (!(user.warn >= 5)) {
+       let resp = `${user.warn == 1 ? `Hola *@${m.sender.split`@`[0]}*` : `*@${m.sender.split`@`[0]}*`}, decir la palabra (${isToxic}) está prohibido en este bot *${user.warn}/5* advertencia`
+       let txt = '';
+       let count = 0;
+       for (const c of resp) {
+           await new Promise(resolve => setTimeout(resolve, 5));
+           txt += c;
+           count++;
+       
+           if (count % 10 === 0) {
+               conn.sendPresenceUpdate('composing' , m.chat);
+           }
+       }
+           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+           }
+       }
     
     if (user.warn >= 5) {
        user.warn = 0
-       await m.reply(`Hola *@${m.sender.split`@`[0]}*, superaste las 5 advertencias serás bloqueado y eliminado de este grupo`, false, { mentions: [m.sender] })
-       user.banned = true
+       let resp = `Hola *@${m.sender.split`@`[0]}*, superaste las 5 advertencias serás bloqueado y eliminado de este grupo`
+       let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+user.banned = true
        await this.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
        //await this.updateBlockStatus(m.sender, 'block')
     }

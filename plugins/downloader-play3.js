@@ -6,7 +6,7 @@ if (!vid) throw '*[❗INFO❗] LO SIENTO, NO PUDE ENCONTRAR EL AUDIO/VIDEO, INTE
 try {
 let { title, description, thumbnail, videoId, durationH, viewH, publishedTime } = vid
 const url = 'https://www.youtube.com/watch?v=' + videoId
-conn.sendHydrated(m.chat, `
+const resp = `
 *◉— PLAY DOCUMENT —◉*
 
 📌 *TITULO:* ${title}
@@ -14,12 +14,24 @@ conn.sendHydrated(m.chat, `
 📆 *PUBLICADO:* ${publishedTime}
 ⌚ *DURACION:* ${durationH}
 👀 *VISTAS:* ${viewH}
-`.trim(), wm, thumbnail, `${url}`, 'URL', null, null, [
-['AUDIO', `${usedPrefix}yta.2 ${url}`],
-['VIDEO', `${usedPrefix}ytv.2 ${url}`]
-], m)
+'URL' => ${url} 
+'AUDIO' => ${usedPrefix}yta.2 ${url}
+'VIDEO' => ${usedPrefix}ytv.2 ${url}
+`.trim()
+let txt = '';
+       let count = 0;
+       for (const c of resp) {
+           await new Promise(resolve => setTimeout(resolve, 5));
+           txt += c;
+           count++;
+       
+           if (count % 10 === 0) {
+               conn.sendPresenceUpdate('composing' , m.chat);
+           }
+       }
+conn.sendMessage(m.chat, {text: txt+'\n\n' +wm, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, null, null, [['audio'], ['video']])
 }catch(e){
-m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*')
+    conn.sendMessage(m.chat, { text: '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*', mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 console.log(e)
 }}
 handler.command = /^play3|playdoc?$/i

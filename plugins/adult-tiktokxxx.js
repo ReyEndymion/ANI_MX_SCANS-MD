@@ -13,8 +13,13 @@ let name = await conn.getName[who]
 let json = await fetch(`http://mkbot.online/api/tiktok/nsfw/nsfwtt?&apikey=${mkbotkey}`)
 let jsons = await json.json()
 let res = jsons.result
-conn.sendButton(m.chat, `- Bienvenido a TikTok Gold🥵 -`, `*◈•@${who.split("@s.whatsapp.net")[0]}*`, res, [['🔄 SIGUIENTE 🔄', `/${command}`]], fgif, { mentions: [who] })}
+conn.sendFile (m.chat, res, null, 'lol', m, null, {viewOnce: true})
+    await delay(1 * 3000)
+//conn.sendMessage(m.chat, { text: `- Bienvenido a TikTok Gold🥵 -`, `*◈•@${who.split("@s.whatsapp.net")[0]}*`, [['🔄 SIGUIENTE 🔄', `/${command}`]], fgif, { mentions: [who] })
+}
 handler.command = /^(tiktokxxx)$/i
+handler.register = true
 export default handler
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 global.mkbot = ['UfN5DLvV', 'lwSUluWz', 'KcrY8r8I', 'HSxJ72Rf', 'Gmc5DlDb', 'H6pvVPJc', 'uVAf54xz', 'wF4gTpTZ', 'nwJVzP6v']
 global.mkbotkey = mkbot[Math.floor(mkbot.length * Math.random())]

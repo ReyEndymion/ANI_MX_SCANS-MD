@@ -1,4 +1,4 @@
-let handler = async (m, { conn }) => {
+let handler = async (m, { conn, usedPrefix }) => {
 let user = global.db.data.users[m.sender]
 let randomaku1 = `${Math.floor(Math.random() * 5)}`
 let randomaku2 = `${Math.floor(Math.random() * 5)}`
@@ -71,21 +71,21 @@ global.db.data.users[m.sender].babi += rbrb11
 global.db.data.users[m.sender].ayam += rbrb12
 	
 let time = global.db.data.users[m.sender].lastberburu + 2700000 //45 Minutos
-if (new Date - global.db.data.users[m.sender].lastberburu < 2700000) return conn.sendButton(m.chat, `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO`, `⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}`, null, [
-['🏞️ ANIMALES CAPTURADOS', '.kandang'],
-[`🎒 𝙸𝙽𝚅𝙴𝙽𝚃𝙰𝙴𝚁𝙸𝙾`, `.inventario`]], m)	
+if (new Date - global.db.data.users[m.sender].lastberburu < 2700000) return conn.sendMessage(m.chat, { text: `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara: 
+['🏞️ ANIMALES CAPTURADOS'] usa: *${usedPrefix}kandang*,
+['🎒 INVENTARIO'] usa: *${usedPrefix}inventario*`}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})	
 
 setTimeout(() => {
-conn.sendHydrated(m.chat, hsl, wm, null, md, `𝙶𝙸𝚃𝙷𝚄𝙱`, null, null, [
+conn.sendMessage(m.chat, {text: hsl + '\n\n' + wm + '\n\n' + null + '\n\n' + md + '\n\n' +`𝙶𝙸𝚃𝙷𝚄𝙱` + '\n\n' + null + '\n\n' + null}[
 [null, null]], null)}, 20000)
 	        
 setTimeout(() => {
-conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, null, { mentions: [m.sender]})}, 18000)	
+conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})}, 18000)	
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['OBJETIVO FIJADO`${conn.getName(m.sender)} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*` 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, wm, null, null, null, null, null, [
 //[null, null]], null)}, 18000)
 
 setTimeout(() => {
-conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, null, { mentions: [m.sender]})}, 15000) 	
+conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})}, 15000) 	
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, wm, null, null, null, null, null, [
 //[null, null]], null)}, 15000)
 

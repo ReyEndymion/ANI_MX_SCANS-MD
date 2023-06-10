@@ -1,5 +1,17 @@
 let handler  = async (m, { conn }) => {
-conn.reply(m.chat,`*┌────「 VERDAD 」─*\n*“${pickRandom(global.verdad)}”*\n*└────「 ANIMXSCANS 」─*`, m)
+let resp = `*┌────「 VERDAD 」─*\n*“${pickRandom(global.verdad)}”*\n*└────「 ${wm} 」─*`       
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 20));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 handler.help = ['verdad']
 handler.tags = ['fun']

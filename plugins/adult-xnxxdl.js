@@ -11,4 +11,6 @@ conn.sendMessage(m.chat, { document: { url: json.result.files.high }, mimetype: 
 m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://www.xnxx.com/video-14lcwbe8/rubia_novia_follada_en_cuarto_de_bano*')
 }}
 handler.command = /^(xnxxdl)$/i
+handler.register = true
 export default handler
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

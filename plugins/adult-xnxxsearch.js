@@ -24,4 +24,5 @@ conn.sendMessage(m.chat, listMessage, { quoted: m })
 m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*')
 }}
 handler.command = /^porhubsearch|xvideossearch|xnxxsearch$/i
+handler.register = true
 export default handler

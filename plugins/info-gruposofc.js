@@ -20,11 +20,11 @@ for (const c of info + link1 + info + link2 + info + link3) {
     }
 }
 await delay(1 * 1000)
-await conn.sendMessage(m.chat, { text: `${info}\n\n${link1}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+await conn.sendMessage(m.chat, { text: `${info}\n\n${link1}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 await delay(1 * 1000)
-await conn.sendMessage(m.chat, { text: `${info}\n\n${link2}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+await conn.sendMessage(m.chat, { text: `${info}\n\n${link2}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 await delay(1 * 1000)
-await conn.sendMessage(m.chat, { text: `${info}\n\n${link3}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+await conn.sendMessage(m.chat, { text: `${info}\n\n${link3}`.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 /*
 	let name1 = link1['group_name'] 
 	let name2 = link2['group_name']//link2.subject//await conn.groupMetadata(m.chat, )
@@ -81,11 +81,11 @@ let prep3 = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: 
 }}}}, {userJid: conn.user.jid, quoted: m }, m)
 
 await delay(1 * 1000)
-conn.relayMessage(m.chat, prep1.message, { messageId: prep1.key.id }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} )
+conn.relayMessage(m.chat, prep1.message, { messageId: prep1.key.id }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 await delay(1 * 1000)
-conn.relayMessage(m.chat, prep2.message, { messageId: prep2.key.id }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} )
+conn.relayMessage(m.chat, prep2.message, { messageId: prep2.key.id }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 await delay(1 * 1000)
-conn.relayMessage(m.chat, prep3.message, { messageId: prep3.key.id }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} )
+conn.relayMessage(m.chat, prep3.message, { messageId: prep3.key.id }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch (error) {
     console.error("Error al transmitir los mensajes en el chat de WhatsApp:", error) 
 }*/
@@ -97,7 +97,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
  /*await conn.sendMessage(m.chat, getLinkPreview, { text: link1})
 await conn.sendMessage(m.chat, getLinkPreview, { text: link2})
 await conn.sendMessage(m.chat, getLinkPreview, { text: link3})
-await conn.sendButton(m.chat, null, null, [['IR AL MENU PRINCIPAL', '.menu']], m)
+await conn.sendMessage(m.chat, { text: null, null, [['IR AL MENU PRINCIPAL', '.menu']], m)
 *_➤ Grupos oficiales del Bot:_*
 *_1.-_* *https://chat.whatsapp.com/L4VRAzaYc11D4LSpt8rB9W*
 *_2.-_* *https://chat.whatsapp.com/H0SheP7ippc1dF9uxL04Gt*
@@ -105,7 +105,7 @@ await conn.sendButton(m.chat, null, null, [['IR AL MENU PRINCIPAL', '.menu']], m
 *Grupo de rol*
 *_3.-* *https://chat.whatsapp.com/DCn5C6m11Js0ie9bZUlNFX* */
 /*let media = './Menu2.jpg'
-let handler = async (m, { conn, command }) => conn.sendButton(m.chat, `
+let handler = async (m, { conn, command }) => conn.sendMessage(m.chat, { text: `
 *Hola 👋🏻, unete a los grupos oficiales para pasar un rato agradable usando el Bot 🌎ANI MX SCANS🌏*
 
 *_➤ Grupos oficiales del Bot:_*

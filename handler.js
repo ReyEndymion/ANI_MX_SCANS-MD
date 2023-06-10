@@ -6,9 +6,9 @@ import { unwatchFile, watchFile } from 'fs'
 import chalk from 'chalk'
 
 /**
- * @type {import('@adiwajshing/baileys')}
+ * @type {import('@whiskeysockets/bailey')}
  */
-const { proto } = (await import('@adiwajshing/baileys')).default
+const { proto } = (await import('@whiskeysockets/bailey')).default
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function () {
     clearTimeout(this)
@@ -17,7 +17,7 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
 
 /**
  * Handle messages upsert
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
+ * @param {import('@whiskeysockets/bailey').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate 
  */
 export async function handler(chatUpdate) {
     this.msgqueque = this.msgqueque || []
@@ -472,7 +472,7 @@ export async function handler(chatUpdate) {
 
 /**
  * Handle groups participants update
- * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
+ * @param {import('@whiskeysockets/bailey').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate 
  */
 export async function participantsUpdate({ id, participants, action }) {
     if (opts['self']) return;
@@ -561,11 +561,10 @@ export async function participantsUpdate({ id, participants, action }) {
         }
         break;
     }
-  }
-  
+ }
   /**
    * Handle groups update
-   * @param {import('@adiwajshing/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate
+   * @param {import('@whiskeysockets/bailey').BaileysEventMap<unknown>['groups.update']} groupsUpdate
    */
   export async function groupsUpdate(groupsUpdate) {
     if (opts['self'])
@@ -583,26 +582,15 @@ export async function participantsUpdate({ id, participants, action }) {
         await this.sendMessage(id, { text, mentions: this.parseMention(text) })
     }
 }
-  
 
 export async function callUpdate(callUpdate, conn,  isAdmin, isBotAdmin, isOwner, isROwner, participants) {
-    function sort(property, ascending = true) {
-        if (property) return (...args) => args[ascending & 1][property] - args[!ascending & 1][property]
-        else return (...args) => args[ascending & 1] - args[!ascending & 1]
-      }
-      
-      function toNumber(property, _default = 0) {
-        if (property) return (a, i, b) => {
-          return {...b[i], [property]: a[property] === undefined ? _default : a[property]}
-        }
-        else return a => a === undefined ? _default : a
-      }
+
       
       try {
     let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
     let espadm = global.espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
-    let ow = owners.map(toNumber('')).sort(sort(''))
-    let adms = espadm.map(toNumber('')).sort(sort(''))
+    let ow = owners
+    let adms = espadm
     let adm = `${adms.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join`, `}`
     console.log(some);
     let sender = `@${m.sender.split`@`[0]}`;
@@ -685,3 +673,4 @@ watchFile(file, async () => {
     console.log(chalk.redBright("Se actualizo 'handler.js'"))
     if (global.reloadHandler) console.log(await global.reloadHandler())
 })
+

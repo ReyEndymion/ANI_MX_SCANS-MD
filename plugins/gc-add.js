@@ -1,10 +1,10 @@
-let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@adiwajshing/baileys')).default
+let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/bailey')).default
 import fetch from 'node-fetch'
 
 /**
- * @type {import('@adiwajshing/baileys')}
+ * @type {import('@whiskeysockets/bailey')}
  */
-const { getBinaryNodeChild, getBinaryNodeChildren } = (await import('@adiwajshing/baileys')).default
+const { getBinaryNodeChild, getBinaryNodeChildren } = (await import('@whiskeysockets/bailey')).default
 let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
 if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
 

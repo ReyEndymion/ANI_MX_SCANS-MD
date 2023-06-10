@@ -5,8 +5,20 @@ if (!text) throw `*[❗] INGRESE UN TEXTO PARA HABLAR CON SIMSIMI O EL BOT*\n\n*
 try {
 let res = await fetch(`https://api.simsimi.net/v2/?text=${text}&lc=es`)
 let json = await res.json()
-m.reply(json.success)
-} catch {
+let txt = '';
+        let count = 0;
+        for (const c of (json.success.trim())) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+            txt += c;
+            count++;
+        
+            if (count % 10 === 0) {
+                conn.sendPresenceUpdate('composing' , m.chat);
+            }
+        }
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100} );
+} catch (e) {
+    console.log(`este es el error del codigo anterior: ${e}`)
 let res2 = await fetch(`https://api.phamvandien.xyz/sim?type=ask&ask=${text}`)  
 let json2 = await res2.json()
 let result = json2.answer  

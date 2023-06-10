@@ -1,4 +1,4 @@
-import { areJidsSameUser } from '@adiwajshing/baileys'
+import { areJidsSameUser } from '@whiskeysockets/bailey'
 
 let handler = async (m, { conn, args, participants }) => {
     if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
@@ -22,7 +22,7 @@ let handler = async (m, { conn, args, participants }) => {
         }
     }
 
-    await conn.sendMessage(m.chat, {image: {url: pp}, caption: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, {image: {url: pp}, caption: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
     await delay(1 * 20000)
 
     let chat = global.db.data.chats[m.chat]
@@ -51,7 +51,7 @@ for (let user of listUsers.split(' ')) {
         }
     }
 
-    await conn.sendMessage(m.chat, {image: {url: pp}, caption: txt2, mentions: conn.parseMention(txt2) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, {image: {url: pp}, caption: txt2, mentions: conn.parseMention(txt2) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 }
 

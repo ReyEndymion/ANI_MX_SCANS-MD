@@ -24,13 +24,11 @@ async function handler(m, { conn, args, usedPrefix, command }) {
     if (!who) return m.reply('✳️ Taguea al usuario')
     if (!(who in global.db.data.users)) return m.reply(`✳️ Usuario ${who} no está en la  database`)
     if (user[type] * 1 < count) return m.reply(`✳️  *${type}*  insuficiente para transferir`)
+    let c = `FG - dylux-bot, sin botones por ${wm} `
     let confirm = `
-¿Está seguro de que desea transferir *${count}* ${type} a  *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}* ? 
-
-Tienes  *60* s
+¿Está seguro de que desea transferir *${count}* ${type} a  *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}* ?\n\nResponde *si* para aceptar o *no* para cancelar, Tienes  *60* s\n\n${c}
 `.trim()
-    let c = 'FG - dylux-bot'
-    conn.sendButton(m.chat, confirm, c, null, [['si'], ['no']], m, { mentions: [who] })
+    conn.sendMessage(m.chat, { text: confirm, mentions: conn.parseMention(confirm)}, {quoted: m, ephemeralExpiration: {}, disappearingMessagesInChat: {}}, [['si'], ['no']])
     confirmation[m.sender] = {
         sender: m.sender,
         to: who,
@@ -72,7 +70,7 @@ handler.before = async m => {
 
 handler.help = ['transfer'].map(v => v + ' [tipo] [cantidad] [@tag]')
 handler.tags = ['xp']
-handler.command = ['payxp', 'transfer', 'darxp'] 
+handler.command = ['payxp', 'transfer', 'darxp', 'transferir'] 
 
 handler.disabled = false
 

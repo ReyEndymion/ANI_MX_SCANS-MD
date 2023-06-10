@@ -4,7 +4,7 @@ import cheerio from 'cheerio'
 let handler = async (m, { conn, text }) => {
 if (!text) throw `*[❗INFO❗] INGRESE EL NOMBRE DE ALGUN ANIME QUE DESEE BUSCAR*`
 try {
-let res = await fetch(global.API('https://api.jikan.moe', '/v3/search/anime', { q: text }))
+let res = await fetch(global.API('https://api.jikan.moe', '/v4/search/anime', { q: text }))
 if (!res.ok) throw await res.text()
 let json = await res.json()
 let { title, members, synopsis, episodes, url, rated, score, image_url, type, start_date, end_date, mal_id } = json.results[0]
@@ -23,7 +23,7 @@ let animeingfo = `✨ *Titulo:* ${title}
 🌐 *URL*: ${url}`
 conn.sendFile(m.chat, image_url, '', animeingfo, m)
 } catch {    
-let res = await fetch(global.API('https://api.jikan.moe', '/v3/search/anime', { q: text }))
+let res = await fetch(global.API('https://api.jikan.moe', '/v4/search/anime', { q: text }))
 if (!res.ok) throw await res.text()
 let json = await res.json()
 let { title, members, synopsis, episodes, url, rated, score, image_url, type, start_date, end_date, mal_id } = json.results[0]

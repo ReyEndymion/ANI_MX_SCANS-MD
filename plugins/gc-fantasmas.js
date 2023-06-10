@@ -16,8 +16,35 @@ sider.push(member[i])}
 }else {
 total++
 sider.push(member[i])}}}
-	if(total == 0) return conn.reply(m.chat, `*Este grupo no tiene fantasmas :D.*`, m) 
-	m.reply(`*[🌎REVISIÓN DE INACTIVOS🌏]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 LISTA DE FANTASMAS 👻 ]*\n${sider.map(v => '🌎👉🏻 @' + v.replace(/@.+/, '')).join('\n')}\n\n*Nota: Esto puede no ser 100% acertado, el Bot inicia el conteo de mensajes a partir de que se activo en este grupo*`, null, { mentions: sider })}
+	if(total == 0) {
+let noHay = `*Este grupo no tiene fantasmas :D.*`
+let txt = '';
+let count = 0;
+for (const c of noHay) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+} else {
+    let siHay = `*[🌎REVISIÓN DE INACTIVOS🌏]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 LISTA DE FANTASMAS 👻 ]*\n${sider.map(v => '🌎👉🏻 @' + v.replace(/@.+/, '')).join('\n')}\n\n*Nota: Esto puede no ser 100% acertado, el Bot inicia el conteo de mensajes a partir de que se activo en este grupo*`
+        let txt = '';
+        let count = 0;
+        for (const c of siHay) {
+            await new Promise(resolve => setTimeout(resolve, 5));
+            txt += c;
+            count++;
+            if (count % 10 === 0) {
+                conn.sendPresenceUpdate('composing' , m.chat);
+            }
+        }
+            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+       }
+    }
 handler.command = /^(verfantasmas|fantasmas|sider|Sider)$/i
 handler.admin = true
 handler.botAdmin = true

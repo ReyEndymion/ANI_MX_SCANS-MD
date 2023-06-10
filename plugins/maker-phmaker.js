@@ -5,7 +5,8 @@ let q = m.quoted ? m.quoted : m
 let mime = (q.msg || q).mimetype || ''
 if (!mime) throw '*[❗] RESPONDA / ETIQUETE A UNA IMAGEN*'
 if (!/image\/(jpe?g|png)/.test(mime)) throw `*[❗] EL TIPO DE ARC𝙷IVO ${mime} NO ES CORRECTO, RECUERDE QUE DEBE SER IMAGEN, JPG, JPEG O PNG*`
-if (!text) return m.reply(`*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
+if (!text){ 
+    let resp = `*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
 —◉ #phmaker (opcion) <responder / etiquetar a una imagen>
 
 *EJEMPLO:*
@@ -438,14 +439,37 @@ if (!text) return m.reply(`*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
 ° ඬ⃟💫 ${usedPrefix + command} worker-by-the-billboard
 ° ඬ⃟💫 ${usedPrefix + command} woven-sketch
 ° ඬ⃟💫 ${usedPrefix + command} xmas_tree
-° ඬ⃟💫 ${usedPrefix + command} yellow_wall`)
+° ඬ⃟💫 ${usedPrefix + command} yellow_wall`.trim()
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
 m.reply('*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*')
 let img = await q.download?.()
 let url = await uploadImage(img)
 let images = `https://violetics.pw/api/photomaker/${encodeURIComponent(text)}?apikey=beta&image=${encodeURIComponent(url)}`
 let caption = `*⎔┉━「 PHMAKER 」━┉⎔*
-*💟 EFECTO:* ${text}`
-conn.sendButton(m.chat, caption, wm, images, [['💫 MAS OPCIONES 💫', `${usedPrefix}phmakerlist`]], m)
+*💟 EFECTO:* ${text}\n\n[['💫 MAS OPCIONES 💫 usa el comando *${usedPrefix}phmakerlist*]]`.trim()
+let txt = '';
+let count = 0;
+for (const c of caption) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+
+conn.sendMessage(m.chat, {image: {url: images}, caption: caption + '\n\n' + wm, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.command = /^(phmaker|phmarker|phmarke|phmake)$/i
 export default handler

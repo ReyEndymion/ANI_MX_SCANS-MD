@@ -10,7 +10,7 @@ conn.sendFile(m.chat, json.result.audio, 'error.mp3', null, m, false, { mimetype
 if (command == 'play.2') {
 conn.reply(m.chat, `*_⏳ SE ESTÁ PROCESANDO SU VIDEO...⏳_*`, m)
 let json = await res.json()
-conn.sendFile(m.chat, json.result.dlmp4, 'error.mp4', `_🌎ANI MX SCANS🌏_`, m)}
+conn.sendFile(m.chat, json.result.dlmp4, 'error.mp4', wm, m)}
 }catch(e){
 m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*')
 }}

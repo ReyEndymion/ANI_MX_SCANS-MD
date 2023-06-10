@@ -1,6 +1,6 @@
 import uploadImage from '../lib/uploadImage.js'
 import { sticker } from '../lib/sticker.js'
-import MessageType from '@adiwajshing/baileys'
+import MessageType from '@whiskeysockets/bailey'
 const effects = ['greyscale', 'invert', 'brightness', 'threshold', 'sepia', 'red', 'green', 'blue', 'blurple', 'pixelate', 'blur']
 
 let handler = async (m, { conn, usedPrefix, text }) => {

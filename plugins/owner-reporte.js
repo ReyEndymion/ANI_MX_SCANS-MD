@@ -14,7 +14,7 @@ for (const c of teks) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage('5215517489568@s.whatsapp.net', { text: m.quoted ? teks + m.quoted.text : teks.trim(), mentions: conn.parseMention(teks) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage('5215517489568@s.whatsapp.net', { text: m.quoted ? teks + m.quoted.text : teks.trim(), mentions: conn.parseMention(teks) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 conn.reply('5215517489568@s.whatsapp.net', m.quoted ? teks + m.quoted.text : teks, null, {contextInfo: {mentionedJid: [m.sender]}})
 conn.reply('5215517489568@s.whatsapp.net', m.quoted ? teks + m.quoted.text : teks, null, { contextInfo: { mentionedJid: [m.sender] }})
 
@@ -28,7 +28,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 1 * 100, disappearingMessagesInChat: true} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 handler.help = ['reporte', 'request'].map(v => v + ' <teks>')
 handler.tags = ['info']

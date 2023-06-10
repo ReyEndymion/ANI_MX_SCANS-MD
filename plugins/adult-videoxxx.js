@@ -4,7 +4,8 @@ if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗INFO❗] LOS COMA
 let res = await pickRandom(asupan)
 conn.sendFile (m.chat, res, null, '*DISFRUTA DEL VIDEO 🥵*', m, null, {viewOnce: true})
     await delay(1 * 10000)
-conn.sendButton(m.chat, wm, res, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)}
+//conn.sendMessage(m.chat, { text: wm, res, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+}
 handler.help = ['videoxxx']
 handler.tags = ['random']
 handler.command = /^videoxxx|vídeoxxx$/i

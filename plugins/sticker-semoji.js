@@ -1,5 +1,5 @@
 import { sticker } from '../lib/sticker.js'
-import MessageType from '@adiwajshing/baileys'
+import MessageType from '@whiskeysockets/bailey'
 import { EmojiAPI } from 'emoji-api' 
 const emoji = new EmojiAPI()
 

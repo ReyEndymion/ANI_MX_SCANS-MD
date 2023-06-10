@@ -20,9 +20,10 @@ let str = `*NOMBRE:* ${username} ${registered ? '(' + name + ') ': ''}
 *LIMITE:* ${limit} USOS
 *REGISTRADO:* ${registered ? 'Si': 'No'}
 *PREMIUM:* ${prem ? 'Si' : 'No'}
-*NUMERO DE SERIE:* 
-${sn}`
-conn.sendButton(m.chat, str, wm, pp, [['MENU PRINCIPAL', '/menu']], m)}}
+*NUMERO DE SERIE:* ${sn}\n\n[['MENU PRINCIPAL' usa: '/menu']]`
+conn.sendMessage(m.chat, {image:{url: pp}, caption: str + ' ' + wm}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+}
+}
 handler.help = ['profile [@user]']
 handler.tags = ['xp']
 handler.command = /^perfil|profile?$/i

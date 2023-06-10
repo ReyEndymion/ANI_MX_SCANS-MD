@@ -5,7 +5,7 @@ if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[ ⚠️ ] LOS COMAND
 let url = packmen[Math.floor(Math.random() * packmen.length)]
 conn.sendFile (m.chat, url, null, '*_🥵 Pack 3 🥵_*', null, null, {viewOnce: true}, m)
     await delay(1 * 2000)
-conn.sendButton(m.chat, `_🥵 Pack 3 🥵_`, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+//conn.sendMessage(m.chat, {image:{} text: `_🥵 Pack 3 🥵_`, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
 }
 handler.help = ['pack3']
 handler.tags = ['internet']

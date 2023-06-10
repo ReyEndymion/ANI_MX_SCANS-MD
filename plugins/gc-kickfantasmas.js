@@ -1,4 +1,4 @@
-import { areJidsSameUser } from '@adiwajshing/baileys'
+import { areJidsSameUser } from '@whiskeysockets/bailey'
 let handler = async (m, { conn, text, participants, args, command }) => {
     let member = participants.map(u => u.id)
     if(!text) {
@@ -17,10 +17,36 @@ let handler = async (m, { conn, text, participants, args, command }) => {
     }else {
     total++
     sider.push(member[i])}}}
-    
-        if(total == 0) return conn.reply(m.chat, `*Este grupo no tiene fantasmas :D.*`, m) 
-       await m.reply(`*[ELIMINACION DE INACTIVOS]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 FANTASMAS QUE MORIRAN 👻 ]*\n${sider.map(v => '@' + v.replace(/@.+/, '')).join('\n')}\n\n*Nota: Aunque esto no sea 100% acertado, el Bot eliminara la lista mencionada, empezando en 20 segundos y cada 10 segundos eliminara un numero*`, null, { mentions: sider }) 
-       await delay(1 * 10000)
+    let noHay = `*Este grupo no tiene fantasmas :D.*`
+    let siHay = `*[ELIMINACION DE INACTIVOS]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 FANTASMAS QUE MORIRAN 👻 ]*\n${sider.map(v => '@' + v.replace(/@.+/, '')).join('\n')}\n\n*Nota: Aunque esto no sea 100% acertado, el Bot eliminara la lista mencionada, empezando en 20 segundos y cada 10 segundos eliminara un numero*`
+    if(total == 0) {
+        let txt = '';
+        let count = 0;
+        for (const c of noHay) {
+            await new Promise(resolve => setTimeout(resolve, 5));
+            txt += c;
+            count++;
+            if (count % 10 === 0) {
+                conn.sendPresenceUpdate('composing' , m.chat);
+            }
+        }
+            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+        
+        } else {
+                let txt = '';
+                let count = 0;
+                for (const c of siHay) {
+                    await new Promise(resolve => setTimeout(resolve, 5));
+                    txt += c;
+                    count++;
+                    if (count % 10 === 0) {
+                        conn.sendPresenceUpdate('composing' , m.chat);
+                    }
+                }
+                    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+               }
+        
+       await delay(1 * 20000)
        let chat = global.db.data.chats[m.chat]
        chat.welcome = false
        try{

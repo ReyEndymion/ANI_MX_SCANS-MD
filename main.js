@@ -18,12 +18,10 @@ import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-const { DisconnectReason, useMultiFileAuthState } = await import('@adiwajshing/baileys')
+const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/bailey')
 const { CONNECTING } = ws
 const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-const boom_1 = ("@hapi/boom");
-const Types_1 = ("../Types");
 protoType()
 serialize()
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString() }; global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) }; global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
@@ -59,22 +57,29 @@ settings: {},
 global.db.chain = chain(global.db.data)
 }
 loadDatabase()
-global.authFile = `ANIMXSCANS`
+global.authFile = join(__dirname, `ANIMXSCANS/`)
+global.authFileRespald = join(__dirname, `sesionRespaldo/`)
+global.temp = join(__dirname, 'tmp')
+if (!existsSync(jadibts)) {
+  mkdirSync(jadibts);
+  console.log('Directorio jadibts creado exitosamente');
+}
+if (!existsSync(authFileRespald)) {
+  mkdirSync(authFileRespald);
+  console.log('Directorio sesionRespaldo creado exitosamente');
+}
+if (!existsSync(temp)) {
+  mkdirSync(temp);
+  console.log('Directorio tmp creado exitosamente');
+}
 const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile)
-const msgRetryCounterMap = MessageRetryMap => { }
-let { version } = await fetchLatestBaileysVersion();
 
 const connectionOptions = {
 logger: P({ level: 'silent' }),
 printQRInTerminal: true,
 auth: state,
 browser: ['🌎ANI MX SCANS🌏','Safari','16.3.1'],
-patchMessageBeforeSending: (message) => {
-const requiresPatch = !!( message.buttonsMessage || message.templateMessage || message.listMessage );
-if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
-return message;},
-getMessage: async (key) => ( opts.store.loadMessage(/** @type {string} */(key.remoteJid), key.id) || opts.store.loadMessage(/** @type {string} */(key.id)) || {} ).message || { conversation: 'Please send messages again' },   
-msgRetryCounterMap,
+
 }
 
 global.conn = makeWASocket(connectionOptions)
@@ -92,17 +97,15 @@ if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
 if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))}, 30 * 1000)}
-if (opts['server']) (await import('./server.js')).default(global.conn, PORT)
+if (opts['server']) (await import(join(__dirname, 'server.js'))).default(global.conn, PORT)
 
-
-function backupCreds() {
-  const SESSION_DIR = './ANIMXSCANS';
-  const SESSION_BACKUP_DIR = './sesionRespaldo';
+  const SESSION_DIR = authFile;
+  const SESSION_BACKUP_DIR = authFileRespald;
   const CREDENTIALS_FILE = 'creds.json';
   const CREDENTIALS_BACKUP_FILE = 'creds.json';
-  //const BACKUP_INTERVAL = 15 * 60 * 1000; // 15 minutos en milisegundos
   
-  const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
+function backupCreds() {
+const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
   const backupFilePath = path.join(SESSION_BACKUP_DIR, CREDENTIALS_BACKUP_FILE);
   
   // Copiar el archivo de credenciales a la carpeta de respaldo
@@ -117,17 +120,13 @@ function actualizarNumero() {
   const updatedConfigData = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*true\]\s*\])/, function(match) {
     const archivoCreds = readFileSync(path.join(__dirname, 'sesionRespaldo/creds.json'));
     const numero = JSON.parse(archivoCreds).me.id.split(':')[0];
-    return `global.animxscans = [['${numero}', 'Bot principal  - ANI MX SCANS', true]]`;
+    return `global.animxscans = [['${numero}', 'Bot principal - ANI MX SCANS', true]]`;
   });
   writeFileSync(configPath, updatedConfigData);
 }
 
 function cleanupOnConnectionError() {
-  const SESSION_DIR = './ANIMXSCANS';
-  const SESSION_BACKUP_DIR = './sesionRespaldo';
-  const CREDENTIALS_BACKUP_FILE = 'creds.json';
 
-  // Borrar archivos en la carpeta de sesión
   readdirSync(SESSION_DIR).forEach(file => {
     const filePath = path.join(SESSION_DIR, file);
     try {
@@ -150,11 +149,7 @@ function cleanupOnConnectionError() {
 } 
 
 function credsStatus() {
-  const SESSION_DIR = './ANIMXSCANS';
-  const SESSION_BACKUP_DIR = './sesionRespaldo';
-  const CREDENTIALS_FILE = 'creds.json';
-  const CREDENTIALS_BACKUP_FILE = 'creds.json';
-  
+
   const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
   const backupFilePath = path.join(SESSION_BACKUP_DIR, CREDENTIALS_BACKUP_FILE);
   
@@ -184,6 +179,7 @@ function credsStatus() {
     console.log('Archivo de respaldo correcto, continuando inicio de sesión');
   }
 }
+
 function waitTwoMinutes() {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -207,31 +203,25 @@ console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 
 if (connection === 'open') {
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
 if (existsSync(global.authFile)) {
-              console.log(chalk.green('✓ Archivo de credenciales guardado correctamente'));
-          } else {
-              console.log(chalk.yellow('🚩ㅤError al guardar el archivo de credenciales'));
-
-                    }
+    console.log(chalk.green('✓ Archivo de credenciales guardado correctamente'));
+  } else {
+    console.log(chalk.yellow('🚩ㅤError al guardar el archivo de credenciales'));
+  }
           backupCreds();
           actualizarNumero()
           credsStatus();
           try {
             // Leer la base de datos
             await db.read();
-          
-            // Buscar y actualizar todos los isBanned: false
             const chats = db.data.chats;
             let successfulBans = 0;
-          
             for (const [key, value] of Object.entries(chats)) {
               if (value.isBanned === false) {
                 value.isBanned = true;
-               // console.log('Baneando chat:', key);
+                //console.log('Baneando chat:', key);
                 successfulBans++;
               }
             }
-          
-            // Escribir los cambios en la base de datos
             await db.write();
           
             if (successfulBans === 0) {
@@ -239,36 +229,27 @@ if (existsSync(global.authFile)) {
             } else {
               console.log(`Se banearon ${successfulBans} chats correctamente`);
             }
-          
           } catch (e) {
             console.log(`Error: ${e.message}`);
           } 
           await waitTwoMinutes()         
           try {
-            // Leer la base de datos
             await db.read();
-          
-            // Buscar y actualizar todos los isBanned: false
             const chats = db.data.chats;
             let successfulUnbans = 0;
-          
             for (const [key, value] of Object.entries(chats)) {
               if (value.isBanned === true) {
                 value.isBanned = false;
-              //  console.log('Desbaneando chat:', key);
+                //console.log('Desbaneando chat:', key);
                 successfulUnbans++;
               }
             }
-          
-            // Escribir los cambios en la base de datos
             await db.write();
-          
             if (successfulUnbans === 0) {
               throw new Error('No se pudo desbanear ningún chat');
             } else {
               console.log(`Se desbanearon ${successfulUnbans} chats correctamente`);
             }
-          
           } catch (e) {
             console.log(`Error: ${e.message}`);
           }
@@ -420,7 +401,7 @@ function clearTmp() {
           if (file.startsWith('pre-key-')) {
           return true 
           }
-          const stats = fs.statSync(path.join(`./ANIMXSCANS/${file}`));
+          const stats = statSync(path.join(`./ANIMXSCANS/${file}`));
           const mtime = new Date(stats.mtime);
         const now = new Date();
         const hourAgo = new Date(now - 60 * 60 * 1000);
@@ -445,18 +426,18 @@ function clearTmp() {
   }  
   
   function purgeSessionSB() {
-    const listaDirectorios = fs.readdirSync('./jadibts/');
+    const listaDirectorios = readdirSync('./jadibts/');
     console.log(listaDirectorios);
     let SBprekey = [];
   
     listaDirectorios.forEach((filesInDir) => {
-      const directorio = fs.readdirSync(`./jadibts/${filesInDir}`);
+      const directorio = readdirSync(`./jadibts/${filesInDir}`);
       console.log(directorio);
       const DSBPreKeys = directorio.filter((fileInDir) => {
         if (fileInDir.startsWith('pre-key-')) {
           return true;
         }
-        const stats = fs.statSync(path.join(`./jadibts/${filesInDir}/${fileInDir}`));
+        const stats = statSync(path.join(`./jadibts/${filesInDir}/${fileInDir}`));
         const mtime = new Date(stats.mtime);
         const now = new Date();
         const hourAgo = new Date(now - 60 * 60 * 1000);
@@ -473,7 +454,7 @@ function clearTmp() {
       } else {
         SBprekey = [...SBprekey, ...DSBPreKeys];
         DSBPreKeys.forEach((fileInDir) => {
-          fs.unlinkSync(`./jadibts/${filesInDir}/${fileInDir}`);
+          unlinkSync(`./jadibts/${filesInDir}/${fileInDir}`);
           console.log(`${fileInDir} fueron eliminados`);
         });
       }

@@ -4,7 +4,7 @@ let res = await fetch('https://api.waifu.pics/sfw/waifu')
 if (!res.ok) throw await res.text()
 let json = await res.json()
 if (!json.url) throw 'Error!'
-conn.sendButton(m.chat, `A-ARA ARA SEMPAI~~`, wm, json.url, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+conn.sendMessage(m.chat, { image:{url: json.url}, caption: `A-ARA ARA SEMPAI~~\n\n${wm}`}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
 }
 handler.help = ['waifu']
 handler.tags = ['anime']

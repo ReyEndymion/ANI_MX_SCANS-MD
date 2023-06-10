@@ -1,4 +1,6 @@
-/*let handler = async (m, { conn, participants, command, usedPrefix }) => {
+import { areJidsSameUser } from '@whiskeysockets/bailey'
+let handler = async (m, { conn, args, participants, command, usedPrefix }) => {
+    try {
 if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
 let kicktext = `*[❗] ETIQUETÉ A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ELIMINAR AL USUARIO*\n\n*—◉ 𝙴𝙹𝙴𝙼𝙿𝙻𝙾:*\n*${usedPrefix + command} @${global.suittag}*`
 if (!m.mentionedJid[0] && !m.quoted) return m.reply(kicktext, m.chat, { mentions: conn.parseMention(kicktext)}) 
@@ -16,16 +18,9 @@ else if (responseb[0].status === "404") m.reply(error2, m.chat, { mentions: conn
 else conn.sendMessage(m.chat, {text: `*[❗] OCURRIO UN ERROR INESPERADO*`, mentions: [m.sender], contextInfo:{forwardingScore:999, isForwarded:true}}, {quoted: m})
 } else if (m.message.extendedTextMessage.contextInfo.mentionedJid != null && m.message.extendedTextMessage.contextInfo.mentionedJid != undefined) {
 return
-}}
-handler.help = ['kick']
-handler.tags = ['group']
-handler.command = /^(kick|echar|hechar|sacar)$/i
-handler.admin = handler.group = handler.botAdmin = true
-export default handler*/
-
-import { areJidsSameUser } from '@adiwajshing/baileys'
-let handler = async (m, { conn, args, participants }) => {
-    //let lol = args[0].replace(/[+]/g, '')
+}
+} catch {
+   //let lol = args[0].replace(/[+]/g, '')
 	let users = m.mentionedJid.filter(u => !areJidsSameUser(u, conn.user.id))
     let kickedUser = participants.map(u => u.id).filter(v => v !== conn.user.jid /*&& v.startsWith(lol || lol)*/)
     for (let user of users)
@@ -35,17 +30,15 @@ let handler = async (m, { conn, args, participants }) => {
             await delay(1 * 10000)
         }
     m.reply(`*LA ELIMINACION FUE EXITOSA* ${users.map(v => '@' + v.split('@')[0]) || kickedUser.map(v => '@' + v.split('@')[0])}`, null, { mentions: kickedUser })
-
+ 
 }
-
-
-handler.help = ['kick @user']
+}
+handler.help = ['kick']
 handler.tags = ['group']
-handler.command = /^(banear|kick|sacar|\-)$/i
-handler.group = true
-handler.admin = true
-handler.botAdmin = true
+handler.command = /^(kick|echar|hechar|sacar)$/i
+handler.admin = handler.group = handler.botAdmin = true
 export default handler
+
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 

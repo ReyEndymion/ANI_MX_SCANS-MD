@@ -1,5 +1,88 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = async (m, { conn, usedPrefix, participants }) => {
+     let ow = global.owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`).join` y `
+     let me = global.botcomedia.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
+var doc = [`pdf`,`zip`,`vnd.openxmlformats-officedocument.presentationml.presentation`,`vnd.openxmlformats-officedocument.spreadsheetml.sheet`,`vnd.openxmlformats-officedocument.wordprocessingml.document`]
+var document = doc[Math.floor(Math.random() * doc.length)]    
+let text = `Hola @${m.sender.split`@`[0]} soy ${me}
+*—◉ EL NUMERO DE MI OWNER ES: ${ow}*
+`.trim()   
+let txt = '';
+let count = 0;
+for (const c of text) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+       await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+const documentUrl = 'https://www.facebook.com/groups/otakustogether';
+  const mimetype = `application/${document}`;
+  const fileName = namerepre;
+  const thumbnailUrl = imagen1;
+  const sourceUrl = 'https://www.facebook.com/groups/otakustogether';
+
+  const documentMessage = {
+    document: { url: documentUrl },
+    caption: txt,
+    mimetype: mimetype,
+    fileName: fileName,
+    fileLength: 99999999999999,
+    pageCount: 200,
+    contextInfo: {
+      forwardingScore: 200,
+      isForwarded: false,
+      externalAdReply: {
+        mediaUrl: 'https://github.com/ReyEndymion/Bot-Comedia-MD',
+        mediaType: 2,
+        previewType: 'pdf',
+        title: 'Bot exclusivo de:',
+        body: 'Bot Comedia👺👌',
+        thumbnail: thumbnailUrl,
+        sourceUrl: sourceUrl
+      },
+      mentionedJid: conn.parseMention(txt) // Utiliza mentionedJid en lugar de mentions en un contextInfo
+    }
+  };
+  await conn.sendMessage(m.chat, documentMessage, { mentions: conn.parseMention(txt), quoted: m, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100});  
+const vcardArray = [];
+
+for (let i = 0; i < global.owner.length; i++) {
+  const [phoneNumber, displayName, isCompany] = global.owner[i];
+  const company = isCompany ? displayName : global.igfg[phoneNumber] || '';
+let vcard = `
+BEGIN:VCARD
+VERSION:3.0
+N:;${displayName};;;
+FN:${displayName}
+${company ? 'ORG:' + company : ''}
+TEL;type=CELL;waid=${phoneNumber}:${phoneNumber}
+X-ABLabel:${displayName}
+X-WA-BIZ-DESCRIPTION:[❗] CONTACTA A ESTE NUM PARA COSAS IMPORTANTES.
+X-WA-BIZ-NAME:${displayName}
+END:VCARD`
+
+vcardArray.push(vcard);
+}
+
+const vcardString = vcardArray.join('\n\n');
+
+
+
+
+await conn.sendMessage(m.chat, { contacts: { displayName: 'Rey Endymion 👑', contacts: vcardArray.map((vcard) => ({ vcard })) }}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+//const data = global.owner.filter(([id, isCreator]) => id && isCreator)
+//await conn.sendContact(m.chat, data.map(([id, name]) => [id, name]), m)
+}
+handler.help = ['owner', 'creator']
+handler.tags = ['info']
+handler.command = /^(owner|creator|creador|propietario)$/i
+export default handler
+
+/*
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+let handler = async (m, { conn, usedPrefix, participants }) => {
      let ow = global.owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).map(toNumber(``)).sort(sort(``)).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`).join` y `
      let me = global.animxscans.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).map(toNumber(``)).sort(sort(``)).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
 var doc = [`pdf`,`zip`,`vnd.openxmlformats-officedocument.presentationml.presentation`,`vnd.openxmlformats-officedocument.spreadsheetml.sheet`,`vnd.openxmlformats-officedocument.wordprocessingml.document`]
@@ -55,14 +138,4 @@ handler.help = [`owner`, `creator`]
 handler.tags = [`info`]
 handler.command = /^(owner|creator|creador|propietario)$/i
 export default handler
-function sort(property, ascending = true) {
-    if (property) return (...args) => args[ascending & 1][property] - args[!ascending & 1][property]
-    else return (...args) => args[ascending & 1] - args[!ascending & 1]
-  }
-  
-  function toNumber(property, _default = 0) {
-    if (property) return (a, i, b) => {
-      return {...b[i], [property]: a[property] === undefined ? _default : a[property]}
-    }
-    else return a => a === undefined ? _default : a
-  }
+*/

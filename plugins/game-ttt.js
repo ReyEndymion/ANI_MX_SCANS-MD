@@ -46,7 +46,7 @@ game: new TicTacToe(m.sender, 'o'),
 state: 'WAITING' }
 if (text) room.name = text     
 let imgplay = `https://cope-cdnmed.agilecontent.com/resources/jpg/8/9/1590140413198.jpg`
-conn.sendButton(m.chat, `*🕹 *TRES EN RAYA* 🎮*\n\n*◉ ESPERANDO AL SEGUNDO JUGADOR*\n*◉ PARA BORRAR O SALIRSE DE LA PARTIDA USEN EL COMANDO ${usedPrefix}delttt*`, wm, imgplay, [['𝚄𝙽𝙸𝚁𝚂𝙴 𝙰 𝙻𝙰 𝙿𝙰𝚁𝚃𝙸𝙳𝙰', `${usedPrefix + command} ${text}`]], m, { mentions: conn.parseMention(text) })
+conn.sendMessage(m.chat, {image: {url: imgplay}, caption: `*🕹 *TRES EN RAYA* 🎮*\n\n*◉ ESPERANDO AL SEGUNDO JUGADOR*\n*◉ PARA BORRAR O SALIRSE DE LA PARTIDA USEN EL COMANDO ${usedPrefix}delttt*`, wm},  [['𝚄𝙽𝙸𝚁𝚂𝙴 𝙰 𝙻𝙰 𝙿𝙰𝚁𝚃𝙸𝙳𝙰', `${usedPrefix + command} ${text}`]], m, { mentions: conn.parseMention(text) })
 conn.game[room.id] = room
 }}
 handler.command = /^(tictactoe|ttc|ttt|xo)$/i

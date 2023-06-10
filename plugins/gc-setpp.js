@@ -13,7 +13,7 @@ handler.botAdmin = true
 export default handler
 
 /*import { webp2png } from '../lib/webp2mp4.js'
-import { URL_REGEX } from '@adiwajshing/baileys'
+import { URL_REGEX } from '@whiskeysockets/bailey'
 let handler = async (m, { conn, args }) => {
 let q = m.quoted ? m.quoted : m
 if (/image/.test(mime)) {

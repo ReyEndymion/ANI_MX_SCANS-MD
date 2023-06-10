@@ -38,7 +38,7 @@ const fkontak = {
 	"participant": "0@s.whatsapp.net"
 }
 
-await conn.sendButton(m.chat, texto, wm, img, [['🔰 𝙼𝙴𝙽𝚄', '/menu'] ], fkontak, m)  
+await conn.sendMessage(m.chat, {image: {url: img}, caption: texto + '\n\n' + wm, }, [['🔰 𝙼𝙴𝙽𝚄', '/menu'] ], {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})  
 global.db.data.users[m.sender].lastcofre = new Date * 1
 }
 handler.help = ['daily']

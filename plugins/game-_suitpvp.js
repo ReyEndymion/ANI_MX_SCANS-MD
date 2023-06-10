@@ -15,24 +15,73 @@ return !0 }
 room.status = 'play'
 room.asal = m.chat
 clearTimeout(room.waktu)
-let textplay = `🎮 *GAMES - PVP - GAMES* 🎮\n\n—◉ EL JUEGO COMIENZA, LAS OPCIONES HAN SIDO ENVIADAS A LOS CHATS PRIVADOS DE @${room.p.split`@`[0]} Y @${room.p2.split`@`[0]}\n\n◉ SELECCIONEN UNA OPCIÓN EN SUS CHATS PRIVADOS, RESPECTIVAMENTE\n*◉ ELEGIR UNA OPCIÓN EN wa.me/${conn.user.jid.split`@`[0]}*`
-m.reply(textplay, m.chat, {mentions: this.parseMention(textplay)})
+let textplay = `🎮 *JUEGO - PVP* 🎮\n\n(PIEDRA PAPEL O TIJERAS)\n\n—◉ EL JUEGO COMIENZA, LAS OPCIONES HAN SIDO ENVIADAS A LOS CHATS PRIVADOS DE @${room.p.split`@`[0]} Y @${room.p2.split`@`[0]}\n\n◉ SELECCIONEN UNA OPCIÓN EN SUS CHATS PRIVADOS, RESPECTIVAMENTE\n*◉ ELEGIR UNA OPCIÓN EN wa.me/${global.animxscans[0][0]}*`
+let txt = '';
+let count = 0;
+for (const c of textplay) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//m.reply(textplay, m.chat, {mentions: this.parseMention(textplay)})
 let imgplay = `https://www.merca2.es/wp-content/uploads/2020/05/Piedra-papel-o-tijera-0003318_1584-825x259.jpeg`    
-if (!room.pilih) this.sendHydrated(room.p, 'POR FAVOR SELECCIONE UNA DE LAS SIGUIENTES OPCIONES', `GANADOR +${room.poin}𝚇𝙿\n PERDEDOR ${room.poin_lose}𝚇𝙿`, imgplay, null, null, null, null, [['PIEDRA 🗿', 'Piedra'], ['PAPEL 📄', 'Papel'], ['TIJERA ✂️', 'Tijera']], m)
-if (!room.pilih2) this.sendHydrated(room.p2, 'POR FAVOR SELECCIONE UNA DE LAS SIGUIENTES OPCIONES', `GANADOR +${room.poin}𝚇𝙿\n PERDEDOR ${room.poin_lose}𝚇𝙿`, imgplay, null, null, null, null, [['PIEDRA 🗿', 'Piedra'], ['PAPEL 📄', 'Papel'], ['TIJERA ✂️', 'Tijera']], m)                             
+let resp = `'POR FAVOR ESCRIBA UNA DE LAS SIGUIENTES OPCIONES'\n\n*['🗿' 'PIEDRA o Piedra']*\n\n*['📄' 'PAPEL o Papel']*\n\n*['✂️' 'TIJERA o Tijera']*\n\nGANADOR +${room.poin}𝚇𝙿\n PERDEDOR ${room.poin_lose}𝚇𝙿`
+if (!room.pilih)
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , room.p);
+    }
+}
+   await conn.sendMessage(room.p, {image: {url: imgplay}, caption: resp.trim(), mentions: conn.parseMention(textplay) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+
+if (!room.pilih2) 
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , room.p2);
+    }
+}
+    await conn.sendMessage(room.p2, {image: {url: imgplay}, caption: resp.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  
+                             
 room.waktu_milih = setTimeout(() => {
-if (!room.pilih && !room.pilih2) this.sendButton(m.chat, `[❗] NINGÚN JUGADOR TOMÓ LA INICIATIVA DE EMPEZAR EL JUEGO, EL PVP SE HA CANCELADO`, wm, null, [['MENÚ PRINCIPAL', '#menu']], m)
+if (!room.pilih && !room.pilih2) 
+this.sendMessage(m.chat, { text: `[❗] NINGÚN JUGADOR TOMÓ LA INICIATIVA DE EMPEZAR EL JUEGO, EL PVP SE HA CANCELADO`}, wm, null, [['MENÚ PRINCIPAL', '#menu']], m)
 else if (!room.pilih || !room.pilih2) {
 win = !room.pilih ? room.p2 : room.p 
 let textnull = `*[❗] @${(room.pilih ? room.p2 : room.p).split`@`[0]} NO ELEGISTE NINGUNA OPCIÓN, FIN DEL PVP*`
-this.sendButton(m.chat, textnull, wm, null, [['MENÚ PRINCIPAL', '#menu']], m, { mentions: this.parseMention(textnull)})
+let txt = '';
+let count = 0;
+for (const c of textnull) {
+     new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+     conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//this.sendMessage(m.chat, { text: textnull}, wm, null, [['MENÚ PRINCIPAL', '#menu']], m, { mentions: this.parseMention(textnull)})
 db.data.users[win == room.p ? room.p : room.p2].exp += room.poin
 db.data.users[win == room.p ? room.p : room.p2].exp += room.poin_bot
 db.data.users[win == room.p ? room.p2 : room.p].exp -= room.poin_lose
 }
 delete this.suit[room.id]
 return !0
-}, room.timeout)}
+}, room.timeout)
+}
 let jwb = m.sender == room.p
 let jwb2 = m.sender == room.p2
 let g = /tijera/i
@@ -42,7 +91,7 @@ let reg = /^(tijera|piedra|papel)/i
 if (jwb && reg.test(m.text) && !room.pilih && !m.isGroup) {
 room.pilih = reg.exec(m.text.toLowerCase())[0]
 room.text = m.text
-m.reply(`*[ ✔ ] HAS ELEGIDO ${m.text}, REGRESA AL GRUPO Y ${room.pilih2 ? `REVISA LOS RESULTADOS*` : 'ESPERA LOS RESULTADOS*'}`)
+m.reply(`*[ ✔ ] HAS ELEGIDO ${m.text}, REGRESA AL GRUPO Y ${room.pilih2 ? `REVISA LOS RESULTADOS*` : 'ESPERA LOS RESULTADOS*'}\n\n_Para regresar al grupo mas rapido usa el citado de mi mensaje de seleccion de opciones_`)
 if (!room.pilih2) this.reply(room.p2, '*[❗] EL OPONENTE HA ELEGIDO, ES TU TURNO DE ELEGIR!!*', 0)}
 if (jwb2 && reg.test(m.text) && !room.pilih2 && !m.isGroup) {
 room.pilih2 = reg.exec(m.text.toLowerCase())[0]
@@ -61,7 +110,7 @@ else if (k.test(stage) && b.test(stage2)) win = room.p
 else if (k.test(stage) && g.test(stage2)) win = room.p2
 else if (stage == stage2) tie = true 
 this.reply(room.asal, `
-*👑 𝚁𝙴𝚂𝚄𝙻𝚃𝙰𝙳𝙾𝚂 𝙳𝙴𝙻 𝙿𝚅𝙿 👑*${tie ? '\n*—◉ 𝙴𝙼𝙿𝙰𝚃𝙴!!*' : ''}
+*👑 RESULTADOS DEL PVP 👑*${tie ? '\n*—◉ EMPATE!!*' : ''}
 
 *@${room.p.split`@`[0]} (${room.text}) ${tie ? '' : room.p == win ? ` GANÓ 🥳 +${room.poin}XP*` : ` PERDIÓ 🤡 ${room.poin_lose}XP*`}
 *@${room.p2.split`@`[0]} (${room.text2}) ${tie ? '' : room.p2 == win ? ` GANÓ 🥳 +${room.poin}XP*` : ` PERDIÓ 🤡 ${room.poin_lose}XP*`}
