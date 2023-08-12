@@ -62,37 +62,105 @@ global.db.data.users[m.sender].harimau += rbrb2
 global.db.data.users[m.sender].gajah += rbrb3
 global.db.data.users[m.sender].kambing += rbrb4
 global.db.data.users[m.sender].panda += rbrb5
-global.db.data.users[m.sender].buaya += rbrb6
+global.db.data.users[m.sender].cocodrilo += rbrb6
 global.db.data.users[m.sender].kerbau += rbrb7
 global.db.data.users[m.sender].sapi += rbrb8
 global.db.data.users[m.sender].monyet += rbrb9
 global.db.data.users[m.sender].babihutan += rbrb10
-global.db.data.users[m.sender].babi += rbrb11
-global.db.data.users[m.sender].ayam += rbrb12
+global.db.data.users[m.sender].cerdo += rbrb11
+global.db.data.users[m.sender].pollo += rbrb12
 	
 let time = global.db.data.users[m.sender].lastberburu + 2700000 //45 Minutos
-if (new Date - global.db.data.users[m.sender].lastberburu < 2700000) return conn.sendMessage(m.chat, { text: `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara: 
+if (new Date - global.db.data.users[m.sender].lastberburu < 2700000){ 
+    let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara: 
 ['🏞️ ANIMALES CAPTURADOS'] usa: *${usedPrefix}kandang*,
-['🎒 INVENTARIO'] usa: *${usedPrefix}inventario*`}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})	
+['🎒 INVENTARIO'] usa: *${usedPrefix}inventario*`
+    let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
 
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
 setTimeout(() => {
-conn.sendMessage(m.chat, {text: hsl + '\n\n' + wm + '\n\n' + null + '\n\n' + md + '\n\n' +`𝙶𝙸𝚃𝙷𝚄𝙱` + '\n\n' + null + '\n\n' + null}[
-[null, null]], null)}, 20000)
+    let txt = '';
+let count = 0;
+for (const c of hsl + '\n\n' + wm ) {
+    new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+//conn.sendMessage(m.chat, {text: hsl + '\n\n' + wm + '\n\n' + null + '\n\n' + md + '\n\n' +`𝙶𝙸𝚃𝙷𝚄𝙱` + '\n\n' + null + '\n\n' + null}[[null, null]], null)
+}, 20000)
 	        
 setTimeout(() => {
-conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})}, 18000)	
+    let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`
+    let txt = '';
+let count = 0;
+for (const c of resp) {
+    new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+//conn.reply(m.chat, txt, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['OBJETIVO FIJADO`${conn.getName(m.sender)} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*` 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, wm, null, null, null, null, null, [
-//[null, null]], null)}, 18000)
+//[null, null]], null)
+}, 18000)
 
 setTimeout(() => {
-conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100})}, 15000) 	
+    let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//conn.reply(m.chat, resp, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, wm, null, null, null, null, null, [
-//[null, null]], null)}, 15000)
+//[null, null]], null)
+}, 15000)
 
 setTimeout(() => {
-conn.reply(m.chat, `@${m.sender.split("@s.whatsapp.net")[0]} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`, m, m.mentionedJid ? { mentions: [m.sender] } : {})}, 0)
+    let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//conn.reply(m.chat, resp, m, m.mentionedJid ? { mentions: [m.sender] } : {})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`, wm, null, null, null, null, null, [
-//[null, null]], null)}, 0)	
+//[null, null]], null)
+}, 0)	
 user.lastberburu = new Date * 1	
 							     
 }
@@ -108,4 +176,3 @@ let m = Math.floor(ms / 60000) % 60
 let s = Math.floor(ms / 1000) % 60
 console.log({ms,h,m,s})
 return [h, m, s].map(v => v.toString().padStart(2, 0) ).join(':')}
-

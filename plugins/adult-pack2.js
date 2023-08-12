@@ -5,7 +5,7 @@ if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[ ⚠️ ] LOS COMAND
 let url = packgirl[Math.floor(Math.random() * packgirl.length)]
 conn.sendFile (m.chat, url, null, '*_🥵 Pack 2 🥵_*', m, null, {viewOnce: true})
     await delay(1 * 2000)
-//conn.sendMessage(m.chat, { text: `_🥵 Pack 2 🥵_`, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+conn.sendMessage(m.chat, { text: `_🥵 Pack 2 🥵_`}, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
 }
 handler.help = ['pack2']
 handler.tags = ['internet']

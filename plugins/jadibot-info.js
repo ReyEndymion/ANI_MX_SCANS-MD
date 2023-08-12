@@ -27,7 +27,7 @@ for (const c of resp) {
           conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
-  await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+  await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   for (const c of SB) {
     await new Promise(resolve => setTimeout(resolve, 50));
     int += c;
@@ -37,7 +37,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-  await conn.sendMessage(m.chat, { text: SB, mentions: conn.parseMention(SB) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+  await conn.sendMessage(m.chat, { text: SB, mentions: conn.parseMention(SB) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 handler.command = handler.help = ['listjadibot','bots','subsbots']
 handler.tags = ['jadibot']

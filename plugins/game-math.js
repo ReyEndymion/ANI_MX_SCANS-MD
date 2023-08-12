@@ -1,50 +1,42 @@
 global.math = global.math ? global.math : {};
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-  let mat = `
-*[❗INFO❗] INGRESE LA DIFICULTAD CON LA QUE DESEA JUGAR*
-
-*DIFICULTADES DISPONIBLES: ${Object.keys(modes).join(' | ')}*
-*EJEMPLO DE USO: ${usedPrefix}mates medium*
-
-Mates disponibles:
-- Mates Easy: ${usedPrefix + command} easy
-- Mates Medium: ${usedPrefix + command} medium
-- Mates Hard: ${usedPrefix + command} hard
-`.trim();
+  let mat = `*[❗INFO❗] INGRESE LA DIFICULTAD CON LA QUE DESEA JUGAR*\n\n*DIFICULTADES DISPONIBLES: ${Object.keys(modes).join(' | ')}*\n\n*EJEMPLO DE USO: ${usedPrefix}mates medium*\n\nMates disponibles:\n- Mates Easy: ${usedPrefix + command} easy\n- Mates Medium: ${usedPrefix + command} medium\n- Mates Hard: ${usedPrefix + command} hard`.trim();
 let txt = '';
 let count = 0;
 for (const c of mat) {
-    await new Promise(resolve => setTimeout(resolve, 15));
+    await new Promise(resolve => setTimeout(resolve, 20));
     txt += c;
     count++;
     if (count % 10 === 0) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-  if (args.length < 1) {
-    await conn.sendMessage(m.chat, { text: mat.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-    return;
-  }
+  if (args.length < 1) return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+  
+let mode = args[0].toLowerCase()
 
-  let mode = args[0].toLowerCase();
-
-  if (!(mode in modes)) {
-    await conn.sendMessage(m.chat, { text: mat });
-    return;
-  }
-
-  let id = m.chat;
-
-  if (id in global.math) {
+  if (!(mode in modes)) return await conn.sendMessage(m.chat, { text: mat, mentions: conn.parseMention(mat) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
+  
+let id = m.chat
+if (id in global.math) {
     let resp = '*[❗INFO❗] TODAVÍA HAY PREGUNTAS SIN RESPONDER EN ESTE CHAT!*';
-    sendResponse(conn, m.chat, resp);
-    return;
-  }
-  let math = genMath(mode);
-let resp = `CUANTO ES EL RESULTADO DE *${math.str}*?\n\n*⏳ TIEMPO: ${(math.time / 1000).toFixed(2)} _segundos_*\n*🏆 GANA HASTA: ${math.bonus} XP*`
+let txt = '';
+let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
+    await new Promise(resolve => setTimeout(resolve, 20));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+   return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: global.math[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
+  }
+let math = genMath(mode)
+let resp = `CUANTO ES EL RESULTADO DE *${math.str}*?\n\n*⏳ TIEMPO: ${(math.time / 1000).toFixed(2)} _segundos_*\n*🏆 GANA HASTA: ${math.bonus} XP*`.trim()
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 50));
     txt += c;
     count++;
 
@@ -52,35 +44,27 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-  global.math[id] = [
-    await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 }),
-    math,
-    4,
-    setTimeout(() => {
+global.math[id] = [
+    await conn.sendMessage(m.chat, { text: resp, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 }),
+    math, 4,
+setTimeout(() => {
       if (global.math[id]) {
         let resp = `*[❗INFO❗] SE HA FINALIZADO EL TIEMPO PARA RESPONDER*\n\n*LA RESPUESTA ES ${math.result}*`;
-        sendResponse(conn, m.chat, resp);
+        for (const c of resp) {
+          new Promise(resolve => setTimeout(resolve, 50));
+          txt += c;
+          count++;
+      
+          if (count % 10 === 0) {
+              conn.sendPresenceUpdate('composing' , m.chat);
+          }
+      }
+      conn.sendMessage(m.chat, { text: resp, mentions: conn.parseMention(txt) }, {quoted: global.math[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
         delete global.math[id];
       }
     }, math.time)
   ];
 };
-
-async function sendResponse(m, conn, chatId, resp) {
-  let txt = '';
-  let count = 0;
-  for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-      conn.sendPresenceUpdate('composing', chatId);
-    }
-  }
-
-  await conn.sendMessage(chatId, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-}
 
 handler.help = ['math <mode>'];
 handler.tags = ['game'];

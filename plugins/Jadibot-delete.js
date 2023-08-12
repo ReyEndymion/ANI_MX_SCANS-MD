@@ -4,9 +4,9 @@ let handler  = async (m, { conn }, args) => {
     let parentw = conn
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 	let uniqid = `${who.split`@`[0]}` //parentw.getName(who)
-    if (global.conn.user.jid !== conn.user.jid) conn.sendMessage(m.chat, {text: 'Por qué no vas directamente con el numero del Bot?'}, { quoted: m }) 
+    if (global.conn.user.jid !== conn.user.jid) conn.sendMessage(m.chat, {text: 'Por qué no vas directamente con el numero del Bot?'}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 }) 
     else {
-      await conn.sendMessage(m.chat, {text: "Adiós Bot"}, { quoted: m }) 
+      await conn.sendMessage(m.chat, {text: "Adiós Bot"}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 }) 
       }
 
     try {
@@ -15,7 +15,7 @@ let handler  = async (m, { conn }, args) => {
         .then(() => {
         console.log('se han eliminado todos los archivos')
         })
-        await conn.sendMessage(m.chat, {text : "todos los archivos fueron eliminados" } , { quoted: m })
+        await conn.sendMessage(m.chat, {text : "todos los archivos fueron eliminados" } , { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
         /*fs.unlink("./jadibts/" + uniqid + "/creds.json")
         console.log('File removed')
         await conn.sendMessage(m.chat, {text : "la session fue eliminada " } , { quoted: m })

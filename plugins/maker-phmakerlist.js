@@ -286,7 +286,7 @@ m.reply(`*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
 ° ඬ⃟💫 ${usedPrefix + command} pink-panther
 ° ඬ⃟💫 ${usedPrefix + command} pinkify
 ° ඬ⃟💫 ${usedPrefix + command} pisa_street
-° ඬ⃟💫 ${usedPrefix + command} playful-cat
+° ඬ⃟💫 ${usedPrefix + command} playful-gato
 ° ඬ⃟💫 ${usedPrefix + command} polaroid_dress
 ° ඬ⃟💫 ${usedPrefix + command} portrait
 ° ඬ⃟💫 ${usedPrefix + command} portrait_on_the_wall

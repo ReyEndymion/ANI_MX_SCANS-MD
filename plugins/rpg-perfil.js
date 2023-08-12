@@ -11,7 +11,7 @@ pp = await conn.profilePictureUrl(who)
 
 } finally {
 let { name, limit, lastclaim, registered, regTime, age } = global.db.data.users[who]
-let username = conn.getName(who)
+let username =`@${who.split`@`[0]}`//conn.getName(who)
 let prem = global.prems.includes(who.split`@`[0])
 let sn = createHash('md5').update(who).digest('hex')
 let str = `*NOMBRE:* ${username} ${registered ? '(' + name + ') ': ''}
@@ -21,7 +21,18 @@ let str = `*NOMBRE:* ${username} ${registered ? '(' + name + ') ': ''}
 *REGISTRADO:* ${registered ? 'Si': 'No'}
 *PREMIUM:* ${prem ? 'Si' : 'No'}
 *NUMERO DE SERIE:* ${sn}\n\n[['MENU PRINCIPAL' usa: '/menu']]`
-conn.sendMessage(m.chat, {image:{url: pp}, caption: str + ' ' + wm}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+let txt = '';
+let count = 0;
+for (const c of str) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+conn.sendMessage(m.chat, {image:{url: pp}, caption: txt + ' ' + wm, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 }
 handler.help = ['profile [@user]']

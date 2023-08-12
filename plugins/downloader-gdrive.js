@@ -3,15 +3,55 @@ import { sizeFormatter } from 'human-readable'
 let formatSize = sizeFormatter({
 std: 'JEDEC', decimalPlaces: 2, keepTrailingZeroes: false, render: (literal, symbol) => `${literal} ${symbol}B` })
 let handler = async (m, { conn, args }) => {
-if (!args[0]) throw '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*' 
-try {
+if (!args[0]){ 
+let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*' 
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+} try {
 GDriveDl(args[0]).then(async (res) => {
-conn.reply(m.chat, '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado', m)
-if (!res) throw res
-conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })})
-}catch(e){
-m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*')
-console.log(e)}}
+    let resp = '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado'
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+        await new Promise(resolve => setTimeout(resolve, 15));
+        txt += c;
+        count++;
+        if (count % 10 === 0) {
+            conn.sendPresenceUpdate('composing' , m.chat);
+        }
+    }
+        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    //conn.reply(m.chat, , m)
+if (!res) {
+//   throw res
+conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })
+}
+})
+} catch(e) {
+let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*'
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+console.log(e)
+}
+}
 handler.command = /^(gdrive)$/i
 export default handler
 async function GDriveDl(url) {

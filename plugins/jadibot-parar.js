@@ -76,7 +76,7 @@ await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(
   handler.help = ['berhenti','stop']
   handler.tags = ['General']
   handler.command = /^(berhenti|stop)$/i
-  handler.owner = true
+  handler.owner = false
   handler.mods = false
   handler.premium = false
   handler.group = false

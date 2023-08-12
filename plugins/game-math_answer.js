@@ -27,10 +27,9 @@ let resp = `*RESPUESTA CORRECTA!!*\n*HAZ GANADO: ${math.bonus} XP*\n\nVOLVER A J
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
+    await new Promise(resolve => setTimeout(resolve, 50));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
@@ -45,7 +44,7 @@ let resp = `*SE ACABARON TUS OPORTUNIDADES*\n*LA RESPUESTA ES: ${math.result}*VO
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
+    await new Promise(resolve => setTimeout(resolve, 50));
     txt += c;
     count++;
 
@@ -61,10 +60,9 @@ let resp = `*RESPUESTA INCORRECTA!!*\n*AUN DISPONIBLES ${global.math[id][2]} _op
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
+    await new Promise(resolve => setTimeout(resolve, 50));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
@@ -88,13 +86,13 @@ if (!(m.chat in global.math)) return conn.sendMessage(m.chat, { text: '*[❗INFO
 if (m.quoted.id == global.math[id][0].id) {
 let math = global.math[id][1]
 if (m.text == math.result) {
-conn.sendMessage(m.chat, { text: `*RESPUESTA CORRECTA!!*\n*HAZ GANADO: ${math.bonus} XP*`, wm, null, [['VOLVER A JUGAR', `/math ${math.mode}`]], m)
+conn.sendButton(m.chat, `*RESPUESTA CORRECTA!!*\n*HAZ GANADO: ${math.bonus} XP*`, wm, null, [['VOLVER A JUGAR', `/math ${math.mode}`]], m)
 global.db.data.users[m.sender].exp += math.bonus
 clearTimeout(global.math[id][3])
 delete global.math[id]
 } else {
 if (--global.math[id][2] == 0) {
-conn.sendMessage(m.chat, { text: `*SE ACABARON TUS OPORTUNIDADES*\n*LA RESPUESTA ES: ${math.result}*`, wm, null, [['VOLVER A JUGAR', `/math ${math.mode}`]], m)
+conn.sendButton(m.chat, `*SE ACABARON TUS OPORTUNIDADES*\n*LA RESPUESTA ES: ${math.result}*`, wm, null, [['VOLVER A JUGAR', `/math ${math.mode}`]], m)
 clearTimeout(global.math[id][3])
 delete global.math[id]
 } else conn.reply(m.chat, `*RESPUESTA INCORRECTA!!*\n*AUN DISPONIBLES ${global.math[id][2]} _oportunidades_*`, m)

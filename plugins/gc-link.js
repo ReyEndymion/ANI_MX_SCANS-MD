@@ -52,7 +52,7 @@ getPreviewFromContent('https://chat.whatsapp.com/' + await conn.groupInviteCode(
 conn.reply(m.chat, img, getLinkPreview, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
 title: 'LINK DEL GRUPO',
-body: '🌎ANI MX SCANS🌏',         
+body: wm,         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
 sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})   
 }

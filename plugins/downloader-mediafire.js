@@ -19,9 +19,9 @@ await m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBO
 /*conn.reply(m.chat, caption, m, {
 contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
 title: 'DESCARGAR DE MEDIAFIRE',
-body: '🌎ANI MX SCANS🌏',         
+body: wm,         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}})
+sourceUrl: hp_otkstogthr}}})
 conn.sendFile(m.chat, url, filename, '', m, null, { mimetype: ext, asDocument: true })
 } catch (e) {
 m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://www.mediafire.com/file/pbabuzyc7i8ord5/TheMystic-Bot-MD-master_%25285%2529.zip/file*')

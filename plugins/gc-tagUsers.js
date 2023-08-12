@@ -14,7 +14,7 @@ let handler = async (m, { conn, participants, groupMetadata, jid, args }) => {
         }
         return str;
       }
-    let pp = await conn.profilePictureUrl(m.chat, 'image');
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync('./src/sinFotoG.png') );
     const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
     
     const lettersImage = await Jimp.read(fs.readFileSync(join(dirP, 'src/invUsers.png')));

@@ -23,11 +23,13 @@ await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted:
 } else if (msg.quoted && msg.mtype){
     await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000})    
 }
+    console.log('texto: ', msg.mtype)    
 } catch (error) {
 await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000, disappearingMessagesInChat: 24*60*100})    
 console.log('texto: ', msg.message + error)
 }
 } catch (e) {  
+    console.log('texto error: ', e)
 
 /**
 [ By @NeKosmic || https://github.com/NeKosmic/ ]

@@ -1,5 +1,5 @@
 let handler  = async (m, { conn, command, args, usedPrefix, DevMode }) => {
-let text = `
+let resp = ` @${m.sender.split('@')[0]}
 *—◉ TUTORIAL BOXMINE HOST*
 > Tutorial: https://youtu.be/eC9TfKICpcY
 > Pagina Oficial: https://boxmineworld.com
@@ -33,12 +33,24 @@ let text = `
 > npm update
 > npm install 
 > npm start` 
-m.reply(text/*, m.chat, m, {
-contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
+let txt = '';
+let count = 0;
+let context = { text: resp.trim(),  contextInfo: {mentionedJid: conn.parseMention(resp), externalAdReply :{ mediaUrl: null, mediaType: 1, description: resp, 
 title: 'INFORMACION - INSTALARBOT',
-body: '🌎ANI MX SCANS🌏',         
-previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
-sourceUrl: `https://www.facebook.com/ANIMxSCANS`}}}*/)   
+body: wm,         
+previewType: 0, thumbnail: imagen1,
+sourceUrl: md}}}
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 5));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, context, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//m.reply(text/*, m.chat, m, */)   
 }
 handler.command = /^(instalarbot)/i
 export default handler

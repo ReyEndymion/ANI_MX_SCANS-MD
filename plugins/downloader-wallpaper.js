@@ -1,7 +1,7 @@
-import { wallpaper, wallpaperv2 } from '@bochilteam/scraper'
+import { wallpaper } from '@bochilteam/scraper'
 let handler = async (m, { conn, text, usedPrefix, command }) => {
 if (!text) throw `*[❗INFO❗] EJEMPLO DE USO DEL COMANDO ${usedPrefix + command} Minecraft*`
-const res = await (/2/.test(command) ? wallpaperv2 : wallpaper)(text)
+const res = await (/2/.test(command) ? wallpaper : wallpaper)(text)
 const img = res[Math.floor(Math.random() * res.length)]
 conn.sendFile(m.chat, img, 'error.jpg', `*RESULTADO DE ${text}*`, m)
 }

@@ -8,7 +8,7 @@ let usersExp = sortedExp.map(enumGetKey)
 let usersLim = sortedLim.map(enumGetKey)
 let usersLevel = sortedLevel.map(enumGetKey)
 let len = args[0] && args[0].length > 0 ? Math.min(100, Math.max(parseInt(args[0]), 5)) : Math.min(5, sortedExp.length)
-let text = `
+let resp = `
 *< TABLA DE CLASIFICACION >*
     
 ▢ *TOP ${len} XP* •
@@ -26,9 +26,21 @@ Tú : *${usersLevel.indexOf(m.sender) + 1}* de *${usersLevel.length}*
 
 ${sortedLevel.slice(0, len).map(({ jid, level }, i) => `${i + 1}. ${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]} *Nivel ${level}*`).join`\n`}
 
-_Diseño By FG_`.trim()
-  m.reply(text, null, { mentions: conn.parseMention(text) })
-}
+_Diseño By FG, naturalizacion by ${author}_`.trim()
+  //m.reply(text, null, { mentions: conn.parseMention(text) })
+  let txt = '';
+  let count = 0;
+  for (const c of resp) {
+      await new Promise(resolve => setTimeout(resolve, 5));
+      txt += c;
+      count++;
+  
+      if (count % 10 === 0) {
+          conn.sendPresenceUpdate('composing' , m.chat);
+      }
+  }
+      await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+  }
 handler.help = ['top']
 handler.tags = ['xp']
 handler.command = ['leaderboard', 'lb'] 

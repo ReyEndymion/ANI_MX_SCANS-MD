@@ -1,7 +1,7 @@
 import similarity from 'similarity'
 const threshold = 0.72
 let handler = {
-async before(m) {
+async before(m, conn) {
 let id = m.chat
 if (!m.quoted || !m.quoted.fromMe || !m.quoted.isBaileys || !/ADIVINA EL TITULO DE LA CANCION/i.test(m.quoted.text)) return !0
 this.tebaklagu = this.tebaklagu ? this.tebaklagu : {}

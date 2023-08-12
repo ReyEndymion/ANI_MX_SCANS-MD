@@ -14,7 +14,7 @@ const fkontak = {
         "participant": "0@s.whatsapp.net"
     }
 
-let user = global.db.data.users[m.sender]
+let user = db.data.users[m.sender]
 let premium = user.premium  
 let minar = `${pickRandom(['Que pro 😎 has minado',
 '🌟✨ Genial!! Obtienes',

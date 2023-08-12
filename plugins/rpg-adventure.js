@@ -18,28 +18,28 @@ POR FAVOR CURATE PRIMERO PARA AVENTURAR DE NUEVO\n\n❤️ CURAME usa el comando
     let txt = '';
     let count = 0;
     for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise(resolve => setTimeout(resolve, 15));
         txt += c;
         count++;
         if (count % 10 === 0) {
             conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
-        await conn.sendMessage(m.chat, {image: {url: imgr + 'MALA SALUD'}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [[`❤️ CURAME`, `${usedPrefix}heal`]])
+        return conn.sendMessage(m.chat, {image: {url: imgr + 'MALA SALUD'}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [[`❤️ CURAME`, `${usedPrefix}heal`]])
 }    
 if (new Date - user.lastadventure <= cooldown) {
     let resp = `${htki} DESCANSANDO ${htka}\n\n*@${m.sender.split`@`[0]}* YA AVENTURASTE, POR FAVOR ESPERA HASTA QUE TERMINE EL TIEMPO DE DESCANSO\n\n⏱️ ${timers.toTimeString()}\n\nPara 🔔 RECLAMO DIARIO usa el comando: *${usedPrefix}daily*`
     let txt = '';
     let count = 0;
     for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise(resolve => setTimeout(resolve, 15));
         txt += c;
         count++;
         if (count % 10 === 0) {
             conn.sendPresenceUpdate('composing' , m.chat);
         }
     }    
-    conn.sendMessage(m.chat, {image: {url: imgr + 'DESCANSANDO'}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [
+    return conn.sendMessage(m.chat, {image: {url: imgr + 'DESCANSANDO'}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [
 [`🔔 RECLAMO DIARIO`, `${usedPrefix}daily`]]) 
 }    
 const rewards = reward(user)
@@ -72,7 +72,7 @@ let img = `https://static-maps.yandex.ru/1.x/?lang=id-ID&ll=${kt[1][0].longitude
  let txt = '';
  let count = 0;
  for (const c of resp) {
-     await new Promise(resolve => setTimeout(resolve, 5));
+     await new Promise(resolve => setTimeout(resolve, 15));
      txt += c;
      count++;
      if (count % 10 === 0) {
@@ -118,12 +118,12 @@ function reward(user = {}) {
                     (user.dog > 8 && user.dog) || 4
                 )).fill(0)
             ),
-            cat: [0, 1, 0, 0, 0],
-            centaur: [0, 1, 0, 0, 0],
+            gato: [0, 1, 0, 0, 0],
+            centauro: [0, 1, 0, 0, 0],
             dog: [0, 1, 0, 0, 0],
             dragon: [0, 1, 0, 0, 0],
             emerald: [0, 1, 0, 0, 0],
-            fox: [0, 1, 0, 0, 0],
+            zorro: [0, 1, 0, 0, 0],
             griffin: [0, 1, 0, 0, 0],
             horse: [0, 1, 0, 0, 0],
             kyubi: [0, 1, 0, 0, 0],
@@ -137,12 +137,12 @@ function reward(user = {}) {
             gold: [0, 0, 0, 0, 0, 1, 0],
             diamond: [0, 0, 0, 0, 0, 0, 1, 0].concat(
                 new Array(5 - (
-                    (user.fox < 6 && user.fox) || (user.fox > 5 && 5) || 0
+                    (user.zorro < 6 && user.zorro) || (user.zorro > 5 && 5) || 0
                 )).fill(0)
             ),
         },
         lost: {
-            health: 101 - user.cat * 4,
+            health: 101 - user.gato * 4,
             armordurability: (15 - user.armor) * 7
         }
     }

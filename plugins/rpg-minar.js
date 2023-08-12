@@ -1,8 +1,35 @@
 let handler = async (m, { conn, isPrems}) => {
 let hasil = Math.floor(Math.random() * 1000)
 let time = global.db.data.users[m.sender].lastmiming + 600000
-if (new Date - global.db.data.users[m.sender].lastmiming < 600000) throw `*[ ⏲️ ] _Espera_ ${msToTime(time - new Date())} _para volver a minar_*`  
-m.reply(`*[ 🎉 ] Genial, minaste ${hasil} XP*`)
+if (new Date - global.db.data.users[m.sender].lastmiming < 600000) {
+let resp = `*[ ⏲️ ] _Espera_ ${msToTime(time - new Date())} _para volver a minar_*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+   return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+let resp = `*[ 🎉 ] Genial, minaste ${hasil} XP*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
 global.db.data.users[m.sender].lastmiming = new Date * 1
   
 }

@@ -5,8 +5,11 @@ conn.tebaklagu = conn.tebaklagu ? conn.tebaklagu : {}
 let id = m.chat
 if (!(id in conn.tebaklagu)) throw false
 let json = conn.tebaklagu[id][1]
-let nya = json.judul
+let nya = json.jawaban
 let nyanya = nya.replace(/[bcdfghjklmnñpqrstvwxyzBCDEFGHJKLMNÑPQRSTVWXYZ]/g, '_')
+if (!json.jawaban) {
+    throw new Error('La propiedad jawaban no existe en este objeto')
+}
 m.reply('' + nyanya + '')
 }
 handler.command = /^insinuar|^hint|pista$/i

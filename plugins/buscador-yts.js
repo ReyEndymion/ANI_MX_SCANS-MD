@@ -16,12 +16,13 @@ case 'channel': return `
 📌 *${v.channelName}* (${v.url})
 🧑‍🤝‍🧑 _${v.subscriberH} suscriptores_
 🎥 ${v.videoCount} videos
-`.trim()
+`//.trim()
 }
 }).filter(v => v).join('\n\n========================\n\n')
 await conn.sendMessage(m.chat, { image: { url: imagennnnn }, caption: teks }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})  
-} catch {
-let get_result = await fetchJson(`https://api.lolhuman.xyz/api/ytsearch?apikey=${lolkeysapi}&query=${text}`)
+} catch (e) {
+    console.log(e)
+/*let get_result = await fetchJson(`https://api.lolhuman.xyz/api/ytsearch?apikey=${lolkeysapi}&query=${text}`)
 let get_result2 = get_result.result
 let ini_txt = ""
 for (var x of get_result2) {
@@ -30,8 +31,9 @@ ini_txt += `👁️ Vistas ${x.views}\n`
 ini_txt += `⏲️ Publicado: ${x.published}`
 ini_txt += `\n\n========================\n\n`
 }
-await conn.sendMessage(m.chat, { image: { url: get_result2[0].thumbnail }, caption: ini_txt }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})  
-}}   
+await conn.sendMessage(m.chat, { image: { url: get_result2[0].thumbnail }, caption: ini_txt }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})  */
+}
+}   
 handler.help = ['', 'earch'].map(v => 'yts' + v + ' <pencarian>')
 handler.tags = ['tools']
 handler.command = /^yts(earch)?$/i

@@ -20,7 +20,19 @@ Tiempo ${(timeout / 1000).toFixed(2)} segundos
 Escribe *${usedPrefix}pista* Para obtener una pista
 Premio: ${poin} XP
 RESPONDE A ESTE MENSAJE CON LAS RESPUESTAS!`.trim()
+let txt = '';
+let count = 0;
+for (const c of caption) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
 conn.tebaklagu[id] = [
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ),
 await m.reply(caption),
 json, poin,
 setTimeout(() => {
@@ -28,7 +40,7 @@ if (conn.tebaklagu[id]) conn.reply(m.chat, `Se acabó el tiempo!\nLa respuesta e
 delete conn.tebaklagu[id]
 }, timeout)
 ]
-let aa = await conn.sendMessage(m.chat, { audio: { url: json.link_song }, fileName: `error.mp3`, mimetype: 'audio/mp4' }, { quoted: m })  
+let aa = await conn.sendMessage(m.chat, { audio: { url: json.link_song }, fileName: `error.mp3`, mimetype: 'audio/mp4' }, { quoted: m, ephemeralExpiration: 2*60*1000})  
 if (!aa) return conn.sendFile(m.chat, json.link_song, 'coba-lagi.mp3', '', m)
 }
 handler.help = ['tebaklagu']

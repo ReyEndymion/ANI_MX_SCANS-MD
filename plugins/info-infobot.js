@@ -1,11 +1,11 @@
 import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
-import os from 'os'
-import util from 'util'
-import sizeFormatter from 'human-readable'
-import MessageType from '@whiskeysockets/baileys'
-import fs from 'fs'
+//import os from 'os'
+//import util from 'util'
+//import sizeFormatter from 'human-readable'
+//import MessageType from '@whiskeysockets/baileys'
+//import fs from 'fs'
 import { performance } from 'perf_hooks'
-let handler = async (m, { conn, usedPrefix, participants }) => {
+let handler = async (m, { conn, usedPrefix, participants }, jid) => {
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 
 let totalreg = Object.keys(global.db.data.users).length
@@ -19,6 +19,7 @@ let old = performance.now()
 let neww = performance.now()
 let speed = neww - old
 let ow = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
+let info1 = 'hola' 
 let info = `
 hola @${m.sender.split`@`[0]}
 ╠═〘 INFO DEL BOT 〙 ═
@@ -41,14 +42,20 @@ hola @${m.sender.split`@`[0]}
 ╠°°° El grupo oficial es:\n${urlgofc}
 ╠═〘 *${wm}* 〙 ═
 `.trim() 
-const res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(m.chat)}}}, {userJid: conn.user.jid, quoted: m})
-conn.relayMessage(m.chat, res.message, {mentions: conn.user.jid, quoted: m})
-/*conn.reply(m.chat, info, m, {
-contextInfo: { externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, 
-title: 'INFO DEL BOT',
-body: `${igfg} by ${namerepre}`,         
-previewType: 0, thumbnail: imagen1,
-sourceUrl: urlgofc}}})*/
+let txt = '';
+let count = 0;
+for (const c of info) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+let res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(info)}}}, {userJid: conn.user.jid})
+conn.relayMessage(m.chat,  res.message, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+//console.log('y esto: ', res)
+conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepre}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']

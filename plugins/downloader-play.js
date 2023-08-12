@@ -5,6 +5,7 @@ async function handler(m, { conn, command, text, usedPrefix })  {
 if (!text) throw `*[❗INFO❗] NOMBRE DE LA CANCION FALTANTE, POR FAVOR INGRESE EL COMANDO MAS EL NOMBRE/TITULO DE UNA CANCION*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} Good Feeling - Flo Rida*`
 try {
 let vid = (await youtubeSearch(text)).video[0]
+console.log('lastimosamente:', text)
 if (!vid) throw '*[❗INFO❗] LO SIENTO, NO PUDE ENCONTRAR EL AUDIO/VIDEO, INTENTE CON OTRO NOMBRE/TITULO*'
 let { title, description, thumbnail, videoId, durationH, viewH, publishedTime } = vid
 const urll = 'https://www.youtube.com/watch?v=' + videoId

@@ -735,7 +735,7 @@ case `gadmin`:
     *📊 Registrados: ${rtotalreg}*
 * 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-┣ *MENU \nUsar asi: *${usedPrefix}SOLO ADMINS de ${wm} powered by*\n*${namerepre}*
+┣ *MENU \nUsar asi: *${usedPrefix}SOLO ADMINS de ${wm} powered by*\n*${igfg}*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *LISTA DE OPCIONES*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -1259,7 +1259,7 @@ try {
     *📅 ${gt} Fecha: ${week}, ${date}*
     *📈 Tiempo activo ${gt}: ${uptime}*
     *📊 Registrados: ${rtotalreg}*
-    *MENU ${wm} powered by*\n*${namerepre}*
+    *MENU ${wm} powered by*\n*${igfg}*
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *MENU PRINCIPAL DEL ${wm} 
 ┣ *bot*\nDescripcion: menu de ayuda (uso sin prefijo)bot|Bot* 
@@ -1286,7 +1286,7 @@ try {
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *🔍 BUSCADORES*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + buscar (buscadores de internet) \nUsar asi: *${usedPrefix}buscar* 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
-┣ *🔊 AUDIOS*\nDescripcion: *- ESCRIBE LAS PALABRAS O FRASES SIN NINGUN PREFIJO (${usedPrefix}, /, *, .)* \nUsar asi: *${usedPrefix}audios-bot* 
+┣ *🔊 AUDIOS*\nDescripcion: *- ESCRIBE LAS PALABRAS O FRASES SIN NINGUN PREFIJO (${usedPrefix}, /, *, .)* \nUsar asi: *${usedPrefix}audios* 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
 ┣ *🛠️ HERRAMIENTAS*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + herramientas (algunas herramientas \nUsar asi: *${usedPrefix}herramientas* 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
