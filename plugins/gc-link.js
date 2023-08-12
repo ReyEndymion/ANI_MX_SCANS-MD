@@ -15,7 +15,7 @@ let handler = async (m, { conn, args }) => {
         body: false, 
         containsAutoReply: true, 
         mediaType: 1, 
-        mediaUrl: link, 
+        mediaUrl: link,
         renderLargerThumbnail: true, 
         showAdAttribution: false, 
         sourceId: name, 

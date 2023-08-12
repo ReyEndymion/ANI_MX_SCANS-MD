@@ -41,7 +41,7 @@ let handler = async (m, _2, msg, isOwner, pickRandom) => {
 }
 handler.help = ['> ', '=> ']
 handler.tags = ['advanced']
-handler.customPrefix = /=?>|~/
+handler.customPrefix = /^(=?>|~)/
 handler.command = /(?:)/i
 
 handler.rowner = true

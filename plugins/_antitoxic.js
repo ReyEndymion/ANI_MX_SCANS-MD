@@ -20,7 +20,6 @@ export async function before(m, { isAdmin, isBotAdmin, isOwner }) {
            await new Promise(resolve => setTimeout(resolve, 5));
            txt += c;
            count++;
-       
            if (count % 10 === 0) {
                conn.sendPresenceUpdate('composing' , m.chat);
            }

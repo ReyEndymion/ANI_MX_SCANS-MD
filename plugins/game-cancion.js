@@ -9,6 +9,7 @@ conn.tebaklagu = conn.tebaklagu ? conn.tebaklagu : {}
 let id = m.chat
 if (id in conn.tebaklagu) {
 conn.reply(m.chat, 'Todavía hay canciones sin respuesta en este chat.', conn.tebaklagu[id][0])
+
 throw false
 } //5LTV57azwaid7dXfz5fzJu
 let res = await fetchJson(`https://raw.githubusercontent.com/BrunoSobrino/TheMystic-Bot-MD/master/src/JSON/tebaklagu.json`)

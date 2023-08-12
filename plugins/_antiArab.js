@@ -5,8 +5,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = m => m
 handler.before = async function (m, {conn, isAdmin, isBotAdmin, isOwner, isROwner} ) {
     let user = m.sender.split`@`[0]
-	let usuario = `@${user}`
-let resp = `✳️ ${usuario} Anti árabes está activo para evitar spam\n\nHasta la próxima`
+let resp = `✳️ @${user} Anti árabes está activo para evitar spam\n\nHasta la próxima`
 	
 if (!m.isGroup) return !1
 let chat = global.db.data.chats[m.chat]

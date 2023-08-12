@@ -1,7 +1,7 @@
 import util from 'util'
 import path from 'path'
 let user = a => '@' + a.split('@')[0]
-function handler(m, { groupMetadata, command, conn, text, usedPrefix}) {
+async function handler(m, { groupMetadata, command, conn, text, usedPrefix}) {
 if (!text) throw `Ejemplo de uso:\n.top *texto*`
 let ps = groupMetadata.participants.map(v => v.id)
 let a = ps.getRandom()
@@ -30,7 +30,19 @@ let top = `*${x} Top 10 ${text} ${x}*
 *8. ${user(h)}*
 *9. ${user(i)}*
 *10. ${user(j)}*`
-m.reply(top, null, { mentions: [a, b, c, d, e, f, g, h, i, j]})
+let txt = '';
+let count = 0;
+for (const c of top) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//m.reply(top, null, { mentions: [a, b, c, d, e, f, g, h, i, j]})
 conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {
 type: 'audioMessage',
 ptt: true })}

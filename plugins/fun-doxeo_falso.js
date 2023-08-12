@@ -6,10 +6,90 @@ let boost2 = `*${pickRandom(['21','22','23','24','25','26','27','28','29','30','
 let boost3 = `*${pickRandom(['41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60'])}%*`
 let boost4 = `*${pickRandom(['61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80'])}%*`
 let boost5 = `*${pickRandom(['81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100'])}%*`
-await m.reply(start)
-await m.reply(boost)
-await m.reply(boost3)
-await m.reply(boost5)
+{//await m.reply(start)
+    let txt = '';
+let count = 0;
+for (const c of start) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+{//await m.reply(boost)
+    let txt = '';
+let count = 0;
+for (const c of boost) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+{
+    let txt = '';
+let count = 0;
+for (const c of boost2) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+{//await m.reply(boost3)
+    let txt = '';
+let count = 0;
+for (const c of boost3) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+{
+    let txt = '';
+let count = 0;
+for (const c of boost4) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+{//await m.reply(boost5)
+    let txt = '';
+let count = 0;
+for (const c of boost5) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
 let old = performance.now()
 let neww = performance.now()
 let speed = `${neww - old}`
@@ -53,7 +133,19 @@ Sof02s32inf14.1e100.net
 *Tcp:* 192.168.629-->92.28.211.167:8615
 *EXTERNAL MAC:* 6U:77:89:ER:O4
 *MODEM JUMPS:* 64`
-m.reply(doxeo, null, { mentions: conn.parseMention(doxeo) })
+let txt = '';
+let count = 0;
+for (const c of doxeo) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+}
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+//m.reply(doxeo, null, { mentions: conn.parseMention(doxeo) })
 }
 handler.help = ['doxear <nombre> | <@tag>']
 handler.tags = ['fun']

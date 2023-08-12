@@ -16,7 +16,21 @@ let img = await q.download?.()
 if (!img) return
 stiker = await sticker(img, false, packname, author)
 } else if (/video/g.test(mime)) {
-if (/video/g.test(mime)) if ((q.msg || q).seconds > 8) return await this.sendMessage(m.chat, { text: '*[❗INFO❗] EL VIDEO NO PUEDE DURAR MAS DE 7 SEGUNDOS*', wm, [['DESACTIVAR AUTOSTICKER', '/disable autosticker']], m)
+if (/video/g.test(mime)) if ((q.msg || q).seconds > 8) { 
+    let resp = `*[❗${wm} INFO❗] EL VIDEO NO PUEDE DURAR MAS DE 7 SEGUNDOS*` + '\n' + wm + '\n' + 'DESACTIVAR AUTOSTICKER => #disable autosticker'
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+        await new Promise(resolve => setTimeout(resolve, 15));
+        txt += c;
+        count++;
+    
+        if (count % 10 === 0) {
+            conn.sendPresenceUpdate('composing' , m.chat);
+        }
+    }
+    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    }
 let img = await q.download()
 if (!img) return
 stiker = await sticker(img, false, packname, author)

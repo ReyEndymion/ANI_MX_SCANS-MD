@@ -1,7 +1,7 @@
 let handler = m => m
-handler.before = async function (m) {
+handler.before = async function (m, conn) {
     let chat = global.db.data.chats[m.chat]
-	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender    
+	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender    
 
     if (/aclaración$/i.test(m.text) && chat.asistente && !chat.isBanned) {
  let resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
@@ -38,15 +38,15 @@ handler.before = async function (m) {
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
+    await new Promise(resolve => setTimeout(resolve , 10));
     txt += c;
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+        this.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
       } 
 
@@ -80,15 +80,15 @@ let resp =
       let txt = '';
       let count = 0;
       for (const c of resp) {
-          await new Promise(resolve => setTimeout(resolve, 20));
+          await new Promise(resolve => setTimeout(resolve , 10));
           txt += c;
           count++;
       
           if (count % 10 === 0) {
-              conn.sendPresenceUpdate('composing' , m.chat);
+              this.sendPresenceUpdate('composing' , m.chat);
           }
       }
-          await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
+          await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
       } 
       if (/^Moonficha| Sailorficha|moon ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
  let resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
@@ -119,15 +119,15 @@ let resp =
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
+    await new Promise(resolve => setTimeout(resolve , 10));
     txt += c;
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+        this.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
       } 
     
@@ -142,10 +142,10 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+        this.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
     }   
    

@@ -27,7 +27,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 	} else if (m.messageStubType == 22) {
 		let resp = `${usuario} Ha cambiado la foto del grupo`
@@ -106,7 +106,7 @@ for (const c of resp) {
 
 	} else if (m.messageStubType == 27 && chat.welcome) {
 
-	let inv = /\d+@g.us/.test(m.sender) ? 'EL ENLACE DE INVITACION' : usuario;
+	let inv = /\d+@g.us/.test(m.sender) ? 'DESDE EL ENLACE DE INVITACION SE' : usuario;
 	let resp = `${inv} AÑADIO A @${m.messageStubParameters[0].split`@`[0]}\n\n*╔══════════════*\n*╟❧ @${await this.getName(m.chat)}*\n*╠══════════════*\n*╟❧ @${m.messageStubParameters[0].split`@`[0]}*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* ${groupMetadata.desc?.toString() || '*SIN DESCRIPCION*'} \n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*`
 let txt = '';
 let count = 0;
@@ -149,7 +149,7 @@ for (const c of resp) {
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 	} else if (m.messageStubType == 30) {
-		let resp = `DEJA DE SER ADMIN EN ESTE GRUPO @${m.messageStubParameters[0].split`@`[0]}\n\n😼🫵ACCION REALIZADA POR: ${usuario}`
+		let resp = `DEJA DE SER ADMIN EN ESTE GRUPO @${m.messageStubParameters[0].split`@`[0]}\n\n🌎🫵ACCION REALIZADA POR: ${usuario}`
 let txt = '';
 let count = 0;
 for (const c of resp) {

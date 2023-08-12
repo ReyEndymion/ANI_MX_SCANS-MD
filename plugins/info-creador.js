@@ -1,7 +1,7 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = async (m, { conn, usedPrefix, participants }) => {
      let ow = global.owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`).join` y `
-     let me = global.botcomedia.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
+     let me = global.me.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
 var doc = [`pdf`,`zip`,`vnd.openxmlformats-officedocument.presentationml.presentation`,`vnd.openxmlformats-officedocument.spreadsheetml.sheet`,`vnd.openxmlformats-officedocument.wordprocessingml.document`]
 var document = doc[Math.floor(Math.random() * doc.length)]    
 let text = `Hola @${m.sender.split`@`[0]} soy ${me}
@@ -38,7 +38,7 @@ const documentUrl = 'https://www.facebook.com/groups/otakustogether';
         mediaType: 2,
         previewType: 'pdf',
         title: 'Bot exclusivo de:',
-        body: 'Bot Comedia👺👌',
+        body: wm,
         thumbnail: thumbnailUrl,
         sourceUrl: sourceUrl
       },

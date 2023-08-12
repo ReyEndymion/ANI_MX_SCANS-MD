@@ -1,23 +1,11 @@
 let handler = m => m
 handler.before = async (m, { conn, text, participants }) => {
-  function sort(property, ascending = true) {
-    if (property) return (...args) => args[ascending & 1][property] - args[!ascending & 1][property]
-    else return (...args) => args[ascending & 1] - args[!ascending & 1]
-  }
-  
-  function toNumber(property, _default = 0) {
-    if (property) return (a, i, b) => {
-      return {...b[i], [property]: a[property] === undefined ? _default : a[property]}
-    }
-    else return a => a === undefined ? _default : a
-  }
-  const chat = global.db.data.chats[m.chat]//.asistente = true  || {}
+const chat = global.db.data.chats[m.chat]//.asistente = true  || {}
 const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let owners = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
 //let espadm = espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
-     let ow = owners.map(toNumber('')).sort(sort(''))
+     let ow = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
      //let adm = espadm.map(toNumber('')).sort(sort(''))
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
@@ -38,13 +26,13 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
     }
 if (!chat.isBanned && chat.asistente && m.text.match(/^Quién eres?$/gi)) {
-	let resp = `K.I.R.R. la inteligencia artificial programada por ${ow.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `}`
+	let resp = `K.I.R.R. la inteligencia artificial programada por ${ow}`
   let int = '';
 let count = 0;
 for (const c of resp) {
@@ -56,7 +44,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -75,13 +63,13 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
   }     
 if (!chat.isBanned && chat.asistente && m.text.match(/Lenin|creador$/gi)) {
-    let resp = `${yos.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
+    let resp = `${ow}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
 let int = '';
 let count = 0;
 for (const c of resp) {
@@ -93,7 +81,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -111,7 +99,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -127,7 +115,7 @@ if (!chat.isBanned && chat.asistente && m.text.match(/^cómo te llamas?$/gi)) {
     }
 
       await conn.sendPresenceUpdate('composing' , m.chat);
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -146,7 +134,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
       handler.customPrefix = / /g
@@ -166,7 +154,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -185,7 +173,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
  
 }     
@@ -202,7 +190,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -221,7 +209,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -240,7 +228,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -259,7 +247,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -277,7 +265,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -311,7 +299,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -347,7 +335,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -371,7 +359,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -389,7 +377,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -425,7 +413,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -481,7 +469,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -501,7 +489,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 
@@ -523,7 +511,7 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+      await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 

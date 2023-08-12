@@ -11,7 +11,7 @@ let handler  = async (m, { conn }, args) => {
 
     try {
         
-        fs.rmdir("./jadibts/" + uniqid, { recursive: true, force: true })
+        fs.rmdir(jadibts + '/' + uniqid, { recursive: true, force: true })
         .then(() => {
         console.log('se han eliminado todos los archivos')
         })

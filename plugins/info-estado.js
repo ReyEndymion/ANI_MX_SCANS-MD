@@ -3,7 +3,7 @@ let picture = imagen1
 let name = await conn.getName(m.sender)
 //sort
 //tonumber
-let me = global.botcomedia.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
+let me = global.me.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
 let _uptime = process.uptime() * 1000
 let _muptime
 if (process.send) { process.send('uptime')

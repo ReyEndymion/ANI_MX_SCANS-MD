@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import Jimp from 'jimp';
 import fs from 'fs'
 let handler = m => m
-handler.all = async function (m) {
+handler.before = async function (m, {conn}) {
 let vn = fs.readFileSync(join(dirP, 'media/bot.mp3'))
 let chat = global.db.data.chats[m.chat]
 const estilo = { key: {  fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "5215517489568-1625305606@g.us" } : {}) }, message: {orderMessage: { itemCount : -999999, status: 1, surface : 1, message: igfg, orderTitle: 'Bang', thumbnail: imagen1, sellerJid: '0@s.whatsapp.net'}}}
@@ -21,7 +21,7 @@ let txt = '';
                conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
-           await conn.sendMessage(m.chat, { text: txt.trim()+'\n\n'+wm, mentions: conn.parseMention(txt) }, {quoted: estilo, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendMessage(m.chat, { text: txt.trim()+'\n\n'+wm, mentions: conn.parseMention(txt) }, {quoted: estilo, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 conn.sendFile(m.chat, vn, 'bot.mp3', null, m, true, { type: 'audioMessage', seconds: '4556', ptt: true, sendEphemeral: true, quoted: m /*estiloaudio*/})}
 return !0
 }
