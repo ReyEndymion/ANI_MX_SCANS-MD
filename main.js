@@ -57,21 +57,7 @@ settings: {},
 global.db.chain = chain(global.db.data)
 }
 loadDatabase()
-global.authFile = join(__dirname, `ANIMXSCANS/`)
-global.authFileRespald = join(__dirname, `sesionRespaldo/`)
-global.temp = join(__dirname, 'tmp')
-if (!existsSync(jadibts)) {
-  mkdirSync(jadibts);
-  console.log('Directorio jadibts creado exitosamente');
-}
-if (!existsSync(authFileRespald)) {
-  mkdirSync(authFileRespald);
-  console.log('Directorio sesionRespaldo creado exitosamente');
-}
-if (!existsSync(temp)) {
-  mkdirSync(temp);
-  console.log('Directorio tmp creado exitosamente');
-}
+
 const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile)
 
 const connectionOptions = {
@@ -210,57 +196,13 @@ if (existsSync(global.authFile)) {
           backupCreds();
           actualizarNumero()
           credsStatus();
-          try {
-            // Leer la base de datos
-            await db.read();
-            const chats = db.data.chats;
-            let successfulBans = 0;
-            for (const [key, value] of Object.entries(chats)) {
-              if (value.isBanned === false) {
-                value.isBanned = true;
-                //console.log('Baneando chat:', key);
-                successfulBans++;
-              }
-            }
-            await db.write();
-          
-            if (successfulBans === 0) {
-              throw new Error('No se pudo banear ningún chat');
-            } else {
-              console.log(`Se banearon ${successfulBans} chats correctamente`);
-            }
-          } catch (e) {
-            console.log(`Error: ${e.message}`);
-          } 
-          await waitTwoMinutes()         
-          try {
-            await db.read();
-            const chats = db.data.chats;
-            let successfulUnbans = 0;
-            for (const [key, value] of Object.entries(chats)) {
-              if (value.isBanned === true) {
-                value.isBanned = false;
-                //console.log('Desbaneando chat:', key);
-                successfulUnbans++;
-              }
-            }
-            await db.write();
-            if (successfulUnbans === 0) {
-              throw new Error('No se pudo desbanear ningún chat');
-            } else {
-              console.log(`Se desbanearon ${successfulUnbans} chats correctamente`);
-            }
-          } catch (e) {
-            console.log(`Error: ${e.message}`);
-          }
-          
-          }
         try {
           await waitTwoMinutes();
           await conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
           } catch (error) {
               console.log('Error al aceptar invitación de grupo:', error);
           }
+}
 }
  
 process.on('uncaughtException', console.error)
