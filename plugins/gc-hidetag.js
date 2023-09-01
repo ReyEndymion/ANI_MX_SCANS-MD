@@ -42,6 +42,10 @@ let isMedia = /image|video|sticker|audio/.test(mime)
 let more = String.fromCharCode(8206)
 let masss = more.repeat(850)
 let htextos = `${text ? text : "*Hola :D*: " + e }`
+const messageFinal = {extendedTextMessage: {
+    text: `${masss}\n${htextos}\n`,
+     ...{ contextInfo: { 
+        mentionedJid: users, externalAdReply: { thumbnail: imagen1, sourceUrl: md }}}}}
 if ((isMedia && quoted.mtype === 'imageMessage') && htextos) {
 var mediax = await quoted.download?.()
 conn.sendMessage(m.chat, { image: mediax, mentions: users, caption: htextos, mentions: users }, { quoted: m, ephemeralExpiration: 2*60*1000 })
@@ -55,7 +59,7 @@ conn.sendMessage(m.chat, { audio: mediax, mentions: users, mimetype: 'audio/mp4'
 var mediax = await quoted.download?.()
 conn.sendMessage(m.chat, {sticker: mediax, mentions: users}, { quoted: m, ephemeralExpiration: 2*60*1000 })
 } else {
-await conn.relayMessage(m.chat, {extendedTextMessage:{text:`${masss}\n${htextos}\n`, ...{ contextInfo: { mentionedJid: users, externalAdReply: { thumbnail: imagen1, sourceUrl: 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD' }}}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+await conn.relayMessage(m.chat, messageFinal, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 }
 }

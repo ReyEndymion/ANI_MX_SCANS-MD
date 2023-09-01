@@ -14,7 +14,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile (m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+    await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }  
 
 if (!chat.isBanned && chat.audios && m.text.match(/(anadieleimporta|a nadie le importa)/gi)) {
@@ -28,7 +28,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-     await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+     await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(araara|ara ara)/gi)) {    
@@ -42,7 +42,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(miarda de bot|mierda de bot|mearda de bot|Miarda de Bot|Mierda de Bot|Mearda de Bot)/gi)) {    
@@ -56,7 +56,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }   
     
 if (!chat.isBanned && chat.audios && m.text.match(/(bañate|Bañate)/gi)) {    
@@ -70,7 +70,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }   
     
 if (!chat.isBanned && chat.audios && m.text.match(/(baneado|Baneado)/gi)) {    
@@ -84,7 +84,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }  
    
 if (!chat.isBanned && chat.audios && m.text.match(/(bebito fiu fiu|bff|Bebito Fiu Fiu|Bff)/gi)) {    
@@ -98,7 +98,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 } 
     
 if (!chat.isBanned && chat.audios && m.text.match(/(buenas noches|Buenas noches|Boanoite|boanoite)/gi)) {    
@@ -112,7 +112,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(buenas tardes|Buenas tardes|boatarde|Boatarde)/gi)) {    
@@ -126,7 +126,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(buenos dias|Buenos dias|buenos días|Buenos días)/gi)) {    
@@ -140,7 +140,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(chica lgante|Chica lgante|Chicalgante|chicalgante|chical gante|Chical gante)/gi)) {    
@@ -154,7 +154,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(giagnosticadocongay|diagnosticado con gay|diagnosticado gay|te diagnóstico con gay|diagnóstico gay|te diagnostico con gay|te diagnóstico con gay|te diagnosticó con gay|te diagnostico con gay)/gi)) {    
@@ -168,7 +168,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(es puto|eeesss putoo|es putoo|esputoo)/gi)) {    
@@ -182,7 +182,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(feliz cumpleaños|felizcumpleaños|happy birthday)/gi)) {    
@@ -196,7 +196,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Fiesta del admin|fiesta del admin)/gi)) {    
@@ -210,7 +210,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(fiesta del administrador)/gi)) {    
@@ -224,7 +224,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(fiesta del admin 3|atención grupo|atencion grupo|aviso importante|fiestadeladmin3)/gi)) {    
@@ -238,7 +238,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(gemidos|gemime|gime|gemime|gemi2)/gi)) {    
@@ -252,7 +252,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(audio hentai|Audio hentai|audiohentai|Audiohentai)/gi)) {    
@@ -266,7 +266,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(sexo|Sexo|Hora de sexo|hora de sexo)/gi)) {    
@@ -280,7 +280,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(laoracion|La biblia|La oración|La biblia|La oración|la biblia|La Biblia)/gi)) {    
@@ -294,7 +294,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Marica tu|cancion1|Marica quien)/gi)) {    
@@ -308,7 +308,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Murió el grupo|Murio el grupo|murio el grupo|murió el grupo|Grupo muerto|grupo muerto)/gi)) {    
@@ -322,7 +322,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Feliz navidad|feliz navidad|Merry Christmas|merry chritmas)/gi)) {    
@@ -336,7 +336,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(noche de paz|Noche de paz|Noche de amor|noche de amor|Noche de Paz)/gi)) {    
@@ -350,7 +350,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Nyapasu|Nyanpasu|nyapasu|Nyapasu|Gambure|Yabure)/gi)) {    
@@ -364,7 +364,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(ho me vengo|oh me vengo|o me vengo|Ho me vengo|Oh me vengo|O me vengo)/gi)) {    
@@ -372,7 +372,7 @@ let vn = media + '/vengo.mp3'
 
         conn.sendPresenceUpdate ('recording', m.chat);
 
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(oni-chan|onichan|o-onichan)/gi)) {    
@@ -386,7 +386,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Pasa pack|vendes tu nudes|pasa video hot|pasa tu pack|pasa fotos hot|vendes tu pack|Vendes tu pack|Vendes tu pack?|vendes tu pack|Pasa Pack Bot|pasa pack Bot|pasa tu pack Bot|Pásame tus fotos desnudas|pásame tu pack|me pasas tu pak|me pasas tu pack|pasa pack)/gi)) {    
@@ -400,7 +400,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Quién es tu senpai botsito 7u7|Quien es tu senpai botsito 7u7|Quién es tu sempai botsito 7u7|Quien es tu sempai botsito 7u7|Quién es tu senpai botsito 7w7|Quien es tu senpai botsito 7w7|quién es tu senpai botsito 7u7|quien es tu senpai botsito 7u7|Quién es tu sempai botsito 7w7|Quien es tu sempai botsito 7w7|Quién es tu senpai botsito|Quien es tu senpai botsito|Quién es tu sempai botsito|Quien es tu sempai botsito|Quién es tu senpai botsito|Quien es tu senpai botsito|quién es tu senpai botsito|quien es tu senpai botsito|Quién es tu sempai botsito|Quien es tu sempai botsito)/gi)) {    
@@ -414,7 +414,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(rawr|Rawr|RAWR|raawwr|rraawr|rawwr)/gi)) {    
@@ -428,7 +428,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(siu|siiuu|ssiiuu|siuuu|siiuuu|siiiuuuu|siuuuu|siiiiuuuuu|siu|SIIIIUUU)/gi)) {    
@@ -442,7 +442,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(te amo|teamo)/gi)) {    
@@ -456,7 +456,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(ooo tio|tio que rico)/gi)) {    
@@ -470,7 +470,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(un Pato| un pato|un pato que va caminando alegremente|Un pato|Un Pato)/gi)) {    
@@ -484,7 +484,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(UwU|uwu|Uwu|uwU|UWU)/gi)) {    
@@ -498,7 +498,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(vetealavrg|vete a la vrg|vete a la verga)/gi)) {    
@@ -512,7 +512,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(fiesta viernes|viernes|Viernes|viernes fiesta)/gi)) {    
@@ -526,7 +526,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(vivan!!|vivan los novios|vivanlosnovios)/gi)) {    
@@ -540,7 +540,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(Yamete|yamete|Yamete kudasai|yamete kudasai)/gi)) {    
@@ -554,7 +554,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(epico|esto va a ser epico)/gi)) {    
@@ -568,7 +568,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
     
 if (!chat.isBanned && chat.audios && m.text.match(/(shitpost)/gi)) {    
@@ -582,7 +582,7 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
             conn.sendPresenceUpdate('recording', m.chat);
           }
     }
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})
+        await conn.sendMessage(m.chat, {audio: {url: vn}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
    
 }

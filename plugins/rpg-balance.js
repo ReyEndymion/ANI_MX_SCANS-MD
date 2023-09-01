@@ -1,4 +1,4 @@
-let handler = async (m, {usedPrefix}) => {	
+let handler = async (m, {conn, usedPrefix}) => {	
 let who
 if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
 else who = m.sender

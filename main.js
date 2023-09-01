@@ -1,11 +1,11 @@
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = true
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = true;
 import './config.js';
-import { createRequire } from "module"; 
+import { createRequire } from 'module'; 
 import path, { join } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { platform } from 'process'
 import * as ws from 'ws';
-import { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat } from 'fs';
+import { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat, mkdirSync } from 'fs';
 import yargs from 'yargs';
 import { spawn } from 'child_process';
 import lodash from 'lodash';
@@ -13,34 +13,51 @@ import chalk from 'chalk';
 import syntaxerror from 'syntax-error';
 import { tmpdir } from 'os';
 import { format } from 'util';
-import P from 'pino';
+import pkg from 'pino';
+const {pino, P} = pkg
+import {Boom} from '@hapi/boom';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
+import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys')
-const { CONNECTING } = ws
-const { chain } = lodash
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys'):
+const { CONNECTING } = ws;
+const { chain } = lodash;
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-protoType()
-serialize()
-global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString() }; global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) }; global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
-global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
-global.timestamp = { start: new Date }
-const __dirname = global.__dirname(import.meta.url)
-global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-global.prefix = new RegExp('^[' + (opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-.@').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
+protoType();
+serialize();
 
-global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`))
+global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
+  return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString();
+};
+global.__dirname = function dirname(pathURL) {
+  return path.dirname(global.__filename(pathURL, true));
+};
+global.__require = function require(dir = import.meta.url) {
+return createRequire(dir);
+};
 
-global.DATABASE = global.db // Backwards Compatibility
+global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({...query, ...(apikeyqueryname ? {[apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name]} : {})})) : '');
+
+global.timestamp = { start: new Date };
+const __dirname = global.__dirname(import.meta.url);
+
+global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
+global.prefix = new RegExp('^[' + (opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®?&.\\-.@').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']');
+
+global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`));
+
+global.DATABASE = global.db; 
 global.loadDatabase = async function loadDatabase() {
-if (global.db.READ) return new Promise((resolve) => setInterval(async function () {
+if (global.db.READ) {
+return new Promise((resolve) => setInterval(async function() {
 if (!global.db.READ) {
-clearInterval(this)
+clearInterval(this);
 resolve(global.db.data == null ? global.loadDatabase() : global.db.data)
 }
 }, 1 * 1000))
+}
 if (global.db.data !== null) return
 global.db.READ = true
 await global.db.read().catch(console.error)
@@ -58,32 +75,57 @@ global.db.chain = chain(global.db.data)
 }
 loadDatabase()
 
-const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile)
+const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile);
+const msgRetryCounterMap = (MessageRetryMap) => { };
+const {version} = await fetchLatestBaileysVersion();
+const storeReload = makeInMemoryStore({ })
 
 const connectionOptions = {
-logger: P({ level: 'silent' }),
-printQRInTerminal: true,
-auth: state,
-browser: ['🌎ANI MX SCANS🌏','Safari','16.3.1'],
-
-}
+  printQRInTerminal: true,
+  patchMessageBeforeSending: (message) => {
+    const requiresPatch = !!( message.buttonsMessage || message.templateMessage || message.listMessage );
+    if (requiresPatch) {
+      message = {viewOnceMessage: {message: {messageContextInfo: {deviceListMetadataVersion: 2, deviceListMetadata: {}}, ...message}}};
+    }
+    return message;
+  },
+  getMessage: async (key) => {
+    if (storeReload) {
+      const msg = await storeReload.loadMessage(key.remoteJid, key.id);
+      return msg.message || undefined;
+    } else if (store) {
+      const msg = store.loadMessage(/** @type {string} */(key.remoteJid), key.id) 
+  return msg.message && undefined
+  }
+    return {  conversation: '' } || proto.Message.fromObject({});
+  },
+  msgRetryCounterMap,
+  logger: pino({level: 'silent'}),
+  auth: {
+    creds: state.creds,
+    keys: makeCacheableSignalKeyStore(state.keys, pino({level: 'silent'})),
+  },
+  browser: ['ANI MX SCANS','Edge','1.0.0'],
+  version,
+  defaultQueryTimeoutMs: undefined,
+};
 
 global.conn = makeWASocket(connectionOptions)
-/* Solucion mensajes en espera */
-//global.conn = makeWASocket({ ...connectionOptions, ...opts.connectionOptions,
-//getMessage: async (key) => (
-//opts.store.loadMessage(/** @type {string} */(key.remoteJid), key.id) ||
-//opts.store.loadMessage(/** @type {string} */(key.id)) || {}
-//).message || { conversation: 'Please send messages again' },
-//})
-
-conn.isInit = false
+conn.isInit = false;
+conn.well = false;
 
 if (!opts['test']) {
-if (global.db) setInterval(async () => {
-if (global.db.data) await global.db.write()
-if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))}, 30 * 1000)}
-if (opts['server']) (await import(join(__dirname, 'server.js'))).default(global.conn, PORT)
+if (global.db) {
+setInterval(async () => {
+if (global.db.data) {
+  await global.db.write()
+}
+if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))
+}, 30 * 1000);
+}
+}
+
+if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
 
   const SESSION_DIR = authFile;
   const SESSION_BACKUP_DIR = authFileRespald;
@@ -103,10 +145,10 @@ const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
 function actualizarNumero() {
   const configPath = path.join(__dirname, 'config.js');
   const configData = readFileSync(configPath, 'utf8');
-  const updatedConfigData = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*true\]\s*\])/, function(match) {
+  const updatedConfigData = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*'ANI MX SCANS'\]\s*\])/, function(match) {
     const archivoCreds = readFileSync(path.join(__dirname, 'sesionRespaldo/creds.json'));
     const numero = JSON.parse(archivoCreds).me.id.split(':')[0];
-    return `global.animxscans = [['${numero}', 'Bot principal - ANI MX SCANS', true]]`;
+    return `global.animxscans = [['${numero}', 'Bot principal - ANI MX SCANS', 'ANI MX SCANS']]`;
   });
   writeFileSync(configPath, updatedConfigData);
 }
@@ -123,7 +165,6 @@ function cleanupOnConnectionError() {
     }
   });
 
-  // Borrar archivo de respaldo
   const backupFilePath = path.join(SESSION_BACKUP_DIR, CREDENTIALS_BACKUP_FILE);
   try {
     unlinkSync(backupFilePath);
@@ -139,7 +180,6 @@ function credsStatus() {
   const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
   const backupFilePath = path.join(SESSION_BACKUP_DIR, CREDENTIALS_BACKUP_FILE);
   
-  // Comprobar si el archivo de credenciales originales existe y no es 0 bytes
   let originalFileValid = false;
   try {
     const stats = statSync(credsFilePath);
@@ -151,7 +191,6 @@ function credsStatus() {
   }
   
   if (!originalFileValid) {
-    // El archivo de credenciales originales no es válido o falta, así que copie el archivo de copia de seguridad y cambie el nombre
     const backupStats = statSync(backupFilePath);
     if (backupStats.isFile() && backupStats.size > 0) {
       copyFileSync(backupFilePath, credsFilePath);
@@ -173,97 +212,198 @@ function waitTwoMinutes() {
     }, 2 * 60 * 1000); 
   });
 }
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const MAX_CLOSE_COUNT = 10;
+const CLOSE_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
+let consecutiveCloseCount = 0
 
 async function connectionUpdate(update) {
-const { connection, lastDisconnect, isNewLogin } = update
-if (isNewLogin) conn.isInit = true
-const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
-if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState !== CONNECTING) {
-console.log(await global.reloadHandler(true).catch(console.error))
-global.timestamp.connect = new Date
+  const { connection, lastDisconnect, isNewLogin } = update;
+  if (isNewLogin) conn.isInit = true;
+  const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
+  if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState == null || undefined || CONNECTING) {
+    await global.reloadHandler(true).catch(console.error);
+    //console.log(await global.reloadHandler(true).catch(console.error));
+    global.timestamp.connect = new Date;
+  }
+  if (global.db.data == null) loadDatabase();
+  if (update.qr != 0 && update.qr != undefined) {
+    console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
+  }
+  if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
+  console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
-if (global.db.data == null) loadDatabase()
-if (update.qr != 0 && update.qr != undefined) {
-console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
+if (connection === undefined) {
+  
+  await wait(5000); // Esperar 5 segundos
+  // Verificar si la conexión cambió a 'connecting' o 'open'
+  if (conn?.ws?.readyState !== CONNECTING && conn?.ws?.readyState !== undefined) {
+    console.log(chalk.yellow(`La conexión ya está abierta: ${connection}`));
+  } else {
+    await wait(10000)
+    console.log(chalk.red(`La conexión aún no está lista, esperando conexión: ${connection}`));
+    //process.send(`reset`);
+  }
+  return;
+
+}
+let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
+if (connection == 'close') {
+    if (reason === DisconnectReason.badSession) {
+        conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFile} y escanea nuevamente.`);
+        cleanupOnConnectionError()
+        //process.exit();
+    } else if (reason === DisconnectReason.connectionClosed) {
+        conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando...`);
+        global.reloadHandler(true).catch(console.error)
+        return
+        //process.send('reset');
+    } else if (reason === DisconnectReason.connectionLost) {
+        conn.logger.warn(`[ ⚠ ] Conexión perdida con el servidor, reconectando...`);
+        global.reloadHandler(true).catch(console.error)
+        return
+       // process.send('reset');
+    } else if (reason === DisconnectReason.connectionReplaced) {
+        conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
+        //process.exit();
+    } else if (reason === DisconnectReason.loggedOut) {
+        conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFile} y escanea nuevamente.`);
+        //process.exit();
+    } else if (reason === DisconnectReason.restartRequired) {
+        conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
+        //process.send('reset');
+    } else if (reason === DisconnectReason.timedOut) {
+        conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
+        process.send('reset');
+    } else if (reason === 403) {
+      conn.logger.warn(`[ ⚠ ] Razón de desconexión revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
+      cleanupOnConnectionError()
+    } else {
+        conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
+        //process.exit();
+          consecutiveCloseCount++;
+      console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${global.authFile} y reescanee el codigo QR`));
+
+      if (consecutiveCloseCount >= MAX_CLOSE_COUNT) {
+        console.log(chalk.red(`La conexión cerrada ocurrió ${consecutiveCloseCount} veces. Reiniciando el servidor...`));
+        consecutiveCloseCount = 0;
+        await wait(RESET_INTERVAL);
+      } else {
+        await wait(CLOSE_CHECK_INTERVAL);
       }
 if (connection === 'open') {
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
-if (existsSync(global.authFile)) {
-    console.log(chalk.green('✓ Archivo de credenciales guardado correctamente'));
-  } else {
-    console.log(chalk.yellow('🚩ㅤError al guardar el archivo de credenciales'));
-  }
-          backupCreds();
-          actualizarNumero()
-          credsStatus();
-        try {
-          await waitTwoMinutes();
-          await conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
-          } catch (error) {
-              console.log('Error al aceptar invitación de grupo:', error);
-          }
+backupCreds() 
+actualizarNumero() 
+credsStatus() 
 }
+return;
 }
- 
-process.on('uncaughtException', console.error)
+
+process.on('uncaughtException', console.error);
 
 let isInit = true;
-let handler = await import('./handler.js')
-global.reloadHandler = async function (restatConn) {
-try {
-const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error)
-if (Object.keys(Handler || {}).length) handler = Handler
-} catch (e) {
-console.error(e)
-}
-if (restatConn) {
-const oldChats = global.conn.chats
-try { global.conn.ws.close() } catch { }
-conn.ev.removeAllListeners()
-global.conn = makeWASocket(connectionOptions, { chats: oldChats })
-isInit = true
-}
-if (!isInit) {
-conn.ev.off('messages.upsert', conn.handler)
-conn.ev.off('group-participants.update', conn.participantsUpdate)
-conn.ev.off('groups.update', conn.groupsUpdate)
-conn.ev.off('message.delete', conn.onDelete)
-conn.ev.off('call', conn.onCall)
-conn.ev.off('connection.update', conn.connectionUpdate)
-conn.ev.off('creds.update', conn.credsUpdate)
-}
-  
-conn.welcome = '*╔══════════════*\n*╟❧ @subject*\n*╠══════════════*\n*╟❧ @user*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* @desc\n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*'
-  conn.bye = '╔══════════════*\n*║〘 *ADIÓS* 〙*\n*╠══════════════*\n║*_☠ Se fue @user_*\n║*_Si no regresa..._*\n║ *_Nadie l@ va a extrañar 😇👍🏼_*\n*╚══════════════*'
-  conn.spromote = '*@user SE SUMA AL GRUPO DE ADMINS!!*'
-  conn.sdemote = '*@user ABANDONA EL GRUPO DE ADMINS !!*'
-  conn.sDesc = '*SE HA MODIFICADO LA DESCRIPCIÓN DEL GRUPO*\n\n*NUEVA DESCRIPCIÓN:* @desc'
-  conn.sSubject = '*SE HA MODIFICADO EL NOMBRE DEL GRUPO*\n *NUEVO NOMBRE:* @subject'
-  conn.sIcon = '*SE HA CAMBIADO LA FOTO DEL GRUPO!!*'
-  conn.sRevoke = '*SE HA ACTUALIZADO EL LINK DEL GRUPO!!*\n*LINK NUEVO:* @revoke'
+let handler = await import('./handler.js');
+global.reloadHandler = async function(restatConn) {
+  try {
+    const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error);
+    if (Object.keys(Handler || {}).length) handler = Handler;
+  } catch (e) {
+    console.error(e);
+  }
+  if (restatConn) {
+    const oldChats = global.conn.chats;
+    try {
+      global.conn.ws.close();
+    } catch { }
+    conn.ev.removeAllListeners();
+    global.conn = makeWASocket(connectionOptions, { chats: oldChats });
+    isInit = true;
+  }
+  if (!isInit) {
+    conn.ev.off('messages.upsert', conn.handler);
+    conn.ev.off('group-participants.update', conn.participantsUpdate);
+    conn.ev.off('groups.update', conn.groupsUpdate);
+    conn.ev.off('message.delete', conn.onDelete);
+    conn.ev.off('call', conn.onCall);
+    conn.ev.off('connection.update', conn.connectionUpdate);
+    conn.ev.off('creds.update', conn.credsUpdate);
+  }
 
-conn.handler = handler.handler.bind(global.conn)
-conn.participantsUpdate = handler.participantsUpdate.bind(global.conn)
-conn.groupsUpdate = handler.groupsUpdate.bind(global.conn)
-conn.onDelete = handler.deleteUpdate.bind(global.conn)
-conn.onCall = handler.callUpdate.bind(global.conn)
-conn.connectionUpdate = connectionUpdate.bind(global.conn)
-conn.credsUpdate = saveCreds.bind(global.conn, true)
+  conn.welcome = '*╔══════════════*\n*╟❧ @subject*\n*╠══════════════*\n*╟❧ @user*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* @desc\n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*';
+  conn.bye = '╔══════════════*\n*║〘 *ADIÓS* 〙*\n*╠══════════════*\n║*_☠ Se fue @user_*\n║*_Si no regresa..._*\n║ *_Nadie l@ va a extrañar 😇👍🏼_*\n*╚══════════════*';
+  conn.spromote = '*@user SE SUMA AL GRUPO DE ADMINS!!*';
+  conn.sdemote = '*@user ABANDONA EL GRUPO DE ADMINS !!*';
+  conn.sDesc = '*SE HA MODIFICADO LA DESCRIPCIÓN DEL GRUPO*\n\n*NUEVA DESCRIPCIÓN:* @desc';
+  conn.sSubject = '*SE HA MODIFICADO EL NOMBRE DEL GRUPO*\n *NUEVO NOMBRE:* @subject';
+  conn.sIcon = '*SE HA CAMBIADO LA FOTO DEL GRUPO!!*';
+  conn.sRevoke = '*SE HA ACTUALIZADO EL LINK DEL GRUPO!!*\n*LINK NUEVO:* @revoke';
 
-conn.ev.on('messages.upsert', conn.handler)
-conn.ev.on('group-participants.update', conn.participantsUpdate)
-conn.ev.on('groups.update', conn.groupsUpdate)
-conn.ev.on('message.delete', conn.onDelete)
-conn.ev.on('call', conn.onCall)
-conn.ev.on('connection.update', conn.connectionUpdate)
-conn.ev.on('creds.update', conn.credsUpdate)
-isInit = false
-return true
+  conn.handler = handler.handler.bind(global.conn);
+  conn.participantsUpdate = handler.participantsUpdate.bind(global.conn);
+  conn.groupsUpdate = handler.groupsUpdate.bind(global.conn);
+  conn.onDelete = handler.deleteUpdate.bind(global.conn);
+  conn.onCall = handler.callUpdate.bind(global.conn);
+  conn.connectionUpdate = connectionUpdate.bind(global.conn);
+  conn.credsUpdate = saveCreds.bind(global.conn, true);
+
+  conn.ev.on('messages.upsert', conn.handler);
+  conn.ev.on('group-participants.update', conn.participantsUpdate);
+  conn.ev.on('groups.update', conn.groupsUpdate);
+  conn.ev.on('message.delete', conn.onDelete);
+  conn.ev.on('call', conn.onCall);
+  conn.ev.on('connection.update', conn.connectionUpdate);
+  conn.ev.on('creds.update', conn.credsUpdate);
+  conn.ev.on('chats.set', () => {
+    // can use "store.chats" however you want, even after the socket dies out
+    // "chats" => a KeyedDB instance
+    console.log('got chats', storeReload.chats.all())
+})
+
+conn.ev.on('contacts.set', () => {
+    console.log('got contacts', Object.values(storeReload.contacts))
+})
+  isInit = false;
+  return true;
+};
+
+/*
+
+const pluginFolder = join(__dirname, './plugins');
+const pluginFilter = filename => /\.js$/.test(filename);
+global.plugins = {};
+
+async function filesInit(folder) {
+  for (let filename of readdirSync(folder).filter(pluginFilter)) {
+    try {
+      let file = join(folder, filename);
+      const module = await import(file);
+      global.plugins[file] = module.default || module;
+    } catch (e) {
+      console.error(e);
+      delete global.plugins[filename];
+    }
+  }
+
+  for (let subfolder of readdirSync(folder)) {
+    const subfolderPath = join(folder, subfolder);
+    if (statSync(subfolderPath).isDirectory()) {
+      await filesInit(subfolderPath);
+    }
+  }
 }
 
-const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
-const pluginFilter = filename => /\.js$/.test(filename)
-global.plugins = {}
+await filesInit(pluginFolder).then(_ => Object.keys(global.plugins)).catch(console.error);
+
+*/
+
+const pluginFolder = global.__dirname(join(__dirname, './plugins/index'));
+const pluginFilter = (filename) => /\.js$/.test(filename);
+global.plugins = {};
 async function filesInit() {
 for (let filename of readdirSync(pluginFolder).filter(pluginFilter)) {
 try {
@@ -326,28 +466,24 @@ Object.freeze(global.support)
 }
 
 function clearTmp() {
-  const tmpPath = join(__dirname, './tmp');
-  const filenames = readdirSync(tmpPath);
-
-  filenames.forEach((filename) => {
-    const filePath = join(tmpPath, filename);
-    const stats = statSync(filePath);
-
-    if (stats.isFile() && Date.now() - stats.mtimeMs >= 1000 * 60 * 3) {
-      unlinkSync(filePath); // Borra el archivo si ha pasado más de 3 minutos
-    }
-  });
+  const tmp = [join(__dirname, 'tmp')]//quitar La función tmpdir para que Windows no tenga el error en la carpeta temporal del sistema Al intentar borrar los archivos temporales
+  const filename = []
+  tmp.forEach(dirname => readdirSync(dirname).forEach(file => filename.push(join(dirname, file))))
+  return filename.map(file => {
+      const stats = statSync(file)
+      if (stats.isFile() && (Date.now() - stats.mtimeMs >= 1000 * 60 * 3)) return unlinkSync(file) // 3 minutes
+      return false })
   }
   
   function purgeSession() {
       
       let prekey = []
-      let directorio = readdirSync("./ANIMXSCANS")
+      let directorio = readdirSync(path.join(dirP, authFile))
       let filesFolderPreKeys = directorio.filter((file) => {
           if (file.startsWith('pre-key-')) {
           return true 
           }
-          const stats = statSync(path.join(`./ANIMXSCANS/${file}`));
+          const stats = statSync(path.join(join(dirP, authFile, file)))
           const mtime = new Date(stats.mtime);
         const now = new Date();
         const hourAgo = new Date(now - 60 * 60 * 1000);
@@ -359,31 +495,31 @@ function clearTmp() {
           mtime <= hourAgo
         )
       })
-      if (prekey.length === 0) {
+      if (filesFolderPreKeys.length === 0) {
         console.log("Ningún archivo encontrado");
       } else {
-      prekey = [...prekey, ...filesFolderPreKeys]
-      filesFolderPreKeys.forEach(files => {
-      unlinkSync(`./ANIMXSCANS/${files}`)
-      console.log(`${files} fueron eliminados`)
+        filesFolderPreKeys.forEach((files) => {
+          prekey.push(files);
+          unlinkSync(path.join(dirP, authFile, files));
+          //console.log(`${files} fueron eliminados`)
   
   })
   }
   }  
   
   function purgeSessionSB() {
-    const listaDirectorios = readdirSync('./jadibts/');
+    const listaDirectorios = readdirSync(jadibts);
     console.log(listaDirectorios);
     let SBprekey = [];
   
     listaDirectorios.forEach((filesInDir) => {
-      const directorio = readdirSync(`./jadibts/${filesInDir}`);
+      const directorio = readdirSync(join(__dirname, jadibts+filesInDir));
       console.log(directorio);
       const DSBPreKeys = directorio.filter((fileInDir) => {
         if (fileInDir.startsWith('pre-key-')) {
           return true;
         }
-        const stats = statSync(path.join(`./jadibts/${filesInDir}/${fileInDir}`));
+        const stats = statSync(path.join(join(__dirname, jadibts+filesInDir+'/'+fileInDir)));
         const mtime = new Date(stats.mtime);
         const now = new Date();
         const hourAgo = new Date(now - 60 * 60 * 1000);
@@ -400,15 +536,15 @@ function clearTmp() {
       } else {
         SBprekey = [...SBprekey, ...DSBPreKeys];
         DSBPreKeys.forEach((fileInDir) => {
-          unlinkSync(`./jadibts/${filesInDir}/${fileInDir}`);
-          console.log(`${fileInDir} fueron eliminados`);
+          unlinkSync(dirP+jadibts+filesInDir+'/'+fileInDir);
+        //  console.log(`${fileInDir} fueron eliminados`);
         });
       }
     });
   }
   
   function purgeOldFiles() {
-      const directories = ['./ANIMXSCANS/', './jadibts/'];
+      const directories = [authFile, jadibts];
       const oneHourAgo = new Date(Date.now() - (60 * 60 * 1000));
      
       directories.forEach((dir) => {
@@ -425,10 +561,10 @@ function clearTmp() {
               if (stats.isFile() && isOld && !isCreds) {
                   unlinkSync(filePath, (err) => {
                   if (err) throw err;
-                  console.log(`Archivos ${filePath} borrados con éxito`);
+//                  console.log(`Archivos ${filePath} borrados con éxito`);
                 });
               } else {
-                console.log(`Archivo ${filePath} no borrado`);
+//                console.log(`Archivo ${filePath} no borrado`);
               }
             });
           });

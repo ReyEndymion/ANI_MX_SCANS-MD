@@ -1,5 +1,5 @@
 let toM = a => '@' + a.split('@')[0]
-async function handler(m, { groupMetadata }) {
+async function handler(m, {conn, groupMetadata }) {
 let ps = groupMetadata.participants.map(v => v.id)
 let a = ps.getRandom()
 let b

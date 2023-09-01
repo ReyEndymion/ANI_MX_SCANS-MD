@@ -1,5 +1,7 @@
+import translate from '@vitalets/google-translate-api'
+import { watchFile, unwatchFile } from 'fs'
 import chalk from 'chalk'
-import fs, { watchFile, unwatchFile } from 'fs';
+import fs from 'fs'
 import cheerio from 'cheerio'
 import fetch from 'node-fetch'
 import axios from 'axios'
@@ -9,6 +11,8 @@ import moment from 'moment-timezone'
 import { platform } from 'process'
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString() }; global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) }; global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
 const __dirname = global.__dirname(import.meta.url)
+
+
 global.owner = [
    ['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
     ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
@@ -45,7 +49,7 @@ global.keysxteammm = ['29d4b59a4aa687ca', '5LTV57azwaid7dXfz5fzJu', 'cb15ed422c7
 global.keysxteam = keysxteammm[Math.floor(keysxteammm.length * Math.random())]
 global.keysneoxrrr = ['5VC9rvNx', 'cfALv5']
 global.keysneoxr = keysneoxrrr[Math.floor(keysneoxrrr.length * Math.random())]
-global.lolkeysapi = ['GataDios']
+global.lolkeysapi = ['GataDios', 'BrunoSobrino']
 
 global.APIs = { 
   xteam: 'https://api.xteam.xyz',
@@ -61,7 +65,7 @@ global.APIs = {
 },
 global.APIKeys = { 
   'https://api.xteam.xyz': `${keysxteam}`,
-  'https://api.lolhuman.xyz': 'GataDios',
+  'https://api.lolhuman.xyz': ['GataDios', '85faf717d0545d14074659ad'],
   'https://api.neoxr.my.id': `${keysneoxr}`,	
   'https://violetics.pw': 'beta',
   'https://api.zahwazein.xyz': `${keysxxx}`,

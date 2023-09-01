@@ -1,4 +1,4 @@
-let handler = async (m, { command, text }) => {
+let handler = async (m, {conn, command, text }) => {
 let resp = `
 *⁉️ *PREGUNTAS* ⁉️*
   

@@ -17,7 +17,7 @@ let txt = '';
                 conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } catch {
     try {
     if (text.includes('Hola')) text = text.replace('Hola', 'Hello')
@@ -42,7 +42,7 @@ let txt = '';
                 conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: true, disappearingMessagesInChat: 24*60*100} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
     //m.reply(resu2[0][0][0])
 } catch (e) {
     console.log(`este es el error del codigo anterior: ${e}`)
@@ -66,7 +66,7 @@ let txt = '';
                 conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 }}
 }

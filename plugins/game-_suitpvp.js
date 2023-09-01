@@ -1,5 +1,5 @@
 let handler = m => m
-handler.before = async function (m, conn) {
+handler.before = async function (m, {conn}) {
 conn.suit = conn.suit ? conn.suit : {}
 if (db.data.users[m.sender].suit < 0) db.data.users[m.sender].suit = 0
 let room = Object.values(conn.suit).find(room => room.id && room.status && [room.p, room.p2].includes(m.sender))
@@ -15,7 +15,7 @@ return !0 }
 room.status = 'play'
 room.asal = m.chat
 clearTimeout(room.waktu)
-let textplay = `🎮 *JUEGO - PVP* 🎮\n\n(PIEDRA PAPEL O TIJERAS)\n\n—◉ EL JUEGO COMIENZA, LAS OPCIONES HAN SIDO ENVIADAS A LOS CHATS PRIVADOS DE @${room.p.split`@`[0]} Y @${room.p2.split`@`[0]}\n\n◉ SELECCIONEN UNA OPCIÓN EN SUS CHATS PRIVADOS, RESPECTIVAMENTE\n*◉ ELEGIR UNA OPCIÓN EN wa.me/${global.animxscans[0][0]}*`
+let textplay = `🎮 *JUEGO - PVP* 🎮\n\n(PIEDRA PAPEL O TIJERAS)\n\n—◉ EL JUEGO COMIENZA, LAS OPCIONES HAN SIDO ENVIADAS A LOS CHATS PRIVADOS DE @${room.p.split`@`[0]} Y @${room.p2.split`@`[0]}\n\n◉ SELECCIONEN UNA OPCIÓN EN SUS CHATS PRIVADOS, RESPECTIVAMENTE\n*◉ ELEGIR UNA OPCIÓN EN wa.me/${conn.user.jid.replace(userID, '')}*`
 let txt = '';
 let count = 0;
 for (const c of textplay) {
@@ -32,6 +32,7 @@ for (const c of textplay) {
 let imgplay = `https://www.merca2.es/wp-content/uploads/2020/05/Piedra-papel-o-tijera-0003318_1584-825x259.jpeg`    
 let resp = `'POR FAVOR ESCRIBA UNA DE LAS SIGUIENTES OPCIONES'\n\n*['🗿' 'PIEDRA o Piedra']*\n\n*['📄' 'PAPEL o Papel']*\n\n*['✂️' 'TIJERA o Tijera']*\n\nGANADOR +${room.poin}𝚇𝙿\n PERDEDOR ${room.poin_lose}𝚇𝙿`
 if (!room.pilih)
+await conn.updateBlockStatus(room.p, 'unblock')
 for (const c of resp) {
     await new Promise(resolve => setTimeout(resolve, 10));
     txt += c;
@@ -44,6 +45,7 @@ for (const c of resp) {
    await conn.sendMessage(room.p, {image: {url: imgplay}, caption: resp.trim(), mentions: conn.parseMention(textplay) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 if (!room.pilih2) 
+await conn.updateBlockStatus(room.p2, 'unblock')
 for (const c of resp) {
     await new Promise(resolve => setTimeout(resolve, 10));
     txt += c;

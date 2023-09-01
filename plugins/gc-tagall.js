@@ -2,7 +2,7 @@ import path, { join } from 'path'
 import fetch from 'node-fetch';
 import Jimp from 'jimp';
 import fs from 'fs'
-let handler = async(m, { isOwner, isAdmin, conn, text, participants, args, command }) => {
+let handler = async(m, {conn, isOwner, isAdmin, text, participants, args, command }) => {
     function randomString(length) {
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
         if (!length) {
@@ -14,7 +14,7 @@ let handler = async(m, { isOwner, isAdmin, conn, text, participants, args, comma
         }
         return str;
       }
-    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync('./src/sinFotoG.png') );
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync('./src/sinFotoG.jpg') );
     const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
     const lettersImage = await Jimp.read(fs.readFileSync(join(dirP, 'src/invAll.png')));
     lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());

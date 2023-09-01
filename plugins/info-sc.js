@@ -2,7 +2,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
 var document = doc[Math.floor(Math.random() * doc.length)]    
 let texto = `*${md}*`
-let buttonMessage= {
+let contextInfo = {
 'document': { url: hp_animxscans },
 'mimetype': `application/${document}`,
 'fileName': `「Traducciones de Manga」`,
@@ -21,9 +21,6 @@ let buttonMessage= {
 'sourceUrl': urlgofc }},
 'caption': texto,
 'footer': wm,
-'buttons':[
-{buttonId: `${usedPrefix}menu`, buttonText: {displayText: 'MENU'}, type: 1}, 
-{buttonId: `${usedPrefix}donar`, buttonText: {displayText: 'DONAR'}, type: 1}],
 'headerType': 6 }
 let txt = '';
 let count = 0;
@@ -36,7 +33,7 @@ for (const c of md) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, buttonMessage, { quoted: m })
+conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100  })
         
 }
 handler.command = ['sc','script']

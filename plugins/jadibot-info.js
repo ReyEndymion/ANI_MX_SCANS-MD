@@ -19,7 +19,7 @@ let handler = async (m, { usedPrefix, conn, args, participants })=> {
   let SB = uniqueUsers.map((v, i) => `${i + 1}.  👉🏻 ${'@'}${v.jid.split`@`[0]}`).join`\n`
   
 for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(resolve, 15));
       int += c;
       count++;
   
