@@ -21,7 +21,7 @@ import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys'):
+const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys');
 const { CONNECTING } = ws;
 const { chain } = lodash;
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
@@ -295,6 +295,8 @@ if (connection == 'close') {
       } else {
         await wait(CLOSE_CHECK_INTERVAL);
       }
+      }
+    }
 if (connection === 'open') {
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
 backupCreds() 
