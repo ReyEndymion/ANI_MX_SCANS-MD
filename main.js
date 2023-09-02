@@ -20,11 +20,13 @@ import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-const { DisconnectReason, useMultiFileAuthState } = await import('@whiskeysockets/baileys');
+import store from './lib/store.js';
+const { proto } = (await import('@whiskeysockets/baileys')).default;
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
 const { CONNECTING } = ws;
 const { chain } = lodash;
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 protoType();
 serialize();
 
@@ -50,30 +52,30 @@ global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(op
 
 global.DATABASE = global.db; 
 global.loadDatabase = async function loadDatabase() {
-if (global.db.READ) {
-return new Promise((resolve) => setInterval(async function() {
-if (!global.db.READ) {
-clearInterval(this);
-resolve(global.db.data == null ? global.loadDatabase() : global.db.data)
-}
-}, 1 * 1000))
-}
-if (global.db.data !== null) return
-global.db.READ = true
-await global.db.read().catch(console.error)
-global.db.READ = null
-global.db.data = {
-users: {},
-chats: {},
-stats: {},
-msgs: {},
-sticker: {},
-settings: {},
-...(global.db.data || {})
-}
-global.db.chain = chain(global.db.data)
-}
-loadDatabase()
+  if (global.db.READ) {
+    return new Promise((resolve) => setInterval(async function() {
+      if (!global.db.READ) {
+        clearInterval(this);
+        resolve(global.db.data == null ? global.loadDatabase() : global.db.data);
+      }
+    }, 1 * 1000));
+  }
+  if (global.db.data !== null) return;
+  global.db.READ = true;
+  await global.db.read().catch(console.error);
+  global.db.READ = null;
+  global.db.data = {
+    users: {},
+    chats: {},
+    stats: {},
+    msgs: {},
+    sticker: {},
+    settings: {},
+    ...(global.db.data || {}),
+  };
+  global.db.chain = chain(global.db.data);
+};
+loadDatabase();
 
 const { state, saveState, saveCreds } = await useMultiFileAuthState(global.authFile);
 const msgRetryCounterMap = (MessageRetryMap) => { };
@@ -94,8 +96,8 @@ const connectionOptions = {
       const msg = await storeReload.loadMessage(key.remoteJid, key.id);
       return msg.message || undefined;
     } else if (store) {
-      const msg = store.loadMessage(/** @type {string} */(key.remoteJid), key.id) 
-  return msg.message && undefined
+      const msg = store.loadMessage((key.remoteJid), key.id);
+  return proto.Message.fromObject({});
   }
     return {  conversation: '' } || proto.Message.fromObject({});
   },
