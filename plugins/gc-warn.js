@@ -9,7 +9,7 @@ if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted
 else who = m.chat
 let user = global.db.data.users[who]
 let bot = global.db.data.settings[conn.user.jid] || {}
-let warntext = `*[❗] ETIQUETE A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ADVERTIR AL USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${global.botcomedia[0][0]}*`
+let warntext = `*[❗] ETIQUETE A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ADVERTIR AL USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${global.animxscans[0][0]}*`
 if (conn.user.jid == who) { 
 let resp = 'No puedo advertirme a mi mismo'
 let txt = '';
@@ -22,14 +22,13 @@ for (const c of resp) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-    return 0
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 if (!who)  {
 let txt = '';
 let count = 0;
     for (const c of warntext) {
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise(resolve => setTimeout(resolve, 15));
         txt += c;
         count++;
         if (count % 10 === 0) {
@@ -52,7 +51,7 @@ for (const c of what) {
     }
 }
     await conn.sendMessage(m.chat, { image: pp, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-	} 
+} 
      if (user.warn >= 3) {
 if (!bot.restrict) {
     let resp = '*[❗INFO❗] EL PROPIETARIO DEL BOT NO TIENE HABILITADO LAS RESTRICCIONES (#enable restrict) CONTACTE CON EL PARA QUE LO HABILITE*'
@@ -70,6 +69,8 @@ if (!bot.restrict) {
 }        
 user.warn = 0
 let kill = `TE LO ADVERTI VARIAS VECES!!\n*@${who.split`@`[0]}* SUPERASTE LAS *3* ADVERTENCIAS, AHORA SERAS ELIMINADO/A 👽`
+let txt = '';
+let count = 0;
 for (const c of kill) {
     await new Promise(resolve => setTimeout(resolve, 5));
     txt += c;

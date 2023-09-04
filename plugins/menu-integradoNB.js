@@ -125,7 +125,7 @@ try {
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-  await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+  await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   
 } catch {
   let str = `
@@ -190,7 +190,7 @@ try {
     }
 }
   
-  await conn.sendMessage(m.chat, { text: str.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+  await conn.sendMessage(m.chat, { text: str.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 
@@ -240,7 +240,7 @@ break
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
  
 } catch {
 
@@ -351,7 +351,7 @@ case `audios`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 {    let str = `${userm} POR SI QUIERES MAS INFORMACION 
 ┣ *Facebook: https://www.facebook.com/groups/otakustogether 
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -371,7 +371,7 @@ if (count % 10 === 0) {
 conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
-await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 } catch {
 
@@ -444,7 +444,7 @@ case `buscar`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 } catch {
 
@@ -535,7 +535,7 @@ case `cajafuerte`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 } catch {
 
@@ -571,7 +571,7 @@ case `chatanonimo`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
 
 }
@@ -614,7 +614,7 @@ case `convert`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
 
 }
@@ -696,7 +696,7 @@ case `descargas`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
 
 }
@@ -734,7 +734,7 @@ case `facebook`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
 
 }
@@ -811,7 +811,7 @@ case `gadmin`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
 
 }
@@ -876,7 +876,7 @@ case `herramientas`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
     } catch {
   let str = `
 ┣ *HOLA ✨${userm}✨, ESTE ES EL MENU DE HERRAMIENTAS DE ${igfg}*
@@ -928,7 +928,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 try {
   let vn = `./media/menu.mp3`
   let pp = `./Menu.png`
@@ -1004,7 +1004,7 @@ case `infoyo`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   
 } catch {
   
@@ -1094,7 +1094,7 @@ case `juegos`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE JUEGOS\n✨${userm}✨\n\npowered by\n*${namerepre}*
@@ -1153,7 +1153,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 break
@@ -1208,7 +1208,7 @@ case `logosefectos`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${userm}✨*
@@ -1248,7 +1248,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 break
@@ -1334,7 +1334,7 @@ try {
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: resp.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: resp.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *HOLA ✨${userm}✨, ESTE ES EL MENU DE MENUS DE ${igfg}*
@@ -1390,7 +1390,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 
 }
@@ -1511,7 +1511,7 @@ case `owners`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *HOLA ✨${userm}✨, ESTE ES EL MENU DE OWNER Y MODERADORES DE ${igfg}*
@@ -1593,7 +1593,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 break
@@ -1749,7 +1749,7 @@ case `random`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨*
@@ -1845,7 +1845,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 break
@@ -1939,7 +1939,7 @@ case `rpg`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 } catch {
 let str = `
@@ -1982,7 +1982,7 @@ let txt = '';
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 break
@@ -2070,7 +2070,7 @@ case `nsfw`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
     handler.register = true
     handler.modohorny = true
 } catch {
@@ -2130,7 +2130,7 @@ case `nsfw`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   
 }
 break
@@ -2199,7 +2199,7 @@ case `stickermenu`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
     try {
   let vn = `./media/menu.mp3`
@@ -2216,7 +2216,7 @@ case `stickermenu`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   await conn.sendFile(m.chat, vn, `../media/menu.mp3`, null, m, true, {type: `audioMessage`, ptt: true, ephemeralExpiration: 24*60*100 })
     } catch (e) {
     conn.reply(m.chat, `*[❗INFO❗] EL MENU TIENE UN ERROR Y NO FUE POSIBLE ENVIARLO, REPORTELO AL PROPIETARIO DEL BOT*`, m)
@@ -2272,7 +2272,7 @@ conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) },
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   
 }
 break
@@ -2309,7 +2309,7 @@ case `youtube`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    await conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch {
   let str = `
 ┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE YOUTUBE\n✨${userm}✨\npowered by\n*${namerepre}*
@@ -2341,7 +2341,7 @@ case `youtube`:
     conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+conn.sendMessage(m.chat, { text: str.trim(), mentions: conn.parseMention(str) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   
 }
 

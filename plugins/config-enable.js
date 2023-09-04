@@ -303,8 +303,8 @@ El comando se usa: *${usedPrefix + command} stickers*
     break
     case 'antiprivado':
     isAll = true
-    if (!isROwner) {
-    global.dfail('rowner', m, conn)
+    if (!isOwner) {
+    global.dfail('owner', m, conn)
     throw false
     }
     bot.antiPrivate = isEnable

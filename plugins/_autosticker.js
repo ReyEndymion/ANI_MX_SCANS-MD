@@ -2,7 +2,7 @@ import { sticker } from '../lib/sticker.js'
 
 let handler = m => m
 
-handler.all = async function (m) {
+handler.all = async function (m, {conn}) {
 let chat = db.data.chats[m.chat]
 let user = db.data.users[m.sender]
 

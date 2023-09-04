@@ -1,3 +1,4 @@
+/*
 let handler = async (m, {conn}) => {
     let chat = global.db.data.chats[m.chat]
     let response = ''
@@ -28,14 +29,26 @@ handler.tags = ['owner']
 handler.command = /^unbanchat$/i
 handler.owner = true
 export default handler
-/*
-let handler = async (m) => {
+*/
+let handler = async (m, {conn, isROwner}) => {
+	if (!isROwner) return
 global.db.data.chats[m.chat].isBanned = false
-m.reply('*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*')
+  let resp = '*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*'
+  let txt = '';
+  let count = 0;
+  for (const c of resp) {
+      await new Promise(resolve => setTimeout(resolve, 15));
+      txt += c;
+      count++;
+  
+      if (count % 10 === 0) {
+          conn.sendPresenceUpdate('composing' , m.chat);
+      }
+  }
+      return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 handler.help = ['unbanchat']
 handler.tags = ['owner']
 handler.command = /^unbanchat$/i
 handler.owner = true
 export default handler
-*/
