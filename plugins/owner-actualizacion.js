@@ -19,7 +19,7 @@ const handler = async (m, {conn, text, usedPrefix, command}) => {
       if (sha !== previousCommitSHA || message !== previousUpdatedAt) {
         previousCommitSHA = sha;
         previousUpdatedAt = message;
-        let resp = `*[❗] ¡El repositorio ha sido actualizado recientementew!*\n*- Repositorio:* ${html_url}\n*- Mensaje de commit:* ${message}`
+        let resp = `*[❗] ¡El repositorio ha sido actualizado recientemente!*\n*- Repositorio:* ${html_url}\n*- Mensaje de commit:* ${message}`
       let txt = '';
       let count = 0;
       for (const c of resp) {
