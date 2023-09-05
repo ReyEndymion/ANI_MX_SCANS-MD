@@ -7,9 +7,36 @@ var number = text.split`@`[1]
 var number = text
 }
 	
-if(!text && !m.quoted) return conn.reply(m.chat, `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix}daradmin @tag*\n*┠≽ ${usedPrefix}darpoder -> responder a un mensaje*\n*┷┯*`, m)
-if(number.length > 13 || (number.length < 11 && number.length > 0)) return conn.reply(m.chat, `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`, m)
-	
+if(!text && !m.quoted) {
+    let resp = `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix}daradmin @tag*\n*┠≽ ${usedPrefix}darpoder -> responder a un mensaje*\n*┷┯*`
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
+if(number.length > 13 || (number.length < 11 && number.length > 0)) {
+    let resp = `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+
+    if (count % 10 === 0) {
+        conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}	
 try {
 if(text) {
 var user = number + '@s.whatsapp.net'
@@ -21,9 +48,20 @@ var user = number + '@s.whatsapp.net'
 } catch (e) {
 } finally {
 conn.groupParticipantsUpdate(m.chat, [user], 'promote')
-conn.reply(m.chat, `*[ ✅ ] ÓRDENES RECIBIDAS*`, m)
+let resp = `*[ ✅ ] ÓRDENES RECIBIDAS*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
+
+if (count % 10 === 0) {
+    conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }}
-handler.help = ['*593xxx*','*@usuario*','*responder chat*'].map(v => 'promote ' + v)
 handler.tags = ['group']
 handler.command = /^(promote|daradmin|darpoder)$/i
 handler.group = true

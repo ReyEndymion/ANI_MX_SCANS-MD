@@ -21,10 +21,10 @@ for (const c of warntext) {
         conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 user.warn -= 1
-{
+
     let resp = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `♻️ *@${who.split`@`[0]}*`} SE TE QUITO UNA ADVERTENCIA\n\n*ADVERTENCIAS:*\n⚠️ *Antes: ${user.warn + 1}/3*\n⚠️ *Ahora: ${user.warn}/3*\n\n${wm}\n\n📋 𝙻𝙸𝚂𝚃𝚆𝙰𝚁𝙽 📋\n => *${usedPrefix}listwarn*`
     let txt = '';
     let count = 0;
@@ -36,8 +36,8 @@ user.warn -= 1
             conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
-        await conn.sendMessage(m.chat, {image: pp, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-}
+        return conn.sendMessage(m.chat, {image: pp, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+
 }
 handler.command = /^(unwarn|delwarn|deladvertir|deladvertencia|delwarning)$/i
 handler.group = true
