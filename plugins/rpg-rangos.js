@@ -118,11 +118,11 @@ ${role}
 *SUPER PRO IV* 🎩
 *SUPER PRO V* 🎩
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-*PRO EN GATABOT I* 😼
-*PRO EN GATABOT II* 😼
-*PRO EN GATABOT III* 😼
-*PRO EN GATABOT IV* 😼
-*PRO EN GATABOT V* 😼
+*PRO EN ${wm} I* ${amsicon}
+*PRO EN ${wm} II* ${amsicon}
+*PRO EN ${wm} III* ${amsicon}
+*PRO EN ${wm} IV* ${amsicon}
+*PRO EN ${wm} V* ${amsicon}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 *DIAMANTE I* 💎
 *DIAMANTE II* 💎
@@ -171,12 +171,37 @@ ${role}
 *NOVATO(A) III* 🪤
 *NOVATO(A) IV* 🪤
 *NOVATO(A) V* 🪤
-╰━━━━━━━━━━━━━━━━━━━⬣`.trim()
-conn.sendHydrated(m.chat, menu, `𝙍𝘼𝙉𝙂𝙊𝙎 | ${wm}`, pp, 'https://github.com/GataNina-Li/GataBot-MD', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [
-['𝙈𝙚𝙣𝙪́ 𝙘𝙤𝙢𝙥𝙡𝙚𝙩𝙤 | 𝙁𝙪𝙡𝙡 𝙈𝙚𝙣𝙪 💫', '.allmenu'],
-['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', `${usedPrefix}top`],
-['𝙈𝙚𝙣𝙪 𝙋𝙧𝙞𝙣𝙘𝙞𝙥𝙖𝙡 | 𝙈𝙖𝙞𝙣 𝙢𝙚𝙣𝙪 ⚡', '#menu']
-], m,)
+╰━━━━━━━━━━━━━━━━━━━⬣
+𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆: ${usedPrefix}top
+`.trim()
+//conn.sendHydrated(m.chat, menu, `𝙍𝘼𝙉𝙂𝙊𝙎 | ${wm}`, pp, 'https://github.com/GataNina-Li/${wm}-MD', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙈𝙚𝙣𝙪́ 𝙘𝙤𝙢𝙥𝙡𝙚𝙩𝙤 | 𝙁𝙪𝙡𝙡 𝙈𝙚𝙣𝙪 💫', '.allmenu'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', `${usedPrefix}top`], ['𝙈𝙚𝙣𝙪 𝙋𝙧𝙞𝙣𝙘𝙞𝙥𝙖𝙡 | 𝙈𝙖𝙞𝙣 𝙢𝙚𝙣𝙪 ⚡', '#menu']], m,)
+let txt = '';
+let count = 0;
+for (const c of menu) {
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
+if (count % 10 === 0) {
+    conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+
+let contextInfo = {  
+mentionedJid: conn.parseMention(txt),  
+"externalAdReply": {  
+"showAdAttribution": true,  
+"containsAutoReply": true,
+"renderLargerThumbnail": true,  
+"title": wm,   
+"containsAutoReply": true,  
+"mediaType": 1,   
+"thumbnail": imagen2,//apii.res.url,  
+"mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
+"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
+}  
+}  
+
+conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
 
 }
 
