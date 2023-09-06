@@ -1,7 +1,7 @@
 let handler = m => m
 
-handler.all = async function (m, { isBotAdmin }) {
-// auto clear ketika terdapat pesan yang tidak dapat dilihat di wa desktop
+handler.all = async function (m, {conn, isBotAdmin }) {
+// Auto borrado cuando hay un mensaje invisible en WA Desktop
 if (m.messageStubType === 68) {
 let log = {
 key: m.key,

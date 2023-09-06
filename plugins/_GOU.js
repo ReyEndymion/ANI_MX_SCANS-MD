@@ -26,7 +26,7 @@ let resp = `*_➤ Asociación de grupos de anime S.A._*
             conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
-        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+        return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
     handler.command = /^(asociaciongruposotakus|asociacion de grupos otakus|GOU)$/i
     export default handler

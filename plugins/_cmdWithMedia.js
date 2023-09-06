@@ -4,7 +4,7 @@ generateWAMessage,
 areJidsSameUser
 } = (await import('@whiskeysockets/baileys')).default
 
-export async function all(m, chatUpdate) {
+export async function all(m, conn, chatUpdate) {
 if (m.isBaileys) return
 if (!m.message) return
 if (!m.msg.fileSha256) return

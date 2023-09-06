@@ -1,5 +1,5 @@
 let handler = m => m
-handler.before = async function (m, conn) {
+handler.before = async function (m, {conn}) {
     let chat = global.db.data.chats[m.chat]
 	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender    
 

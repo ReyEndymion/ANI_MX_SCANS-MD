@@ -14,7 +14,7 @@ export async function before(m, { conn }) {
 	let fkontak = { key: { participants: "0@s.whatsapp.net", remoteJid: "status@broadcast", fromMe: false, id: "Halo" }, message: { contactMessage: { vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${user}:${user}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, participant: "0@s.whatsapp.net" }
     let groupMetadata = (await this.groupMetadata(m.chat)) || (conn.chats[m.chat] || {}).metadata;
 
-	if (m.messageStubType == 21) {
+	if (m.messageStubType == 21 && chat.detect) {
 		let resp = `${usuario} Ha cambiado el nombre del grupo a:\n*${m.messageStubParameters[0]}*`
 let txt = '';
 let count = 0;
