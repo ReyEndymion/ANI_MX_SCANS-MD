@@ -58,7 +58,7 @@ console.error(e)
 if (Buffer.isBuffer(e)) stiker = e
 } finally {
 if (stiker) {
-    conn.sendMessage(m.chat, {sticker: {url: stiker},  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 2*60*1000 });
+    conn.sendMessage(m.chat, {sticker: stiker,  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 2*60*1000 });
 
 } else {
     let resp = '*[❗INFO❗] LO SIENTO, ALGO FALLO.. CORROBORE QUE HAYA RESPONDIDO A UN STICKER Y HAYA AGREGADO UN NOMBRE DE PAQUETE Y UN NOMBRE DE USUARIO*'

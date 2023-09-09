@@ -13,8 +13,7 @@ import chalk from 'chalk';
 import syntaxerror from 'syntax-error';
 import { tmpdir } from 'os';
 import { format } from 'util';
-import pkg from 'pino';
-const {pino, P} = pkg
+import pino from 'pino';
 import {Boom} from '@hapi/boom';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
 import { makeInMemoryStore } from '@whiskeysockets/baileys'
@@ -145,14 +144,18 @@ const credsFilePath = path.join(SESSION_DIR, CREDENTIALS_FILE);
 }
  
 function actualizarNumero() {
-  const configPath = path.join(__dirname, 'config.js');
+  const configPath = path.join(dirP, 'config.js');
   const configData = readFileSync(configPath, 'utf8');
-  const updatedConfigData = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*'ANI MX SCANS'\]\s*\])/, function(match) {
-    const archivoCreds = readFileSync(path.join(__dirname, 'sesionRespaldo/creds.json'));
+    const archivoCreds = readFileSync(path.join(dirP, 'sesionRespaldo/creds.json'));
     const numero = JSON.parse(archivoCreds).me.id.split(':')[0];
+  const updatedGlobalAni = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*'ANI MX SCANS'\]\s*\])/, function(match) {
     return `global.animxscans = [['${numero}', 'Bot principal - ANI MX SCANS', 'ANI MX SCANS']]`;
   });
-  writeFileSync(configPath, updatedConfigData);
+  const updateSerbotOfc = configData.replace(/(global\.serbot\s*=\s*`https:\/\/api\.whatsapp\.com\/send\/\?phone=)[0-9]+(&text=.serbot&type=phone_number&app_absent=0`)/, function(match) {
+    return `global.serbot = 'https://api.whatsapp.com/send/?phone=${numero}&text=.serbot&type=phone_number&app_absent=0'`
+  
+  });
+  writeFileSync(configPath, updatedGlobalAni && updateSerbotOfc);
 }
 
 function cleanupOnConnectionError() {
@@ -229,7 +232,6 @@ async function connectionUpdate(update) {
   const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
   if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState == null || undefined || CONNECTING) {
     await global.reloadHandler(true).catch(console.error);
-    //console.log(await global.reloadHandler(true).catch(console.error));
     global.timestamp.connect = new Date;
   }
   if (global.db.data == null) loadDatabase();
@@ -241,14 +243,12 @@ async function connectionUpdate(update) {
 }
 if (connection === undefined) {
   
-  await wait(5000); // Esperar 5 segundos
-  // Verificar si la conexión cambió a 'connecting' o 'open'
+  await wait(5000); 
   if (conn?.ws?.readyState !== CONNECTING && conn?.ws?.readyState !== undefined) {
     console.log(chalk.yellow(`La conexión ya está abierta: ${connection}`));
   } else {
     await wait(10000)
     console.log(chalk.red(`La conexión aún no está lista, esperando conexión: ${connection}`));
-    //process.send(`reset`);
   }
   return;
 
@@ -259,6 +259,10 @@ if (connection == 'close') {
         conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFile} y escanea nuevamente.`);
         cleanupOnConnectionError()
         //process.exit();
+    } else if (reason === DisconnectReason.preconditionRequired){
+      conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
+      global.reloadHandler(true).catch(console.error)
+      return
     } else if (reason === DisconnectReason.connectionClosed) {
         conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando...`);
         global.reloadHandler(true).catch(console.error)
@@ -274,6 +278,7 @@ if (connection == 'close') {
         //process.exit();
     } else if (reason === DisconnectReason.loggedOut) {
         conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFile} y escanea nuevamente.`);
+        cleanupOnConnectionError()
         //process.exit();
     } else if (reason === DisconnectReason.restartRequired) {
         conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
@@ -284,12 +289,14 @@ if (connection == 'close') {
     } else if (reason === 403) {
       conn.logger.warn(`[ ⚠ ] Razón de desconexión revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
       cleanupOnConnectionError()
+    } else if (code === 503){
+      global.reloadHandler(true).catch(console.error)
     } else {
         conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
         //process.exit();
           consecutiveCloseCount++;
       console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${global.authFile} y reescanee el codigo QR`));
-
+    }
       if (consecutiveCloseCount >= MAX_CLOSE_COUNT) {
         console.log(chalk.red(`La conexión cerrada ocurrió ${consecutiveCloseCount} veces. Reiniciando el servidor...`));
         consecutiveCloseCount = 0;
@@ -297,13 +304,16 @@ if (connection == 'close') {
       } else {
         await wait(CLOSE_CHECK_INTERVAL);
       }
-      }
     }
-if (connection === 'open') {
+if (connection == 'open') {
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
 backupCreds() 
 actualizarNumero() 
 credsStatus() 
+if (update.receivedPendingNotifications) { 
+  waitTwoMinutes()
+  return conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
+}
 }
 return;
 }
@@ -338,15 +348,6 @@ global.reloadHandler = async function(restatConn) {
     conn.ev.off('creds.update', conn.credsUpdate);
   }
 
-  conn.welcome = '*╔══════════════*\n*╟❧ @subject*\n*╠══════════════*\n*╟❧ @user*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* @desc\n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*';
-  conn.bye = '╔══════════════*\n*║〘 *ADIÓS* 〙*\n*╠══════════════*\n║*_☠ Se fue @user_*\n║*_Si no regresa..._*\n║ *_Nadie l@ va a extrañar 😇👍🏼_*\n*╚══════════════*';
-  conn.spromote = '*@user SE SUMA AL GRUPO DE ADMINS!!*';
-  conn.sdemote = '*@user ABANDONA EL GRUPO DE ADMINS !!*';
-  conn.sDesc = '*SE HA MODIFICADO LA DESCRIPCIÓN DEL GRUPO*\n\n*NUEVA DESCRIPCIÓN:* @desc';
-  conn.sSubject = '*SE HA MODIFICADO EL NOMBRE DEL GRUPO*\n *NUEVO NOMBRE:* @subject';
-  conn.sIcon = '*SE HA CAMBIADO LA FOTO DEL GRUPO!!*';
-  conn.sRevoke = '*SE HA ACTUALIZADO EL LINK DEL GRUPO!!*\n*LINK NUEVO:* @revoke';
-
   conn.handler = handler.handler.bind(global.conn);
   conn.participantsUpdate = handler.participantsUpdate.bind(global.conn);
   conn.groupsUpdate = handler.groupsUpdate.bind(global.conn);
@@ -363,8 +364,6 @@ global.reloadHandler = async function(restatConn) {
   conn.ev.on('connection.update', conn.connectionUpdate);
   conn.ev.on('creds.update', conn.credsUpdate);
   conn.ev.on('chats.set', () => {
-    // can use "store.chats" however you want, even after the socket dies out
-    // "chats" => a KeyedDB instance
     console.log('got chats', storeReload.chats.all())
 })
 
@@ -374,36 +373,6 @@ conn.ev.on('contacts.set', () => {
   isInit = false;
   return true;
 };
-
-/*
-
-const pluginFolder = join(__dirname, './plugins');
-const pluginFilter = filename => /\.js$/.test(filename);
-global.plugins = {};
-
-async function filesInit(folder) {
-  for (let filename of readdirSync(folder).filter(pluginFilter)) {
-    try {
-      let file = join(folder, filename);
-      const module = await import(file);
-      global.plugins[file] = module.default || module;
-    } catch (e) {
-      console.error(e);
-      delete global.plugins[filename];
-    }
-  }
-
-  for (let subfolder of readdirSync(folder)) {
-    const subfolderPath = join(folder, subfolder);
-    if (statSync(subfolderPath).isDirectory()) {
-      await filesInit(subfolderPath);
-    }
-  }
-}
-
-await filesInit(pluginFolder).then(_ => Object.keys(global.plugins)).catch(console.error);
-
-*/
 
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'));
 const pluginFilter = (filename) => /\.js$/.test(filename);
@@ -470,7 +439,7 @@ Object.freeze(global.support)
 }
 
 function clearTmp() {
-  const tmp = [join(__dirname, 'tmp')]//quitar La función tmpdir para que Windows no tenga el error en la carpeta temporal del sistema Al intentar borrar los archivos temporales
+  const tmp = [join(__dirname, 'tmp')]
   const filename = []
   tmp.forEach(dirname => readdirSync(dirname).forEach(file => filename.push(join(dirname, file))))
   return filename.map(file => {
@@ -505,7 +474,6 @@ function clearTmp() {
         filesFolderPreKeys.forEach((files) => {
           prekey.push(files);
           unlinkSync(path.join(dirP, authFile, files));
-          //console.log(`${files} fueron eliminados`)
   
   })
   }
@@ -513,12 +481,10 @@ function clearTmp() {
   
   function purgeSessionSB() {
     const listaDirectorios = readdirSync(jadibts);
-    console.log(listaDirectorios);
     let SBprekey = [];
   
     listaDirectorios.forEach((filesInDir) => {
       const directorio = readdirSync(join(__dirname, jadibts+filesInDir));
-      console.log(directorio);
       const DSBPreKeys = directorio.filter((fileInDir) => {
         if (fileInDir.startsWith('pre-key-')) {
           return true;
@@ -541,7 +507,6 @@ function clearTmp() {
         SBprekey = [...SBprekey, ...DSBPreKeys];
         DSBPreKeys.forEach((fileInDir) => {
           unlinkSync(dirP+jadibts+filesInDir+'/'+fileInDir);
-        //  console.log(`${fileInDir} fueron eliminados`);
         });
       }
     });
@@ -565,17 +530,14 @@ function clearTmp() {
               if (stats.isFile() && isOld && !isCreds) {
                   unlinkSync(filePath, (err) => {
                   if (err) throw err;
-//                  console.log(`Archivos ${filePath} borrados con éxito`);
                 });
               } else {
-//                console.log(`Archivo ${filePath} no borrado`);
               }
             });
           });
         });
       });
     }
-    purgeOldFiles()
 
 setInterval(async () => {
     backupCreds()

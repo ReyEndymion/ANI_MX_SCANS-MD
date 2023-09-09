@@ -6,7 +6,6 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     let mentionedJid = [who]
     let userm =  `@${who.split(`@s.whatsapp.net`)[0]}` && `@${who.replace(/@.+/, '')}`
     let userg =  await conn.getName(m.chat)
-    let estado = {key: {participant: who, remoteJid: who}, message: {groupInviteMessage: {groupJid: "1234567890-9876543210@g.us", inviteCode: `\n`, groupName: `\n`, caption: `${userg}\n${usedPrefix + command}\n${igfg}`, jpegThumbnail: pp}}}
     let resp = `
  ╭══╡✯✯✯✯✯✯✯✯✯✯╞══╮
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡
@@ -394,8 +393,22 @@ El comando se usa: *${usedPrefix + command} stickers*
                 conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
-            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: estado, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-            throw false
+        let contextInfo = {  
+            mentionedJid: conn.parseMention(txt),  
+            "externalAdReply": {  
+            "showAdAttribution": true,  
+            "containsAutoReply": true,
+            "renderLargerThumbnail": true,  
+            "title": wm,   
+            "containsAutoReply": true,  
+            "mediaType": 1,   
+            "thumbnail": imagen4,//apii.res.url,  
+            "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
+            "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
+            }  
+            }  
+            return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+            //throw false
     }
       
     break

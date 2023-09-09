@@ -31,7 +31,6 @@ handler.owner = true
 export default handler
 */
 let handler = async (m, {conn, isROwner}) => {
-	if (!isROwner) return
 global.db.data.chats[m.chat].isBanned = false
   let resp = '*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*'
   let txt = '';
