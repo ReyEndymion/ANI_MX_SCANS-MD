@@ -11,7 +11,7 @@ owner = match[1];
 repo = match[2];
 }
 const handler = async (m, {conn, text, usedPrefix, command}) => {
-  async function checkRepoUpdates() {
+ // async function checkRepoUpdates() {
     try {
       const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`);
       const {sha, commit: {message}, html_url} = response.data[0];
@@ -63,8 +63,8 @@ const handler = async (m, {conn, text, usedPrefix, command}) => {
       }
       return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
     }
-  }
-  return checkRepoUpdates()
+//  }
+  //return checkRepoUpdates()
   //setInterval(checkRepoUpdates, 60000);
 };
 handler.command = /^(actualizaciones)/i;
