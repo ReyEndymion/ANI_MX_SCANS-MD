@@ -25,24 +25,6 @@ UN AGRADECIMIENTO MUY ESPECIAL A MI MAESTRO [@BrunoSobrino](https://github.com/B
 - CLONAR EL REPOSITORIO [Aqui](https://github.com/ReyEndymion/ANI_MX_SCANS-MD/fork)
 - CAMBIAR NÚMERO DEL OWNER [Aqui](https://github.com/ReyEndymion/ANI_MX_SCANS-MD/blob/master/config.js)
 
-### `—◉ 👾 ACTIVAR EN TERMUX 👾`
-```bash
-ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
-> cd
-> termux-setup-storage
-> apt update 
-> pkg upgrade 
-> pkg install git -y
-> pkg install nodejs -y
-> pkg install ffmpeg -y
-> pkg install imagemagick -y
-> pkg install yarn
-> git clone https://github.com/ReyEndymion/ANI_MX_SCANS-MD
-> cd ANI_MX_SCANS-MD
-> yarn install 
-> npm update
-> npm start
-```
 
 ### `—◉ ✔️ ACTIVAR EN CASO DE DETENERSE ✔️`
 ```bash
@@ -74,11 +56,14 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <p>> Dudas UNICAMENTE SOBRE EL HOST:
 <a href="https://discord.gg/84qsr4v">https://discord.gg/84qsr4v</a> (Preguntar por Vicemi)
   
-### `—◉ 💥 ACTIVAR EN ACIDICNODES 💥`
+### `—◉ 💥 ACTIVAR EN ZIPPONODES HOST 💥`
 <a href="https://billing.acidicnodes.ml/register?ref=ADII104p"><img src="https://billing.acidicnodes.ml/storage/icon.png" width="100" height="100" alt="acidicnodes"/></a>
 - TUTORIAL: [https://youtu.be/nbjvreJ0tUk](https://youtu.be/nbjvreJ0tUk)
-- PAGINA: [https://billing.acidicnodes.ml/register?ref=ADII104p](https://billing.acidicnodes.ml/register?ref=ADII104p)
-- SOPORTE: [https://whatsapp.acidicnodes.com](https://whatsapp.acidicnodes.com)
+- PAGINA: [https://www.zipponodes.com/](https://www.zipponodes.com/)
+- SOPORTE: [whatsapp](https://chat.whatsapp.com/EKQaXhfAO1D5ojNMcRdRVF)
+> INFORMACION: [DOCS](https://docs.zipponodes.com/inicio/enlaces)
+
+*NOTA IMPORTANTE*: En cada host hay algunos inicios de sesión muy similares por lo que deben cambiar algunas partes del tutorial sobre todo los enlaces para que puedan realizar su cuenta
 
 ### `—◉ 📝 NOTAS 📝`
 ```bash
@@ -90,19 +75,8 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 - 🌎ANI MX SCANS🌏 NO SE HACE RESPONSABLE DEL USO, NUMEROS, PRIVACIDAD Y CONTENIDO MANDADO, USADO O GESTIONADO POR USTEDES O EL BOT
 ```
 
-## `COLABORADORES DEL BOT` 
-<a href="https://github.com/BrunoSobrino"><img src="https://github.com/BrunoSobrino.png" width="250" height="250" alt="BrunoSobrino"/></a>
-<a href="https://github.com/theh2so4"><img src="https://github.com/theh2so4.png" width="250" height="250" alt="theh2so4"/></a>
-
 ## `EDITOR Y PROPIETARIO DEL BOT` 
 <a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="ReyEndymion"/></a>
 
 `ANI_MX_SCANS-MD _ By Rey Endymion`
 
-POWERED BY BRUNO SOBRINO & TheH2SO4
-
-https://github.com/BrunoSobrino
-
-https://github.com/BrunoSobrino/TheMystic-Bot-MD
-
-https://github.com/theh2so4
