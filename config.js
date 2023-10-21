@@ -14,8 +14,9 @@ const __dirname = global.__dirname(import.meta.url)
 
 
 global.owner = [
-   ['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
-    ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
+   ['584141794374','MonkychapMC - Creador 👁️', true],
+   ['584128863413','MonkychapMC 2 - Creador 🐵', true],
+   ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
 ] // Cambia los numeros que quieras
 
 /**********GLOBAL INFO*****************/
