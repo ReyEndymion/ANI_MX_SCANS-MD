@@ -43,7 +43,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 > npm start
 ```
 ### `—◉ 🔥 ACTIVAR EN FLAREXCLOUD 🔥`
-<a href="https://flarex.cloud/"><img src="https://cdn.flarex.cloud/deploy.png" width="450" height="240" alt="JPG"/></a>
+<a href="https://flarex.cloud/"><img src="https://cdn.flarex.cloud/deploy.png" width="428" height="92" alt="JPG"/></a>
 <p>> - Pagina Web Oficial:
 <a href="https://flarex.cloud">https://flarex.cloud</a>
 <p>> - Tutorial: en proceso
