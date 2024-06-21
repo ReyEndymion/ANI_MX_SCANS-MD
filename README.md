@@ -42,6 +42,19 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 > rm -rf session.data.json
 > npm start
 ```
+### `—◉ 🔥 ACTIVAR EN FLAREXCLOUD 🔥`
+<a href="https://flarex.cloud/"><img src=https://cdn.flarex.cloud/deploy.png" width="450" height="240" alt="JPG"/></a>
+<p>> Pagina Web Oficial:
+<a href="https://flarex.cloud">https://flarex.cloud</a>
+<p>> - Tutorial: en proceso
+<p>> - Área de Pagos: 
+<a href="https://billing.flarex.cloud">https://billing.flarex.cloud</a>
+<p>> - Game Panel: 
+<a href="https://gamepanel.flarex.cloud">https://gamepanel.flarex.cloud</a>
+- Contacto: hi@flarex.cloud / support@flarex.cloud / partnerships@flarex.cloud
+- Discord: https://discord.flarex.cloud
+
+
 
 ### `—◉ 🔥 ACTIVAR EN BOXMINEHOST 🔥`
 <a href="https://boxmineworld.com"><img src="https://raw.githubusercontent.com/ReyEndymion/ANI_MX_SCANS-MD/master/src/Pre%20Bot%20Publi.png" width="450" height="240" alt="JPG"/></a>
@@ -56,12 +69,12 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <p>> Dudas UNICAMENTE SOBRE EL HOST:
 <a href="https://discord.gg/84qsr4v">https://discord.gg/84qsr4v</a> (Preguntar por Vicemi)
   
-### `—◉ 💥 ACTIVAR EN ZIPPONODES HOST 💥`
+### `—◉ 💥 ACTIVAR EN CAFIREXOS HOST 💥`
 <a href="https://billing.acidicnodes.ml/register?ref=ADII104p"><img src="https://billing.acidicnodes.ml/storage/icon.png" width="100" height="100" alt="acidicnodes"/></a>
 - TUTORIAL: [https://youtu.be/nbjvreJ0tUk](https://youtu.be/nbjvreJ0tUk)
-- PAGINA: [https://www.zipponodes.com/](https://www.zipponodes.com/)
+- PAGINA: [https://www.cafirexos.com/](https://www.cafirexos.com/)
 - SOPORTE: [whatsapp](https://chat.whatsapp.com/EKQaXhfAO1D5ojNMcRdRVF)
-> INFORMACION: [DOCS](https://docs.zipponodes.com/inicio/enlaces)
+> INFORMACION: [DOCS](https://docs.cafirexos.com/inicio/enlaces)
 
 *NOTA IMPORTANTE*: En cada host hay algunos inicios de sesión muy similares por lo que deben cambiar algunas partes del tutorial sobre todo los enlaces para que puedan realizar su cuenta
 
@@ -79,4 +92,3 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <a href="https://github.com/ReyEndymion"><img src="https://github.com/ReyEndymion.png" width="250" height="250" alt="ReyEndymion"/></a>
 
 `ANI_MX_SCANS-MD _ By Rey Endymion`
-
