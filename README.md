@@ -44,7 +44,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 ```
 ### `—◉ 🔥 ACTIVAR EN FLAREXCLOUD 🔥`
 <a href="https://flarex.cloud/"><img src="https://cdn.flarex.cloud/deploy.png" width="450" height="240" alt="JPG"/></a>
-<p>> Pagina Web Oficial:
+<p>> - Pagina Web Oficial:
 <a href="https://flarex.cloud">https://flarex.cloud</a>
 <p>> - Tutorial: en proceso
 <p>> - Área de Pagos: 
@@ -72,7 +72,6 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <a href="https://discord.gg/84qsr4v">https://discord.gg/84qsr4v</a> (Preguntar por Vicemi)
   
 ### `—◉ 💥 ACTIVAR EN CAFIREXOS HOST 💥`
-<a href="https://billing.acidicnodes.ml/register?ref=ADII104p"><img src="https://billing.acidicnodes.ml/storage/icon.png" width="100" height="100" alt="acidicnodes"/></a>
 - TUTORIAL: [https://youtu.be/nbjvreJ0tUk](https://youtu.be/nbjvreJ0tUk)
 - PAGINA: [https://www.cafirexos.com/](https://www.cafirexos.com/)
 - SOPORTE: [whatsapp](https://chat.whatsapp.com/EKQaXhfAO1D5ojNMcRdRVF)
