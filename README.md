@@ -43,7 +43,7 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 > npm start
 ```
 ### `—◉ 🔥 ACTIVAR EN FLAREXCLOUD 🔥`
-<a href="https://flarex.cloud/"><img src=https://cdn.flarex.cloud/deploy.png" width="450" height="240" alt="JPG"/></a>
+<a href="https://flarex.cloud/"><img src="https://cdn.flarex.cloud/deploy.png" width="450" height="240" alt="JPG"/></a>
 <p>> Pagina Web Oficial:
 <a href="https://flarex.cloud">https://flarex.cloud</a>
 <p>> - Tutorial: en proceso
@@ -51,8 +51,10 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 <a href="https://billing.flarex.cloud">https://billing.flarex.cloud</a>
 <p>> - Game Panel: 
 <a href="https://gamepanel.flarex.cloud">https://gamepanel.flarex.cloud</a>
-- Contacto: hi@flarex.cloud / support@flarex.cloud / partnerships@flarex.cloud
-- Discord: https://discord.flarex.cloud
+<p>> - Contacto: 
+<a href="hi@flarex.cloud">hi@flarex.cloud</a> / <a href="support@flarex.cloud">support@flarex.cloud</a> / <a href="partnerships@flarex.cloud">partnerships@flarex.cloud</a>
+<p>> - Discord: 
+<a href="https://discord.flarex.cloud">https://discord.flarex.cloud</a>
 
 
 
