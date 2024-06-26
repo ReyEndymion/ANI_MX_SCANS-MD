@@ -1,6 +1,6 @@
 let handler = async (m, { conn, text, isROwner, isOwner }) => {
 if (text) {
-global.db.data.chats[m.chat].sBye = text
+global.db.data.bot[conn.user.jid].chats[m.chat].sBye = text
 let resp = '*[❗] MENSAJE DE DESPEDIDA CONFIGURADO CORRECTAMENTE PARA ESTE GRUPO*'
 let txt = '';
 let count = 0;
@@ -9,7 +9,7 @@ await new Promise(resolve => setTimeout(resolve, 15));
 txt += c;
 count++;
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 
@@ -23,7 +23,7 @@ await new Promise(resolve => setTimeout(resolve, 15));
 txt += c;
 count++;
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 

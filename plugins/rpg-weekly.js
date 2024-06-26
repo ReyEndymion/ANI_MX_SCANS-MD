@@ -3,12 +3,12 @@ let handler = async (m, { isPrems, conn }) => {
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
 //let grupos = [nna, nn, nnn, nnnt]
-let img = [imagen1, imagen2, imagen3, imagen4]
+let img = [imagen1, imagen2am, imagen3, imagen4]
 //let enlace = { contextInfo: { externalAdReply: {title: wm + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}
 //let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
 //let dos = [enlace, enlace2]    
 
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let premium = user.premium
 
 let exp = `${pickRandom([1000, 1800, 2500, 3000, 3700, 4400, 5000, 5500, 6000, 6500])}` * 1
@@ -53,7 +53,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -78,7 +78,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { image: img.getRandom(), caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  

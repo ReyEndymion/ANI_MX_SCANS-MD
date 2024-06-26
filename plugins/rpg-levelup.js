@@ -2,8 +2,12 @@ import { canLevelUp, xpRange } from '../lib/levelling.js'
 import { levelup } from '../lib/canvas.js'
 
 let handler = async (m, { conn }) => {
+  if (m.chat.endsWith(userID)) return
 	let name = m.sender.split`@`[0]//conn.getName(m.sender)
-    let user = global.db.data.users[m.sender]
+  let chats = global.db.data.bot[conn.user.jid].chats
+  let chat = chats.groups[m.chat]
+  let users = chat.users
+  let user = users[m.sender]
     if (!canLevelUp(user.level, user.exp, global.multiplier)) {
    let { min, xp, max } = xpRange(user.level, global.multiplier)
    let resp =  `
@@ -23,7 +27,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-   conn.sendPresenceUpdate('composing' , m.chat);
+  await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -49,7 +53,7 @@ for (const c of resp) {
       txt += c;
       count++;
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+         await conn.sendPresenceUpdate('composing' , m.chat);
       }
        }
 //         conn.sendFile(m.chat, img, 'levelup.jpg', str, m)
@@ -62,7 +66,7 @@ for (const c of str) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-   conn.sendPresenceUpdate('composing' , m.chat);
+  await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

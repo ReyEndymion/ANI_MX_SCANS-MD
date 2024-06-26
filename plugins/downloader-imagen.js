@@ -14,7 +14,7 @@ if (!text) {
       count++;
   
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+        await conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
    return conn.sendMessage(m.chat, {text: txt, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
@@ -30,7 +30,7 @@ const res = await googleImage(textoFiltrado)
 let image = await res.getRandom()
 let link = image
 let captionn = `🔎 *RESULTADO DE:* ${text}\n🔗 *LINK ${link}\n🌎 *BUSCADOR:* Google\n\nPara 🔄 SIGUIENTE 🔄 usa: *${usedPrefix}imagen ${text}*`
-conn.sendMessage(m.chat, { image:{url: image}, caption: captionn}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, wm , link, m)}
+return conn.sendMessage(m.chat, { image:{url: image}, caption: captionn}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, wm , link, m)}
 handler.help = ['gimage <query>', 'imagen <query>']
 handler.tags = ['internet', 'tools']
 handler.command = /^(gimage|image|imagen)$/i

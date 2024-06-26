@@ -1,14 +1,14 @@
 import fetch from 'node-fetch'
 let handler = async (m, { isPrems, conn }) => {
+  let resp, imagen
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
 let grupos = [hp_animxscans, md, urlgofc, paypal]
-let img = [imagen1, imagen4]
 //let enlace = { contextInfo: { externalAdReply: {title: wm + amsicon, body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}
 //let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: wm, thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
 //let dos = [enlace, enlace2]    
 
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let premium = user.premium
 
 let exp = `${pickRandom([1000, 1800, 2500, 3000, 3700, 4400, 5000, 5500, 6000, 6500])}` * 1
@@ -43,33 +43,37 @@ const recompensas = {
 }
 
 let time = user.halloween + 18000000 //18000000 5 horas
-if (new Date - user.halloween < 18000000) return await conn.sendButton(m.chat, `𝙔𝘼 𝙍𝙀𝘾𝙄𝘽𝙄𝙎𝙏𝙀 𝙏𝙐 𝙍𝙀𝘾𝙊𝙈𝙋𝙀𝙉𝙎𝘼 🎃\n\n𝙔𝙊𝙐 𝘼𝙇𝙍𝙀𝘼𝘿𝙔 𝙍𝙀𝘾𝙀𝙄𝙑𝙀𝘿 𝙔𝙊𝙐𝙍 𝙍𝙀𝙒𝘼𝙍𝘿 🎃`, wm + `\n\n𝙑𝙐𝙀𝙇𝙑𝙀 𝙀𝙉 : 𝘾𝙊𝙈𝙀 𝘽𝘼𝘾𝙆 𝙄𝙉\n${clockString(time - new Date() * 1)}`, null, [['𝗠 𝗘 𝗡 𝗨 ☘️', '/menu']], fkontak, m)
+if (new Date - user.halloween < 18000000) {resp = `Ya recibiste tu recompensa 🎃\n\nVuelve en:\n${clockString(time - new Date() * 1)}`
+} else {
+imagen = [imagen1, imagen4].getRandom()
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
     if (!(reward in user)) continue
     user[reward] += recompensas[reward]
 texto += `*+${recompensas[reward]}* ${global.rpgshop.emoticon(reward)}\n`}
-let text = `
+resp = `
 ╭━━👻━🏰━🎃━━⬣
-┃ 🔮 𝙍𝙀𝘾𝙊𝙈𝙋𝙀𝙉𝙎𝘼 𝙎𝙀𝙈𝘼𝙉𝘼𝙇!!
-┃ 🔮 𝙒𝙀𝙀𝙆𝙇𝙔 𝙍𝙀𝙒𝘼𝙍𝘿!!
+┃ 🔮 RECOMPENSA SEMANAL!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
-╰━━🕯️━🍬━🕸️━━⬣`
+╰━━🕯️━🍬━🕸️━━⬣\n\n🎟️ PREMIUM ⇢ ${premium ? '✅' : '❌'}\n${wm}`
+}
 let txt = '';
 let count = 0;
-for (const c of text) {
+for (const c of resp) {
     await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-
-//await conn.sendButton(m.chat, text, texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${wm}`, gata.getRandom(), [['🌅 𝙀𝙉𝙏𝙍𝙀𝙂𝘼 𝘿𝙀𝙇 𝙈𝙀𝙎 | 𝙈𝙊𝙉𝙏𝙃 🌠', '/monthly'], ['𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ | 𝘽𝙖𝙘𝙠 𝙩𝙤 𝙈𝙚𝙣𝙪 ☘️', '/menu']], m, enlace)  
+if (resp && imagen) {
 user.halloween = new Date * 1
+return conn.sendMessage(m.chat, { image: imagen, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
+} else {
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
 }
 handler.command = ['halloween'] 
 //handler.level = 7

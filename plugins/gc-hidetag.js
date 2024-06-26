@@ -15,7 +15,7 @@ for (const c of msg.message.extendedTextMessage.text) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})    

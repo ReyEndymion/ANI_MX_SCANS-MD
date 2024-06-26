@@ -14,7 +14,7 @@ txt += c;
 count++;
 
 if (count % 10 === 0) {
-conn.sendPresenceUpdate('composing' , m.chat);
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ) 
@@ -29,7 +29,7 @@ txt += c;
 count++;
 
 if (count % 10 === 0) {
-conn.sendPresenceUpdate('composing' , m.chat);
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ) 
@@ -41,7 +41,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     text = [text.trim()];
   }
   const effectoSelect = effects.find((effectz) => new RegExp(effectz?.title, 'i').test(effect));
-  const res = await maker(effectoSelect?.url, [...text]).catch(_ =>{
+  const res = await maker(effectoSelect?.url, [...text]).catch(async _ =>{
     let resp = `*[❗ERROR❗] Falta el texto al que se realizara el logo*`      
     let txt = '';
     let count = 0;
@@ -51,7 +51,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     count++;
     
     if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ) 
@@ -69,7 +69,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     count++;
     
     if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ) 
@@ -83,7 +83,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
   count++;
   
   if (count % 10 === 0) {
-  conn.sendPresenceUpdate('composing' , m.chat);
+ await conn.sendPresenceUpdate('composing' , m.chat);
   }
   }
     await conn.sendMessage(m.chat, {image: {url: res.image}, caption: resp}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  

@@ -1,5 +1,6 @@
 let handler = async (m, { conn, isPrems}) => { //lastmiming
-const fkontak = {
+    let resp, imagen
+const q = {
         "key": {
         "participants":"0@s.whatsapp.net",
             "remoteJid": "status@broadcast",
@@ -14,7 +15,7 @@ const fkontak = {
         "participant": "0@s.whatsapp.net"
     }
 
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let premium = user.premium  
 let minar = `${pickRandom(['Que pro 😎 has minado',
 '🌟✨ Genial!! Obtienes',
@@ -32,7 +33,6 @@ let minar = `${pickRandom(['Que pro 😎 has minado',
 '👾 Gracias a que has minado tus ingresos suman',
 'Felicidades!! Ahora tienes','⛏️⛏️⛏️ Obtienes'])}`
 
-let pp = './Menu2.jpg'
 
 let aqua = `${pickRandom([0, 2, 3, 1, 5])}` * 1
 let aquapremium = `${pickRandom([2, 4, 6, 7, 5, 9])}` * 1
@@ -53,47 +53,39 @@ let money = `${pickRandom([100, 200, 250, 300, 370, 400, 450, 480, 500, 510, 640
 let moneypremium = `${pickRandom([500, 600, 700, 800, 900, 1000, 1050, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1950, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3400, 3500, 3600, 3700, 3800, 3850, 3900, 3950, 4000])}` * 1
 
 let time = user.lastcoins + 600000 //10 min
-if (new Date - user.lastcoins < 600000) {
-    let resp = `*⏱️ _Vuelve en_ ${msToTime(time - new Date())} _para continuar minando_ ${global.rpgshopp.emoticon('money')}⛏️*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 5));
-        txt += c;
-        count++;
-    
-        if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
-        }
-    }
-    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}    
 user.money += premium ? moneypremium : money  
+if (new Date - user.lastcoins < 600000) {
+    resp = `*⏱️ _Vuelve en_ ${msToTime(time - new Date())} _para continuar minando_ ${global.rpgshopp.emoticon('money')}⛏️*`
+    imagen = 0
+} else {
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
     if (!(reward in user)) continue
     user[reward] += recompensas[reward]
 texto += `+${recompensas[reward]} ${global.rpgshop.emoticon(reward)}\n`}
-{
-let resp = `*${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*\n*${minar}*\n*${money} ${global.rpgshop.emoticon('money')}*` + '\n\n' + `🍁 𝗕 𝗢 𝗡 𝗢\n` + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${wm}`
+imagen = imagen1
+resp = `*${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*\n*${minar}*\n*${money} ${global.rpgshop.emoticon('money')}*` + '\n\n' + `🍁 BONO\n` + texto + `\n\n🎟️ PREMIUM ⇢ ${premium ? '✅' : '❌'}\n${wm}`}
+//conn.sendHydrated(m.chat, '', pp, md, 'ANI MX SCANS-MD', null, null, [['_Minar Diamantes_ 💎', `.minar3`], ['_Volver al_ 𝙈𝙚𝙣𝙪́ | _Back to Menu_ ☘️', `.menu`]], m,)
 let txt = '';
 let count = 0;
 for (const c of resp) {
     await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-//conn.sendHydrated(m.chat, '', pp, md, 'ANI MX SCANS-MD', null, null, [['_Minar Diamantes_ 💎', `.minar3`], ['_Volver al_ 𝙈𝙚𝙣𝙪́ | _Back to Menu_ ☘️', `.menu`]], m,)
-}
+if (resp && imagen == 0) {
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+    }
+    if (resp && imagen != 0) {
 user.lastcoins = new Date * 1  
-}
+    return conn.sendMessage(m.chat, { image: imagen, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+    }  
+    }
 handler.help = ['minar2']
-handler.tags = ['gata']
+handler.tags = ['ANI']
 handler.command = ['minar2', 'miming2', 'mine2', 'minarAMXcoins', 'minarcoins', 'minarAMX'] 
 handler.fail = null
 handler.exp = 0

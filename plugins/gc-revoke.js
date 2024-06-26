@@ -11,7 +11,8 @@ await new Promise(resolve => setTimeout(resolve, 15));
 txt += c;
 count++;
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+  
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 

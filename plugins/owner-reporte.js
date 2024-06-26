@@ -11,7 +11,8 @@ for (const c of teks) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage('5215517489568@s.whatsapp.net', { text: m.quoted ? teks + m.quoted.text : teks.trim(), mentions: conn.parseMention(teks) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -25,7 +26,8 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, command, args, usedPrefix: _p, __dir
 const { levelling } = '../lib/levelling.js'
 //let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text }) => {
 
-let { exp, limit, level, role } = global.db.data.users[m.sender]
+let { exp, limit, level, role } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let { min, xp, max } = xpRange(level, global.multiplier)
 
 let d = new Date(new Date + 3600000)
@@ -39,12 +39,12 @@ process.once('message', resolve)
 setTimeout(resolve, 1000)
 }) * 1000
 }
-let { money, joincount } = global.db.data.users[m.sender]
-//let { limit } = global.db.data.users[m.sender]
+let { money, joincount } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+//let { limit } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let muptime = clockString(_muptime)
 let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.users).length
-let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
+let totalreg = Object.keys(global.db.data.bot[conn.user.jid].users).length
+let rtotalreg = Object.values(global.db.data.bot[conn.user.jid].users).filter(user => user.registered == true).length
 let replace = {
 '%': '%',
 p: _p, uptime, muptime,
@@ -61,7 +61,7 @@ readmore: readMore
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
   
 //let name = await conn.getName(m.sender)
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let pp = dirP + 'src/avatar_contact.png';
 try {
@@ -98,7 +98,7 @@ let menu = `╭━━〔 *${wm}* 〕━━⬣
 ┃ ➥ *${week}, ${date}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *USUARIOS | USERS*
-┃ ➥ *${Object.keys(global.db.data.users).length}* 
+┃ ➥ *${Object.keys(global.db.data.bot[conn.user.jid].users).length}* 
 ╰━━━━━━〔 *${wm}* 〕━━━━━━⬣`.trim()
 let txt = '';
 let count = 0;
@@ -108,7 +108,7 @@ for (const c of menu) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { image: {url: pp}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  

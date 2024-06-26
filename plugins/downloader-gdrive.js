@@ -12,7 +12,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -26,15 +26,14 @@ GDriveDl(args[0]).then(async (res) => {
         txt += c;
         count++;
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+          await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
         await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
     //conn.reply(m.chat, , m)
-if (!res) {
-//   throw res
-conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })
-}
+if (!res) throw res
+await conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })
+
 })
 } catch(e) {
 let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*'
@@ -45,7 +44,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
      await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

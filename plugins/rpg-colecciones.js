@@ -19,7 +19,19 @@ utilidad: 'Medianamente alta',
 abundancia: 'Medianamente poca' 
 }
 }
-m.reply(categorias.exp.utilidad)
+let resp = categorias.exp.utilidad
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
 }
 handler.command = /^(colección|coleccion|inforpg|set|collection)$/i
 

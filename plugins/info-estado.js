@@ -14,7 +14,7 @@ let estado =`
 ╭─[ *${igfg}* ]
 │ *➤ HOLA @${m.sender.split`@`[0]}*
 │
-│ *ESTADO DE ${me}*
+│ *ESTADO DE @${conn.user.jid.split`@`[0]}*
 │ *=> BOT ACTIVO ✅*
 │ *=> BOT DE USO PUBLICO ✅*
 │ *=> TIEMPO ACTIVO: ${uptime}*
@@ -28,7 +28,7 @@ for (const c of estado) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 conn.sendMessage(m.chat, {image: picture, caption: estado, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [['https://www.facebook.com/groups/otakustogether', 'FACEBOOK'], 

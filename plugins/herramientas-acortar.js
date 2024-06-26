@@ -12,7 +12,7 @@ if (!text) {
         count++;
     
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -41,7 +41,7 @@ async function obtenerTokenOwner(conn) {
         count++;
     
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
         await conn.sendMessage(ownerJid, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -97,7 +97,7 @@ async function guardarCredencialesBitly(conn) {
           count++;
       
           if (count % 10 === 0) {
-              conn.sendPresenceUpdate('composing' , m.chat);
+             await conn.sendPresenceUpdate('composing' , m.chat);
           }
       }
           await conn.sendMessage(ow + global.userID, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -167,7 +167,7 @@ for (const c of hasil) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );       

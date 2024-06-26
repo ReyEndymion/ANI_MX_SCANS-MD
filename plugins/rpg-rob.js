@@ -1,78 +1,40 @@
 let ro = 3000
 let handler = async (m, { conn, isPrems, usedPrefix, command}) => {
 //let hasil = Math.floor(Math.random() * 5000)
-let time = global.db.data.users[m.sender].lastrob + 7200000
-let who
-if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false
-else who = m.chat
-let users = global.db.data.users[who]
+if (m.isBaileys && m.fromMe)
+return !0
+if (!m.isGroup) return !1
+let bot = global.db.data.bot[conn.user.jid]
+let chats = bot.chats || {}
+let chat = chats.groups[m.chat] || {}
+let users = chat.users || {}
+let user = users[m.sender] || {}
+let settings = bot.settings || {}
+console.log('robar: ', users)
+let time = users[m.sender].lastrob + 7200000
+let who, resp
+if (m.isGroup) { who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : false} else {who = m.sender}
+//users[who]
 let rob = Math.floor(Math.random() * ro)
-global.db.data.users[m.sender].exp += rob
+user.exp += rob
+console.log('robar: ', user)
 
-if (new Date - global.db.data.users[m.sender].lastrob < 7200000) {
-    let resp =  `*⏱️¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-}
-if (!who) {
-    let resp =  `${pickRandom(global.crimen)} *${rob} XP*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-    global.db.data.users[m.sender].lastwork = new Date * 1
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-} else if (!(who in global.db.data.users)) {
-    let resp = `*[❗] El usuario no se encuentra en mi base de datos.*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-} else if (users.exp < rob) {
-    let resp = `😔 @${who.split`@`[0]} tiene menos de *${ro} xp*\nNo robes a un pobre v":`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+if (new Date - user.lastrob < 7200000) {
+resp =  `*⏱️¡Hey! Espera ${msToTime(time - new Date())} para volver a robar*`
+} else if (!who) {
+user.lastrob = new Date * 1
+resp =  `${pickRandom(global.crimen)} *${rob} XP*`
+} else if (!(who in users)) {
+resp = `*[❗] El usuario no se encuentra en mi base de datos.*`
+} else if (user.exp < rob) {
+resp = `😔 @${who.split`@`[0]} tiene menos de *${ro} xp*\nNo robes a un pobre v":`
 } else {
+users.exp -= rob 
+user.lastrob = new Date * 1
+resp = `*‣ Robaste ${rob} XP a @${who.split`@`[0]}*`
 
-let resp = `*‣ Robaste ${rob} XP a @${who.split`@`[0]}*`
-global.db.data.users[m.sender].lastrob = new Date * 1
+}
+user.lastrob = new Date * 1
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -81,13 +43,13 @@ txt += c;
 count++;
 
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
-
-    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-}
-global.db.data.users[who].exp -= rob 
+if (resp) {
+user.lastrob = new Date * 1
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+} 
 }
 handler.help = ['robar']
 handler.tags = ['xp']

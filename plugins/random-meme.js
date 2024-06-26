@@ -1,20 +1,28 @@
 import axios from "axios"
 import { googleImage } from '@bochilteam/scraper'
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = async (m, {command, conn, text}) => {
-    try{
-let res = await axios(pickRandom(meme))
-let json = res.data
-let url = json.url
-conn.sendMessage(m.chat, {image:{url: url}, caption: `_${command}_`.trim()}, wm, url, [['SIGUIENTE', `/${command}`]], m)
-}catch {
-    const res = await googleImage(command)
-let image = await res.getRandom()
-let link = image
-let captionn = `soy random 👺👍🏼`
-conn.sendFile (m.chat, link, null, captionn, m, null, {viewOnce: false})
-    await delay(1 * 3000)
-conn.sendMessage(m.chat, { text: `_${command}_`.trim()}, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+let imagen, resp 
+try {
+const res = await googleImage(command)
+imagen = await res.getRandom()
+resp = `soy random 👺👍🏼`
+} catch (e) {
+resp = `No se a podido descargar, por favor inténtelo más tarde. El error fue: ${e}`
+}
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+if (imagen) {
+return conn.sendMessage(m.chat, { image: {url: imagen}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
+} else {
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 }
 handler.help = ['meme']
@@ -24,26 +32,3 @@ export default handler
 
 function pickRandom(list) {
 return list[Math.floor(list.length * Math.random())]}
-
-const meme = [
-"https://meme-api.herokuapp.com/gimme/memesmexico",
-"https://meme-api.herokuapp.com/gimme/mememexico",
-"https://meme-api.herokuapp.com/gimme/memeslatam",
-"https://meme-api.herokuapp.com/gimme/memeslatinoamerica",
-"https://meme-api.herokuapp.com/gimme/latammemes",
-"https://meme-api.herokuapp.com/gimme/memeslatinoamerica",
-"https://meme-api.herokuapp.com/gimme/latammemes",
-"https://meme-api.herokuapp.com/gimme/memesmexico",
-"https://meme-api.herokuapp.com/gimme/mememexico",
-"https://meme-api.herokuapp.com/gimme/memeslatam",
-"https://meme-api.herokuapp.com/gimme/memesmexico",
-"https://meme-api.herokuapp.com/gimme/mememexico",
-"https://meme-api.herokuapp.com/gimme/memeslatam",
-"https://meme-api.herokuapp.com/gimme/memeslatinoamerica",
-"https://meme-api.herokuapp.com/gimme/latammemes",
-"https://meme-api.herokuapp.com/gimme/memeslatinoamerica",
-"https://meme-api.herokuapp.com/gimme/latammemes",
-"https://meme-api.herokuapp.com/gimme/memesmexico",
-"https://meme-api.herokuapp.com/gimme/mememexico",
-"https://meme-api.herokuapp.com/gimme/memeslatam"
-]

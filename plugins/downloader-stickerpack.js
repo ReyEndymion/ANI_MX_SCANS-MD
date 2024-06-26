@@ -8,7 +8,7 @@ let url = text
 let res = await fetch(`https://api.akuari.my.id/downloader/stickerpack?link=${url}`)
 let json = await res.json()
 for (let data of (json.result || json)) {
-const stikers = await sticker(false, data, global.packname, global.author)
+const stikers = await sticker(false, data, global.gt, global.author)
 conn.sendFile(m.chat, stikers, null, { asSticker: true }, m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': true }}, { quoted: m })
 //await delay(1500)
 }} catch {   

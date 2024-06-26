@@ -1,7 +1,7 @@
 let handler = async (m, { command, usedPrefix, text }) => {
 let which = command.replace(/eliminar/i, '')
 if (!text) throw `*[❗INFO❗] USAR ${usedPrefix}list${which} PARA VER LA LISTA*`
-let msgs = global.db.data.msgs
+let msgs = global.db.data.bot[conn.user.jid].msgs
 if (!text in msgs) throw `*[❗INFO❗] '${text}' NO REGISTRADO EN LA LISTA DE MENSAJES*`
 delete msgs[text]
 m.reply(`*[❗INFO❗] ELIMINO CON EXITO EN LA LISTA DE MENSAJES EL MENSAJE CON EL NOMBRE '${text}'*`)

@@ -6,7 +6,7 @@ let name = who.split`@`[0]//conn.getName(who)
 let resp = `
 ┌───⊷ *BALANCE* ⊶
 ▢ *Nombre:* @${name}
-▢ *Diamantes:* ${global.db.data.users[who].limit}💎
+▢ *Diamantes:* ${global.db.data.bot[conn.user.jid].users[who].limit}💎
 └──────────────
 *NOTA:* 
 *Puedes comprar diamantes 💎 usando los comandos*
@@ -19,7 +19,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

@@ -4,11 +4,35 @@ import { readdirSync, unlinkSync, existsSync, promises as fs, rmSync } from 'fs'
 import path from 'path';
 
 const handler = async (m, { conn, usedPrefix }) => {
-  if (global.conn.user.jid !== conn.user.jid) {
-    return conn.sendMessage(m.chat, {text: '*[❗] Utiliza este comando directamente en el número principal del Bot*'}, {quoted: m});
-  }
   const chatId = m.isGroup ? [m.chat, m.sender] : [m.sender];
-  const sessionPath = authFile;
+  const sessionPath = authFolderAniMX;
+    let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+    let uniqid = `${who.split`@`[0]}` //parentw.getName(who)
+    const subBotSessionPath = authFolderAniMX + '/' + uniqid
+  if (global.conn.user.jid !== conn.user.jid) {
+    try {
+      const files = await fs.readdir(subBotSessionPath);
+      let filesDeleted = 0;
+      for (const file of files) {
+        for (const id of chatId) {
+          if (file.includes(id.split('@')[0])) {
+            await fs.unlink(path.join(subBotSessionPath, file));
+            filesDeleted++;
+            break;
+          }
+        }
+      }
+      if (filesDeleted === 0) {
+        await conn.sendMessage(m.chat, {text: '*[❗] No se encontró ningún archivo que incluya la ID del chat*'}, {quoted: m});
+      } else {
+        await conn.sendMessage(m.chat, {text: `*[❗] Se eliminaron ${filesDeleted} archivos de sesión*`}, {quoted: m});
+      }
+    } catch (err) {
+      console.error('Error al leer la carpeta o los archivos de sesión:', err);
+      await conn.sendMessage(m.chat, {text: '*[❗] Ocurrió un error al eliminar los archivos de sesión*'}, {quoted: m});
+    }
+      //return conn.sendMessage(m.chat, {text: '*[❗] Utiliza este comando directamente en el número principal del Bot*'}, {quoted: m});
+  }
   try {
     const files = await fs.readdir(sessionPath);
     let filesDeleted = 0;

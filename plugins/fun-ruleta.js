@@ -43,5 +43,4 @@ handler.command = ['ruleta'];
 handler.group = true
 handler.owner = true
 handler.admin = true
-espadmins = true
 export default handler;

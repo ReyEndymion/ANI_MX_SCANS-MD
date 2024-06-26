@@ -14,14 +14,14 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: conn.tekateki[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 throw false
 }
-let tekateki = JSON.parse(fs.readFileSync(`./src/game/acertijo.json`))
+let tekateki = JSON.parse(fs.readFileSync(dirP + `src/game/acertijo.json`))
 let json = tekateki[Math.floor(Math.random() * tekateki.length)]
 let _clue = json.response
 let clue = _clue.replace(/[A-Za-z]/g, '_')
@@ -38,7 +38,7 @@ for (const c of caption) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 conn.tekateki[id] = [
@@ -54,7 +54,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: conn.tekateki[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

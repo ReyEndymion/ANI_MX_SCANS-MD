@@ -1,7 +1,7 @@
 let handler = async (m, { command, usedPrefix, DevMode, args, conn }) => {
 let type = (args[0] || '').toLowerCase()
 let msk = (args[0] || '').toLowerCase()
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 
 const listaComida = ['◈ Pollo a la parrilla 🍖','◈ Pollo frito 🍗','◈ Fideos con crema de leche y pollo 🍜','◈ Filete de Vaca 🥩','◈ Paella 🥘','◈ Curry de pollo 🍲','Cerdo asado 🥠','◈ Pescado asado 🐟','']
 
@@ -211,7 +211,7 @@ default:
          count++;
      
          if (count % 10 === 0) {
-             conn.sendPresenceUpdate('composing' , m.chat);
+            await conn.sendPresenceUpdate('composing' , m.chat);
          }
      }
      await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );    

@@ -10,10 +10,10 @@ let handler = async (m, { args }) => {
         txt += c;
         count++;
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
-        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
   }
   try {
       const response = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${args}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273`)
@@ -28,17 +28,17 @@ let handler = async (m, { args }) => {
     const Wind = res.data.wind.speed + "km/h"
     const wea = `「 📍 」LUGAR: ${name}\n「 🗺️ 」PAIS: ${Country}\n「 🌤️ 」TIEMPO: ${Weather}\n「 🌡️ 」TEMPERATURA: ${Temperature}\n「 💠 」 TEMPERATURA MINIMA: ${Minimum_Temperature}\n「 📛 」TEMPERATURA MAXIMA: ${Maximum_Temperature}\n「 💦 」HUMEDAD: ${Humidity}\n「 🌬️ 」 VIENTO: ${Wind}
   `.trim()
-         let txt = '';
-       let count = 0;
-       for (const c of wea) {
-           await new Promise(resolve => setTimeout(resolve, 5));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+    let txt = '';
+    let count = 0;
+    for (const c of wea) {
+      await new Promise(resolve => setTimeout(resolve, 5));
+      txt += c;
+      count++;
+      if (count % 10 === 0) {
+          await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } catch (e) {
 let resp = " *[❗INFO❗] Error!\n _No se encontrarón resultados, trate de escribir un país o ciudad existente._* "
        let txt = '';
@@ -48,10 +48,10 @@ let resp = " *[❗INFO❗] Error!\n _No se encontrarón resultados, trate de esc
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+              await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+        return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 }
 handler.help = ['clima *<ciudad/país>*']

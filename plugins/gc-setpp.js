@@ -12,23 +12,22 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 }
-await conn.updateProfilePicture(m.chat, img).then(_ => {
+await conn.updateProfilePicture(m.chat, img).then(async _ => {
     let resp = '⚘ *_Imagen actualizada con éxito._*'
     let txt = '';
     let count = 0;
     for (const c of resp) {
-    new Promise(resolve => setTimeout(resolve, 15));
-        txt += c;
-        count++;
-    
-        if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+        await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
@@ -42,7 +41,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }

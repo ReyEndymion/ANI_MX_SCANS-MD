@@ -31,7 +31,7 @@ let handler = async (m, { conn, args }) => {
         txt += c;
         count++;
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
     conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id })

@@ -1,5 +1,5 @@
 let handler = m => {
-let msgs = global.db.data.msgs
+let msgs = global.db.data.bot[conn.user.jid].msgs
 m.reply(`
 *🔰 LISTA DE TEXTOS/MENSAJES/PALABRAS CLAVE 🔰*
 

@@ -1,3 +1,68 @@
+  let handler  = async (m, { conn }) => {
+    let parentw = conn
+    let resp
+    let contextInfo = {  
+      mentionedJid: [m.sender],  
+      "externalAdReply": {  
+      "showAdAttribution": true,  
+      "containsAutoReply": true,
+      "renderLargerThumbnail": true,  
+      "title": `Serbot Stop`,   
+      "containsAutoReply": true,  
+      "mediaType": 1,   
+      "thumbnail": imagen1,  
+      "mediaUrl": `https://chat.whatsapp.com/HbC4vaYsvYi0Q3i38diybA`,  
+      "sourceUrl": `https://api.whatsapp.com/send/?phone=${m.sender[0]}&text=.stop&type=phone_number&app_absent=0`  
+      }  
+      }  
+ if (global.conn.user.jid != conn.user.jid && m.sender != global.conn.user.jid){ 
+      resp = 'Me apagare :\')'
+     let i = global.conns.indexOf(conn)		
+      global.conns.splice(i, 1)
+      conn.isInit = false
+       if (i < 0) return
+      delete global.conns[i]
+      conn.ev.removeAllListeners()
+      conn.ws.close()
+      if (!conn.user) {
+        try { conn.ws.close() } catch (e) { console.log(e)}
+        conn.ev.removeAllListeners()
+      }/****/          
+    } else if (!conn.user.jid) {
+    resp = `Este numero no es un Sub-Bot de ${wm}, por lo tanto no lo puedo detener`
+} else if (global.conn.user.jid == (m.chat || m.sender)) {
+  resp = `El bot principal no se apaga asi`
+     } else {
+    resp = 'Por qué no vas directamente al chat privado del Sub-Bot?'
+    } 
+      let txt = '';
+      let count = 0;
+      for (const c of resp) {
+      await new Promise(resolve => setTimeout(resolve, 20));
+      txt += c;
+      count++;
+  
+      if (count % 10 === 0) {
+         await conn.sendPresenceUpdate('composing' , m.chat);
+      }
+      }
+      return conn.sendMessage(m.chat, {text: txt, contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+  }
+  handler.help = ['berhenti','stop']
+  handler.tags = ['General']
+  handler.command = /^(berhenti|stop)$/i
+  handler.owner = true
+  handler.mods = false
+  handler.premium = false
+  handler.group = false
+  handler.private = true
+  
+  handler.admin = false
+  handler.botAdmin = false
+  
+  handler.fail = null
+  
+  export default handler
 /*
 import { Low, JSONFile } from 'lowdb'
 
@@ -21,7 +86,7 @@ let handler  = async (m, { conn }) => {
         count++;
     
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
     await db.read();
@@ -65,72 +130,3 @@ await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(
   
   export default handler
   */
-  let handler  = async (m, { conn }) => {
-    let i = global.conns.indexOf(conn)		
-    global.conns.push(conn)
-    let parentw = conn
-    let contextInfo = {  
-      mentionedJid: [m.sender],  
-      "externalAdReply": {  
-      "showAdAttribution": true,  
-      "containsAutoReply": true,
-      "renderLargerThumbnail": true,  
-      "title": `Serbot Stop`,   
-      "containsAutoReply": true,  
-      "mediaType": 1,   
-      "thumbnail": imagen1,  
-      "mediaUrl": `https://chat.whatsapp.com/HbC4vaYsvYi0Q3i38diybA`,  
-      "sourceUrl": `https://api.whatsapp.com/send/?phone=${m.sender}&text=.stop&type=phone_number&app_absent=0`  
-      }  
-      }  
-    if (global.conn.user.jid == conn.user.jid){ 
-    let resp = 'Por qué no vas directamente con el numero del Bot?'
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-    conn.sendMessage(m.chat, {text: txt, contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-     } else {
-      let resp = 'Me apagare :\')'
-      let txt = '';
-      let count = 0;
-      for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 20));
-      txt += c;
-      count++;
-  
-      if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
-      }
-      }
-        conn.sendMessage(m.chat, {text: txt, contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-          conn.isInit = false
-          conn.ev.removeAllListeners()
-           if (i < 0) return
-            delete global.conns[i]
-            global.conns.splice(i, 1)
-      conn.ws.close()
-    }
-  }
-  handler.help = ['berhenti','stop']
-  handler.tags = ['General']
-  handler.command = /^(berhenti|stop)$/i
-  handler.owner = false
-  handler.mods = false
-  handler.premium = false
-  handler.group = false
-  handler.private = false
-  
-  handler.admin = false
-  handler.botAdmin = false
-  
-  handler.fail = null
-  
-  export default handler

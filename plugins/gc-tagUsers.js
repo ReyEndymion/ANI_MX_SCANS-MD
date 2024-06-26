@@ -14,10 +14,10 @@ let handler = async (m, { conn, participants, groupMetadata, jid, args }) => {
         }
         return str;
       }
-    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync('./src/sinFotoG.png') );
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync(join(media, 'pictures/sinFotoG.png')));
     const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
     
-    const lettersImage = await Jimp.read(fs.readFileSync(join(dirP, 'src/invUsers.png')));
+    const lettersImage = await Jimp.read(fs.readFileSync(join(media, 'pictures/invUsers.png')));
     lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
     profilePicture.composite(lettersImage, 0, 0);
     const img = path.join(dirP, `tmp/${randomString(5)}.jpg`);
@@ -34,7 +34,7 @@ const listUsers = groupNoAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+               await conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
     await conn.sendMessage(m.chat, {image: {url: img}, caption: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

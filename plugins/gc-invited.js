@@ -2,19 +2,28 @@ const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await im
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 import fetch from 'node-fetch'
 import fs from 'fs'
+import path, {join} from 'path';
 
 let handler = async (m, { conn, args, participants, text, jid }) => {
-  m.reply(`espere un momento... procesando invitacion`)
+  //m.reply(`espere un momento... procesando invitacion`)
+      let resp = `procesando solicitud.`;
+      let txt = '';
+      let count = 0;
+      for (const c of resp) {
+        await new Promise(resolve => setTimeout(resolve, 15));
+        txt += c;
+        count++;
+    
+        if (count % 10 === 0) {
+          await conn.sendPresenceUpdate('composing', m.chat);
+        }
+      }
+      let q = conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
+  
     // Obtener los usuarios a invitar
     let _participants = participants.map(user => user.id)
-    let users = (await Promise.all(
-        text.split(',').map(v => v.replace(/[^0-9]/g, ''))
-            .filter(v => v.length > 4 && v.length < 20 && !_participants.includes(v + '@s.whatsapp.net'))
-            .map(async v => [v, await conn.onWhatsApp(v + '@s.whatsapp.net')
-            ])
-    )).filter(v => v[1][0]?.exists).map(v => v[0] + '@c.us')
-    const invited = users.map(jid => ({
-      tag: 'participant', attrs: { jid } }))
+    let users = (await Promise.all(text.split(',').map(v => v.replace(/[^0-9]/g, '')).filter(v => v.length > 4 && v.length < 20 && !_participants.includes(v + '@s.whatsapp.net')).map(async v => [v, await conn.onWhatsApp(v + '@s.whatsapp.net')]))).filter(v => v[1][0]?.exists).map(v => v[0] + '@s.whatsapp.net')
+    const invited = users.map(jid => ({tag: 'participant', attrs: { jid }}))
 
     for (const user of invited) {
       const jid = user.attrs.jid
@@ -25,61 +34,81 @@ let handler = async (m, { conn, args, participants, text, jid }) => {
         var pp = await conn.profilePictureUrl(m.chat, 'image')
         var img = await (await fetch(pp)).buffer()
     } catch {
-        var img = fs.readFileSync('./src/avatar_contact.png')
+        var img = fs.readFileSync(path.join(media, 'pictures/avatar_contact.png'))
     }
-    const inviteMessage = `🌎 Que tal, soy el Bot ${wm} que esta en este grupo, me han pedido que te envié está invitación porque no te pude añadir, esperemos que aceptes... Bienvenido al grupo 🌏🤝🏼`
-        /*var messaa = await prepareWAMessageMedia({ image: img }, { upload: conn.waUploadToServer })
-        var prep = generateWAMessageFromContent(m.chat, proto.Message.fromObject({ groupInviteMessage: { 
-          groupJid: m.chat,  
-          inviteCode: link, 
-          inviteExpirationTimestamp: invite_code_exp.getTime(), groupName: name, 
-          caption: inviteMessage, 
-          jpegThumbnail: messaa }}), */
-    ///*
-    let prep = generateWAMessageFromContent(m.chat, {
-        extendedTextMessage: {
-            text: inviteMessage,
-            contextInfo: {
-                forwardingScore: 999,
-                isForwarded: true,
-                externalAdReply: {
-                    body: false,
-                    containsAutoReply: true,
-                    mediaType: 1,
-                    mediaUrl: link,
-                    renderLargerThumbnail: true,
-                    showAdAttribution: false,
-                    sourceId: name,
-                    sourceUrl: link,
-                    thumbnail: img,
-                    thumbnailUrl: img,
-                    title: name
-                    }
-                }
-            }
-         },//*/
-     { userJid: jid, quoted: m })     
-      let isBlocked = []
-      let devol = isBlocked ? `Listo @${m.sender.split('@')[0]} Se ha enviado la invitación a @${jid.split('@')[0]} pero se tuvieron que desbloquear algunos usuarios seleccionados.` : `Listo @${m.sender.split('@')[0]} Se ha enviado la invitación a @${jid.split('@')[0]} los usuarios seleccionados.`
-      if (isBlocked.includes(user)) {
-        await conn.updateBlockStatus(m.chat, 'unblock')
-        await delay (1 * 40000)
-      conn.relayMessage(jid, prep.message, {
-        messageId: prep.key.id,
-        user: conn.user.jid
-      });
+    const inviteMessage = `🌎 Que tal @${jid.split('@')[0]}, soy el Bot ${wm} que esta en este grupo, me han pedido que te envié está invitación porque no te pude añadir, esperemos que aceptes... Bienvenido al grupo 🌏🤝🏼`
+    let txt = '';
+    let count = 0;
+    for (const c of inviteMessage) {
+      await new Promise(resolve => setTimeout(resolve, 15));
+      txt += c;
+      count++;
+      if (count % 10 === 0) {
+        await conn.sendPresenceUpdate('composing', jid);
+      }
+    }
+    //var messaa = await prepareWAMessageMedia({ image: img }, { upload: conn.waUploadToServer })
+       // var prep = generateWAMessageFromContent(m.chat, proto.Message.fromObject({  groupInviteMessage: {groupJid: m.chat, inviteCode: link, inviteExpirationTimestamp: invite_code_exp.getTime(), groupName: name, caption: inviteMessage, jpegThumbnail: messaa }}), 
+    let prep = generateWAMessageFromContent(m.chat, {extendedTextMessage: { text: txt.trim(), contextInfo: {mentionedJid: conn.parseMention(txt), externalAdReply: { body: false, containsAutoReply: true, mediaType: 1, mediaUrl: link, renderLargerThumbnail: true, showAdAttribution: false, sourceId: name, sourceUrl: link, thumbnail: img, thumbnailUrl: img, title: name}}}}, { userJid: conn.user.jid, quoted: m })     
+      let isBlocked 
+      await conn.fetchBlocklist().then(async data => {
+        for (let i of data) {
+       if (i === jid) {
+        isBlocked = true
+       } else {
+        isBlocked = false
+       }
+        break
+      }
+        })
+    console.log('invitar: ', jid)
+      if (isBlocked) {
+        await conn.updateBlockStatus(jid, 'unblock')
+        //await delay (1 * 40000)
+        let resp = `Listo @${m.sender.split('@')[0]} Se ha enviado la invitación a @${jid.split('@')[0]} pero se tuvieron que desbloquear algunos usuarios seleccionados.`;
+        let txt = '';
+        let count = 0;
+        for (const c of resp) {
+          await new Promise(resolve => setTimeout(resolve, 15));
+          txt += c;
+          count++;
+      
+          if (count % 10 === 0) {
+            await conn.sendPresenceUpdate('composing', m.chat);
+          }
+        }
+      //conn.relayMessage(jid, prep.message, {messageId: prep.key.id, user: conn.user.jid});
+        return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
         //await conn.sendMessage(user, groupInvite, 'groupInviteMessage', { sendEphemeral: true, ephemeralDuration: 60 * 1000 })
       } else {
-        await delay (1 * 40000)
-        conn.relayMessage(jid, prep.message, {
-          messageId: prep.key.id,
-          user: conn.user.jid
-        });
-
-       await conn.sendMessage (m.chat, {text: devol}, { mentions: conn.parseMention(devol)})
-        //await conn.sendMessage(user, groupInvite, 'groupInviteMessage', { sendEphemeral: true, ephemeralDuration: 60 * 1000 })
-        //await conn.sendMessage(m.chat, `*✅ INVITACIÓN ENVIADA A @${user.split('@')[0]}*`)
+//        await delay (1 * 40000)
+      let devol = `Listo @${m.sender.split('@')[0]} Se ha enviado la invitación a @${jid.split('@')[0]} los usuarios seleccionados.`
+        let txt = '';
+        let count = 0;
+      for (const c of devol) {
+      await new Promise(resolve => setTimeout(resolve, 15));
+      txt += c;
+      count++;
+      if (count % 10 === 0) {
+     await conn.sendPresenceUpdate('composing', m.chat);
+   }
+ }
+  await conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id});
+  return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
+  //await conn.sendMessage(user, groupInvite, 'groupInviteMessage', { sendEphemeral: true, ephemeralDuration: 60 * 1000 })
+/* let resp = `*✅ INVITACIÓN ENVIADA A @${jid.split('@')[0]}*`;
+        for (const c of resp) {
+          await new Promise(resolve => setTimeout(resolve, 15));
+          txt += c;
+          count++;
+      
+          if (count % 10 === 0) {
+            await conn.sendPresenceUpdate('composing', m.chat);
+          }
         }
+        return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });*/
+        }  
+
       }
     }
 
@@ -110,7 +139,7 @@ let handler = async (m, { conn, args, text, participants, usedPrefix, command  }
       .map(async v => [v, await conn.onWhatsApp(v + '@s.whatsapp.net')]))).filter(v => v[1][0]?.exists).map(v => v[0] + '@c.us')
             
         var pp = await conn.profilePictureUrl(m.chat, 'image')
-        var img = await (await fetch(pp)).buffer() || fs.readFileSync('./src/avatar_contact.png')
+        var img = await (await fetch(pp)).buffer() || fs.readFileSync(path.join(media, 'pictures/avatar_contact.png'))
         
     //for (const user of response.filter(item => item.attrs.error == 403)) {
       //const jid = user.attrs.jid
@@ -173,7 +202,7 @@ let handler = async (m, { conn, args }) => {
     const pp = await conn.getProfilePicture(groupId);
     img = await (await fetch(pp.imgUrl)).buffer();
   } catch (e) {
-    img = fs.readFileSync('./src/avatar_contact.png');
+    img = fs.readFileSync(path.join(media, 'pictures/avatar_contact.png'));
   }
 let user = number + '@s.whatsapp.net'
   // Crear el mensaje de WhatsApp
@@ -212,7 +241,7 @@ export default handler;
 let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/baileys')).default
 import fetch from 'node-fetch'
 let handler = async (m, { conn, text, participants, usedPrefix, command, args }) => {
-  if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
+  if (!global.db.data.bot[conn.user.jid].settings.restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
   if (!args[0]) throw '*[❗] INGRESE EL USUARIO QUE DESEE INVITAR*'
     
   try {

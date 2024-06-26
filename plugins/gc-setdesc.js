@@ -8,7 +8,7 @@ let handler = async (m, { conn, args, text }) => {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
@@ -28,7 +28,7 @@ await new Promise(resolve => setTimeout(resolve, 15));
 txt += c;
 count++;
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
@@ -41,7 +41,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})

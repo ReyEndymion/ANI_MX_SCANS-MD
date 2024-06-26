@@ -7,21 +7,21 @@ let pp =  await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra
 //let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: paypal, mediaType: 'VIDEO', description: '', title: wm, body: wm, thumbnailUrl: await(await fetch(img)).buffer(), sourceUrl: paypal }}}
 //let dos = [enlace, enlace2]  
 
-let name = global.db.data.users[m.sender].name
-let level = global.db.data.users[m.sender].level
-let exp = global.db.data.users[m.sender].exp
-let paus = global.db.data.users[m.sender].paus
-let kepiting = global.db.data.users[m.sender].kepiting
-let gurita = global.db.data.users[m.sender].gurita
-let cumi = global.db.data.users[m.sender].cumi
-let buntal = global.db.data.users[m.sender].buntal
-let dory = global.db.data.users[m.sender].dory
-let lumba = global.db.data.users[m.sender].lumba
-let lobster = global.db.data.users[m.sender].lobster
-let hiu = global.db.data.users[m.sender].hiu
-let udang = global.db.data.users[m.sender].udang
-let ikan = global.db.data.users[m.sender].ikan
-let orca = global.db.data.users[m.sender].orca
+let name = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].name
+let level = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].level
+let exp = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp
+let paus = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].paus
+let kepiting = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kepiting
+let gurita = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].gurita
+let cumi = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cumi
+let buntal = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].buntal
+let dory = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].dory
+let lumba = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lumba
+let lobster = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lobster
+let hiu = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].hiu
+let udang = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].udang
+let ikan = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].ikan
+let orca = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].orca
 //let wm = global.wm 
 
 let peces = `🌊🌊 𝗣𝗜𝗦𝗖𝗜𝗡𝗔 𝗗𝗘 𝗣𝗘𝗖𝗘𝗦 🌊🌊
@@ -52,7 +52,7 @@ for (const c of peces) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { image: {url: pp}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  

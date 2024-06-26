@@ -17,7 +17,7 @@ console.log('laconsola dice: ' + jid, chat)
       img = await (await fetch(pp)).buffer();
     } catch {
       link = '';
-      img = fs.readFileSync(join(__dirname, '../src/avatar_contact.png'));
+      img = fs.readFileSync(join(media, 'pictures/avatar_contact.png'));
     }
 
     groupInvitations.push({ jid, name, link, img });
@@ -53,10 +53,10 @@ console.log('laconsola dice: ' + jid, chat)
              count++;
          
              if (count % 10 === 0) {
-                 conn.sendPresenceUpdate('composing' , m.chat);
+                await conn.sendPresenceUpdate('composing' , m.chat);
              }
          }
-      conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id });
+      return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id });
     } else {
       let resp = `No puedo enviar el enlace de invitación del grupo *${group.name}* porque no soy administrador.`
       let txt = '';
@@ -67,10 +67,10 @@ console.log('laconsola dice: ' + jid, chat)
           count++;
       
           if (count % 10 === 0) {
-              conn.sendPresenceUpdate('composing' , m.chat);
+             await conn.sendPresenceUpdate('composing' , m.chat);
           }
       }
-          await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
+      return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
     }
   }
 };

@@ -1,75 +1,105 @@
 import { areJidsSameUser } from '@whiskeysockets/baileys'
 let handler = async (m, { conn, text, participants, args, command }) => {
-    let member = participants.map(u => u.id)
-    if(!text) {
-    var sum = member.length
-    } else {
-    var sum = text} 
-    var total = 0
-    var sider = []
-    for(let i = 0; i < sum; i++) {
-    let users = m.isGroup ? participants.find(u => u.id == member[i]) : {}
-    if((typeof global.db.data.users[member[i]] == 'undefined' || global.db.data.users[member[i]].chat == 0) && !users.isAdmin && !users.isSuperAdmin) { 
-    if (typeof global.db.data.users[member[i]] !== 'undefined'){
-    if(global.db.data.users[member[i]].whitelist == false){
-    total++
-    sider.push(member[i])}
-    }else {
-    total++
-    sider.push(member[i])}}}
-    let noHay = `*Este grupo no tiene fantasmas :D.*`
-    let siHay = `*[ELIMINACION DE INACTIVOS]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 FANTASMAS QUE MORIRAN 👻 ]*\n${sider.map(v => '@' + v.replace(/@.+/, '')).join('\n')}\n\n*Nota: Aunque esto no sea 100% acertado, el Bot eliminara la lista mencionada, empezando en 20 segundos y cada 10 segundos eliminara un numero*`
-    if(total == 0) {
-        let txt = '';
-        let count = 0;
-        for (const c of noHay) {
-            await new Promise(resolve => setTimeout(resolve, 5));
-            txt += c;
-            count++;
-            if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
-            }
-        }
-            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-        
-        } else {
-                let txt = '';
-                let count = 0;
-                for (const c of siHay) {
-                    await new Promise(resolve => setTimeout(resolve, 5));
-                    txt += c;
-                    count++;
-                    if (count % 10 === 0) {
-                        conn.sendPresenceUpdate('composing' , m.chat);
-                    }
-                }
-                    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
-               }
-        
-       await delay(1 * 20000)
-       let chat = global.db.data.chats[m.chat]
-       chat.welcome = false
-       try{
-       
-       let users = m.mentionedJid.filter(u => !areJidsSameUser(u, conn.user.id))
-       let kickedGhost = sider.map(u => u.id).filter(v => v !== conn.user.jid)
-       for (let user of users)
-           if (user.endsWith('@s.whatsapp.net') && !(participants.find(v => areJidsSameUser(v.id, user)) || { admin: true }).admin)
-        {
-        let res = await conn.groupParticipantsUpdate(m.chat, [user], 'remove')
-        kickedGhost.concat(res)
-       await delay(1 * 10000)
-       }} finally{
-        chat.welcome = true
-       }
+
+let chat = global.db.data.bot[conn.user.jid].chats.groups[m.chat]
+let resp = '', ghostKick = false
+let participantIds = new Set(participants.map(u => u.id));
+let users = chat.users
+var sum = participants.length
+let adminUsers = participants.filter(p => p.admin === 'admin' || p.admin === 'superadmin').map(p => p.id);
+let botJid = conn.user.jid;
+let groupOwner = (await conn.groupMetadata(m.chat)).owner;
+
+for (let participant of participants) {
+let user = participant.id;
+if (!(user in users)) {
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+msgcount: {
+count: 0,
+time: 0
 }
-    handler.command = /^(kickfantasmas|sacarfantasmas)$/i
-    handler.admin = true
-    handler.botAdmin = true
-    export default handler
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+};
+await global.db.write();
+console.log(`Usuario ${user} inicializado en la base de datos.`);
+} else if ((users[user] && users[user].msgcount && users[user].msgcount.count && users[user].msgcount.time) === undefined) {
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+msgcount: {
+count: 0,
+time: 0
+}
+}
+}
+}
 
-    //desarrollado por https://github.com/ReyEndymion
-    //participa en desactivacion de despedida https://github.com/BrunoSobrino/
-    
+for (let user in users) {
+if (!participantIds.has(user) || typeof users[user] !== 'object' || users[user] === null) {
+delete users[user];
+}
+}
+let usersToKick = [];
+let tags = ''
+for (let usuario in users) {
+let user = users[usuario];
+let tag = usuario.split('@')[0];
 
+if (user && user.msgcount && user.msgcount.count === 0 && usuario !== botJid && usuario !== groupOwner) {
+if (args[0] === 'todos' || !adminUsers.includes(usuario)) {
+usersToKick.push(usuario);
+let count = user.msgcount.count
+tags += `@${tag} con ${count} mensajes\n`;
+}
+}
+}
+
+if (usersToKick.length > 0) {
+const date = new Date(users[m.sender].msgcount.time);
+const day = date.getDate();
+const monthNames = [
+'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+];
+const month = monthNames[date.getMonth()];
+const year = date.getFullYear();
+const formattedDate = `${day} de ${month} de ${year}`;
+resp = `*[ELIMINACION DE INACTIVOS]*\n\n*Grupo: ${await conn.getName(m.chat)}*\n*Participantes: ${sum}*\n\n*[ 👻 FANTASMAS QUE MORIRAN 👻 ]*\n${tags}\n\n*Nota: Esto es 100% acertado y el conteo empezo desde ${formattedDate}, el Bot eliminara la lista mencionada, empezando en 20 segundos y cada 10 segundos eliminara un numero*`
+ghostKick = true
+} else {
+resp = `*Este grupo no tiene fantasmas :D.*`;
+ghostKick = false
+}
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 5));
+txt += c;
+count++;
+if (count % 10 === 0) {
+conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+if (ghostKick) {
+await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+chat.welcome = false;
+await delay(20000);
+txt = ''
+for (let usuario of usersToKick) {
+console.log('KickMentionedANI: ', usuario, conn.user.jid, usuario.includes(conn.user.jid) )
+await conn.groupParticipantsUpdate(m.chat, [usuario], 'remove')
+delete users[usuario];
+await delay(10000);
+}
+chat.welcome = true;
+txt = `La eliminacion fue exitosa`
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+} else {
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+}
+}
+handler.command = /^(kick|sacar)fantasmas$/i
+handler.admin = true
+handler.botAdmin = true
+export default handler
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+//desarrollado totalmente por https://github.com/ReyEndymion
+//participa en desactivacion de despedida https://github.com/BrunoSobrino/

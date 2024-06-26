@@ -1,4 +1,5 @@
 let handler = async (m, { conn, isPrems}) => { //lastmiming
+    let resp, imagen
 const fkontak = {
         "key": {
         "participants":"0@s.whatsapp.net",
@@ -14,7 +15,7 @@ const fkontak = {
         "participant": "0@s.whatsapp.net"
     }
 
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let premium = user.premium  
 let minar = `${pickRandom(['Que pro 😎 has minado',
 '🌟✨ Genial!! Obtienes',
@@ -24,7 +25,7 @@ let minar = `${pickRandom(['Que pro 😎 has minado',
 'Tus Ingresos subiran gracias a que minaste',
 '⛏️⛏️⛏️⛏️⛏️ Minando',
 '🤩 SII!!! AHORA TIENES',
-'La minaria esta de tu lado, por ello obtienes',
+'La Mineria esta de tu lado, por ello obtienes',
 '😻 La suerte de Minar',
 '♻️ Tu Mision se ha cumplido, lograste minar',
 '⛏️ La Mineria te ha beneficiado con',
@@ -32,7 +33,6 @@ let minar = `${pickRandom(['Que pro 😎 has minado',
 '👾 Gracias a que has minado tus ingresos suman',
 'Felicidades!! Ahora tienes','⛏️⛏️⛏️ Obtienes'])}`
 
-let pp = 'https://us.123rf.com/450wm/emojiimage/emojiimage1802/emojiimage180200332/95468325-mont%C3%B3n-de-piedras-preciosas-diamantes-azules-brillantes-concepto-de-joyas-caras-s%C3%ADmbolo-de-riqueza-d.jpg?ver=6'
 
 let kyubi = `${pickRandom([0, 1, 3, 1, 2])}` * 1
 let kyubipremium = `${pickRandom([2, 3, 5, 9, 10, 7])}` * 1
@@ -53,20 +53,35 @@ let limit = `${pickRandom([2, 3, 4, 5, 0, 1, 6, 7, 8, 9, 10])}` * 1
 let limitpremium = `${pickRandom([4, 7, 8, 9, 11, 13, 16, 17, 19, 22, 24, 26, 28, 30])}` * 1
 
 let time = user.lastdiamantes + 900000 //15 min
-if (new Date - user.lastdiamantes < 900000) return await conn.reply(m.chat, `*⏱️ 𝙑𝙪𝙚𝙡𝙫𝙖 𝙚𝙣 ${msToTime(time - new Date())} 𝙥𝙖𝙧𝙖 𝙘𝙤𝙣𝙩𝙞𝙣𝙪𝙖𝙧 𝙢𝙞𝙣𝙖𝙣𝙙𝙤 ${global.rpgshopp.emoticon('limit')}⛏️*\n\n*𝙂𝙚𝙩 𝙗𝙖𝙘𝙠 𝙞𝙣 ${msToTime(time - new Date())} 𝙩𝙤 𝙢𝙞𝙣𝙚 ${global.rpgshopp.emoticon('limit')}⛏️*`, fkontak,  m)
+if (new Date - user.lastdiamantes < 900000) {
+    resp = `*⏱️ 𝙑𝙪𝙚𝙡𝙫𝙖 𝙚𝙣 ${msToTime(time - new Date())} 𝙥𝙖𝙧𝙖 𝙘𝙤𝙣𝙩𝙞𝙣𝙪𝙖𝙧 𝙢𝙞𝙣𝙖𝙣𝙙𝙤 ${global.rpgshopp.emoticon('limit')}⛏️*`
+} else {
 user.limit += premium ? limitpremium : limit  
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
     if (!(reward in user)) continue
     user[reward] += recompensas[reward]
 texto += `+${recompensas[reward]} ${global.rpgshop.emoticon(reward)}\n`}
+imagen = 'https://img.freepik.com/vector-premium/monton-piedras-preciosas-preciosas-diamantes-azules-brillantes-concepto-joyas-caras-simbolo-riqueza-diseno-grafico-juegos-moviles-icono-vector-plano-dibujos-animados_223337-5395.jpg?w=740'
 
-conn.sendHydrated(m.chat, `*${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*\n*${minar}*\n*${limit} ${global.rpgshop.emoticon('limit')}*`,`🍁 𝗕 𝗢 𝗡 𝗢\n` + texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${wm}`, pp, md, '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [
-['𝙈𝙞𝙣𝙖𝙧 𝙀𝙓𝙋 ⚡', `.minar`],
-['𝙈𝙞𝙣𝙖𝙧 𝙂𝙖𝙩𝙖𝘾𝙤𝙞𝙣𝙨 🐈', `.minar2`],
-['𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ | 𝘽𝙖𝙘𝙠 𝙩𝙤 𝙈𝙚𝙣𝙪 ☘️', `.menu`]
-], m,)
+resp = `*${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*\n*${minar}*: *${limit} ${global.rpgshop.emoticon('limit')}*\n*🍁 BONO\n` + texto + `\n\n🎟️ PREMIUM ⇢ ${premium ? '✅' : '❌'}\n${wm}`
+}
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
+if (count % 10 === 0) {
+   await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+if (resp && imagen) {
 user.lastdiamantes = new Date * 1  
+return conn.sendMessage(m.chat, { image: {url: imagen}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+} else {
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+} 
 }
 handler.help = ['minar']
 handler.tags = ['diamantes']

@@ -10,7 +10,7 @@ let name = conn.getName(who)
 //let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: wm, thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
 //let dos = [enlace, enlace2]
 
-let user = global.db.data.users[who]
+let user = global.db.data.bot[conn.user.jid].users[who]
 let premium = user.premium
 const cartera = {
     economia: {
@@ -29,7 +29,8 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 await conn.sendMessage(m.chat, { image: {url: img5}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100},// [['𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 | 𝙄𝙣𝙫𝙚𝙣𝙩𝙤𝙧𝙮 🎒', '/inventario'], ['𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ | 𝘽𝙖𝙘𝙠 𝙩𝙤 𝙈𝙚𝙣𝙪 ☘️', '/menu']] 

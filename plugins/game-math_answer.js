@@ -15,7 +15,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -31,11 +31,11 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-global.db.data.users[m.sender].exp += math.bonus
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += math.bonus
 clearTimeout(global.math[id][3])
 delete global.math[id]
 } else {
@@ -49,7 +49,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -64,7 +64,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -87,7 +87,7 @@ if (m.quoted.id == global.math[id][0].id) {
 let math = global.math[id][1]
 if (m.text == math.result) {
 conn.sendButton(m.chat, `*RESPUESTA CORRECTA!!*\n*HAZ GANADO: ${math.bonus} XP*`, wm, null, [['VOLVER A JUGAR', `/math ${math.mode}`]], m)
-global.db.data.users[m.sender].exp += math.bonus
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += math.bonus
 clearTimeout(global.math[id][3])
 delete global.math[id]
 } else {

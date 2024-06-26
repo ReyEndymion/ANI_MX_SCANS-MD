@@ -1,5 +1,5 @@
 let handler = async (m, { conn, usedPrefix }) => {
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let randomaku1 = `${Math.floor(Math.random() * 5)}`
 let randomaku2 = `${Math.floor(Math.random() * 5)}`
 let randomaku4 = `${Math.floor(Math.random() * 5)}`
@@ -57,106 +57,103 @@ let hsl = `
  *🐐 ${ar4} ${anti4}*			 *🐗 ${ar10} ${anti10}*
  *🐼 ${ar5} ${anti5}*			 *🐖 ${ar11} ${anti11}*
  *🐊 ${ar6} ${anti6}*		    *🐓 ${ar12} ${anti12}*`.trim()
-global.db.data.users[m.sender].banteng += rbrb1
-global.db.data.users[m.sender].harimau += rbrb2
-global.db.data.users[m.sender].gajah += rbrb3
-global.db.data.users[m.sender].kambing += rbrb4
-global.db.data.users[m.sender].panda += rbrb5
-global.db.data.users[m.sender].cocodrilo += rbrb6
-global.db.data.users[m.sender].kerbau += rbrb7
-global.db.data.users[m.sender].sapi += rbrb8
-global.db.data.users[m.sender].monyet += rbrb9
-global.db.data.users[m.sender].babihutan += rbrb10
-global.db.data.users[m.sender].cerdo += rbrb11
-global.db.data.users[m.sender].pollo += rbrb12
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].banteng += rbrb1
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].harimau += rbrb2
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].gajah += rbrb3
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kambing += rbrb4
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].panda += rbrb5
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cocodrilo += rbrb6
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kerbau += rbrb7
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].sapi += rbrb8
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].monyet += rbrb9
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].babihutan += rbrb10
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cerdo += rbrb11
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].pollo += rbrb12
 	
-let time = global.db.data.users[m.sender].lastberburu + 2700000 //45 Minutos
-if (new Date - global.db.data.users[m.sender].lastberburu < 2700000){ 
-    let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara: 
-['🏞️ ANIMALES CAPTURADOS'] usa: *${usedPrefix}kandang*,
-['🎒 INVENTARIO'] usa: *${usedPrefix}inventario*`
+let time = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastberburu + 2700000 //45 Minutos
+if (new Date - global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastberburu < 2700000){ 
+    let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara:\n\n🏞️ ANIMALES CAPTURADOS usa: *${usedPrefix}kandang*\n🎒 INVENTARIO usa: *${usedPrefix}inventario*`
     let txt = '';
-let count = 0;
-for (const c of resp) {
+    let count = 0;
+    for (const c of resp) {
     await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
-setTimeout(() => {
+setTimeout(async () => {
     let txt = '';
-let count = 0;
-for (const c of hsl + '\n\n' + wm ) {
-    new Promise(resolve => setTimeout(resolve, 15));
+    let count = 0;
+    for (const c of hsl + '\n\n' + wm ) {
+    await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 //conn.sendMessage(m.chat, {text: hsl + '\n\n' + wm + '\n\n' + null + '\n\n' + md + '\n\n' +`𝙶𝙸𝚃𝙷𝚄𝙱` + '\n\n' + null + '\n\n' + null}[[null, null]], null)
 }, 20000)
 	        
-setTimeout(() => {
+setTimeout(async () => {
     let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`
     let txt = '';
-let count = 0;
-for (const c of resp) {
-    new Promise(resolve => setTimeout(resolve, 15));
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 //conn.reply(m.chat, txt, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['OBJETIVO FIJADO`${conn.getName(m.sender)} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*` 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, wm, null, null, null, null, null, [
 //[null, null]], null)
 }, 18000)
 
-setTimeout(() => {
+setTimeout(async () => {
     let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    new Promise(resolve => setTimeout(resolve, 15));
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
-
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 //conn.reply(m.chat, resp, null, { mentions: [m.sender]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, wm, null, null, null, null, null, [
 //[null, null]], null)
 }, 15000)
 
-setTimeout(() => {
+setTimeout(async () => {
     let resp = `@${m.sender.split("@s.whatsapp.net")[0]} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    new Promise(resolve => setTimeout(resolve, 15));
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+    await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 //conn.reply(m.chat, resp, m, m.mentionedJid ? { mentions: [m.sender] } : {})
 //conn.sendHydrated(m.chat, `${conn.getName(m.sender)} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`, wm, null, null, null, null, null, [
 //[null, null]], null)

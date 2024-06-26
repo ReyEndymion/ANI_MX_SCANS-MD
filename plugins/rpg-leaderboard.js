@@ -1,5 +1,10 @@
 let handler = async (m, { conn, args, participants }) => {
-let users = Object.entries(global.db.data.users).map(([key, value]) => {
+  if (m.chat.endsWith(userID)) return
+  let chats = global.db.data.bot[conn.user.jid].chats
+  let chat = chats.groups[m.chat] || {}
+ // let users = chat.users || {}
+  //let user = users[m.sender] || {}
+let users = Object.entries(chat.users).map(([key, value]) => {
 return {...value, jid: key}})
 let sortedExp = users.map(toNumber('exp')).sort(sort('exp'))
 let sortedLim = users.map(toNumber('limit')).sort(sort('limit'))
@@ -36,7 +41,7 @@ _Diseño By FG, naturalizacion by ${author}_`.trim()
       count++;
   
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+         await conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
       await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

@@ -1,6 +1,6 @@
 /*
 let handler = async (m, {conn}) => {
-    let chat = global.db.data.chats[m.chat]
+    let chat = global.db.data.bot[conn.user.jid].chats[m.chat]
     let response = ''
     let who = m.mentionedJid[0]? conn.user.jid : global.conn.user.jid
     if (m.isGroup && m.mentionedJid.includes(conn.user.jid)) {
@@ -18,7 +18,7 @@ let handler = async (m, {conn}) => {
           txt += c;
           count++;
           if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing', m.chat);
+           await conn.sendPresenceUpdate('composing', m.chat);
           }
         }
     await conn.sendMessage(m.chat, { text: response.trim(), mentions: conn.parseMention(response) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} );
@@ -30,18 +30,39 @@ handler.command = /^unbanchat$/i
 handler.owner = true
 export default handler
 */
-let handler = async (m, {conn, isROwner}) => {
-global.db.data.chats[m.chat].isBanned = false
-  let resp = '*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*'
+let handler = async (m, {conn, isROwner, isOwner}) => {
+let bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+let chat, users, user, resp
+if (m.chat.endsWith(userID)) {
+chat = privs[m.chat] || {}
+user = privs[m.sender] || {}
+} else if (m.chat.endsWith(groupID)) {
+chat = groups[m.chat] || {}
+users = chat.users || {}
+user = users[m.sender] || {}
+} else return
+
+try {
+if (isROwner || isOwner || conn.user.jid) {
+chat.isBanned = false
+resp = '*[❗INFO❗] ESTE CHAT FUE DESBANEADO CON EXITO*'
+}
+} catch (error) {
+resp = `Error: ${error}`
+}
   let txt = '';
   let count = 0;
+  if (resp === undefined) return
   for (const c of resp) {
       await new Promise(resolve => setTimeout(resolve, 15));
       txt += c;
       count++;
   
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+         await conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
       return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

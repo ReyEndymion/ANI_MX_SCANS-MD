@@ -3,8 +3,36 @@ import uploadImage from '../lib/uploadImage.js'
 let handler = async (m, { conn, text, usedPrefix, command }) => {
 let q = m.quoted ? m.quoted : m
 let mime = (q.msg || q).mimetype || ''
-if (!mime) throw '*[❗] RESPONDA / ETIQUETE A UNA IMAGEN*'
-if (!/image\/(jpe?g|png)/.test(mime)) throw `*[❗] EL TIPO DE ARC𝙷IVO ${mime} NO ES CORRECTO, RECUERDE QUE DEBE SER IMAGEN, JPG, JPEG O PNG*`
+if (!mime) {
+    let resp = '*[❗] RESPONDA / ETIQUETE A UNA IMAGEN*'
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 1));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+    await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
+if (!/image\/(jpe?g|png)/.test(mime)) {
+    let resp = `*[❗] EL TIPO DE ARC𝙷IVO ${mime} NO ES CORRECTO, RECUERDE QUE DEBE SER IMAGEN, JPG, JPEG O PNG*`
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 1));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+    await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
 if (!text){ 
     let resp = `*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
 —◉ #phmaker (opcion) <responder / etiquetar a una imagen>
@@ -447,12 +475,26 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
-m.reply('*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*')
+{
+let resp ='*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*'
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+
+let q = conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
 let img = await q.download?.()
 let url = await uploadImage(img)
 let images = `https://violetics.pw/api/photomaker/${encodeURIComponent(text)}?apikey=beta&image=${encodeURIComponent(url)}`
@@ -465,11 +507,10 @@ for (const c of caption) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-
-conn.sendMessage(m.chat, {image: {url: images}, caption: caption + '\n\n' + wm, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendMessage(m.chat, {image: {url: images}, caption: caption + '\n\n' + wm, mentions: conn.parseMention(txt)}, {quoted: q, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.command = /^(phmaker|phmarker|phmarke|phmake)$/i
 export default handler

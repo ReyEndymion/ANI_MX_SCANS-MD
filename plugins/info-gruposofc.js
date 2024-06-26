@@ -5,7 +5,7 @@ import fs from 'fs'
 let handler = async (m, { conn, args }, jid) => {
 
 let info = `*Hola 👋🏻, unete a los grupos oficiales para pasar un rato agradable usando el Bot o platicando con la familia de*\n*🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂*\n*ㄒㄖᎶ乇ㄒ卄乇尺🍜⃢⃟ᭀᬽ*\ny\n*🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂*\n千ㄖ尺乇ᐯ乇尺🍜⃢⃟ᭀᬽ*`.trim()
-let link1 = 'https://chat.whatsapp.com/L4VRAzaYc11D4LSpt8rB9W'
+let link1 = 'https://chat.whatsapp.com/DaToDy2AZgTJ0Xnai2TRog'
 let link2 = 'https://chat.whatsapp.com/BW4PAJNxiBYIfVS8RpKNbp'
 let link3 = 'https://chat.whatsapp.com/JSduqw7R9Oa7iXrdryrBCu'
 let txt = '';
@@ -16,7 +16,7 @@ for (const c of info + link1 + info + link2 + info + link3) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 await delay(1 * 1000)

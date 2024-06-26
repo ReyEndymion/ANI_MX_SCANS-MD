@@ -1,10 +1,22 @@
-let handler = m => m
-handler.before = async function (m, {conn}) {
-    let chat = global.db.data.chats[m.chat]
-	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender    
+export async function before(m, {conn}) {
+  let bot = global.db.data.bot[conn.user.jid] || {}
+  let chats = bot.chats || {}
+  let settings = bot.settings || {}
+  let privs, groups, chat, users, user
+  if (m.chat.endsWith(userID)) {
+  privs = chats.privs || {}
+  chat = privs[m.chat] || {}
+  } else if (m.chat.endsWith(groupID)) {
+  groups = chats.groups || {}
+  chat = groups[m.chat] || {}
+  users = chat.users || {}
+  user = users[m.sender] || {}
+  } else return
 
+	let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender    
+    let resp
     if (/aclaración$/i.test(m.text) && chat.asistente && !chat.isBanned) {
- let resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
+    resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
       *ㄖㄒ卂Ҡ凵丂*  
       *ㄒㄖᎶ乇ㄒ卄乇尺.*
       *Ser Otaku en Latinoamérica no es lo mismo que ser un Otaku nipón. Quien quiera estar en el grupo principal lo único que se les pide es lo siguiente:*
@@ -35,23 +47,10 @@ handler.before = async function (m, {conn}) {
       
       *También pueden hacer 10 mensajes a la semana para evitar ser eliminados... En algunos grupos el mínimo son 30 mensajes a la semana además de estar obligados a compartir contenido así que les conviene la propuesta de este grupo...*
       🚨🚨🚨🚨🚨🚨🚨🚨🚨`.trim()
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve , 10));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        this.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-
       } 
 
     if (/^ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
-let resp = 	
+    resp = 	
 `*ɴᴏᴍʙʀᴇ*:
 
 
@@ -77,21 +76,9 @@ let resp =
       
       
       **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
-      let txt = '';
-      let count = 0;
-      for (const c of resp) {
-          await new Promise(resolve => setTimeout(resolve , 10));
-          txt += c;
-          count++;
-      
-          if (count % 10 === 0) {
-              this.sendPresenceUpdate('composing' , m.chat);
-          }
-      }
-          await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );      
       } 
-      if (/^Moonficha| Sailorficha|moon ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
- let resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
+      if (/^Moonficha|Sailorficha|moon ficha$/i.test(m.text) && chat.asistente && !chat.isBanned) {
+    resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ  ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
       
       
       1.💜 *ɴᴏᴍʙʀᴇ* 💜:
@@ -116,38 +103,25 @@ let resp =
       
       
       8.💜 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*💜:`.trim()
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve , 10));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-        this.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-
       } 
     
     if (/^No gracias$/i.test(m.text) && chat.asistente && !chat.isBanned) {
-      let resp = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
+      resp = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
     
+    }   
+    if (resp == undefined) return
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 10));
     txt += c;
     count++;
 
     if (count % 10 === 0) {
-        this.sendPresenceUpdate('composing' , m.chat);
+        conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    await this.sendMessage(m.chat, { text: txt.trim(), mentions: this.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
-    }   
    
 }
-export default handler

@@ -1,10 +1,9 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = async (m, { conn, usedPrefix, participants }) => {
      let ow = global.owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`).join` y `
-     let me = global.me.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
 var doc = [`pdf`,`zip`,`vnd.openxmlformats-officedocument.presentationml.presentation`,`vnd.openxmlformats-officedocument.spreadsheetml.sheet`,`vnd.openxmlformats-officedocument.wordprocessingml.document`]
 var document = doc[Math.floor(Math.random() * doc.length)]    
-let text = `Hola @${m.sender.split`@`[0]} soy ${me}
+let text = `Hola @${m.sender.split`@`[0]} soy @${conn.user.jid.split`@`[0]}
 *—◉ EL NUMERO DE MI OWNER ES: ${ow}*
 `.trim()   
 let txt = '';
@@ -19,7 +18,7 @@ for (const c of text) {
 }
 const documentUrl = 'https://www.facebook.com/groups/otakustogether';
   const mimetype = `application/${document}`;
-  const fileName = namerepre;
+  const fileName = namerepream;
   const thumbnailUrl = imagen1;
   const sourceUrl = 'https://www.facebook.com/groups/otakustogether';
 
@@ -125,7 +124,7 @@ const templateButtons = [
   {index: 1, urlButton: {displayText: `⭐GitHub de ${igfg} !`, url: animxscansmd}}, 
 ]
 const templateMessage = {
-    text: gt,
+    text: gtam,
     footer: `Aqui esten nuestras paginas oficiales y de descarga del repositorio:`,
     mentions: conn.parseMention(text),
     templateButtons: templateButtons,

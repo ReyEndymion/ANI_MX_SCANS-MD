@@ -15,18 +15,18 @@ let handler = async (m, { conn, usedPrefix}) => {
 	"participant": "0@s.whatsapp.net"
 }
   
-	let banteng = global.db.data.users[m.sender].banteng
-	let harimau = global.db.data.users[m.sender].harimau
-	let gajah = global.db.data.users[m.sender].gajah
-	let kambing = global.db.data.users[m.sender].kambing
-	let panda = global.db.data.users[m.sender].panda
-	let cocodrilo = global.db.data.users[m.sender].cocodrilo
-	let kerbau = global.db.data.users[m.sender].kerbau
-	let sapi = global.db.data.users[m.sender].sapi
-	let monyet = global.db.data.users[m.sender].monyet
-	let babihutan = global.db.data.users[m.sender].babihutan
-	let cerdo = global.db.data.users[m.sender].cerdo
-	let pollo = global.db.data.users[m.sender].pollo
+	let banteng = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].banteng
+	let harimau = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].harimau
+	let gajah = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].gajah
+	let kambing = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kambing
+	let panda = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].panda
+	let cocodrilo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cocodrilo
+	let kerbau = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kerbau
+	let sapi = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].sapi
+	let monyet = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].monyet
+	let babihutan = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].babihutan
+	let cerdo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cerdo
+	let pollo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].pollo
 
 	let ndy = `
 *${htki} 𝘼𝙉𝙄𝙈𝘼𝙇𝙀𝙎 ${htka}*

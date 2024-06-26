@@ -29,7 +29,7 @@ for (const c of texto1+'\n'+buttons+'\n'+buttonMessage) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
@@ -52,5 +52,5 @@ throw '*[❗INFO❗] ERROR, POR FAVOR VUELAVA A INTENTARLO*'}
 
 handler.help = ['playdoc', 'play3'].map(v => v + ' <pencarian>')
 handler.tags = ['downloader']
-handler.command = /^play3|playdoc?$/i
+handler.command = /^playdoc$/i
 export default handler

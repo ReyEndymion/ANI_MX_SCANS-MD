@@ -1,11 +1,11 @@
 /*const diamantetk = 15
 let handler = async (m, { conn, command, args, usedPrefix }) => {
   let count = command.replace(/^buy3|token|tokens/i, '')
-  count = count ? /all/i.test(count) ? Math.floor(global.db.data.users[m.sender].limit / diamantetk) : parseInt(count) : args[0] ? parseInt(args[0]) : 1
+  count = count ? /all/i.test(count) ? Math.floor(global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].limit / diamantetk) : parseInt(count) : args[0] ? parseInt(args[0]) : 1
   count = Math.max(1, count)
-  if (global.db.data.users[m.sender].limit >= diamantetk * count) {
-    global.db.data.users[m.sender].limit -= diamantetk * count
-    global.db.data.users[m.sender].joincount += count
+  if (global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].limit >= diamantetk * count) {
+    global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].limit -= diamantetk * count
+    global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].joincount += count
     //conn.reply(m.chat, `
     let gata = `
 ╭━━〔 *DATOS DE COMPRA* 〕━━⬣

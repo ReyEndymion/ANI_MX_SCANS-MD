@@ -13,7 +13,7 @@ let limit = dmt
 let pjk = Math.ceil(dmt * pajak)
 limit += pjk
 if (limit < 1) throw '*[❗𝐈𝐍𝐅𝐎❗] EL NUMERO MINIMO DE DIAMANTES PARA AÑADIR ES 𝟷*'
-let users = global.db.data.users
+let users = global.db.data.bot[conn.user.jid].users
 users[who].limit += dmt
 m.reply(`≡ *💎 AÑADIDO*
 ┌──────────────

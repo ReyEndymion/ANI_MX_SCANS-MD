@@ -1,11 +1,11 @@
 /*const xpperlimit = 330
 let handler = async (m, { conn, command, args, usedPrefix }) => {
   let count = command.replace(/^buy2/i, '')
-  count = count ? /all/i.test(count) ? Math.floor(global.db.data.users[m.sender].money / xpperlimit) : parseInt(count) : args[0] ? parseInt(args[0]) : 1
+  count = count ? /all/i.test(count) ? Math.floor(global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].money / xpperlimit) : parseInt(count) : args[0] ? parseInt(args[0]) : 1
   count = Math.max(1, count)
-  if (global.db.data.users[m.sender].money >= xpperlimit * count) {
-    global.db.data.users[m.sender].money -= xpperlimit * count
-    global.db.data.users[m.sender].limit += count
+  if (global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].money >= xpperlimit * count) {
+    global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].money -= xpperlimit * count
+    global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].limit += count
     //conn.reply(m.chat, `
     let gata = `
 ╭━━〔 *DATOS DE COMPRA* 〕━━⬣

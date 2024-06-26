@@ -14,7 +14,7 @@ if (!(id in this.tekateki)){
         txt += c;
         count++;
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
        return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -24,7 +24,7 @@ let json = JSON.parse(JSON.stringify(this.tekateki[id][1]))
 let userResponse = m.text.toLowerCase();
 
 if (userResponse.includes(json.response.toLowerCase().trim())) {
-global.db.data.users[m.sender].exp += this.tekateki[id][2]
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += this.tekateki[id][2]
 let resp = `*Respuesta correcta!*\n+${this.tekateki[id][2]} Exp`
 let txt = '';
 let count = 0;
@@ -34,7 +34,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -50,7 +50,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -63,7 +63,7 @@ for (const c of resp) {
         txt += c;
         count++;
         if (count % 10 === 0) {
-            conn.sendPresenceUpdate('composing' , m.chat);
+           await conn.sendPresenceUpdate('composing' , m.chat);
         }
     }
         await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

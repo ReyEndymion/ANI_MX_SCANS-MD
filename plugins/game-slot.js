@@ -9,7 +9,7 @@ let fa = `
 if (!args[0]) throw fa
 if (isNaN(args[0])) throw fa
 let apuesta = parseInt(args[0])
-let users = global.db.data.users[m.sender]
+let users = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let time = users.lastslot + 10000
 if (new Date - users.lastslot < 10000) throw `*⏳ ESPERE ${msToTime(time - new Date())} PARA VOLVER A APOSTAR*`
 if (apuesta < 100) throw '*[❗] EL MINIMO PARA APOSTAR ES DE 100 XP*'
@@ -77,4 +77,3 @@ seconds = (seconds < 10) ? "0" + seconds : seconds
 
 return minutes + " m " + seconds + " s "
 }
-

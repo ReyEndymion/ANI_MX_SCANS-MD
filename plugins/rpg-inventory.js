@@ -128,12 +128,17 @@ const inventory = {
   }
 }
 let handler = async (m, { conn, args, command, jid, text, usedPrefix }) => {
-	
+  if (m.chat.endsWith(userID)) return
+  let chats = global.db.data.bot[conn.user.jid].chats
+  let chat = chats.groups[m.chat] || {}
+  let users = chat.users || {}
+  let user = users[m.sender] || {}
+    
 //let imgr = flaaa.getRandom()
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let name = await conn.getName(who)
-if (typeof global.db.data.users[who] == "Sin Datos | No Dates") {
-      global.db.data.users[who] = {
+if (typeof users[who] == "Sin Datos | No Dates") {
+      users[who] = {
         exp: 0,
         limit: 20,
         lastclaim: 0,
@@ -156,14 +161,14 @@ if (typeof global.db.data.users[who] == "Sin Datos | No Dates") {
 if (!args[0]) {
 let resp =	`✨ *AVERIGUA EL INVENTARIO QUE TIENES*
 
-${comienzo}𝗜𝗡𝗩𝗘𝗡𝗧𝗔𝗥𝗜𝗢${fin}
+${comienzo}INVENTARIO${fin}
 
 "დ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘈𝘙𝘛𝘐𝘊𝘜𝘓𝘖𝘚 : 𝘐𝘛𝘌𝘔𝘚" usa: ${ usedPrefix + command } ' 1'}
 "დ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘊𝘖𝘔𝘉𝘈𝘛𝘌 : 𝘊𝘖𝘔𝘉𝘈𝘛" usa: ${usedPrefix + command} + ' 2'}
 "დ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘔𝘐𝘚𝘐𝘖𝘕𝘌𝘚 : 𝘔𝘐𝘚𝘚𝘐𝘖𝘕" usa: ${usedPrefix + command} + ' 3'}
 "დ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘊𝘖𝘔𝘗𝘓𝘌𝘛𝘖 : 𝘚𝘜𝘗𝘗𝘓𝘐𝘌𝘚" usa: ${usedPrefix + command} + ' 4'
 
-${comienzo} 𝗔𝗟𝗜𝗠𝗘𝗡𝗧𝗢𝗦 𝗬 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦 ${fin}
+${comienzo} ALIMENTOS Y ANIMALES ${fin}
 
 "ღ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘈𝘓𝘐𝘔𝘌𝘕𝘛𝘖𝘚 𝘠 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚 : 𝘍𝘖𝘖𝘋" usa: ${usedPrefix}alimentos
 {title: "ღ 𝘐𝘕𝘝𝘌𝘕𝘛𝘈𝘙𝘐𝘖 - 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚 𝘈𝘛𝘙𝘈𝘗𝘈𝘋𝘖𝘚 : HUNT" usa: ${usedPrefix}animales`
@@ -177,7 +182,7 @@ const listMessage = {
   sections
 }
 */
-let bottime = `${name} 𝗧𝗜𝗠𝗘: ${moment.tz('America/Bogota').format('HH:mm:ss')}`//America/Los_Angeles
+let bottime = `${name} TIME: ${moment.tz('America/Bogota').format('HH:mm:ss')}`//America/Los_Angeles
 let ftroli = { key: { remoteJid: 'status@broadcast', participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 99, status: 1, surface: 1, message: wm, orderTitle: wm, sellerJid: '0@s.whatsapp.net' } } }
 let fgif = {
             key: {
@@ -189,7 +194,7 @@ let fgif = {
                         'seconds': '999999999', 
                         'gifPlayback': 'true', 
                         'caption': bottime,
-                        'jpegThumbnail': imagen2
+                        'jpegThumbnail': imagen2am
                                }
                               }
                              }
@@ -215,7 +220,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -224,7 +229,7 @@ for (const c of resp) {
 
 if (args[0] == '1') { // Inventario 1
 	
-let member = global.db.data.users[m.sender]
+let member = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let healt = member.health
 let level = member.level
 let rol = member.role
@@ -236,21 +241,21 @@ let token = member.joincount
 let dia = member.limit
 let tiketm = member.healtmonster
 
-    let sortedmoney = Object.entries(global.db.data.users).sort((a, b) => b[1].money - a[1].money)
-    let sortedlevel = Object.entries(global.db.data.users).sort((a, b) => b[1].level - a[1].level)
-    let sorteddiamond = Object.entries(global.db.data.users).sort((a, b) => b[1].diamond - a[1].diamond)
-    let sortedpotion = Object.entries(global.db.data.users).sort((a, b) => b[1].potion - a[1].potion)
-    let sortedsampah = Object.entries(global.db.data.users).sort((a, b) => b[1].sampah - a[1].sampah)
-    let sortedmakananpet = Object.entries(global.db.data.users).sort((a, b) => b[1].makananpet - a[1].makananpet)
-    let sortedbatu = Object.entries(global.db.data.users).sort((a, b) => b[1].batu - a[1].batu)
-    let sortediron = Object.entries(global.db.data.users).sort((a, b) => b[1].iron - a[1].iron)
-    let sortedkayu = Object.entries(global.db.data.users).sort((a, b) => b[1].kayu - a[1].kayu)
-    let sortedstring = Object.entries(global.db.data.users).sort((a, b) => b[1].string - a[1].string)
-    let sortedcommon = Object.entries(global.db.data.users).sort((a, b) => b[1].common - a[1].common)
-    let sorteduncoommon = Object.entries(global.db.data.users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
-    let sortedmythic = Object.entries(global.db.data.users).sort((a, b) => b[1].mythic - a[1].mythic)
-    let sortedlegendary = Object.entries(global.db.data.users).sort((a, b) => b[1].legendary - a[1].legendary)
-    let sortedpet = Object.entries(global.db.data.users).sort((a, b) => b[1].pet - a[1].pet)
+    let sortedmoney = Object.entries(users).sort((a, b) => b[1].money - a[1].money)
+    let sortedlevel = Object.entries(users).sort((a, b) => b[1].level - a[1].level)
+    let sorteddiamond = Object.entries(users).sort((a, b) => b[1].diamond - a[1].diamond)
+    let sortedpotion = Object.entries(users).sort((a, b) => b[1].potion - a[1].potion)
+    let sortedsampah = Object.entries(users).sort((a, b) => b[1].sampah - a[1].sampah)
+    let sortedmakananpet = Object.entries(users).sort((a, b) => b[1].makananpet - a[1].makananpet)
+    let sortedbatu = Object.entries(users).sort((a, b) => b[1].batu - a[1].batu)
+    let sortediron = Object.entries(users).sort((a, b) => b[1].iron - a[1].iron)
+    let sortedkayu = Object.entries(users).sort((a, b) => b[1].kayu - a[1].kayu)
+    let sortedstring = Object.entries(users).sort((a, b) => b[1].string - a[1].string)
+    let sortedcommon = Object.entries(users).sort((a, b) => b[1].common - a[1].common)
+    let sorteduncoommon = Object.entries(users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
+    let sortedmythic = Object.entries(users).sort((a, b) => b[1].mythic - a[1].mythic)
+    let sortedlegendary = Object.entries(users).sort((a, b) => b[1].legendary - a[1].legendary)
+    let sortedpet = Object.entries(users).sort((a, b) => b[1].pet - a[1].pet)
     let usersmoney = sortedmoney.map(v => v[0])
     let userslevel = sortedlevel.map(v => v[0])
     let usersdiamond = sorteddiamond.map(v => v[0])
@@ -268,13 +273,13 @@ let tiketm = member.healtmonster
     let userspet = sortedpet.map(v => v[0])
     
     let { min, max } = xpRange(level, global.multiplier)
-    let pareja = global.db.data.users[m.sender].pasangan
+    let pareja = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].pasangan
 	
 let str = `
 🏷️ *INVENTARIO | INVENTORY* 
 👤» *${name}* ( @${who.split("@")[0]} )\n
 ╭━━━━━━━━━⬣
-┃ *𝗜𝗡𝗩𝗘𝗡𝗧𝗔𝗥𝗜𝗢 𝗗𝗘 𝗔𝗥𝗧𝗜𝗖𝗨𝗟𝗢𝗦* 
+┃ *INVENTARIO DE ARTICULOS* 
 ┃ *𝙄𝙏𝙀𝙈 𝙄𝙉𝙑𝙀𝙉𝙏𝙊𝙍𝙔*
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpg.emoticon('health')} » ${healt}* 
@@ -289,8 +294,8 @@ let str = `
 ┃ 🚷 *Baneado(a) : Banned » No*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗣𝗥𝗢𝗗𝗨𝗖𝗧𝗢𝗦 𝗩𝗔𝗟𝗜𝗢𝗦𝗢𝗦
-┃ 𝗩𝗔𝗟𝗨𝗔𝗕𝗟𝗘 𝗣𝗥𝗢𝗗𝗨𝗖𝗧𝗦
+┃ PRODUCTOS VALIOSOS
+┃ VALUABLE PRODUCTS
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ ${rpgg.emoticon('exp')} *Exp » ${exp}*
 ┃ ${rpgg.emoticon('limit')} *Diamante : Diamond » ${dia}*
@@ -307,8 +312,8 @@ let str = `
 ┃ 📉 *Gastos : Expg » ${member.expg}*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗦𝗨𝗣𝗘𝗥𝗩𝗜𝗩𝗘𝗡𝗖𝗜𝗔
-┃ 𝗦𝗨𝗥𝗩𝗜𝗩𝗔𝗟 𝗜𝗧𝗘𝗠
+┃ SUPERVIVENCIA
+┃ SURVIVAL ITEM
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('potion')} » ${member.potion}*
 ┃ *${rpgshop.emoticon('aqua')} » ${member.aqua}*
@@ -324,8 +329,8 @@ let str = `
 ┃ *${rpgshop.emoticon('kardus')} » ${member.kardus}*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗢𝗕𝗝𝗘𝗧𝗢𝗦 𝗠𝗜𝗦𝗧𝗘𝗥𝗜𝗢𝗦𝗢𝗦
-┃ 𝗠𝗬𝗦𝗧𝗘𝗥𝗜𝗢𝗨𝗦 𝗢𝗕𝗝𝗘𝗖𝗧𝗦
+┃ OBJETOS MISTERIOSOS
+┃ MYSTERIOUS OBJECTS
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('eleksirb')} » ${member.eleksirb}*
 ┃ *${rpgshop.emoticon('emasbatang')} » ${member.emasbatang}*
@@ -381,7 +386,7 @@ const fkontak = {
 	},
 	"participant": "0@s.whatsapp.net"
 }
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${member.premium ? "✅": "❌"}*\n${wm}` + str  + `Inventario` + `🤺 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘾𝙤𝙢𝙗𝙖𝙩𝙚 => ${usedPrefix}inventario 2\n🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 => ${usedPrefix}adventure\n💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂 => ${usedPrefix}rpg`
+let resp = `*PREMIUM ${member.premium ? "✅": "❌"}*\n${wm}` + str  + `Inventario` + `🤺 _Inventario de combate_ => ${usedPrefix}inventario 2\n🏕️ Aventurar => ${usedPrefix}adventure\n💗 _Menu Aventura | RPG_ => ${usedPrefix}rpg`
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -390,16 +395,16 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 //conn.reply(m.chat, str, m)
-//await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${member.premium ? "✅": "❌"}*\n${wm}`, str, imgr + `Inventario : Inventory`, [[`🤺 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘾𝙤𝙢𝙗𝙖𝙩𝙚`, `${usedPrefix}inventario 2`],[`🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`], ['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(str) })
+//await conn.sendButton(m.chat, `*PREMIUM ${member.premium ? "✅": "❌"}*\n${wm}`, str, imgr + `Inventario : Inventory`, [[`🤺 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘾𝙤𝙢𝙗𝙖𝙩𝙚`, `${usedPrefix}inventario 2`],[`🏕️ Aventurar | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`], ['💗 _Menu Aventura | RPG_', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(str) })
 	
 } else if (args[0] == '2') { // Inventario 2
 
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let healt = user.health
 
 let pickaxe = user.pickaxe
@@ -455,10 +460,10 @@ const cooldowns = Object.entries(inventory.cooldowns).map(([cd, { name, time }])
 	
  const caption = `
 👤» *@${who.split("@")[0]}* 
-🛣️ 𝗘𝗦𝗧𝗥𝗔𝗧𝗘𝗚𝗜𝗔𝗦 | 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦
+🛣️ ESTRATEGIAS | ANIMALES
 
 ╭━━━━━━━━━⬣
-┃ *𝗘𝗦𝗧𝗔𝗗𝗢 𝗗𝗘 𝗖𝗢𝗠𝗕𝗔𝗧𝗘*
+┃ *ESTADO DE COMBATE*
 ┃
 ┃ *${rpg.emoticon('health')}* 
 ┃ *» ${healt}*
@@ -504,7 +509,7 @@ const cooldowns = Object.entries(inventory.cooldowns).map(([cd, { name, time }])
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
 ╭━━━━━━━━━⬣
-┃ *𝗖𝗔𝗝𝗔𝗦 𝗘𝗡𝗖𝗢𝗡𝗧𝗥𝗔𝗗𝗔𝗦*
+┃ *CAJAS ENCONTRADAS*
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpgshop.emoticon('common')}*
 ┃ *» ${user.common}*
@@ -529,7 +534,7 @@ const cooldowns = Object.entries(inventory.cooldowns).map(([cd, { name, time }])
 ╰━━━━━━━━━⬣
 
 ╭━━━━━━━━━⬣
-┃ *𝗠𝗔𝗦𝗖𝗢𝗧𝗔𝗦*
+┃ *MASCOTAS*
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpgshop.emoticon('kuda')}*
 ┃ *${kuda == 0 ? 'No tengo Mascota : I do not have pet' : '' || kuda == 1 ? 'Nivel | Level ✦ 1' : '' || kuda == 2 ? 'Nivel | Level ✦ 2' : '' || kuda == 3 ? 'Nivel | Level ✦ 3' : '' || kuda == 4 ? 'Nivel | Level ✦ 4' : '' || kuda == 5 ? 'Nivel | Level ✦ 5 ǁ MAX' : ''}*
@@ -643,8 +648,8 @@ const fkontak = {
 	},
 	"participant": "0@s.whatsapp.net"
 }
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}\n`+ caption + '\n' + 'Inventario'+ '\n' + `⚜️ 𝙇𝙞𝙨𝙩𝙖 𝙙𝙚 𝙈𝙞𝙨𝙞𝙤𝙣𝙚𝙨` + '\n' + `${usedPrefix}inventario 3`+ '\n' + `🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧`+ '\n' + `${usedPrefix}adventure`+ '\n' + '💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂'+ '\n' +`${usedPrefix}rpg`
-//await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}`, caption, imgr + 'Inventario : Inventory', [[`⚜️ 𝙇𝙞𝙨𝙩𝙖 𝙙𝙚 𝙈𝙞𝙨𝙞𝙤𝙣𝙚𝙨 | 𝙈𝙞𝙨𝙨𝙞𝙤𝙣𝙨`, `${usedPrefix}inventario 3`], [`🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`], ['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(caption) })
+let resp = `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}\n`+ caption + '\n' + 'Inventario'+ '\n' + `⚜️ 𝙇𝙞𝙨𝙩𝙖 𝙙𝙚 𝙈𝙞𝙨𝙞𝙤𝙣𝙚𝙨` + '\n' + `${usedPrefix}inventario 3`+ '\n' + `🏕️ Aventurar`+ '\n' + `${usedPrefix}adventure`+ '\n' + '💗 _Menu Aventura | RPG_'+ '\n' +`${usedPrefix}rpg`
+//await conn.sendButton(m.chat, `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}`, caption, imgr + 'Inventario : Inventory', [[`⚜️ 𝙇𝙞𝙨𝙩𝙖 𝙙𝙚 𝙈𝙞𝙨𝙞𝙤𝙣𝙚𝙨 | 𝙈𝙞𝙨𝙨𝙞𝙤𝙣𝙨`, `${usedPrefix}inventario 3`], [`🏕️ Aventurar | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`], ['💗 _Menu Aventura | RPG_', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(caption) })
 	
 let txt = '';
 let count = 0;
@@ -654,15 +659,15 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else if (args[0] == '3') { // Inventario 3
 
-let member = global.db.data.users[m.sender]
-let user = global.db.data.users[m.sender]
-let usuario = global.db.data.users[m.sender]
+let member = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let usuario = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 
 let healt = member.health
 //let level = member.level
@@ -675,23 +680,23 @@ let token = member.joincount
 let dia = member.limit
 let tiketm = member.healtmonster
 
-let sortedmoney = Object.entries(global.db.data.users).sort((a, b) => b[1].money - a[1].money)
-    let sortedlevel = Object.entries(global.db.data.users).sort((a, b) => b[1].level - a[1].level)
-    let sorteddiamond = Object.entries(global.db.data.users).sort((a, b) => b[1].diamond - a[1].diamond)
-    let sortedpotion = Object.entries(global.db.data.users).sort((a, b) => b[1].potion - a[1].potion)
-    let sortedsampah = Object.entries(global.db.data.users).sort((a, b) => b[1].sampah - a[1].sampah)
-    let sortedmakananpet = Object.entries(global.db.data.users).sort((a, b) => b[1].makananpet - a[1].makananpet)
-    let sortedbatu = Object.entries(global.db.data.users).sort((a, b) => b[1].batu - a[1].batu)
-    let sortediron = Object.entries(global.db.data.users).sort((a, b) => b[1].iron - a[1].iron)
-    let sortedkayu = Object.entries(global.db.data.users).sort((a, b) => b[1].kayu - a[1].kayu)
-    let sortedstring = Object.entries(global.db.data.users).sort((a, b) => b[1].string - a[1].string)
-    let sortedcommon = Object.entries(global.db.data.users).sort((a, b) => b[1].common - a[1].common)
-    let sorteduncoommon = Object.entries(global.db.data.users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
-    let sortedmythic = Object.entries(global.db.data.users).sort((a, b) => b[1].mythic - a[1].mythic)
-    let sortedlegendary = Object.entries(global.db.data.users).sort((a, b) => b[1].legendary - a[1].legendary)
-    let sortedpet = Object.entries(global.db.data.users).sort((a, b) => b[1].pet - a[1].pet)
-    let sortedgold = Object.entries(global.db.data.users).sort((a, b) => b[1].gold - a[1].gold)
-    let sortedarlok = Object.entries(global.db.data.users).sort((a, b) => b[1].arlok - a[1].arlok)
+let sortedmoney = Object.entries(users).sort((a, b) => b[1].money - a[1].money)
+    let sortedlevel = Object.entries(users).sort((a, b) => b[1].level - a[1].level)
+    let sorteddiamond = Object.entries(users).sort((a, b) => b[1].diamond - a[1].diamond)
+    let sortedpotion = Object.entries(users).sort((a, b) => b[1].potion - a[1].potion)
+    let sortedsampah = Object.entries(users).sort((a, b) => b[1].sampah - a[1].sampah)
+    let sortedmakananpet = Object.entries(users).sort((a, b) => b[1].makananpet - a[1].makananpet)
+    let sortedbatu = Object.entries(users).sort((a, b) => b[1].batu - a[1].batu)
+    let sortediron = Object.entries(users).sort((a, b) => b[1].iron - a[1].iron)
+    let sortedkayu = Object.entries(users).sort((a, b) => b[1].kayu - a[1].kayu)
+    let sortedstring = Object.entries(users).sort((a, b) => b[1].string - a[1].string)
+    let sortedcommon = Object.entries(users).sort((a, b) => b[1].common - a[1].common)
+    let sorteduncoommon = Object.entries(users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
+    let sortedmythic = Object.entries(users).sort((a, b) => b[1].mythic - a[1].mythic)
+    let sortedlegendary = Object.entries(users).sort((a, b) => b[1].legendary - a[1].legendary)
+    let sortedpet = Object.entries(users).sort((a, b) => b[1].pet - a[1].pet)
+    let sortedgold = Object.entries(users).sort((a, b) => b[1].gold - a[1].gold)
+    let sortedarlok = Object.entries(users).sort((a, b) => b[1].arlok - a[1].arlok)
     
     let usersmoney = sortedmoney.map(v => v[0])
     let userslevel = sortedlevel.map(v => v[0])
@@ -814,10 +819,10 @@ let semillasdeplatano = user.semillasdeplatano
     let pepe = flaaa.getRandom()
     let pp = pepe + 'Inventario : Inventory'
     let str = `
-🎒 *𝙄𝙉𝙑𝙀𝙉𝙏𝘼𝙍𝙄𝙊 𝙏𝙊𝙏𝘼𝙇*
+🎒 *_INVENTARIO TOTAL_*
 ${readMore}
 ╭━━━━━━━━━⬣
-┃ *𝗜𝗡𝗩𝗘𝗡𝗧𝗔𝗥𝗜𝗢 𝗗𝗘 𝗔𝗥𝗧𝗜𝗖𝗨𝗟𝗢𝗦* 
+┃ *INVENTARIO DE ARTICULOS* 
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpg.emoticon('health')} » ${healt}* 
 ┃ ${rpgg.emoticon('level')} *Nivel : Level » ${level}*
@@ -830,7 +835,7 @@ ${readMore}
 ┃ 🚷 *Baneado(a) : Banned » No*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗣𝗥𝗢𝗗𝗨𝗖𝗧𝗢𝗦 𝗩𝗔𝗟𝗜𝗢𝗦𝗢𝗦
+┃ PRODUCTOS VALIOSOS
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ ${rpgg.emoticon('exp')} *Exp » ${exp}*
 ┃ ${rpgg.emoticon('limit')} *Diamante : Diamond » ${dia}*
@@ -847,7 +852,7 @@ ${readMore}
 ┃ 📉 *Gastos : Expg » ${member.expg}*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗦𝗨𝗣𝗘𝗥𝗩𝗜𝗩𝗘𝗡𝗖𝗜𝗔
+┃ SUPERVIVENCIA
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('potion')} » ${member.potion}*
 ┃ *${rpgshop.emoticon('aqua')} » ${member.aqua}*
@@ -863,7 +868,7 @@ ${readMore}
 ┃ *${rpgshop.emoticon('kardus')} » ${member.kardus}*
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
-┃ 𝗢𝗕𝗝𝗘𝗧𝗢𝗦 𝗠𝗜𝗦𝗧𝗘𝗥𝗜𝗢𝗦𝗢𝗦
+┃ OBJETOS MISTERIOSOS
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('eleksirb')} » ${member.eleksirb}*
 ┃ *${rpgshop.emoticon('emasbatang')} » ${member.emasbatang}*
@@ -903,11 +908,11 @@ _15.Top Caja Legendaria_ *${userslegendary.indexOf(m.sender) + 1}* _de_ *${users
 _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.length}*
 
 👤» *@${who.split("@")[0]}* 
-🛣️ 𝗘𝗦𝗧𝗥𝗔𝗧𝗘𝗚𝗜𝗔𝗦 | 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦
-🌄 𝗦𝗧𝗥𝗔𝗧𝗘𝗚𝗜𝗘𝗦 | 𝗔𝗡𝗜𝗠𝗔𝗟𝗦
+🛣️ ESTRATEGIAS | ANIMALES
+🌄 STRATEGIES | ANIMALS
 
 ╭━━━━━━━━━⬣
-┃ *𝗘𝗦𝗧𝗔𝗗𝗢 𝗗𝗘 𝗖𝗢𝗠𝗕𝗔𝗧𝗘*
+┃ *ESTADO DE COMBATE*
 ┃
 ┃ *${rpg.emoticon('health')}* 
 ┃ *» ${healt}*
@@ -953,7 +958,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
 ╭━━━━━━━━━⬣
-┃ *𝗖𝗔𝗝𝗔𝗦 𝗘𝗡𝗖𝗢𝗡𝗧𝗥𝗔𝗗𝗔𝗦*
+┃ *CAJAS ENCONTRADAS*
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpgshop.emoticon('common')}*
 ┃ *» ${user.common}*
@@ -978,7 +983,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 ╰━━━━━━━━━⬣
 
 ╭━━━━━━━━━⬣
-┃ *𝗠𝗔𝗦𝗖𝗢𝗧𝗔𝗦*
+┃ *MASCOTAS*
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpgshop.emoticon('kuda')}*
 ┃ *${kuda == 0 ? 'No tengo Mascota : I do not have pet' : '' || kuda == 1 ? 'Nivel | Level ✦ 1' : '' || kuda == 2 ? 'Nivel | Level ✦ 2' : '' || kuda == 3 ? 'Nivel | Level ✦ 3' : '' || kuda == 4 ? 'Nivel | Level ✦ 4' : '' || kuda == 5 ? 'Nivel | Level ✦ 5 ǁ MAX' : ''}*
@@ -1076,7 +1081,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 *│ 📮 Mensual : Monthly ${new Date - user.lastmonthly < 432000000 ? '❌' : '✅'}* 
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭──━• 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦 𝗘𝗡 𝗥𝗘𝗦𝗘𝗥𝗩𝗔*
+*╭──━• ANIMALES EN RESERVA*
 *│${rpg.emoticon('toro')} ➡️ ${banteng}*
 *│${rpg.emoticon('tiger')} ➡️ ${harimau}*
 *│${rpg.emoticon('elefante')} ➡️ ${gajah}*
@@ -1095,7 +1100,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 *│💬 Animales totales » ${ cocodrilo + gajah + panda + babihutan + monyet + harimau + kerbau + kambing + pollo + sapi + cerdo + banteng } Para Cocinar*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭────━• 𝗖𝗢𝗠𝗜𝗗𝗔*
+*╭────━• COMIDA*
 *│🥓 Comida de Mascota : Food Pet » ${makananpet}*
 *│🍖 Pollo a la Parrilla : Grilled Chicken » ${ayamb}*
 *│🍗 Pollo frito : Fried Chicken » ${ayamg}*
@@ -1105,7 +1110,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 *│🎒 Total inv » ${makananpet + ayamb + ayamg + sapir + ssapi} Comida*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭──━• 𝗙𝗥𝗨𝗧𝗔𝗦 𝗬 𝗦𝗘𝗠𝗜𝗟𝗟𝗔𝗦*
+*╭──━• 𝗙RUTAS Y SEMILLAS*
 *│🥭 Mango » ${mangga}*
 *│🍇 Uva : Grape » ${anggur}*
 *│🍌 Platano : Banana » ${pisang}*
@@ -1140,7 +1145,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 ╰━━━━━━━━━⬣
 
 ╭━━━━━━━━━⬣ 
-┃ *𝗣𝗜𝗦𝗖𝗜𝗡𝗔 𝗗𝗘 𝗣𝗘𝗖𝗘𝗦*
+┃ *PISCINA DE PECES*
 ┃ *╸╸╸╸╸╸╸╸╸╸╸╸╸╸*
 ┃ 🦈 *Tiburón : Shark » ${hiu}*
 ┃ 🐟 *Pez : Fish » ${ikan}*
@@ -1181,34 +1186,34 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(m.sender) + 1}* _de_ *${userspet.
 
 *╭──━• MISIONES*
 *│ ⛏️⚡ Minar EXP » ${new Date - user.lastmiming < 600000 ? '❌' : '✅'}*
-${new Date - user.lastmiming < 600000 ? `${clockString(user.lastmiming + 600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastmiming < 600000 ? `${clockString(user.lastmiming + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️🪙 Minar AMXcoins » ${new Date - user.lastcoins < 600000 ? '❌' : '✅'}*
-${new Date - user.lastcoins < 600000 ? `${clockString(user.lastcoins + 600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastcoins < 600000 ? `${clockString(user.lastcoins + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️💎 Minar Diamantes » ${new Date - user.lastdiamantes < 900000 ? '❌' : '✅'}* 
-${new Date - user.lastdiamantes < 900000 ? `${clockString(user.lastdiamantes + 900000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastdiamantes < 900000 ? `${clockString(user.lastdiamantes + 900000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⚗️ Cofre : Coffer » ${new Date - user.lastcofre < 86400000 ? '❌' : '✅'}* 
-${new Date - user.lastcofre < 86400000 ? `${clockString(user.lastcofre + 86400000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastcofre < 86400000 ? `${clockString(user.lastcofre + 86400000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🏹 Caza : Berburu » ${new Date - user.lastberburu < 2700000 ? '❌' : '✅'}* 
-${new Date - user.lastberburu < 2700000 ? `${clockString(user.lastberburu + 2700000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastberburu < 2700000 ? `${clockString(user.lastberburu + 2700000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛰️ Aventura : Adventure : » ${new Date - user.lastadventure < 1500000 ? '❌' : '✅'}* 
-${new Date - user.lastadventure < 1500000 ? `${clockString(user.lastadventure + 1500000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastadventure < 1500000 ? `${clockString(user.lastadventure + 1500000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🕐 Cada hora : Hourly » ${new Date - user.lasthourly < 3600000 ? '❌' : '✅'}* 
-${new Date - user.lasthourly < 3600000 ? `${clockString(user.lasthourly + 3600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lasthourly < 3600000 ? `${clockString(user.lasthourly + 3600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 📦 Reclamar : Claim » ${new Date - user.lastclaim < 7200000 ? '❌' : '✅'}* 
-${new Date - user.lastclaim < 7200000 ? `${clockString(user.lastclaim + 7200000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastclaim < 7200000 ? `${clockString(user.lastclaim + 7200000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🎁 Semanalmente : Weekly ${new Date - user.lastweekly < 259200000 ? '❌' : '✅'}* 
-${new Date - user.lastweekly < 259200000 ? `${clockString(user.lastweekly + 259200000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastweekly < 259200000 ? `${clockString(user.lastweekly + 259200000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 📮 Mensual : Monthly ${new Date - user.lastmonthly < 432000000 ? '❌' : '✅'}* 
-${new Date - user.lastmonthly < 432000000 ? `${clockString(user.lastmonthly + 432000000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastmonthly < 432000000 ? `${clockString(user.lastmonthly + 432000000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│*
 *│ PROXIMAMENTE* ⬇️
 *│*
@@ -1263,8 +1268,8 @@ const fkontak = {
 	"participant": "0@s.whatsapp.net"
 }
 // let ftroli = { key: {participant : '0@s.whatsapp.net'}, message: { orderMessage: { itemCount: 2022, status: 1, surface: 1, message: bottime, orderTitle: wm, sellerJid: '0@s.whatsapp.net' } } }   
-//await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}`, str, imgr + 'Inventario : Inventory', [[`${healt < 40 ? '❤️ 𝘾𝙐𝙍𝘼𝙍𝙈𝙀 | 𝙃𝙀𝘼𝙇 𝙈𝙀' : '𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚 🏕️'}`, `${healt < 40 ? ${usedPrefix}heal' : ${usedPrefix}adventure'}`],['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 | 𝘽𝙪𝙮', '.'buy'],['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝙑𝙚𝙣𝙙𝙚𝙧 | 𝙎𝙚𝙡𝙡', '.sell']], m, {quoted: fkontak})
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}` + '\n' + str + 'Inventario' + '\n' + `${healt < 40 ? '❤️ 𝘾𝙐𝙍𝘼𝙍𝙈𝙀' : '𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 🏕️'}` + '\n' + `${healt < 40 ? usedPrefix + `heal` : usedPrefix + `adventure`}` + '\n' + '🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝘾𝙤𝙢𝙥𝙧𝙖𝙧' + '\n' + `${usedPrefix}buy` + '\n' + '🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝙑𝙚𝙣𝙙𝙚𝙧' + '\n' + `${usedPrefix}sell`
+//await conn.sendButton(m.chat, `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}`, str, imgr + 'Inventario : Inventory', [[`${healt < 40 ? '❤️ _CURARME_ | 𝙃𝙀𝘼𝙇 𝙈𝙀' : 'Aventurar | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚 🏕️'}`, `${healt < 40 ? ${usedPrefix}heal' : ${usedPrefix}adventure'}`],['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 | 𝘽𝙪𝙮', '.'buy'],['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝙑𝙚𝙣𝙙𝙚𝙧 | 𝙎𝙚𝙡𝙡', '.sell']], m, {quoted: fkontak})
+let resp = `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}` + '\n' + str + 'Inventario' + '\n' + `${healt < 40 ? '❤️ _CURARME_' : 'Aventurar 🏕️'}` + '\n' + `${healt < 40 ? usedPrefix + `heal` : usedPrefix + `adventure`}` + '\n' + '🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝘾𝙤𝙢𝙥𝙧𝙖𝙧' + '\n' + `${usedPrefix}buy` + '\n' + '🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝙑𝙚𝙣𝙙𝙚𝙧' + '\n' + `${usedPrefix}sell`
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -1273,35 +1278,46 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else if (args[0] == '4') { // Inventario 4
 
  // let name = m.fromMe ? conn.user : conn.contacts[m.sender]
-//let { lastdiamantes, lastcoins, lastmiming, registered, age, lastrampok, lastdagang, lastcofre, lastcodereg, lastberkebon, lasthourly, lastberburu, lastbansos, lastadventure, lastfishing, lastwar, lastduel, lastmining, lastdungeon, lastclaim, lastweekly, lastmonthly } = global.db.data.users[m.sender]
-    let user = global.db.data.users[m.sender]
+//let { lastdiamantes, lastcoins, lastmiming, registered, age, lastrampok, lastdagang, lastcofre, lastcodereg, lastberkebon, lasthourly, lastberburu, lastbansos, lastadventure, lastfishing, lastwar, lastduel, lastmining, lastdungeon, lastclaim, lastweekly, lastmonthly } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let chats, chat, users, user
+if (m.chat.endsWith(userID)) {
+chats = global.db.data.bot[conn.user.jid].chats.privs
+chat = chats[m.chat]
+users = chats
+user = chats[m.sender]
+} else if (m.chat.endsWith(groupID)) {
+chats = global.db.data.bot[conn.user.jid].chats.groups
+chat = chats[m.chat]
+users = chat.users
+user = users[m.sender]
+}
     let name = m.sender
     let usuario = await conn.getName(name)
     
-    let sortedmoney = Object.entries(global.db.data.users).sort((a, b) => b[1].money - a[1].money)
-    let sortedlevel = Object.entries(global.db.data.users).sort((a, b) => b[1].level - a[1].level)
-    let sorteddiamond = Object.entries(global.db.data.users).sort((a, b) => b[1].diamond - a[1].diamond)
-    let sortedpotion = Object.entries(global.db.data.users).sort((a, b) => b[1].potion - a[1].potion)
-    let sortedsampah = Object.entries(global.db.data.users).sort((a, b) => b[1].sampah - a[1].sampah)
-    let sortedmakananpet = Object.entries(global.db.data.users).sort((a, b) => b[1].makananpet - a[1].makananpet)
-    let sortedbatu = Object.entries(global.db.data.users).sort((a, b) => b[1].batu - a[1].batu)
-    let sortediron = Object.entries(global.db.data.users).sort((a, b) => b[1].iron - a[1].iron)
-    let sortedkayu = Object.entries(global.db.data.users).sort((a, b) => b[1].kayu - a[1].kayu)
-    let sortedstring = Object.entries(global.db.data.users).sort((a, b) => b[1].string - a[1].string)
-    let sortedcommon = Object.entries(global.db.data.users).sort((a, b) => b[1].common - a[1].common)
-    let sorteduncoommon = Object.entries(global.db.data.users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
-    let sortedmythic = Object.entries(global.db.data.users).sort((a, b) => b[1].mythic - a[1].mythic)
-    let sortedlegendary = Object.entries(global.db.data.users).sort((a, b) => b[1].legendary - a[1].legendary)
-    let sortedpet = Object.entries(global.db.data.users).sort((a, b) => b[1].pet - a[1].pet)
-    let sortedgold = Object.entries(global.db.data.users).sort((a, b) => b[1].gold - a[1].gold)
-    let sortedarlok = Object.entries(global.db.data.users).sort((a, b) => b[1].arlok - a[1].arlok)
+    let sortedmoney = Object.entries(users).sort((a, b) => b[1].money - a[1].money)
+    let sortedlevel = Object.entries(users).sort((a, b) => b[1].level - a[1].level)
+    let sorteddiamond = Object.entries(users).sort((a, b) => b[1].diamond - a[1].diamond)
+    let sortedpotion = Object.entries(users).sort((a, b) => b[1].potion - a[1].potion)
+    let sortedsampah = Object.entries(users).sort((a, b) => b[1].sampah - a[1].sampah)
+    let sortedmakananpet = Object.entries(users).sort((a, b) => b[1].makananpet - a[1].makananpet)
+    let sortedbatu = Object.entries(users).sort((a, b) => b[1].batu - a[1].batu)
+    let sortediron = Object.entries(users).sort((a, b) => b[1].iron - a[1].iron)
+    let sortedkayu = Object.entries(users).sort((a, b) => b[1].kayu - a[1].kayu)
+    let sortedstring = Object.entries(users).sort((a, b) => b[1].string - a[1].string)
+    let sortedcommon = Object.entries(users).sort((a, b) => b[1].common - a[1].common)
+    let sorteduncoommon = Object.entries(users).sort((a, b) => b[1].uncoommon - a[1].uncoommon)
+    let sortedmythic = Object.entries(users).sort((a, b) => b[1].mythic - a[1].mythic)
+    let sortedlegendary = Object.entries(users).sort((a, b) => b[1].legendary - a[1].legendary)
+    let sortedpet = Object.entries(users).sort((a, b) => b[1].pet - a[1].pet)
+    let sortedgold = Object.entries(users).sort((a, b) => b[1].gold - a[1].gold)
+    let sortedarlok = Object.entries(users).sort((a, b) => b[1].arlok - a[1].arlok)
     
     let usersmoney = sortedmoney.map(v => v[0])
     let userslevel = sortedlevel.map(v => v[0])
@@ -1330,34 +1346,34 @@ for (const c of resp) {
 *╭──━• MISIONES*
 *╭──━• MISSIONS*
 *│ ⛏️⚡ Minar EXP » ${new Date - user.lastmiming < 600000 ? '❌' : '✅'}*
-${new Date - user.lastmiming < 600000 ? `${clockString(user.lastmiming + 600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastmiming < 600000 ? `${clockString(user.lastmiming + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️🪙 Minar AMXcoins » ${new Date - user.lastcoins < 600000 ? '❌' : '✅'}*
-${new Date - user.lastcoins < 600000 ? `${clockString(user.lastcoins + 600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastcoins < 600000 ? `${clockString(user.lastcoins + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️💎 Minar Diamantes » ${new Date - user.lastdiamantes < 900000 ? '❌' : '✅'}* 
-${new Date - user.lastdiamantes < 900000 ? `${clockString(user.lastdiamantes + 900000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastdiamantes < 900000 ? `${clockString(user.lastdiamantes + 900000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⚗️ Cofre : Coffer » ${new Date - user.lastcofre < 86400000 ? '❌' : '✅'}* 
-${new Date - user.lastcofre < 86400000 ? `${clockString(user.lastcofre + 86400000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastcofre < 86400000 ? `${clockString(user.lastcofre + 86400000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🏹 Caza : Berburu » ${new Date - user.lastberburu < 2700000 ? '❌' : '✅'}* 
-${new Date - user.lastberburu < 2700000 ? `${clockString(user.lastberburu + 2700000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastberburu < 2700000 ? `${clockString(user.lastberburu + 2700000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛰️ Aventura : Adventure : » ${new Date - user.lastadventure < 1500000 ? '❌' : '✅'}* 
-${new Date - user.lastadventure < 1500000 ? `${clockString(user.lastadventure + 1500000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastadventure < 1500000 ? `${clockString(user.lastadventure + 1500000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🕐 Cada hora : Hourly » ${new Date - user.lasthourly < 3600000 ? '❌' : '✅'}* 
-${new Date - user.lasthourly < 3600000 ? `${clockString(user.lasthourly + 3600000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lasthourly < 3600000 ? `${clockString(user.lasthourly + 3600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 📦 Reclamar : Claim » ${new Date - user.lastclaim < 7200000 ? '❌' : '✅'}* 
-${new Date - user.lastclaim < 7200000 ? `${clockString(user.lastclaim + 7200000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastclaim < 7200000 ? `${clockString(user.lastclaim + 7200000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 🎁 Semanalmente : Weekly ${new Date - user.lastweekly < 259200000 ? '❌' : '✅'}* 
-${new Date - user.lastweekly < 259200000 ? `${clockString(user.lastweekly + 259200000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastweekly < 259200000 ? `${clockString(user.lastweekly + 259200000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ 📮 Mensual : Monthly ${new Date - user.lastmonthly < 432000000 ? '❌' : '✅'}* 
-${new Date - user.lastmonthly < 432000000 ? `${clockString(user.lastmonthly + 432000000 - new Date())}` : '*│* ✅ 𝗠𝗜𝗦𝗜𝗢𝗡 𝗬𝗔 𝗗𝗜𝗦𝗣𝗢𝗡𝗜𝗕𝗟𝗘'}
+${new Date - user.lastmonthly < 432000000 ? `${clockString(user.lastmonthly + 432000000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│*
 *│ PROXIMAMENTE* ⬇️
 *│*
@@ -1460,8 +1476,8 @@ const fkontak = {
 	},
 	"participant": "0@s.whatsapp.net"
 } 
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}\n`  + str + 'Inventario' + '\n' + `🍱 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙡𝙞𝙢𝙚𝙣𝙩𝙤𝙨 => ${usedPrefix}alimentos` + '\n' + `🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡 => ${usedPrefix}inventario 4` + '\n' + `💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂 => ${usedPrefix}rpgmenu`
-//await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}`, str, imgr + 'Inventario : Inventory', [[`🍱 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙡𝙞𝙢𝙚𝙣𝙩𝙤𝙨 `, `${usedPrefix}alimentos`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(str) })
+let resp = `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}\n`  + str + 'Inventario' + '\n' + `🍱 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙡𝙞𝙢𝙚𝙣𝙩𝙤𝙨 => ${usedPrefix}alimentos` + '\n' + `🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡 => ${usedPrefix}inventario 4` + '\n' + `💗 _Menu Aventura | RPG_ => ${usedPrefix}rpgmenu`
+//await conn.sendButton(m.chat, `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}`, str, imgr + 'Inventario : Inventory', [[`🍱 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙡𝙞𝙢𝙚𝙣𝙩𝙤𝙨 `, `${usedPrefix}alimentos`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['💗 _Menu Aventura | RPG_', ${usedPrefix}rpgmenu']], fkontak, m, { mentions: conn.parseMention(str) })
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -1470,14 +1486,14 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 	
     } else if (args[0] == 'alimentos') { // Inventario piscina
 	    
-let user = global.db.data.users[m.sender]
+let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let pollo = user.pollo
 let kambing = user.kambing
 let sapi = user.sapi
@@ -1532,7 +1548,7 @@ let semillasdemango = user.semillasdemango
 let semillasdeplatano = user.semillasdeplatano
 
 let aineh = `
-*╭──━• 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦 𝗘𝗡 𝗥𝗘𝗦𝗘𝗥𝗩𝗔*
+*╭──━• ANIMALES EN RESERVA*
 *│${rpg.emoticon('toro')} ➡️ ${banteng}*
 *│${rpg.emoticon('tiger')} ➡️ ${harimau}*
 *│${rpg.emoticon('elefante')} ➡️ ${gajah}*
@@ -1551,7 +1567,7 @@ let aineh = `
 *│💬 Animales totales » ${ cocodrilo + gajah + panda + babihutan + monyet + harimau + kerbau + kambing + pollo + sapi + cerdo + banteng } Para Cocinar*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭────━• 𝗖𝗢𝗠𝗜𝗗𝗔*
+*╭────━• COMIDA*
 *│🥓 Comida de Mascota : Food Pet » ${makananpet}*
 *│🍖 Pollo a la Parrilla : Grilled Chicken » ${ayamb}*
 *│🍗 Pollo frito : Fried Chicken » ${ayamg}*
@@ -1561,7 +1577,7 @@ let aineh = `
 *│🎒 Total inv » ${makananpet + ayamb + ayamg + sapir + ssapi} Comida*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭──━• 𝗙𝗥𝗨𝗧𝗔𝗦 𝗬 𝗦𝗘𝗠𝗜𝗟𝗟𝗔𝗦*
+*╭──━• 𝗙RUTAS Y SEMILLAS*
 *│🥭 Mango » ${mangga}*
 *│🍇 Uva : Grape » ${anggur}*
 *│🍌 Platano : Banana » ${pisang}*
@@ -1596,7 +1612,7 @@ let aineh = `
 ╰━━━━━━━━━⬣
 
 ╭━━━━━━━━━⬣ 
-┃ *𝗣𝗜𝗦𝗖𝗜𝗡𝗔 𝗗𝗘 𝗣𝗘𝗖𝗘𝗦*
+┃ *PISCINA DE PECES*
 ┃ *╸╸╸╸╸╸╸╸╸╸╸╸╸╸*
 ┃ 🦈 *Tiburón : Shark » ${hiu}*
 ┃ 🐟 *Pez : Fish » ${ikan}*
@@ -1644,7 +1660,7 @@ const fkontak = {
 	},
 	"participant": "0@s.whatsapp.net"
 }
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}`.trim()
+let resp = `*PREMIUM ${user.premium ? "✅": "❌"}*\n${wm}`.trim()
 let txt = '';
 let count = 0;
 for (const c of resp + aineh + 'Inventario') {
@@ -1653,11 +1669,11 @@ for (const c of resp + aineh + 'Inventario') {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-//await conn.sendButton(m.chat, resp, , [[`🐈 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙣𝙞𝙢𝙖𝙡𝙚𝙨`, `${usedPrefix}animales`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂 💗', ${usedPrefix}rpgmenu']], fkontak, m)
+//await conn.sendButton(m.chat, resp, , [[`🐈 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘼𝙣𝙞𝙢𝙖𝙡𝙚𝙨`, `${usedPrefix}animales`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['_Menu Aventura | RPG_ 💗', ${usedPrefix}rpgmenu']], fkontak, m)
 }
 
 }
@@ -1676,5 +1692,5 @@ function clockString(ms) {
   let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
   let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
   let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-  return ['*│ 𝗡𝗨𝗘𝗩𝗔 𝗠𝗜𝗦𝗜𝗢𝗡 𝗘𝗡 : 𝗠𝗜𝗦𝗦𝗜𝗢𝗡*\n*│* ', ye, ' *🗓️ Años : Year*\n', '*│* ', mo, ' *⛅ Mes : Month*\n', '*│* ', d, ' *☀️ Días : Days*\n', '*│* ', h, ' *⏰ Horas : Hours*\n', '*│* ', m, ' *🕐 Minutos : Minutes*\n', '*│* ', s, ' *⏱️ Segundos : Seconds*\n*│*'].map(v => v.toString().padStart(2, 0)).join('')
+  return ['*│ NUEVA MISION EN : MISSION*\n*│* ', ye, ' *🗓️ Años : Year*\n', '*│* ', mo, ' *⛅ Mes : Month*\n', '*│* ', d, ' *☀️ Días : Days*\n', '*│* ', h, ' *⏰ Horas : Hours*\n', '*│* ', m, ' *🕐 Minutos : Minutes*\n', '*│* ', s, ' *⏱️ Segundos : Seconds*\n*│*'].map(v => v.toString().padStart(2, 0)).join('')
 }

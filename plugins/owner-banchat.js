@@ -1,6 +1,6 @@
 /*
 let handler = async (m, {conn}) => {
-  let chat = global.db.data.chats[m.chat]
+  let chat = global.db.data.bot[conn.user.jid].chats[m.chat]
   let response = ''
   let who = m.mentionedJid[0]? conn.user.jid : conn.user.jid
   if (m.isGroup && !m.mentionedJid.includes(conn.user.jid) return
@@ -19,7 +19,7 @@ let handler = async (m, {conn}) => {
         txt += c;
         count++;
         if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing', m.chat);
+         await conn.sendPresenceUpdate('composing', m.chat);
         }
       }
   await conn.sendMessage(m.chat, { text: response.trim(), mentions: conn.parseMention(response) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} );
@@ -31,8 +31,23 @@ handler.command = /^banchat$/i
 handler.owner = true
 export default handler
 */
-let handler = async (m, {conn, isROwner}) => {
-global.db.data.chats[m.chat].isBanned = true
+let handler = async (m, {conn, isROwner, isOwner}) => {
+  if (isOwner || isROwner || conn.user.jid) {
+const bot = global.db.data.bot[conn.user.jid]
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+let chat, users, user
+if (m.chat.endsWith(userID)) {
+  chat = privs[m.chat] || {}
+  user = privs[m.sender] || {}
+} else if (m.chat.endsWith(groupID)){
+  chat = groups[m.chat] || {}
+  users = chat.users || {}
+  user = users[m.sender] || {}
+} else return
+  
+chat.isBanned = true
   let resp = '*[❗INFO❗] ESTE CHAT FUE BANEADO CON EXITO*\n\n*—◉ EL BOT NO REACCIONARA A NINGUN COMANDO HASTA DESBANEAR ESTE CHAT*'
   let txt = '';
   let count = 0;
@@ -42,10 +57,11 @@ global.db.data.chats[m.chat].isBanned = true
       count++;
   
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+         await conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
       return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    }
 }
 handler.help = ['banchat']
 

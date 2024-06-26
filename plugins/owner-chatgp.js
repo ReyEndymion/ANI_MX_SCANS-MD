@@ -12,7 +12,7 @@ if (!m.isGroup) return !1
 if (!text) throw '*_⚠ • ️Ingrese un -texto- para enviar un mensaje a todos los grupos._*'
 const linkThisGroup = `${link}`
 if (m.text.includes(linkThisGroup)) return conn.reply(m.chat, '❌ *_No puedes espamear enlaces a otros grupos._*', m)
-let time = global.db.data.users[m.sender].msgwait + 300000
+let time = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].msgwait + 300000
 if (new Date - db.data.users[m.sender].msgwait < 300000) throw `*_⚠️ • Tienes que esperar ${msToTime(time - new Date())} para volver a enviar un mensaje._*`
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let name = await conn.getName(m.sender)
@@ -21,7 +21,7 @@ let fakegif = { key: {participant: `0@s.whatsapp.net`, ...("5215532867844-160061
 let teks = `*🌺 • _Grupo:_* ${groupMetadata.subject}\n*🍀 • 𝙳𝚎:* ${name}\n*🍁 • _Número:_* wa.me/${who.split`@`[0]}\n*📧 • _Mensaje:_* ${text}`
 for (let id of groups) {
 await conn.sendMessage(id, { text: teks }, { quoted: fakegif })
-global.db.data.users[m.sender].msgwait = new Date * 1
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].msgwait = new Date * 1
 }}
 handler.command = /^(msg)$/i
 handler.owner = true

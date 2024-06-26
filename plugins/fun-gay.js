@@ -14,7 +14,7 @@ let handler = async (m, { conn }) => {
         }
         return str;
       }   
-let vn = media + '/gay2.mp3'
+let vn = join(media, '/gay2.mp3')
 const stats = fs.statSync(vn).size / 1024;
 const fileSizeInMiliSeconds = Math.round((stats / 112) * 1000);
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
@@ -36,7 +36,8 @@ for (const c of '*🏳️‍🌈 MIREN A ESTE GAY 🏳️‍🌈*') {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 conn.sendMessage(m.chat, {image: {url: img}, caption: txt, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
@@ -44,7 +45,8 @@ for (let i = 0; i < fileSizeInMiliSeconds; i++) {
         await new Promise(resolve => setTimeout(resolve, 1));
         
         if ((i + 1) % 10 === 0) {
-            conn.sendPresenceUpdate('recording', m.chat);
+          
+await conn.sendPresenceUpdate('recording', m.chat);
           }
     }
 await await await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 2*60*1000})

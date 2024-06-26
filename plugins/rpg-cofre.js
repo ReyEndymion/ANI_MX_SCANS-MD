@@ -1,6 +1,6 @@
 let handler = async (m, { isPrems, conn }) => {
-let time = global.db.data.users[m.sender].lastcofre + 86400000 // 36000000 10 Horas //86400000 24 Horas
-if (new Date - global.db.data.users[m.sender].lastcofre < 86400000) {
+let time = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastcofre + 86400000 // 36000000 10 Horas //86400000 24 Horas
+if (new Date - global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastcofre < 86400000) {
   let resp = `[❗INFO❗] YA RECLAMASTE TU COFRE\nVUELVE EN *${msToTime(time - new Date())}* PARA VOLVER A RECLAMAR`
   let txt = '';
   let count = 0;
@@ -10,7 +10,7 @@ if (new Date - global.db.data.users[m.sender].lastcofre < 86400000) {
       count++;
   
       if (count % 10 === 0) {
-          conn.sendPresenceUpdate('composing' , m.chat);
+         await conn.sendPresenceUpdate('composing' , m.chat);
       }
   }
      return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
@@ -21,10 +21,10 @@ let tok = Math.floor(Math.random() * 10)
 let animxscans = Math.floor(Math.random() * 4000)
 let expp = Math.floor(Math.random() * 5000)
 
-  global.db.data.users[m.sender].limit += dia
-  global.db.data.users[m.sender].money += animxscans
-  global.db.data.users[m.sender].joincount += tok
-  global.db.data.users[m.sender].exp += expp
+  global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].limit += dia
+  global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].money += animxscans
+  global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].joincount += tok
+  global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += expp
   
 let texto = `
 @${m.sender.split`@`[0]}
@@ -59,11 +59,11 @@ for (const c of texto) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 await conn.sendMessage(m.chat, {image: {url: img}, caption: txt + '\n\n' + wm, mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [['🔰 𝙼𝙴𝙽𝚄', '/menu'] ])  
-global.db.data.users[m.sender].lastcofre = new Date * 1
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastcofre = new Date * 1
 }
 handler.help = ['daily']
 handler.tags = ['xp']

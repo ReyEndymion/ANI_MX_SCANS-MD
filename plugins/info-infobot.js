@@ -6,14 +6,28 @@ import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 //import fs from 'fs'
 import { performance } from 'perf_hooks'
 let handler = async (m, { conn, usedPrefix, participants }, jid) => {
+let bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+let chat, users, user
+if (m.chat.endsWith(userID)) {
+chat = privs[m.chat] || {}
+user = privs[m.sender] || {}
+} else if (m.chat.endsWith(groupID)) {
+chat = groups[m.chat] || {}
+users = chat.users || {}
+user = users[m.sender] || {}
+} else return
+
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 
-let totalreg = Object.keys(global.db.data.users).length
-const chats = Object.entries(conn.chats).filter(([id, data]) => id && data.isChats)
-const groupsIn = chats.filter(([id]) => id.endsWith('@g.us'))
-const groups = chats.filter(([id]) => id.endsWith('@g.us'))
+let totalreg = Object.keys(users).length
+const connchats = Object.entries(conn.chats).filter(([id, data]) => id && data.isChats)
+const groupsIn = connchats.filter(([id]) => id.endsWith('@g.us'))
+const conngroups = connchats.filter(([id]) => id.endsWith('@g.us'))
 const used = process.memoryUsage()
-const { restrict, antiCall, antiprivado } = global.db.data.settings[conn.user.jid] || {}
+const { restrict, antiCall, antiprivado } = global.db.data.bot[conn.user.jid].settings || {}
 const { autoread, gconly, pconly, self } = global.opts || {}
 let old = performance.now()
 let neww = performance.now()
@@ -26,9 +40,9 @@ hola @${m.sender.split`@`[0]}
 ╠${wm} by ${igfg}
 ╠➥ [🤴🏻] CREADOR: ${ow}
 ╠➥ [🎳] PREFIJO: *${usedPrefix}*
-╠➥ [🔐] CHATS PRIVADOS: *${chats.length - groups.length}*
-╠➥ [🦜] CHATS DE GRUPOS: *${groups.length}* 
-╠➥ [💡] CHATS TOTALES: *${chats.length}* 
+╠➥ [🔐] CHATS PRIVADOS: *${connchats.length - conngroups.length}*
+╠➥ [🦜] CHATS DE GRUPOS: *${conngroups.length}* 
+╠➥ [💡] CHATS TOTALES: *${connchats.length}* 
 ╠➥ [🚀] ACTIVIDAD: *${uptime}*
 ╠➥ [🎩] USUARIOS: *${totalreg} NUMEROS*
 ╠➥ [☑️] AUTOREAD: ${autoread ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
@@ -49,13 +63,13 @@ for (const c of info) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 let res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(info)}}}, {userJid: conn.user.jid})
 conn.relayMessage(m.chat,  res.message, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //console.log('y esto: ', res)
-conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepre}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepream}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']

@@ -8,9 +8,9 @@ export async function all(m, conn, chatUpdate) {
 if (m.isBaileys) return
 if (!m.message) return
 if (!m.msg.fileSha256) return
-if (!(Buffer.from(m.msg.fileSha256).toString('base64') in global.db.data.sticker)) return
+if (!(Buffer.from(m.msg.fileSha256).toString('base64') in global.db.data.bot[this.user.jid].sticker)) return
 
-let hash = global.db.data.sticker[Buffer.from(m.msg.fileSha256).toString('base64')]
+let hash = global.db.data.bot[this.user.jid].sticker[Buffer.from(m.msg.fileSha256).toString('base64')]
 let { text, mentionedJid } = hash
 let messages = await generateWAMessage(m.chat, { text: text, mentions: mentionedJid }, {
 userJid: this.user.id,

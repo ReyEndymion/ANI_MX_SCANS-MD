@@ -62,7 +62,7 @@ let str = `
 
 ${isWin ? `@${(isSurrender ? room.game.currentTurn : room.game.winner).split('@')[0]} GANASTE 🥳, TE LLEVAS +4999 𝚎𝚡𝚙` : isTie ? 'EL JUEGO TERMINÓ EN EMPATE 😐' : `TURNO DE @${room.game.currentTurn.split('@')[0]}`}
 `.trim()
-let users = global.db.data.users
+let users = global.db.data.bot[conn.user.jid].users
 if ((room.game._currentTurn ^ isSurrender ? room.x : room.o) !== m.chat)
 room[room.game._currentTurn ^ isSurrender ? 'x' : 'o'] = m.chat
 if (room.x !== room.o)

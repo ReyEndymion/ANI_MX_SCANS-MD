@@ -14,9 +14,9 @@ let handler = async(m, {conn, isOwner, isAdmin, text, participants, args, comman
         }
         return str;
       }
-    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync('./src/sinFotoG.jpg') );
+    let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync(join(media, 'pictures/sinFotoG.jpg')));
     const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
-    const lettersImage = await Jimp.read(fs.readFileSync(join(dirP, 'src/invAll.png')));
+    const lettersImage = await Jimp.read(fs.readFileSync(join(media, 'pictures/invAll.png')));
     lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
     profilePicture.composite(lettersImage, 0, 0);
     const img = path.join(dirP, `tmp/${randomString(5)}.jpg`);
@@ -35,11 +35,11 @@ teks += `*└* BY ${wm}\n\n*▌│█║▌║▌║║▌║▌║▌║█*`
 let txt = teks;
         let count = 0;
         for (const c of teks) {
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, 1));
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+               await conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
         await conn.sendMessage(m.chat, {image: {url: img}, caption: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

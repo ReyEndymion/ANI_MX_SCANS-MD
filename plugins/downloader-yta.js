@@ -35,7 +35,7 @@ title: 'REPRODUCTOR DE AUDIO',
 body: wm,         
 previewType: 0, thumbnail: fs.readFileSync("./Menu2.jpg"),
 sourceUrl: hp_otkstogthr}}})
-let chat = global.db.data.chats[m.chat]
+let chat = global.db.data.bot[conn.user.jid].chats[m.chat]
 const isY = /y(es)/gi.test(args[1])
 const { thumbnail, audio: _audio, title } = await youtubedl(args[0]).catch(async _ => await youtubedlv2(args[0])).catch(async _ => await youtubedlv3(args[0]))
 const limitedSize = (isPrems || isOwner ? 350 : limit) * 3074

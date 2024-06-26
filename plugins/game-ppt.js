@@ -25,7 +25,8 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -41,7 +42,8 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 if (!args[0]) throw conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, null, null, null, null, [])
@@ -54,7 +56,7 @@ astro = 'tijera'
 astro = 'papel'
 }
 if (text == astro) {
-global.db.data.users[m.sender].exp += 500
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 500
 let resp = `🔰 Empate!\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +500 XP*`
 let txt = '';
 let count = 0;
@@ -63,13 +65,14 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      
+await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else if (text == 'papel') {
 if (astro == 'piedra') {
-global.db.data.users[m.sender].exp += 1000
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 1000
 let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
        let txt = '';
        let count = 0;
@@ -78,12 +81,13 @@ let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${as
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else {
-global.db.data.users[m.sender].exp -= 300
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp -= 300
 let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
        let txt = '';
        let count = 0;
@@ -92,14 +96,15 @@ let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: $
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 } else if (text == 'tijera') {
 if (astro == 'papel') {
-global.db.data.users[m.sender].exp += 1000
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 1000
 let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
        let txt = '';
        let count = 0;
@@ -108,12 +113,13 @@ let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${as
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else {
-global.db.data.users[m.sender].exp -= 300
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp -= 300
 let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
        let txt = '';
        let count = 0;
@@ -122,14 +128,15 @@ let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: $
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 } else if (text == 'tijera') {
 if (astro == 'papel') {
-global.db.data.users[m.sender].exp += 1000
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 1000
 let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
        let txt = '';
        let count = 0;
@@ -138,12 +145,13 @@ let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${as
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else {
-global.db.data.users[m.sender].exp -= 300
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp -= 300
 let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
        let txt = '';
        let count = 0;
@@ -152,14 +160,15 @@ let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: $
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 } else if (text == 'papel') {
 if (astro == 'piedra') {
-global.db.data.users[m.sender].exp += 1000
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 1000
 let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
        let txt = '';
        let count = 0;
@@ -168,12 +177,13 @@ let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${as
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else {
-global.db.data.users[m.sender].exp -= 300
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp -= 300
 let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
        let txt = '';
        let count = 0;
@@ -182,14 +192,15 @@ let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: $
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 } else if (text == 'piedra') {
 if (astro == 'tijera') {
-global.db.data.users[m.sender].exp += 1000
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 1000
 let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
        let txt = '';
        let count = 0;
@@ -198,12 +209,13 @@ let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${as
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 } else {
-global.db.data.users[m.sender].exp -= 300
+global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp -= 300
 let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
        let txt = '';
        let count = 0;
@@ -212,7 +224,8 @@ let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: $
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             
+await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

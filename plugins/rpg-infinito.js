@@ -1,11 +1,28 @@
 //SOLO USA SI ERES EL/LA PROPIETARIO(A) DEL BOT PARA TENER TODO ILIMITADO O USA EL COMANDO PREMIUM Jajaj
 let handler = async (m, { conn }) => {
-    let user = global.db.data.users[m.sender]
-        conn.reply(m.chat, `*ÉXITO!!*`, m)
-        global.db.data.users[m.sender].money = Infinity
-        global.db.data.users[m.sender].limit = Infinity
-        global.db.data.users[m.sender].level = Infinity
+if (m.chat.endsWith(userID)) return
+let chats = global.db.data.bot[conn.user.jid].chats
+let chat = chats.groups[m.chat]
+let users = chat.users
+let user = users[m.sender]
+console.log('dbCh: ', chats)
+user.money = Infinity
+user.limit = Infinity
+user.level = Infinity
         
+let resp = `*ÉXITO!!*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['cheat']
 handler.tags = ['owner']

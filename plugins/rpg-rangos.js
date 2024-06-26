@@ -8,7 +8,7 @@ let handler = async (m, { conn, usedPrefix, command, args, usedPrefix: _p, __dir
 const { levelling } = '../lib/levelling.js'
 //let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text }) => {
 
-let { exp, limit, level, role } = global.db.data.users[m.sender]
+let { exp, limit, level, role } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let { min, xp, max } = xpRange(level, global.multiplier)
 
 let d = new Date(new Date + 3600000)
@@ -39,11 +39,11 @@ process.once('message', resolve)
 setTimeout(resolve, 1000)
 }) * 1000
 }
-let { money } = global.db.data.users[m.sender]
+let { money } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 let muptime = clockString(_muptime)
 let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.users).length
-let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
+let totalreg = Object.keys(global.db.data.bot[conn.user.jid].users).length
+let rtotalreg = Object.values(global.db.data.bot[conn.user.jid].users).filter(user => user.registered == true).length
 let replace = {
 '%': '%',
 p: _p, uptime, muptime,
@@ -65,7 +65,7 @@ let pp = './media/menus/Menuvid3.mp4'
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let mentionedJid = [who]
 let username = conn.getName(who)
-//let user = global.db.data.users[m.sender]
+//let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
 //user.registered = false
 
 let menu = `
@@ -182,7 +182,7 @@ await new Promise(resolve => setTimeout(resolve, 15));
 txt += c;
 count++;
 if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 
@@ -195,7 +195,7 @@ mentionedJid: conn.parseMention(txt),
 "title": wm,   
 "containsAutoReply": true,  
 "mediaType": 1,   
-"thumbnail": imagen2,//apii.res.url,  
+"thumbnail": imagen2am,//apii.res.url,  
 "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
 "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
 }  

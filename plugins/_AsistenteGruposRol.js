@@ -1,7 +1,8 @@
-let handler = m => m
-handler.before = async function (m, {conn}) {
-	let chat = global.db.data.chats[m.chat]
-    let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender    
+export async function before(m, {conn}) {
+	let chat
+if (m.chat.endsWith(userID)) {chat = global.db.data.bot[this.user.jid].chats.privs[m.sender]} else if (m.chat.endsWith(groupID)) {chat = global.db.data.bot[this.user.jid].chats.groups[m.chat]}
+
+    let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender    
 
     if (/ficha$/i.test(m.text) && chat.gruposrol && !chat.isBanned) {
  let resp = 	
@@ -132,7 +133,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -140,4 +141,3 @@ for (const c of resp) {
       } 
   
 }
-export default handler

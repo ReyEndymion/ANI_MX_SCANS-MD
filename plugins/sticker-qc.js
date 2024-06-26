@@ -51,7 +51,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
    count++;
    
    if (count % 10 === 0) {
-   conn.sendPresenceUpdate('composing' , m.chat);
+  await conn.sendPresenceUpdate('composing' , m.chat);
    }
    }
    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ) 
@@ -61,7 +61,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
     const obj = {"type": "quote", "format": "png", "backgroundColor": "#000000", "width": 512, "height": 768, "scale": 2, "messages": [{"entities": [], "avatar": true, "from": {"id": 1, "name": `${who?.name || nombre}`, "photo": {url: `${pp}`}}, "text": mishi, "replyMessage": {}}]};
     const json = await axios.post('https://bot.lyo.su/quote/generate', obj, {headers: {'Content-Type': 'application/json'}});
     const buffer = Buffer.from(json.data.result.image, 'base64');
-   let stiker = await sticker(buffer, false, global.packname, global.author);
+   let stiker = await sticker(buffer, false, global.gt, global.author);
    if (stiker) return conn.sendMessage(m.chat, {sticker: {url: stiker}? stiker : {url: stiker},  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 2 * 60 * 1000 });
 }
 handler.help = ['qc'];

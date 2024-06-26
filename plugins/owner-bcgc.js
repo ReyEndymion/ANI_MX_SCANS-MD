@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path, { join } from 'path'
 let handler = async (m, { conn, text } ) => {  
 let groups = Object.entries(conn.chats).filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isChats && !chat.metadata?.read_only && !chat.metadata?.announce).map(v => v[0])
 let cc = text ? m : m.quoted ? await m.getQuotedObj() : false || m
@@ -19,7 +20,6 @@ let contextInfo = {
     }
 for (let id of groups) { 
 let resp = `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*` + '\n\n*_ESTE ES UN COMUNICADO OFICIAL_*\n'
-//conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + wm, fs.readFileSync('./src/avatar_contact.png'), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: '*COMUNICADO OFICIAL A GRUPOS*', body: ' BY 🌎ANI MX SCANS🌏', sourceUrl: md, thumbnail: fs.readFileSync('./Menu2.jpg') }}})
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -28,7 +28,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , id);
+       await conn.sendPresenceUpdate('composing' , id);
     }
 }
 conn.sendMessage(id, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
@@ -42,7 +42,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
@@ -52,3 +52,5 @@ handler.tags = ['owner']
 handler.command = /^(broadcast|bc)(group|grup|gc)$/i
 handler.rowner = true
 export default handler
+
+//conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + wm, fs.readFileSync(join(media, 'pictures/avatar_contact.png')), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: '*COMUNICADO OFICIAL A GRUPOS*', body: ' BY 🌎ANI MX SCANS🌏', sourceUrl: md, thumbnail: fs.readFileSync('./Menu2.jpg') }}})

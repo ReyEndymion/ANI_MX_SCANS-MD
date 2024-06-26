@@ -5,22 +5,108 @@ const exec = promisify(_exec).bind(cp);
 const handler = async (m, {conn, isROwner, usedPrefix, command, text}) => {
   const ar = Object.keys(plugins);
   const ar1 = ar.map((v) => v.replace('.js', ''));
-  if (!text) throw `*[❗] 𝙸𝙽𝙶𝚁𝙴𝚂𝙰 𝙴𝙻 𝙽𝙾𝙼𝙱𝚁𝙴 𝙳𝙴 𝙰𝙻𝙶𝚄𝙽 𝙿𝙻𝚄𝙶𝙸𝙽 (𝙰𝚁𝙲𝙷𝙸𝚅𝙾) 𝙴𝚇𝙸𝚂𝚃𝙴𝙽𝚃𝙴*\n\n*—◉ 𝙴𝙹𝙴𝙼𝙿𝙻𝙾*\n*◉ ${usedPrefix + command}* info-infobot\n\n*—◉ 𝙻𝙸𝚂𝚃𝙰 𝙳𝙴 𝙿𝙻𝚄𝙶𝙸𝙽𝚂 (𝙰𝚁𝙲𝙷𝙸𝚅𝙾𝚂) 𝙴𝚇𝙸𝚂𝚃𝙴𝙽𝚃𝙴𝚂:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
-  if (!ar1.includes(text)) return m.reply(`*[❗] 𝙽𝙾 𝚂𝙴 𝙴𝙽𝙲𝙾𝙽𝚃𝚁𝙾 𝙽𝙸𝙽𝙶𝚄𝙽 𝙿𝙻𝚄𝙶𝙸𝙽 (𝙰𝚁𝙲𝙷𝙸𝚅𝙾) 𝙻𝙻𝙰𝙼𝙰𝙳𝙾 "${text}", 𝙸𝙽𝙶𝚁𝙴𝚂𝙰 𝙰𝙻𝙶𝚄𝙽𝙾 𝙴𝚇𝙸𝚂𝚃𝙴𝙽𝚃𝙴*\n\n*==================================*\n\n*—◉ 𝙻𝙸𝚂𝚃𝙰 𝙳𝙴 𝙿𝙻𝚄𝙶𝙸𝙽𝚂 (𝙰𝚁𝙲𝙷𝙸𝚅𝙾𝚂) 𝙴𝚇𝙸𝚂𝚃𝙴𝙽𝚃𝙴𝚂:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`);
-  let o;
+  const bannedPlugins = ['jadibot-serbot', '_pruebasConsoleHandler', '_pruebasConsoleBefore', 'gc_invitamegGC', '_textos'];///jadibot-serbot|_pruebasConsoleHandler|_pruebasConsoleBefore|gc_invitamegGC|_textos$/ig.test(text)
+  if (!text) {
+    let resp = `*[❗] Ingresa el nombre de algún plugin (archivo) existente*\n\n*—◉ por ejemplo*\n*◉ ${usedPrefix + command}* info-infobot\n\n*—◉ Lista de plugins (archivos) existentes:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 1));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+       await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+
+    let contextInfo = {  
+    mentionedJid: conn.parseMention(txt),  
+    "externalAdReply": {  
+    "showAdAttribution": true,  
+    "containsAutoReply": true,
+    "renderLargerThumbnail": true,  
+    "title": wm,   
+    "containsAutoReply": true,  
+    "mediaType": 1,   
+    "thumbnail": imagen1,//apii.res.url,  
+    "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
+    "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
+    }  
+    }  
+
+    return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+  }
+  if (ar.includes(text + '.js') && bannedPlugins.includes(text.toLowerCase())) {
+    let resp = `Lo siento este codigo esta prohibido por el autor`
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 15));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+       await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+
+    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+  }
+  if (!ar1.includes(text)) {
+    let resp = `*[❗] No se encontró ningún plugin (archivo) llamado "${text}", ingresa alguno existente*\n\n*==================================*\n\n*—◉  Lista de archivos existentes:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
+    let txt = '';
+    let count = 0;
+    for (const c of resp) {
+    await new Promise(resolve => setTimeout(resolve, 1));
+    txt += c;
+    count++;
+    if (count % 10 === 0) {
+       await conn.sendPresenceUpdate('composing' , m.chat);
+    }
+    }
+
+    let contextInfo = {  
+    mentionedJid: conn.parseMention(txt),  
+    "externalAdReply": {  
+    "showAdAttribution": true,  
+    "containsAutoReply": true,
+    "renderLargerThumbnail": true,  
+    "title": wm,   
+    "containsAutoReply": true,  
+    "mediaType": 1,   
+    "thumbnail": imagen1,//apii.res.url,  
+    "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
+    "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
+    }  
+    }  
+
+    return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+  }  
+let o;
   try {
-    o = await exec('cat plugins/' + text + '.js');
+    o = await exec(`cat ${dirP}plugins/` + text + '.js');
   } catch (e) {
     o = e;
   } finally {
     const {stdout, stderr} = o;
+    console.log ('gp: ', o)
     if (stdout.trim()) {
-      const aa = await conn.sendMessage(m.chat, {text: stdout}, {quoted: m});
-      await conn.sendMessage(m.chat, {document: fs.readFileSync(`./plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa});
+      let resp = stdout
+      let txt = '';
+      let count = 0;
+      for (const c of resp) {
+      await new Promise(resolve => setTimeout(resolve, 1));
+      txt += c;
+      count++;
+      if (count % 10 === 0) {
+         await conn.sendPresenceUpdate('composing' , m.chat);
+      }
+      }
+      const aa = await conn.sendMessage(m.chat, {text: txt}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+      await conn.sendMessage(m.chat, {document: fs.readFileSync(dirP + `plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
     }
     if (stderr.trim()) {
       const aa2 = await conn.sendMessage(m.chat, {text: stderr}, {quoted: m});
-      await conn.sendMessage(m.chat, {document: fs.readFileSync(`./plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa2});
+      await conn.sendMessage(m.chat, {document: fs.readFileSync(dirP + `plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa2, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
     }
   }
 };

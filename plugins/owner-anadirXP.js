@@ -13,7 +13,7 @@ let exp = xp
 let pjk = Math.ceil(xp * pajak)
 exp += pjk
 if (exp < 1) throw '*[❗INFO❗] EL NUMERO MINIMO DE EXPERIENCIA (XP) PARA AÑADIR ES 𝟷*'
-let users = global.db.data.users
+let users = global.db.data.bot[conn.user.jid].users
 users[who].exp += xp
   m.reply(`≡ *XP AÑADIDO*
 ┌──────────────

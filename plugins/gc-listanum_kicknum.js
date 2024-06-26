@@ -7,7 +7,7 @@ if (!args[0]) return m.reply(`*[❗] INGRESA EL PREFIJO DE ALGUN PAIS PARA BUSCA
 if (isNaN(args[0])) return m.reply(`*[❗] INGRESA EL PREFIJO DE ALGUN PAIS PARA BUSCAR NUMEROS EN ESTE GRUPO DE ESE PAIS, EJEMPLO: ${usedPrefix + command} 52*`) 
 let lol = args[0].replace(/[+]/g, '')
 let ps = participants.map(u => u.id).filter(v => v !== conn.user.jid && v.startsWith(lol || lol)) 
-let bot = global.db.data.settings[conn.user.jid] || {}
+let bot = global.db.data.bot[conn.user.jid].settings || {}
 if (ps == '') return m.reply(`*[❗] EN ESTE GRUPO NO HAY NINGUN NUMERO CON EL PREFIJO +${lol}*`)
 let numeros = ps.map(v=> '⭔ @' + v.replace(/@.+/, ''))
 const delay = time => new Promise(res=>setTimeout(res,time));

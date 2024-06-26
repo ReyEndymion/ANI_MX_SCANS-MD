@@ -6,7 +6,7 @@ import fetch from 'node-fetch'
  */
 const { getBinaryNodeChild, getBinaryNodeChildren } = (await import('@whiskeysockets/baileys')).default
 let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
-if (!global.db.data.settings[conn.user.jid].restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
+if (!global.db.data.bot[conn.user.jid].settings.restrict) throw '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
 
     let _participants = participants.map(user => user.id)
     let users = (await Promise.all(

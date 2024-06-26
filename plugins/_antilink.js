@@ -3,10 +3,13 @@ export async function before(m, {conn, isAdmin, isBotAdmin }) {
 if (m.isBaileys && m.fromMe)
 return !0
 if (!m.isGroup) return !1
-let chat = global.db.data.chats[m.chat]
+let bot = global.db.data.bot[conn.user.jid]
+let chats = global.db.data.bot[conn.user.jid].chats || {}
+let chat = chats.groups[m.chat] || {}
+let settings = bot.settings || {}
+
 let delet = m.key.participant
 let bang = m.key.id
-let bot = global.db.data.settings[this.user.jid] || {}
 const isGroupLink = linkRegex.exec(m.text)
 const grupo = `https://chat.whatsapp.com`
 if (isAdmin && chat.antiLink && m.text.includes(grupo)) { 
@@ -25,8 +28,8 @@ if (isAdmin && chat.antiLink && m.text.includes(grupo)) {
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
     }
 if (chat.antiLink && isGroupLink && !isAdmin) {
-if (isBotAdmin && bot.restrict) {
-const linkThisGroup = `https://chat.whatsapp.com/${await this.groupInviteCode(m.chat)}`
+if (isBotAdmin && settings.restrict) {
+const linkThisGroup = `https://chat.whatsapp.com/${await conn.groupInviteCode(m.chat)}`
 if (m.text.includes(linkThisGroup)) {
     let resp = '*Lol.. enviaste el enlace de este grupo :v*'
     let txt = '';
@@ -42,7 +45,7 @@ if (m.text.includes(linkThisGroup)) {
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
     return !0
     }
-let resp = `*「 ANTI LINKS 」*\n*HASTA LA VISTA BABY 👋, ${await this.getName(m.sender)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
+let resp = `*「 ANTI LINKS 」*\n*HASTA LA VISTA BABY 👋, ${await conn.getName(m.sender)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
 let txt = '';
 let count = 0;
 for (const c of resp) {

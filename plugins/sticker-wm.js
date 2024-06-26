@@ -10,7 +10,7 @@ if (!m.quoted) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
 
@@ -18,7 +18,7 @@ if (!m.quoted) {
 }
 let stiker = false
 try {
-let [packname, ...author] = text.split('|')
+let [gt, ...author] = text.split('|')
 author = (author || []).join('|')
 let mime = m.quoted.mimetype || ''
 if (!/webp/.test(mime)) {
@@ -31,7 +31,7 @@ if (!/webp/.test(mime)) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
 
@@ -47,12 +47,12 @@ if (!img) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-    conn.sendPresenceUpdate('composing' , m.chat);
+   await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
-stiker = await addExif(img, packname || '', author || '')
+stiker = await addExif(img, gt || '', author || '')
 } catch (e) {
 console.error(e)
 if (Buffer.isBuffer(e)) stiker = e
@@ -70,14 +70,14 @@ if (stiker) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+       await conn.sendPresenceUpdate('composing' , m.chat);
     }
     }
 
     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 }}
-handler.help = ['wm <packname>|<author>']
+handler.help = ['wm <gt>|<author>']
 handler.tags = ['sticker']
 handler.command = /^take|nuestro|wm$/i
 export default handler

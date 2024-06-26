@@ -3,12 +3,14 @@ const toxicRegex = /puto|puta|rata|estupido|imbecil|rctmre|mrd|verga|vrga|marico
 export async function before(m, {conn, isAdmin, isBotAdmin, isOwner }) {
     if (m.isBaileys && m.fromMe)
         return !0
-    if (!m.isGroup)
-        return !1
-    let user = global.db.data.users[m.sender]
-    let chat = global.db.data.chats[m.chat]
-    let bot = global.db.data.settings[this.user.jid] || {}
-    const isToxic = toxicRegex.exec(m.text)
+if (!m.isGroup) return !1
+let bot = global.db.data.bot[this.user.jid]
+let chats = global.db.data.bot[this.user.jid].chats || {}
+let chat = chats.groups[m.chat] || {}
+let users = chat.users || {}
+let user = users[m.sender] || {}
+let settings = bot.settings || {}
+const isToxic = toxicRegex.exec(m.text)
     
     if (isToxic && chat.antiToxic && !isOwner && !isAdmin) {
        user.warn += 1
@@ -21,7 +23,7 @@ export async function before(m, {conn, isAdmin, isBotAdmin, isOwner }) {
            txt += c;
            count++;
            if (count % 10 === 0) {
-               conn.sendPresenceUpdate('composing' , m.chat);
+             await conn.sendPresenceUpdate('composing' , m.chat);
            }
        }
            await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
@@ -39,7 +41,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-        conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );

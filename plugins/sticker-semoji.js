@@ -39,7 +39,7 @@ case 'ip':
 case 'ap':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[0].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[0].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -48,7 +48,7 @@ case 'fb':
 case 'fa':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[6].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[6].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -56,7 +56,7 @@ case 'google':
 case 'go':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[1].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[1].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -64,7 +64,7 @@ case 'htc':
 case 'ht':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[12].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[12].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -73,7 +73,7 @@ case 'ig':
 case 'instagram':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[11].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[11].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -82,7 +82,7 @@ case 'mc':
 case 'mi':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[3].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[3].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -91,7 +91,7 @@ case 'moz':
 case 'mo':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[13].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[13].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -100,7 +100,7 @@ case 'omoji':
 case 'op':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[8].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[8].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -108,7 +108,7 @@ case 'pixel':
 case 'pi':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[7].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[7].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -116,7 +116,7 @@ case 'samsung':
 case 'sa':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[2].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[2].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -124,7 +124,7 @@ case 'twitter':
 case 'tw':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(false, emoji.images[5].url, global.packname, global.author)
+let stiker = await sticker(false, emoji.images[5].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break
@@ -134,7 +134,7 @@ case 'wh':
 case 'wha':
 emoji.get(`${args[1]}`)
 .then(async emoji => {
-let stiker = await sticker(null, emoji.images[4].url, global.packname, global.author)
+let stiker = await sticker(null, emoji.images[4].url, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true }, m)
 })
 break

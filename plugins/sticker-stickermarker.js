@@ -23,7 +23,7 @@ let apiUrl = global.API('https://some-random-api.ml/canvas/', encodeURIComponent
 avatar: url
 })
 try {
-let stiker = await sticker(null, apiUrl, global.packname, global.author)
+let stiker = await sticker(null, apiUrl, global.gt, global.author)
 conn.sendFile(m.chat, stiker, null, { asSticker: true })
 } catch (e) {
 m.reply('*_⚠️ Ocurrió un error al hacer la conversión a sticker_*\n\n*_✳️ Enviando imagen en su lugar..._*')

@@ -6,12 +6,12 @@ function waitTwoMinutes() {
   });
 }
   let handler = async (m, { conn }) => {
+      const chats = db.data.bot[conn.user.jid].chats;
     try {
       // Leer la base de datos
       await db.read();
     
       // Buscar y actualizar todos los isBanned: false
-      const chats = db.data.chats;
       let successfulBans = 0;
     
       for (const [key, value] of Object.entries(chats)) {
@@ -40,7 +40,7 @@ function waitTwoMinutes() {
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+              await conn.sendPresenceUpdate('composing' , m.chat);
             }}
               await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} ) 
             throw new Error('No se pudo banear ningún chat', error);
@@ -56,7 +56,7 @@ function waitTwoMinutes() {
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+              await conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
               await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
@@ -73,7 +73,7 @@ function waitTwoMinutes() {
           count++;
       
           if (count % 10 === 0) {
-              conn.sendPresenceUpdate('composing' , m.chat);
+            await conn.sendPresenceUpdate('composing' , m.chat);
           }
       }
             await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
@@ -84,7 +84,6 @@ function waitTwoMinutes() {
             await db.read();
           
             // Buscar y actualizar todos los isBanned: false
-            const chats = db.data.chats;
             let successfulUnbans = 0;
           
             for (const [key, value] of Object.entries(chats)) {
@@ -111,7 +110,7 @@ function waitTwoMinutes() {
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+              await conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
               await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
@@ -129,7 +128,7 @@ function waitTwoMinutes() {
             count++;
         
             if (count % 10 === 0) {
-                conn.sendPresenceUpdate('composing' , m.chat);
+              await conn.sendPresenceUpdate('composing' , m.chat);
             }
         }
               await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
@@ -146,7 +145,7 @@ function waitTwoMinutes() {
                 count++;
             
                 if (count % 10 === 0) {
-                    conn.sendPresenceUpdate('composing' , m.chat);
+                  await conn.sendPresenceUpdate('composing' , m.chat);
                 }
             }
                   await conn.sendMessage(m.chat, { text: int, mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )          }

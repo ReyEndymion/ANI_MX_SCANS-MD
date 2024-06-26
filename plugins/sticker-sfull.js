@@ -1,32 +1,46 @@
 import fetch from 'node-fetch'
 import { addExif } from '../lib/sticker.js'
-import { Sticker } from 'wa-sticker-formatter'
+//import { Sticker } from 'wa-sticker-formatter'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
 	let stiker = false
 	try {
-		let [packname, ...author] = args.join` `.split`|`
+		let [gt, ...author] = args.join` `.split`|`
 		author = (author || []).join`|`
 		let q = m.quoted ? m.quoted : m
 		let mime = (q.msg || q).mimetype || q.mediaType || ''
 		if (/webp/g.test(mime)) {
 			let img = await q.download?.()
-			stiker = await addExif(img, packname || '', author || '')
+			stiker = await addExif(img, gt || '', author || '')
 		} else if (/image/g.test(mime)) {
 			let img = await q.download?.()
-			stiker = await createSticker(img, false, packname, author)
+			stiker = await createSticker(img, false, gt, author)
 		} else if (/video/g.test(mime)) {
 		//	if ((q.msg || q).seconds > 10) throw 'Max 10 seconds!'
 			let img = await q.download?.()
-			stiker = await mp4ToWebp(img, { pack: packname, author: author })
+			stiker = await mp4ToWebp(img, { pack: gt, author: author })
 		} else if (args[0] && isUrl(args[0])) {
 			stiker = await createSticker(false, args[0], '', wm, 20)
-		} else throw `Reply an image/video/sticker with command ${usedPrefix + command}`
+		} else {
+			let resp = `Responda a una imagen/video/sticker con el comando ${usedPrefix + command}`
+		let txt = '';
+		let count = 0;
+		for (const c of resp) {
+		await new Promise(resolve => setTimeout(resolve, 15));
+		txt += c;
+		count++;
+		if (count % 10 === 0) {
+			conn.sendPresenceUpdate('composing' , m.chat);
+		}
+		}
+	
+	return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+		}
 	} catch (e) {
 		console.log(e)
 		stiker = e
 	} finally {
-		m.reply(stiker)
+		conn.sendMessage(m.chat, {sticker: {url: stiker}? stiker : {url: stiker},  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 2*60*1000 });
 	}
 }
 handler.help = ['sfull']
@@ -37,10 +51,10 @@ export default handler
 
 const isUrl = (text) => text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/, 'gi'))
 
-async function createSticker(img, url, packName, authorName, quality) {
+async function createSticker(img, url, gt, authorName, quality) {
 	let stickerMetadata = {
 		type: 'full',
-		pack: packName,
+		pack: gt,
 		author: authorName,
 		quality
 	}
