@@ -625,7 +625,7 @@ if (err) throw err;
 }
 
 setInterval(async () => {
-backupCreds()
+backupCreds(authFolder, botDirRespald)
 console.log(chalk.whiteBright(`\n▣────────[ BACKUP_CREDS ]───────────···\n│\n▣─❧ RESPALDO EXITOSO ✅\n│\n▣────────────────────────────────────···\n`))
 }, 15 * 60 * 1000)
 setInterval(async () => {
