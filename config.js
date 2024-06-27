@@ -43,7 +43,6 @@ global.botcomediamd = 'https://github.com/ReyEndymion/Bot-Comedia-MD'
 global.raiz = `./`
 global.anidir = `ANI_MX_SCANS`
 global.dirP = !fs.existsSync(anidir) ? __dirname : join(raiz, anidir) //Solo si quieres arrancar el bot desde una carpeta diferente, por ejemplo: /ANI_MX_SCANS
-console.log('config: ', dirP)
 global.sessionNameAni = `ANIMXSCANS`
 global.authFolder = join(dirP, sessionNameAni)
 global.authFolderRespald = join(dirP, `sesionRespaldo`)
