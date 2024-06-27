@@ -126,7 +126,7 @@ if (!('gruposRol' in chat)) chat.gruposRol = false;
 if (!isNumber(chat.expired)) chat.expired = 1;
 if (!('users' in chat)) chat.users = {};
 } else
-global.db.data.bot[this.user.jid].chats[m.chat] = {
+global.db.data.bot[this.user.jid].chats.groups[m.chat] = {
 isBanned: false,
 welcome: true,
 detect: true,
