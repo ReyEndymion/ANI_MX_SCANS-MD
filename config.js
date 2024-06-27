@@ -77,7 +77,7 @@ global.mods = []
 
 if (!fs.existsSync(authFolder)) {
 fs.mkdirSync(authFolder);
-console.log('Directorio jadibts creado exitosamente');
+console.log('Directorio ANIMXSCANS creado exitosamente');
 }
 if (!fs.existsSync(jadibts)) {
 fs.mkdirSync(jadibts);

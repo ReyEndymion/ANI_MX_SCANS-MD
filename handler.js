@@ -782,7 +782,7 @@ return list[Math.floor(Math.random() * list.length)];
  * Tipo de dato para el stub de mensajes de WhatsApp
  * @typedef {import('@whiskeysockets/baileys').WAMessageStubType} WAMessageStubType
  */
-export async function participantsUpdate({ id, conn, participants, action }) {
+export async function participantsUpdate({ id, participants, action }) {
 const grupo = id.id
 if (!grupo.endsWith(groupID)) return
 console.log('participantsUpdate: ', grupo)

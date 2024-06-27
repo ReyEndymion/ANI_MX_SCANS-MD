@@ -400,7 +400,6 @@ actualizarNumero()
 return conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
 }
 }
-return;
 }
 
 process.on('uncaughtException', console.error);
