@@ -208,6 +208,27 @@ return 'La carpeta Backup de credenciales no existe, debe realizar un respaldo d
 }
 }
 
+function cleanupOnConnectionError(pathSession, pathBackUp) {
+
+readdirSync(pathSession).forEach(file => {
+const credsFilePath = path.join(pathSession, file);
+try {
+rmSync(pathSession, { recursive: true, force: true });
+console.log(`Archivo eliminado: ${credsFilePath}`);
+} catch (error) {
+console.log(`No se pudo eliminar el archivo: ${credsFilePath}`);
+}
+});
+const backupFilePath = path.join(pathBackUp, creds);
+try {
+rmSync(pathBackUp, { recursive: true, force: true });
+console.log(`Archivo de copia de seguridad eliminado: ${backupFilePath}`);
+} catch (error) {
+console.log(`No se pudo eliminar el archivo de copia de seguridad o no existe: ${backupFilePath}`);
+}
+process.send('reset')
+}
+
 
 export async function onBot(filePath) {
 const { state, saveState, saveCreds } = await useMultiFileAuthState(filePath);
@@ -249,6 +270,7 @@ global.conn = makeWASocket(connectionOptions)
 conn.isInit = false;
 conn.well = false;
 loadDatabase(global.conn);
+const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
 
 if (!opts['test']) {
 if (global.db) {
@@ -263,17 +285,6 @@ if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 't
 
 if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
 
-
-function backupCreds() {
-const credsFilePath = path.join(authFolder, creds);
-const backupFilePath = path.join(authFolderRespald, creds);
-
-// Copiar el archivo de credenciales a la carpeta de respaldo
-copyFileSync(credsFilePath, backupFilePath);
-console.log(`Creado el archivo de respaldo: ${backupFilePath}`);
-
-}
- 
 function actualizarNumero() {
 const configPath = path.join(dirP, 'config.js');
 const configData = readFileSync(configPath, 'utf8');
@@ -287,58 +298,6 @@ return `global.serbot = 'https://api.whatsapp.com/send/?phone=${numero}&text=.se
 
 });
 writeFileSync(configPath, updatedGlobalAni && updateSerbotOfc);
-}
-
-function cleanupOnConnectionError() {
-
-readdirSync(authFolder).forEach(file => {
-const filePath = path.join(authFolder, file);
-try {
-unlinkSync(filePath);
-console.log(`Archivo eliminado: ${filePath}`);
-} catch (error) {
-console.log(`No se pudo eliminar el archivo: ${filePath}`);
-}
-});
-
-const backupFilePath = path.join(authFolderRespald, creds);
-try {
-unlinkSync(backupFilePath);
-console.log(`Archivo de copia de seguridad eliminado: ${backupFilePath}`);
-} catch (error) {
-console.log(`No se pudo eliminar el archivo de copia de seguridad o no existe: ${backupFilePath}`);
-}
-process.send('reset')
-} 
-
-function credsStatus() {
-
-const credsFilePath = path.join(authFolder, creds);
-const backupFilePath = path.join(authFolderRespald, creds);
-
-let originalFileValid = false;
-try {
-const stats = statSync(credsFilePath);
-originalFileValid = stats.isFile() && stats.size > 0;
-} catch (error) {
-console.log(`El archivo de credenciales no existe o está vacío. Generando código QR...`);
-connectionOptions
-console.log(`Escanea el código QR para continuar.`);
-}
-
-if (!originalFileValid) {
-const backupStats = statSync(backupFilePath);
-if (backupStats.isFile() && backupStats.size > 0) {
-copyFileSync(backupFilePath, credsFilePath);
-console.log(`Archivo de credenciales restaurado desde la copia de seguridad: ${backupFilePath} -> ${credsFilePath}`);
-process.send('reset')
-} else {
-console.log(`No se encuentra el archivo de credenciales válido y el archivo de copia de seguridad no es válido o falta: ${credsFilePath}, ${backupFilePath}`);
-connectionOptions
-}
-} else {
-console.log('Archivo de respaldo correcto, continuando inicio de sesión');
-}
 }
 
 function waitTwoMinutes() {
@@ -388,28 +347,25 @@ let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
 conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
-cleanupOnConnectionError()
+return global.reloadHandler(true).catch(console.error)
 //process.exit();
 } else if (reason === DisconnectReason.preconditionRequired){
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
-global.reloadHandler(true).catch(console.error)
-return
+return global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.connectionClosed) {
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando...`);
-global.reloadHandler(true).catch(console.error)
-return
+return global.reloadHandler(true).catch(console.error)
 //process.send('reset');
 } else if (reason === DisconnectReason.connectionLost) {
 conn.logger.warn(`[ ⚠ ] Conexión perdida con el servidor, reconectando...`);
-global.reloadHandler(true).catch(console.error)
-return
+return global.reloadHandler(true).catch(console.error)
  // process.send('reset');
 } else if (reason === DisconnectReason.connectionReplaced) {
 conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
 //process.exit();
 } else if (reason === DisconnectReason.loggedOut) {
 conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
-cleanupOnConnectionError()
+cleanupOnConnectionError(filePath, botDirRespald)
 //process.exit();
 } else if (reason === DisconnectReason.restartRequired) {
 conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
@@ -419,7 +375,7 @@ conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
 process.send('reset');
 } else if (reason === 403) {
 conn.logger.warn(`[ ⚠ ] Razón de desconexión revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
-cleanupOnConnectionError()
+cleanupOnConnectionError(filePath, botDirRespald)
 } else if (code === 503){
 global.reloadHandler(true).catch(console.error)
 } else {
@@ -438,11 +394,9 @@ await wait(CLOSE_CHECK_INTERVAL);
 }
 if (connection == 'open') {
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
-backupCreds() 
-actualizarNumero() 
-credsStatus() 
 if (update.receivedPendingNotifications) { 
 waitTwoMinutes()
+actualizarNumero() 
 return conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
 }
 }
