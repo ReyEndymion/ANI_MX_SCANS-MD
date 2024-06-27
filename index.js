@@ -9,7 +9,7 @@ import { createInterface } from 'readline'
 import yargs from 'yargs'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const require = createRequire(__dirname) // Bring in the hability to create the 'require' method
-const { name, author } = require(join(__dirname, './package.json')) // https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/
+const { name, author, description } = require(join(__dirname, './package.json')) // https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/
 const { say } = cfonts
 const rl = createInterface(process.stdin, process.stdout)
 
@@ -33,7 +33,7 @@ var isRunning = false
 function start(file) {
 let args = [join(__dirname, file), ...process.argv.slice(2)]
 
-say('Bot de promocion del proyecto de traduccion de manga 🌎ANI MX SCANS🌏\n\nAjuste la pantalla para escanear el codigo QR', {
+say(`${description}\n\nAjuste la pantalla para escanear el codigo QR`, {
 font: 'console',
 align: 'center',
 gradient: ['red', 'magenta']
