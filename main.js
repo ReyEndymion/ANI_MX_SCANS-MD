@@ -569,12 +569,13 @@ const listaDirectorios = readdirSync(jadibts);
 let SBprekey = [];
 
 listaDirectorios.forEach((filesInDir) => {
-const directorio = readdirSync(join(__dirname, jadibts+filesInDir));
+const sessionSB = join(jadibts, filesInDir)
+const directorio = readdirSync(sessionSB);
 const DSBPreKeys = directorio.filter((fileInDir) => {
 if (fileInDir.startsWith('pre-key-')) {
 return true;
 }
-const stats = statSync(path.join(join(__dirname, jadibts+filesInDir+'/'+fileInDir)));
+const stats = statSync(path.join(jadibts, filesInDir, fileInDir));
 const mtime = new Date(stats.mtime);
 const now = new Date();
 const hourAgo = new Date(now - 60 * 60 * 1000);
@@ -591,7 +592,7 @@ console.log('Ningún archivo encontrado');
 } else {
 SBprekey = [...SBprekey, ...DSBPreKeys];
 DSBPreKeys.forEach((fileInDir) => {
-unlinkSync(dirP+jadibts+filesInDir+'/'+fileInDir);
+unlinkSync(jadibts, filesInDir, fileInDir);
 });
 }
 });
