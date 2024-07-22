@@ -225,14 +225,23 @@ privs: {},
 groups: {}
 }
 }
-} else {
-global.db.data.bot[this.user.jid] = {
-chats: {},
-stats: {},
-msgs: {},
-sticker: {},
-settings: {},
+let stats = global.db.data.bot[this.user.jid].stats;
+if (typeof stats !== 'object')
+global.db.data.bot[this.user.jid].stats = {};
+if (!stats) {
+global.db.data.bot[this.user.jid].stats = {}
 };
+let sticker = global.db.data.bot[this.user.jid].sticker;
+if (typeof sticker !== 'object')
+global.db.data.bot[this.user.jid].sticker = {};
+if (!sticker) {
+global.db.data.bot[this.user.jid].sticker = {}
+};
+let msgs = global.db.data.bot[this.user.jid].smgs;
+if (typeof smgs !== 'object')
+global.db.data.bot[this.user.jid].msgs = {};
+if (!msgs) {
+global.db.data.bot[this.user.jid].msgs = {};
 }
 let settings = global.db.data.bot[this.user.jid].settings;
 if (typeof settings !== 'object')
@@ -242,17 +251,28 @@ if (!('self' in settings)) settings.self = false;
 if (!('autoread' in settings)) settings.autoread = false;
 if (!('restrict' in settings)) settings.restrict = false;
 if (!('antiCall' in settings)) settings.antiCall = false;
+if (!('antispam' in settings)) settings.antispam = false;
 if (!('antiPrivate' in settings)) settings.antiPrivate = false;
 if (!('modejadibot' in settings)) settings.modejadibot = true;
 } else
-global.db.data.bot[this.user.jid].settings[this.user.jid] = {
+global.db.data.bot[this.user.jid].settings = {
 self: false,
 autoread: false,
 restrict: false,
+antispam: false,
 antiCall: false,
 antiPrivate: false,
 modejadibot: true,
 };
+} else {
+global.db.data.bot[this.user.jid] = {
+chats: {},
+stats: {},
+msgs: {},
+sticker: {},
+settings: {},
+};
+}
 } catch (e) {
 console.error(e);
 }
@@ -297,7 +317,7 @@ m.exp += Math.ceil(Math.random() * 10);
 
 let usedPrefix;
 let _user =
-global.db.data.bot[this.user.jid] && global.db.data.bot[this.user.jid].chats && global.db.data.bot[this.user.jid].chats.groups && global.db.data.bot[this.user.jid].chats.groups[m.chat] && global.db.data.bot[this.user.jid].chats.groups[m.chat].users && global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] || global.db.data.bot[this.user.jid] && global.db.data.bot[this.user.jid].chats && global.db.data.bot[this.user.jid].chats.privs && global.db.data.bot[this.user.jid].chats.privs[m.sender];
+global.db.data.bot[this.user.jid] && global.db.data.bot[this.user.jid].chats && global.db.data.bot[this.user.jid].chats.groups && global.db.data.bot[this.user.jid].chats.groups[m.chat] && global.db.data.bot[this.user.jid].chats.groups[m.chat].users && global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] || global.db.data.bot[this.user.jid] && global.db.data.bot[this.user.jid].chats && global.db.data.bot[this.user.jid].chats.privs && global.db.data.bot[this.user.jid].chats.privs[m.chat];
 
 const groupMetadata =
 (m.isGroup
@@ -440,8 +460,8 @@ const chats = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups : globa
 const users = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat].users : global.db.data.bot[this.user.jid].chats.privs
 m.plugin = name;
 if (m.chat in chats || m.sender in users) {
-let chat = chats[m.chat];
-let user = users[m.sender];
+let chat = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat] : global.db.data.bot[this.user.jid].chats.privs[m.chat];
+let user = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] : global.db.data.bot[this.user.jid].chats.privs[m.chat];
 const botSpam = global.db.data.bot[this.user.jid].settings;
 
 if (!['owner-unbanchat.js', 'gc-link.js', 'gc-hidetag.js', 'info-creator.js'].includes(name) && chat && chat.isBanned && !isROwner) return; // Except this
@@ -562,7 +582,7 @@ if (count % 10 === 0) {
 conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
-//conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } // Hehehe
 else {
 m.exp += xp;
@@ -755,58 +775,6 @@ if (opts['autoread']) await this.readMessages([m.key]);
 if (settingsREAD.autoread2) await this.readMessages([m.key]);
 // if (settingsREAD.autoread2 == 'true') await this.readMessages([m.key])
 
-if (!m.fromMe && m.text.match(/(Rey Endymion|@5215517489568|@5215533827255|ANIMXSCANS|ANI MX SCANS)/gi)) {
-let emot = pickRandom([
-'🎃',
-'❤',
-'😘',
-'😍',
-'💕',
-'😎',
-'🙌',
-'⭐',
-'👻',
-'🔥',
-]);
-await this.sendMessage(m.chat, { react: { text: emot, key: m.key } });
-}
-function pickRandom(list) {
-return list[Math.floor(Math.random() * list.length)];
-}
-}
-}
-
-/**
- * Handle groups participants update
- * @param {import('@whiskeysockets/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate
- * Tipo de dato para el stub de mensajes de WhatsApp
- * @typedef {import('@whiskeysockets/baileys').WAMessageStubType} WAMessageStubType
- */
-export async function participantsUpdate({ id, participants, action }) {
-const grupo = id.id
-if (!grupo.endsWith(groupID)) return
-console.log('participantsUpdate: ', grupo)
-const chat = global.db.data.bot[this.user.jid].chats.groups[grupo] || {};
-if (typeof chat != 'object') chat = {}
-const groupMetadata = await this.groupMetadata(grupo) || (this.chats[grupo] || {}).metadata;
-let users = global.db.data.bot[this.user.jid].chats.groups[grupo].users
-if (typeof users != 'object') global.db.data.bot[this.user.jid].chats.groups[grupo].users = {}
-if (users) {
-for (const participant of groupMetadata.participants) {
-if (!participant.id.endsWith(userID)) continue
-const user = users[participant.id]
-if (typeof user != 'object') global.db.data.bot[this.user.jid].chats.groups[grupo].users[participant.id] = {}
-if (action === ('add'|'promote'|'daradmin'|'darpoder'|'demote'|'quitarpoder'|'quitaradmin')) {
-if (!user) {
-global.db.data.bot[this.user.jid].chats.groups[grupo].users[participant.id] = {}
-}
-} else if (action === 'remove') {
-delete users[participant.id]
-if (!participant.id.endsWith(userID)) delete users[participant.id]
-}
-}
-} else {
-global.db.data.bot[this.user.jid].chats.groups[grupo].users = {}
 }
 }
 
@@ -815,13 +783,16 @@ global.db.data.bot[this.user.jid].chats.groups[grupo].users = {}
  * @param {import('@whiskeysockets/baileys').BaileysEventMap<unknown>['groups.update']} groupsUpdate
  */
 export async function groupsUpdate(groupsUpdate) {
-const group = groupsUpdate.id
-const usuario = groupsUpdate.participants.id
+for (const groupUpdate of groupsUpdate) {
+const { id, subject, subjectOwner, subjectTime, size, creation, owner, desc, descId, linkedParent, restrict, announce, isCommunity, isCommunityAnnounce, joinApprovalMode, memberAddMode, participants, ephemeralDuration} = groupUpdate
+if (({ id, subject, subjectOwner, subjectTime, size, creation, owner, desc, descId, linkedParent, restrict, announce, isCommunity, isCommunityAnnounce, joinApprovalMode, memberAddMode, participants, ephemeralDuration}) !== undefined) {
+const group = id
 let groups = global.db.data.bot[this.user.jid].chats.groups;
 if (typeof groups !== 'object') global.db.data.bot[this.user.jid].chats.groups = {};
 if (groups) {
-chat = global.db.data.bot[this.user.jid].chats.groups[group];
-if (typeof chat !== 'object') global.db.data.bot[this.user.jid].chats.groups[group] = {};
+//const groupMetadata = await this.groupMetadata(group) || (this.chats[group] || {}).metadata;
+const chat = global.db.data.bot[this.user.jid].chats.groups[group];
+if (typeof chat != 'object') global.db.data.bot[this.user.jid].chats.groups[group] = {}
 if (chat) {
 if (!('isBanned' in chat)) chat.isBanned = false;
 if (!('welcome' in chat)) chat.welcome = true;
@@ -877,9 +848,15 @@ users: {}
 let users = global.db.data.bot[this.user.jid].chats.groups[group].users;
 if (typeof users !== 'object') global.db.data.bot[this.user.jid].chats.groups[group].users = {};
 if (users) {
-let user = global.db.data.bot[this.user.jid].chats.groups[group].users[usuario];
+//const participant = groupMetadata.participants
+if (participants !== undefined) {
+for (const usersGroup of participants) {
+const userGroup = usersGroup.id
+let username = await conn.getName(userGroup)
+if (!userGroup.endsWith(userID)) continue
+let user = global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup];
 if (typeof user !== 'object') {
-global.db.data.bot[this.user.jid].chats.groups[group].users[usuario] = {};
+global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {};
 }
 if (user) {
 // Nuevo contador de mensajes 
@@ -891,7 +868,7 @@ if (!isNumber(user.limit)) user.limit = 10;
 if (!isNumber(user.lastclaim)) user.lastclaim = 0;
 if (!('registered' in user)) user.registered = false;
 if (!user.registered) {
-if (!('name' in user)) user.name = m.name;
+if (!('name' in user)) user.name = username;
 if (!isNumber(user.age)) user.age = -1;
 if (!isNumber(user.regTime)) user.regTime = -1;
 }
@@ -905,14 +882,14 @@ if (!('autolevelup' in user)) user.autolevelup = true;
 if (!isNumber(user.money)) user.money = 0;
 if (!isNumber(user.limit)) user.limit = 10;
 if (!isNumber(user.lastclaim)) user.lastclaim = 0;
-} else
-global.db.data.bot[this.user.jid].chats.groups[group].users[usuario] = {
+} else {
+global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {
 msgcount: {count: 0, time: 0},
 exp: 0,
 limit: 10,
 lastclaim: 0,
 registered: false,
-name: m.name,
+name: username,
 age: -1,
 regTime: -1,
 afk: -1,
@@ -928,10 +905,11 @@ lastclaim: 0,
 lastweekly: 0,
 lastmonthly: 0,
 };
+}
+}
+}
 } else {
-global.db.data.bot[this.user.jid].chats.groups[group].users = {
-[usuario]: {}
-};
+global.db.data.bot[this.user.jid].chats.groups[group].users = {};
 }
 } else {
 global.db.data.bot[this.user.jid].chats.groups = {
@@ -940,8 +918,164 @@ users: {}
 }
 }
 }
-
 }
+global.db.write()
+}
+//console.log('handlerGroupsUpdate: ', groupsUpdate)
+for (const update of groupsUpdate) {
+const {id, subject, author} = update
+if ((id, subject, author) !== undefined) console.log(`se ha cambiado el nombre ${subject} del grupo ${id} y la accion fue por ${author}`)
+}
+}
+
+/**
+ * Handle groups participants update
+ * @param {import('@whiskeysockets/baileys').BaileysEventMap<unknown>['group-participants.update']} groupsUpdate
+ * Tipo de dato para el stub de mensajes de WhatsApp
+ * @typedef {import('@whiskeysockets/baileys').WAMessageStubType} WAMessageStubType
+ */
+export async function participantsUpdate({id, author, participants, action}) {
+const group = id
+if (!group) return
+let groups = global.db.data.bot[this.user.jid].chats.groups;
+if (typeof groups !== 'object') global.db.data.bot[this.user.jid].chats.groups = {};
+if (groups) {
+const groupMetadata = await this.groupMetadata(group) || (this.chats[group] || {}).metadata;
+const chat = global.db.data.bot[this.user.jid].chats.groups[group];
+if (typeof chat != 'object') global.db.data.bot[this.user.jid].chats.groups[group] = {}
+if (chat) {
+if (!('isBanned' in chat)) chat.isBanned = false;
+if (!('welcome' in chat)) chat.welcome = true;
+if (!('detect' in chat)) chat.detect = true;
+if (!('sWelcome' in chat)) chat.sWelcome = '';
+if (!('sBye' in chat)) chat.sBye = '';
+if (!('sPromote' in chat)) chat.sPromote = '';
+if (!('sDemote' in chat)) chat.sDemote = '';
+if (!('delete' in chat)) chat.delete = true;
+if (!('modohorny' in chat)) chat.modohorny = false;
+if (!('autosticker' in chat)) chat.autosticker = false;
+if (!('audios' in chat)) chat.audios = false;
+if (!('antiLink' in chat)) chat.antiLink = false;
+if (!('antiLink2' in chat)) chat.antiLink2 = false;
+if (!('antiviewonce' in chat)) chat.antiviewonce = false;
+if (!('antiToxic' in chat)) chat.antiToxic = false;
+if (!('antiTraba' in chat)) chat.antiTraba = false;
+if (!('antiArab' in chat)) chat.antiArab = false;
+if (!('modoadmin' in chat)) chat.modoadmin = false;
+if (!('simi' in chat)) chat.simi = false;
+if (!('stickers' in chat)) chat.stickers = false;
+if (!('asistente' in chat)) chat.asistente = false;
+if (!('gruposRol' in chat)) chat.gruposRol = false;
+if (!isNumber(chat.expired)) chat.expired = 1;
+if (!('users' in chat)) chat.users = {};
+} else
+global.db.data.bot[this.user.jid].chats[group] = {
+isBanned: false,
+welcome: true,
+detect: true,
+sWelcome: '',
+sBye: '',
+sPromote: '',
+sDemote: '',
+delete: true,
+modohorny: true,
+autosticker: false,
+audios: true,
+antiLink: false,
+antiLink2: false,
+antiviewonce: false,
+antiToxic: false,
+antiTraba: false,
+antiArab: false,
+modoadmin: false,
+simi: false,
+stickers: true,
+asistente: false,
+gruposRol: false,
+expired: 0,
+users: {}
+};
+let users = global.db.data.bot[this.user.jid].chats.groups[group].users;
+if (typeof users !== 'object') global.db.data.bot[this.user.jid].chats.groups[group].users = {};
+if (users) {
+const participant = groupMetadata.participants
+for (const usersGroup of participant) {
+const userGroup = usersGroup.id
+let username = await conn.getName(userGroup)
+if (!userGroup.endsWith(userID)) continue
+let user = global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup];
+if (typeof user !== 'object') {
+global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {};
+}
+if (user) {
+// Nuevo contador de mensajes 
+if (!('msgcount' in user)) user.msgcount = {};
+if (!isNumber(user.msgcount.count)) {user.msgcount.count = 0;}
+if (!isNumber(user.msgcount.time)) {user.msgcount.time = 0;}
+if (!isNumber(user.exp)) user.exp = 0;
+if (!isNumber(user.limit)) user.limit = 10;
+if (!isNumber(user.lastclaim)) user.lastclaim = 0;
+if (!('registered' in user)) user.registered = false;
+if (!user.registered) {
+if (!('name' in user)) user.name = username;
+if (!isNumber(user.age)) user.age = -1;
+if (!isNumber(user.regTime)) user.regTime = -1;
+}
+if (!isNumber(user.afk)) user.afk = -1;
+if (!('role' in user)) user.role = 'Novato';
+if (!('afkReason' in user)) user.afkReason = '';
+if (!('banned' in user)) user.banned = false;
+if (!isNumber(user.warn)) user.warn = 0;
+if (!isNumber(user.level)) user.level = 0;
+if (!('autolevelup' in user)) user.autolevelup = true;
+if (!isNumber(user.money)) user.money = 0;
+if (!isNumber(user.limit)) user.limit = 10;
+if (!isNumber(user.lastclaim)) user.lastclaim = 0;
+} else {
+global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {
+msgcount: {count: 0, time: 0},
+exp: 0,
+limit: 10,
+lastclaim: 0,
+registered: false,
+name: username,
+age: -1,
+regTime: -1,
+afk: -1,
+afkReason: '',
+banned: false,
+warn: 0,
+level: 0,
+role: 'Novato',
+autolevelup: true,
+money: 0,
+limit: 10,
+lastclaim: 0,
+lastweekly: 0,
+lastmonthly: 0,
+};
+}
+}
+if (action === ('add')) {
+global.db.data.bot[this.user.jid].chats.groups[group].users[participant.id] = {}
+} else if (action === 'remove') {
+delete users[participant.id]
+console.log('participantsUpdate: ', participant)
+if (!participant.id.endsWith(userID)) delete users[participant.id]
+}
+} else {
+global.db.data.bot[this.user.jid].chats.groups[group].users = {};
+}
+} else {
+global.db.data.bot[this.user.jid].chats.groups = {
+[group]: {
+users: {}
+}
+}
+}
+global.db.write()
+}
+
 
 export async function callUpdate( callUpdate, conn, isAdmin, isBotAdmin, isOwner, isROwner, participants) {
 let ow = global.owner.filter((entry) => typeof entry[0] === 'string' && !isNaN(entry[0])).map((entry) => ({ jid: entry[0] })).slice(0).map(({ jid }) => `${participants.some((p) => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `;

@@ -28,17 +28,20 @@ global.paypal = `https://www.paypal.me/AMxScan`
 global.urlgofc = 'https://www.facebook.com/groups/otakustogether'
 global.otkstgthr = 'ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺'
 global.namerepre = `「 Traducciones de Manga 」`
-global.animxscans = [['14708300538', 'Bot principal - ANI MX SCANS', true]]
+global.animxscans = [['1234567890', 'Bot principal - ANI MX SCANS', true]]
 global.me = animxscans
 global.hp_animxscans = 'https://www.facebook.com/ANIMxSCANS' 
 global.hp_otkstogthr = 'https://www.facebook.com/OtakusTogether' 
-global.md = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
+global.md = 'https://github.com/ReyEndymion'
 global.animxscansmd = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
-global.suppbot = 'https://chat.whatsapp.com/DpcgpFF2RO16wFG9SIZemG'
-global.gofwhabot = 'https://chat.whatsapp.com/DpcgpFF2RO16wFG9SlZemG'
 global.gt = '(☞ﾟ∀ﾟ)☞'
 global.botcomedia = '𝓑𝓸𝓽 𝓒𝓸𝓶𝓮𝓭𝓲𝓪 👺👍'
-global.botcomediamd = 'https://github.com/ReyEndymion/Bot-Comedia-MD'
+global.suppbot = 'https://chat.whatsapp.com/IgcrWQHcxpoD1dgSvTGQ7Y'
+global.gofwhabot = 'https://chat.whatsapp.com/KL6BBEMQoH6KVLy7wjs5St'
+global.lobby = 'https://chat.whatsapp.com/DV5v6atFvtAKaq5mWOFPNb'
+global.community = 'https://chat.whatsapp.com/LpIcN0eoJYXDmT65IwixPk'
+global.gaportes = 'https://chat.whatsapp.com/JArEosfq4x89SGKnQKH6Td'
+
 /***************GLOBAL CONFIG****************/
 global.raiz = `./`
 global.anidir = `ANI_MX_SCANS`
