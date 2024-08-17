@@ -1,5 +1,5 @@
 import axios from 'axios'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 let handler = async (m, { conn, args, usedPrefix, command }) => {
 if (!args[0]) throw `*[❗INFO❗] INGRESE EL NOMBRE DE USUARIO DE UN USUARIO DE INSTAGRAM, EJEMPLO: ${usedPrefix + command} luisitocomunica*`
 let res = await igstalk(args[0].replace(/^@/, ''))

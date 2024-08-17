@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import axiox from 'axios'
 import * as scraper from '@bochilteam/scraper';
 let handler = async (m, { conn, args, command, usedPrefix }) => {

@@ -1,6 +1,6 @@
 import translate from '@vitalets/google-translate-api'
 import fetch from 'node-fetch'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 let handler = async (m, { conn, text }) => {
     let resp, imagen
 if (!text) {resp = `*[❗INFO❗] INGRESE EL NOMBRE DE ALGUN ANIME QUE DESEE BUSCAR*`}
