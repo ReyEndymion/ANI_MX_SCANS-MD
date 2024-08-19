@@ -1,7 +1,7 @@
 import axios from 'axios'
 import FormData from 'form-data'
 import fetch from 'node-fetch'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 let split = '|'
 let handler = async (m, { conn, args: [effect], text: txt, usedPrefix, command, name }) => {
 if (!effect){ 

@@ -1,6 +1,6 @@
 /* Created by https://github.com/Rlxfly */
 
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import fetch from 'node-fetch'
 
 async function sekaikomikDl(url) {

@@ -20,6 +20,7 @@ global.owner = [
 
 /**********GLOBAL INFO*****************/
 global.packname = '(☞ﾟ∀ﾟ)☞'
+global.gt = '(☞ﾟ∀ﾟ)☞'
 global.amsicon = `🌎`
 global.author = '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷'
 global.wm = '🌎ANI MX SCANS🌏'
@@ -34,8 +35,6 @@ global.hp_animxscans = 'https://www.facebook.com/ANIMxSCANS'
 global.hp_otkstogthr = 'https://www.facebook.com/OtakusTogether' 
 global.md = 'https://github.com/ReyEndymion'
 global.animxscansmd = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
-global.gt = '(☞ﾟ∀ﾟ)☞'
-global.botcomedia = '𝓑𝓸𝓽 𝓒𝓸𝓶𝓮𝓭𝓲𝓪 👺👍'
 global.suppbot = 'https://chat.whatsapp.com/IgcrWQHcxpoD1dgSvTGQ7Y'
 global.gofwhabot = 'https://chat.whatsapp.com/KL6BBEMQoH6KVLy7wjs5St'
 global.lobby = 'https://chat.whatsapp.com/DV5v6atFvtAKaq5mWOFPNb'
@@ -49,6 +48,7 @@ global.dirP = !fs.existsSync(anidir) ? __dirname : join(raiz, anidir) //Solo si 
 global.sessionNameAni = `ANIMXSCANS`
 global.authFolder = join(dirP, sessionNameAni)
 global.authFolderRespald = join(dirP, `sesionRespaldo`)
+global.dataBases = join(dirP, 'dataBases')
 global.temp = join(dirP, 'tmp')
 global.media = join(dirP, 'media')
 global.jadibts = join(dirP, 'jadibts')
@@ -92,6 +92,10 @@ console.log('Directorio sesionRespaldo creado exitosamente');
 if (!fs.existsSync(temp)) {
 fs.mkdirSync(temp);
 console.log('Directorio tmp creado exitosamente');
+}
+if (!fs.existsSync(dataBases)) {
+fs.mkdirSync(dataBases);
+console.log(`Directorio ${dataBases} creado exitosamente`);
 }
 
 /*******IDIOMAS***** */

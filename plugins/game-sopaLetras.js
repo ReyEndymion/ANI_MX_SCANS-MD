@@ -1,6 +1,6 @@
 import WordFind from 'wordfind'
 import request from 'request';
-import cheerio from 'cheerio';  
+import * as cheerio from 'cheerio';  
 import fs from 'fs';
 import jimp from 'jimp';
 

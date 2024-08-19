@@ -463,6 +463,7 @@ if (m.chat in chats || m.sender in users) {
 let chat = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat] : global.db.data.bot[this.user.jid].chats.privs[m.chat];
 let user = m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] : global.db.data.bot[this.user.jid].chats.privs[m.chat];
 const botSpam = global.db.data.bot[this.user.jid].settings;
+let creators = owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
 
 if (!['owner-unbanchat.js', 'gc-link.js', 'gc-hidetag.js', 'info-creator.js'].includes(name) && chat && chat.isBanned && !isROwner) return; // Except this
 
@@ -481,7 +482,7 @@ const messageText = `
 —◉ *Aviso ${messageNumber}/3 (Total: 3)*
 —◉ ${user.bannedReason ? `\n*Motivo:* ${user.bannedReason}` : '*Motivo:* Sin especificar'}
 —◉ *Si consideras que esto es un error y cuentas con pruebas, puedes comunicarte con el propietario del Bot para apelar la suspensión.*
-—◉ *Contacto para apelaciones:* wa.me/5219992095479
+—◉ *Contacto para apelaciones:* ${creators}
 ╚═════════════════════════╝
  `.trim();
 let resp = messageText;
@@ -819,7 +820,7 @@ if (!('gruposRol' in chat)) chat.gruposRol = false;
 if (!isNumber(chat.expired)) chat.expired = 1;
 if (!('users' in chat)) chat.users = {};
 } else
-global.db.data.bot[this.user.jid].chats[group] = {
+global.db.data.bot[this.user.jid].chats.groups[group] = {
 isBanned: false,
 welcome: true,
 detect: true,
@@ -1055,13 +1056,7 @@ lastweekly: 0,
 lastmonthly: 0,
 };
 }
-}
-if (action === ('add')) {
-global.db.data.bot[this.user.jid].chats.groups[group].users[participant.id] = {}
-} else if (action === 'remove') {
-delete users[participant.id]
-console.log('participantsUpdate: ', participant)
-if (!participant.id.endsWith(userID)) delete users[participant.id]
+if (!userGroup.endsWith(userID)) delete users[userGroup]
 }
 } else {
 global.db.data.bot[this.user.jid].chats.groups[group].users = {};
@@ -1073,6 +1068,12 @@ users: {}
 }
 }
 }
+if (action === ('add')) {
+global.db.data.bot[this.user.jid].chats.groups[group].users[participants] = {}
+} else if (action === 'remove') {
+delete global.db.data.bot[this.user.jid].chats.groups[group].users[participants]
+}
+console.log('participantsUpdate: ', participants)
 global.db.write()
 }
 
@@ -1125,7 +1126,11 @@ const { fromMe, id, participant } = message;
 if (fromMe) return;
 let msg = this.serializeM(this.loadMessage(id));
 if (!msg) return;
-let chat = global.db.data.bot[this.user.jid].chats[msg.chat] || {};
+let bot = global.db.data.bot[this.user.jid]
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+let chat = msg.isGroup ? groups[msg.chat] || {} : privs[msg.chat] || {};
 if (chat.delete) return;
 let resp = `
 ━━━━⬣*ANTI DELETE*⬣━━━━
@@ -1136,18 +1141,7 @@ let resp = `
 *—◉ #enable delete*
 ━━━━⬣*ANTI DELETE*⬣━━━━
 `.trim();
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-conn.sendPresenceUpdate('composing' , msg.chat);
-}
-}
-conn.sendMessage(msg.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendWritinText(msg.chat, resp, msg)
 this.copyNForward(msg.chat, msg).catch((e) => console.log(e, msg));
 } catch (e) {
 console.error(e);
