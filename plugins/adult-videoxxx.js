@@ -1,10 +1,18 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler  = async (m, { conn, usedPrefix, command }) => {
-if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*'   
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chats] || {}
+if (!chat.modohorny && m.isGroup) {return conn.sendWritingText(m.chat, '*[ ⚠️ ] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMINISTRADOR DE ESTE GRUPO Y DESEA ACTIVARLOS ESCRIBA #enable modohorny*', m)
+} else {
 let res = await pickRandom(asupan)
-conn.sendFile (m.chat, res, null, '*DISFRUTA DEL VIDEO 🥵*', m, null, {viewOnce: true})
-    await delay(1 * 10000)
-//conn.sendMessage(m.chat, { text: wm, res, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+let resp = '*DISFRUTA DEL VIDEO 🥵*'
+let q = await conn.sendMessage(m.chat, { image: {url: res}, caption: resp.trim(), mentions: conn.parseMention(resp), viewOnce: true }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+await delay(1 * 2000)
+return conn.sendWritingText(m.chat, resp, q)
+}
 }
 handler.help = ['videoxxx']
 handler.tags = ['random']

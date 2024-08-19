@@ -5,10 +5,10 @@ import path from 'path';
 
 const handler = async (m, { conn, usedPrefix }) => {
   const chatId = m.isGroup ? [m.chat, m.sender] : [m.sender];
-  const sessionPath = authFolderAniMX;
+  const sessionPath = authFolder;
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
     let uniqid = `${who.split`@`[0]}` //parentw.getName(who)
-    const subBotSessionPath = authFolderAniMX + '/' + uniqid
+    const subBotSessionPath = jadibts + '/' + uniqid
   if (global.conn.user.jid !== conn.user.jid) {
     try {
       const files = await fs.readdir(subBotSessionPath);

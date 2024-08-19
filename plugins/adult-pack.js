@@ -1,25 +1,20 @@
 import fetch from 'node-fetch'
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler = async (m, { conn, command, viewOnce }) => {
-if (!global.db.data.bot[conn.user.jid].chats[m.chat].modohorny && m.isGroup) { 
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chats] || {}
+if (!chat.modohorny && m.isGroup) { 
 let resp = '*[ ⚠️ ] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMINISTRADOR DE ESTE GRUPO Y DESEA ACTIVARLOS ESCRIBA #enable modohorny*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+return await conn.sendWritingText(m.chat, resp, m );
 }
 let url = pack[Math.floor(Math.random() * pack.length)]
-conn.sendFile (m.chat, url, null, '*_🥵 Pack 🥵_*', null, null, {viewOnce: true}, m)
-    await delay(1 * 2000)
-return conn.sendMessage(m.chat, { text: `_🥵 Pack 🥵_`}, wm, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+let resp = '*_🥵 Pack 🥵_*'
+let q = await conn.sendMessage(m.chat, { image: {url: url}, caption: resp.trim(), mentions: conn.parseMention(resp), viewOnce: true }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+await delay(1 * 2000)
+return conn.sendWritingText(m.chat, resp, q)
 }
 handler.help = ['pack']
 handler.tags = ['internet']

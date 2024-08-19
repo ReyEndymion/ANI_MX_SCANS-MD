@@ -10,33 +10,47 @@ if (!text) {
 resp = '*[❗INFO❗] INGRESE EL TEXTO O TEMA QUE DESEE BUSCAR*'
 } else {
 try {
-let search = await google({'query': text})//await googleIt(url)
+let search = await google({
+query: text,
+options: {
+url: 'https://www.google.com/search',
+qs: {
+q: text,
+num: 10,
+start: 0,
+lr: 'lang_es' 
+},
+headers: {
+'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:34.0) Gecko/20100101 Firefox/34.0',
+},
+}
+})
 imagen = `https://image.thum.io/get/fullpage/${url}`
 //await (await fetch(global.API('nrtm', '/api/ssweb', { delay: 1000, url, full }))).arrayBuffer()
 resp = `*RESULTADOS DE : _${text}_*\n\n${url}\n\n`
-//let msg = search.then(async (res) => {})
+let toesp = ''
 for (let g of search) {
 resp += `_*${g.title}*_\n_${g.link}_\n_${g.snippet}_\n\n`
 } 
 } catch (error) {
 resp = `${error}`
 }
-}    
-    let txt = '';
-    let count = 0;
+}
+let txt = '';
+let count = 0;
 if (resp === undefined) return
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 10));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 10));
+txt += c;
+count++;
+if (count % 10 === 0) {
+
 await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
+}
+}
 
 if (imagen) {
-return conn.sendMessage(m.chat, { image: {url: imagen}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
+return conn.sendMessage(m.chat, { image: {url: imagen}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
 } else {
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }		

@@ -1,8 +1,16 @@
 import { googleImage } from '@bochilteam/scraper'
 import axios from "axios"
 let handler = async (m, {command, conn, text, usedPrefix}) => {
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const inDBChat = m.isGroup ? groups : privs
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chats] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+const user = m.isGroup ? users[m.sender] || {} : privs[m.sender]
 let resp, imagen
-if (!global.db.data.bot[conn.user.jid].chats[m.chat].modohorny && m.isGroup) {resp = `*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO ${usedPrefix}enable modohorny*`}
+if (!chat.modohorny && m.isGroup) {resp = `*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO ${usedPrefix}enable modohorny*`}
 const res = await googleImage(command)
 let image = await res.getRandom()
 let nsfw = `🔎 *RESULTADO DE:* ${text}\n🔗 *LINK ${image}\n🌎 *BUSCADOR:* Google`

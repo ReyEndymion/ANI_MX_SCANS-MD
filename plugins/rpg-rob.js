@@ -43,7 +43,7 @@ txt += c;
 count++;
 
 if (count % 10 === 0) {
-   await conn.sendPresenceUpdate('composing' , m.chat);
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 if (resp) {

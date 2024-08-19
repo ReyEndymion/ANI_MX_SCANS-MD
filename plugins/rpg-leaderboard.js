@@ -1,9 +1,9 @@
 let handler = async (m, { conn, args, participants }) => {
-  if (m.chat.endsWith(userID)) return
-  let chats = global.db.data.bot[conn.user.jid].chats
-  let chat = chats.groups[m.chat] || {}
- // let users = chat.users || {}
-  //let user = users[m.sender] || {}
+if (m.chat.endsWith(userID)) return
+let chats = global.db.data.bot[conn.user.jid].chats
+let chat = chats.groups[m.chat] || {}
+// let users = chat.users || {}
+//let user = users[m.sender] || {}
 let users = Object.entries(chat.users).map(([key, value]) => {
 return {...value, jid: key}})
 let sortedExp = users.map(toNumber('exp')).sort(sort('exp'))

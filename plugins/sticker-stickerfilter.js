@@ -17,15 +17,15 @@ ${effects.map(effect => `_> ${effect}_`).join('\n')}
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 }
 let q = m.quoted ? m.quoted : m
@@ -35,33 +35,33 @@ let resp = '*_🔰 No se encontro la imagen_*\n\n*_✅ Responda a una imagen_*'
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 }
 if (!/image\/(jpe?g|png)/.test(mime)) {
-    let resp = `*_⚠️ Formato no admitido_*\n\n*_👉🏻 Responda a una imagen_*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 5));
-        txt += c;
-        count++;
-    
-        if (count % 10 === 0) {
-           await conn.sendPresenceUpdate('composing' , m.chat);
-        }
-    }
-        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    
-    }
+let resp = `*_⚠️ Formato no admitido_*\n\n*_👉🏻 Responda a una imagen_*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 5));
+txt += c;
+count++;
+
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+}
 let img = await q.download()
 let url = await uploadImage(img)
 let apiUrl = global.API('https://some-random-api.ml/canvas/', encodeURIComponent(effect), {
@@ -70,25 +70,25 @@ avatar: url
 try {
 let stiker = await sticker(null, apiUrl, global.gt, global.author)
 //conn.sendFile(m.chat, stiker, null, { asSticker: true })
-conn.sendMessage(m.chat, {sticker: {url: stiker}?  stiker : {url: stiker},  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
-    
+conn.sendMessage(m.chat, {sticker: {url: stiker}?stiker : {url: stiker},mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
+
 } catch (e) {
 let resp = '*_⚠️ Ocurrió un error al hacer la conversión a sticker_*\n\n*_✳️ Enviando imagen en su lugar..._*'
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
-//    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+//await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 //await conn.sendFile(m.chat, apiUrl, 'image.png', null, m)
-await conn.sendMessage(m.chat, { image: {url: apiUrl}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  
+return conn.sendMessage(m.chat, { image: {url: apiUrl}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }}
 handler.help = ['stickfilter (caption|reply media)']
 handler.tags = ['General']

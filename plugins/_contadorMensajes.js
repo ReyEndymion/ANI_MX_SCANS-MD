@@ -119,26 +119,4 @@ bot[conn.user.jid] = { chats: { privs: {}, groups: {} } };
 global.db.data.bot[conn.user.jid] = bot;
 }
 }
-/**
-if (chats) {
-}
-if ()
-const databaseFile = './countMessagesReg.json';
-const adapter = new JSONFile(databaseFile);
-const db = new Low(adapter);
-if (db) {
-await global.db.read();
-global.db.data = global.db.data || {};
-global.db.data.bot = global.db.data.bot || {};
-global.db.write();
-} else {
-global.db.write();
-}
- */
-/**
 
-if (!groups[m.chat]) {
-groups[m.chat] = { users: {} };
-bot.chats.groups[m.chat] = groups[m.chat];
-}
- */

@@ -7,12 +7,10 @@ let boost3 = `*${pickRandom(['41','42','43','44','45','46','47','48','49','50','
 let boost4 = `*${pickRandom(['61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80'])}%*`
 let boost5 = `*${pickRandom(['81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100'])}%*`
 const startComposing = async (conn, m) => {
-  
 await conn.sendPresenceUpdate('composing', m.chat);
 };
 
 const stopComposing = async (conn, m) => {
-  
 await conn.sendPresenceUpdate('paused', m.chat);
 };
 let old = performance.now()
@@ -33,7 +31,7 @@ let doxeo = `*[ ✔ ] PERSONA DOXXEADA CON EXITO*\n*⏳ DOXXEADO EN: ${speed} se
 *MAC:* 5A:78:3E:7E:00
 *ISP:* Ucom unversal 
 *DNS:* 8.8.8.8
-*ALT DNS:* 1.1.1.8.1  
+*ALT DNS:* 1.1.1.8.1
 *DNS SUFFIX:* Dlink
 *WAN:* 100.23.10.15
 *WAN TYPE:* private nat
@@ -61,34 +59,33 @@ Sof02s32inf14.1e100.net
 let txt = '';
 let count = 0;
 for (const c of doxeo) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
+await new Promise(resolve => setTimeout(resolve, 5));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-      
+if (count % 10 === 0) {
 await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+}
 }
 async function loading() {
-    var hawemod = [
-    `《 █▒▒▒▒▒▒▒▒▒▒▒》${boost1}`,
-    `《 ████▒▒▒▒▒▒▒▒》${boost2}`,
-    `《 ███████▒▒▒▒▒》${boost3}`,
-    `《 ██████████▒▒》${boost4}`,
-    `《 ████████████》${boost5}`
-    ]
-       let { key } = await conn.sendMessage(m.chat, {text: start, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-    for (let i = 0; i < hawemod.length; i++) {
+var hawemod = [
+`《 █▒▒▒▒▒▒▒▒▒▒▒》${boost1}`,
+`《 ████▒▒▒▒▒▒▒▒》${boost2}`,
+`《 ███████▒▒▒▒▒》${boost3}`,
+`《 ██████████▒▒》${boost4}`,
+`《 ████████████》${boost5}`
+]
+ let { key } = await conn.sendMessage(m.chat, {text: start, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+for (let i = 0; i < hawemod.length; i++) {
 await new Promise(resolve => setTimeout(resolve, 1000)); 
-    startComposing(conn, m);
+startComposing(conn, m);
 await conn.sendMessage(m.chat, {text: hawemod[i], edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}); 
-      }
-      stopComposing(conn, m);
-       await conn.sendMessage(m.chat, {text: doxeo, edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
-      return       
-     }
-     loading() 
+}
+stopComposing(conn, m);
+ await conn.sendMessage(m.chat, {text: doxeo, edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+return 
+ }
+ loading() 
 }
 handler.help = ['doxear <nombre> | <@tag>']
 handler.tags = ['fun']

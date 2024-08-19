@@ -9,16 +9,15 @@ let resp = `*${toM(a)}, DEBERIAS CASARTE 💍 CON ${toM(b)}, HACEN UNA BUENA PAR
 let txt = '';
 let count = 0;
 for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    txt += c;
-    count++;
+await new Promise(resolve => setTimeout(resolve, 20));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-      
+if (count % 10 === 0) {
 await conn.sendPresenceUpdate('composing' , m.chat);
-    }
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 handler.help = ['formarpareja']
 handler.tags = ['main', 'fun']

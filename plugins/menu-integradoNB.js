@@ -26,22 +26,22 @@ let vn = join(media, 'menu.mp3')
 let img = imagen4
 let pp = imagen1
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender 
-let userm =  `@${who.split(`@s.whatsapp.net`)[0]}` && `@${who.replace(/@.+/, '')}`
-let userg =  await conn.getName(m.chat)
-let contextInfo = {  
-  mentionedJid: [m.sender],  
-  "externalAdReply": {  
-  "showAdAttribution": true,  
-  "containsAutoReply": true,
-  "renderLargerThumbnail": true,  
-  "title": global.wm,   
-  "containsAutoReply": true,  
-  "mediaType": 1,   
-  "thumbnail": pp,  
-  "mediaUrl": paypal,  
-  "sourceUrl": paypal  
-  }  
-  }  
+let userm =`@${who.split(`@s.whatsapp.net`)[0]}` && `@${who.replace(/@.+/, '')}`
+let userg =await conn.getName(m.chat)
+let contextInfo = {
+mentionedJid: [m.sender],
+"externalAdReply": {
+"showAdAttribution": true,
+"containsAutoReply": true,
+"renderLargerThumbnail": true,
+"title": global.wm, 
+"containsAutoReply": true,
+"mediaType": 1, 
+"thumbnail": pp,
+"mediaUrl": paypal,
+"sourceUrl": paypal
+}
+}
 let locale = 'es'
 let d = new Date(new Date + 3600000)
 let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
@@ -90,22 +90,22 @@ level, limit, userm, weton, week, date, time, totalreg, rtotalreg, role,
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
 let { money, joincount } = user
 let resp, contextinfo
-    
+
 //Asistente de grupos
 try {
 switch (command) {
 case `asistente`:
-    try {
+try {
 resp = `┏━━━━━━━━━━━━━━━━━━━━━┓
-┣   HOLA ✨${userm}✨, ESTE ES EL MENU DE *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO* DE ${wm}* 
+┣ HOLA ✨${userm}✨, ESTE ES EL MENU DE *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO* DE ${wm}* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *ASISTENTES DE GRUPO ${wm}*\npowered by\n*${namerepream}*
+┣ *ASISTENTES DE GRUPO ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *☑️ enable asistente*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + enable  \nUsar asi: *${usedPrefix}enable asistente* 
+┣ *☑️ enable asistente*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + enable\nUsar asi: *${usedPrefix}enable asistente* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *☑️ disable asistente*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + disable  \nUsar asi: *${usedPrefix}disable asistente* 
+┣ *☑️ disable asistente*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + disable\nUsar asi: *${usedPrefix}disable asistente* 
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *☑️ enable gruposRol*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + enable gruposRol \nUsar asi: *${usedPrefix}enable gruposRol* 
 ━━━━━━━━━━━━━━━━━━━━
@@ -128,8 +128,8 @@ resp = `┏━━━━━━━━━━━━━━━━━━━━━┓
 ┣ *☑️ disable stickers*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + disable stickers \nUsar asi: *${usedPrefix}disable stickers`
 contextinfo = contextInfo
 } catch {
-  resp = `
-  *HOLA ✨${userm}✨, ESTE ES EL MENU DE *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO* DE ${wm}*
+resp = `
+*HOLA ✨${userm}✨, ESTE ES EL MENU DE *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO* DE ${wm}*
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
@@ -178,30 +178,30 @@ contextinfo = contextInfo
 
 
 
-      let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 1));
-    txt += c;
-    count++;
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-    await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
-  
-  return conn.sendMessage(m.chat, { text: resp.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+}
+
+return conn.sendMessage(m.chat, { text: resp.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 
 }
 
 break
 //efectos de audio
 
-    case `audioefect`:
-  try {
-    resp =  `${gtam} ESTE ES EL MENU DE LOS EFECTOS DE AUDIO\n✨${userm}✨*
+case `audioefect`:
+try {
+resp =`${gt} ESTE ES EL MENU DE LOS EFECTOS DE AUDIO\n✨${userm}✨*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *EFECTOS DE AUDIOS ${wm}*\npowered by\n*${namerepream}*
+┣ *EFECTOS DE AUDIOS ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -231,19 +231,19 @@ break
 contextinfo = contextInfo
 } catch {
 
-    }
+}
 break;
-  
+
 //Audios del bot
 
 case `audios`:
-  try {
-  
-    resp = `${gtam} ✨${userm}✨ESTE ES EL MENU DE los audios predeterminados del Bot* 
+try {
+
+resp = `${gt} ✨${userm}✨ESTE ES EL MENU DE los audios predeterminados del Bot* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *MENU AUDIOS ${wm}*\npowered by\n*${namerepream}*
+┣ *MENU AUDIOS ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *${gtam}* ELIJE \nUsar asi: *${usedPrefix}PROBAR LOS AUDIOS* 
+┣ *${gt}* ELIJE \nUsar asi: *${usedPrefix}PROBAR LOS AUDIOS* 
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *🔊 Quien es tu sempai botsito 7w7 escribe: Quien es tu sempai botsito 7w7* 
 ━━━━━━━━━━━━━━━━━━━━
@@ -344,9 +344,9 @@ break
 //buscadores
 
 case `buscar`:
-  try {
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS para DESCARGAR ✨${userm}✨
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS para DESCARGAR ✨${userm}✨
 ┣ *BUSCAR ${wm}*powered by\n${igfg}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
@@ -404,10 +404,10 @@ break
 //caja fuerte
 
 case `cajafuerte`:
-  try {
-    resp = `${gtam}✨${userm}✨ ESTE ES EL MENU DE LOS COMANDOS DE LA CAJA FUERTE \n\nAQUI PUEDE GUARDAR MENSAJES QUE QUIERAS VER MAS TARDE* 
+try {
+resp = `${gt}✨${userm}✨ ESTE ES EL MENU DE LOS COMANDOS DE LA CAJA FUERTE \n\nAQUI PUEDE GUARDAR MENSAJES QUE QUIERAS VER MAS TARDE* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🗳️CAJA FUERTE🔐 ${wm}*\npowered by\n*${namerepream}*
+┣ *🗳️CAJA FUERTE🔐 ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *AGREGAR A LA LISTA*
 ━━━━━━━━━━━━━━━━━━━━
@@ -467,7 +467,7 @@ case `cajafuerte`:
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *APOYO*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *💵 DONAR*\nDescripcion: dona por favor que los pobres deben comer y ya no desarrollan \nUsar asi: *${usedPrefix}donasi  
+┣ *💵 DONAR*\nDescripcion: dona por favor que los pobres deben comer y ya no desarrollan \nUsar asi: *${usedPrefix}donasi
 ┣ *👽 OWNER*\nDescripcion: conoce los numeros de quien da soporte a este bot \nUsar asi: *${usedPrefix}owner* 
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *🔰 INFOBOT*\nDescripcion: la informacion del Bot \nUsar asi: *${usedPrefix}infobot* 
@@ -482,10 +482,10 @@ break
 //Chat Anonimo
 
 case `chatanonimo`:
-  try {
-  
-    resp = `${gtam} ESTE ES EL MENU DE los comandos para el chat anonimo\n✨${userm}✨
-┣ *CHAT ANONIMO ${wm}*\npowered by\n*${namerepream}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE los comandos para el chat anonimo\n✨${userm}✨
+┣ *CHAT ANONIMO ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -506,12 +506,12 @@ break
 //Convertidores
 
 case `convert`:
-  try {
-  
-    resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS para CONVERTIR ✨${userm}✨
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS para CONVERTIR ✨${userm}✨
 * 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *CONVERTIDORES ${wm}*\npowered by\n*${namerepream}*
+┣ *CONVERTIDORES ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -536,9 +536,9 @@ break
 //Descargas
 
 case `descargas`:
-  try {
-    resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS para DESCARGAR ✨${userm}✨ powered by ${igfg}*
-    *DESCARGAS ${wm}*
+try {
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS para DESCARGAR ✨${userm}✨ powered by ${igfg}*
+*DESCARGAS ${wm}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -605,9 +605,9 @@ break
 //Facebook
 
 case `facebook`:
-  try {
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS DE FACEBOOK\n✨${userm}✨\npowered by\n*${namerepream}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS DE FACEBOOK\n✨${userm}✨\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *FACEBOOK ${wm}*
 ━━━━━━━━━━━━━━━━━━━━
@@ -630,11 +630,11 @@ break
 //Grupos (administradores)
 
 case `gadmin`:
-  try {
-  
-    resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS para LOS ADMINS ✨${userm}✨
-    *📅 ${gtam} fecha: ${week}, ${date}*
-    *📊 Registrados: ${rtotalreg}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS para LOS ADMINS ✨${userm}✨
+*📅 ${gt} fecha: ${week}, ${date}*
+*📊 Registrados: ${rtotalreg}*
 * 
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *MENU \nUsar asi: *${usedPrefix}SOLO ADMINS de ${wm} powered by*\n*${igfg}*
@@ -694,54 +694,54 @@ break
 //Herramientas
 
 case `herramientas`:
-  try {
-  
-    resp = `${gtam} ✨${userm}✨ ESTE ES EL MENU DE HERRAMIENTAS* 
+try {
+
+resp = `${gt} ✨${userm}✨ ESTE ES EL MENU DE HERRAMIENTAS* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *HERRAMIENTAS ${wm}*\npowered by\n*${namerepream}*
+┣ *HERRAMIENTAS ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  SPAM MENSAJE*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + spamwa *<numero|texto|cantidad>* \nUsar asi: *${usedPrefix}spamwa* 
+┣ *🛠️SPAM MENSAJE*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + spamwa *<numero|texto|cantidad>* \nUsar asi: *${usedPrefix}spamwa* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  TAMAÑO*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + tamaño *<cantidad> <imagen / video>* \nUsar asi: *${usedPrefix}tamaño* 
+┣ *🛠️TAMAÑO*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + tamaño *<cantidad> <imagen / video>* \nUsar asi: *${usedPrefix}tamaño* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  CLIMA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + clima *<país> <ciudad>* \nUsar asi: *${usedPrefix}clima* 
+┣ *🛠️CLIMA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + clima *<país> <ciudad>* \nUsar asi: *${usedPrefix}clima* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  ENCUESTA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + encuesta *<texto1|texto2...>* \nUsar asi: *${usedPrefix}encuesta* 
+┣ *🛠️ENCUESTA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + encuesta *<texto1|texto2...>* \nUsar asi: *${usedPrefix}encuesta* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  NO MOLESTAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + afk *<motivo>* \nUsar asi: *${usedPrefix}afk* 
+┣ *🛠️NO MOLESTAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + afk *<motivo>* \nUsar asi: *${usedPrefix}afk* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  RECONOCIMIENTO DE TEXTO EN IMAGENES*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + ocr *<responde a imagen>* \nUsar asi: *${usedPrefix}ocr* 
+┣ *🛠️RECONOCIMIENTO DE TEXTO EN IMAGENES*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + ocr *<responde a imagen>* \nUsar asi: *${usedPrefix}ocr* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  ACORTAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + acortar *<enlace / link / url>* \nUsar asi: *${usedPrefix}acortar* 
+┣ *🛠️ACORTAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + acortar *<enlace / link / url>* \nUsar asi: *${usedPrefix}acortar* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  CALCULADORA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + calc *<operacion math>* \nUsar asi: *${usedPrefix}calc* 
+┣ *🛠️CALCULADORA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + calc *<operacion math>* \nUsar asi: *${usedPrefix}calc* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  BORRAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + del *<mensaje>* \nUsar asi: *${usedPrefix}del* 
+┣ *🛠️BORRAR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + del *<mensaje>* \nUsar asi: *${usedPrefix}del* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  RECONOCIENTO DE MUSICA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + whatmusic *<audio>* \nUsar asi: *${usedPrefix}whatmusic* 
+┣ *🛠️RECONOCIENTO DE MUSICA*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + whatmusic *<audio>* \nUsar asi: *${usedPrefix}whatmusic* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  LEER QR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + readqr *<imagen (QR)>* \nUsar asi: *${usedPrefix}readqr* 
+┣ *🛠️LEER QR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + readqr *<imagen (QR)>* \nUsar asi: *${usedPrefix}readqr* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  ENVIAR QR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + qrcode *<texto>* \nUsar asi: *${usedPrefix}qrcode* 
+┣ *🛠️ENVIAR QR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + qrcode *<texto>* \nUsar asi: *${usedPrefix}qrcode* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  READMORE*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + readmore *<texto1| texto2>* \nUsar asi: *${usedPrefix}readmore* 
+┣ *🛠️READMORE*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + readmore *<texto1| texto2>* \nUsar asi: *${usedPrefix}readmore* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  STYLETEXT*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + styletext *<texto>* \nUsar asi: *${usedPrefix}styletext* 
+┣ *🛠️STYLETEXT*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + styletext *<texto>* \nUsar asi: *${usedPrefix}styletext* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  TRADUCIR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + traducir *<texto>* \nUsar asi: *${usedPrefix}traducir* 
+┣ *🛠️TRADUCIR*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + traducir *<texto>* \nUsar asi: *${usedPrefix}traducir* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  VIDEO CONFERENCIA EN ZOOM*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + zoom *<texto>* \nUsar asi: *${usedPrefix}zoom* 
+┣ *🛠️VIDEO CONFERENCIA EN ZOOM*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + zoom *<texto>* \nUsar asi: *${usedPrefix}zoom* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  NUMEROS EN WHATSAPP*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + nowa *<numero>x* \nUsar asi: *${usedPrefix}nowa* 
+┣ *🛠️NUMEROS EN WHATSAPP*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + nowa *<numero>x* \nUsar asi: *${usedPrefix}nowa* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  COVID*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + covid *<pais>* \nUsar asi: *${usedPrefix}covid* 
+┣ *🛠️COVID*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + covid *<pais>* \nUsar asi: *${usedPrefix}covid* 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🛠️  HORARIO*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + horario \nUsar asi: *${usedPrefix}horario*` 
+┣ *🛠️HORARIO*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + horario \nUsar asi: *${usedPrefix}horario*` 
 contextinfo = contextInfo
-    } catch {
-  resp = `
+} catch {
+resp = `
 ┣ *HOLA ✨${userm}✨, ESTE ES EL MENU DE HERRAMIENTAS DE ${igfg}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📅 FECHA: ${week}, ${date}*
@@ -789,9 +789,9 @@ break
 //Informacion del usuario
 
 case `infoyo`:
-  try {
+try {
 resp = `
-*${gtam} AQUI ESTA LO QUE YO PUEDO SABER DE TI SEGUN TU PARTICIPACION EN GRUPOS ✨${userm}✨*
+*${gt} AQUI ESTA LO QUE YO PUEDO SABER DE TI SEGUN TU PARTICIPACION EN GRUPOS ✨${userm}✨*
 
 
 ╭═〘 ✯✯✯✯✯✯✯✯✯✯ 〙═╮
@@ -817,10 +817,10 @@ resp = `
 ┣ *🪙 Tokens:* ${joincount}
 ┣ *🎟️ Premium:* ${user.premiumTime > 0 ? `✅` : `❌`}
 ┗━━━━━━━━━━━━━━━━━━━┛
-  ${usedPrefix}donar \nUsar asi: ${usedPrefix}📮 𝙳𝙾𝙽𝙰𝚁 📮
-  ${usedPrefix}owner \nUsar asi: ${usedPrefix}🌹 OWNER 🌹
-  ${usedPrefix}infobot \nUsar asi: ${usedPrefix}🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾`
-  
+${usedPrefix}donar \nUsar asi: ${usedPrefix}📮 𝙳𝙾𝙽𝙰𝚁 📮
+${usedPrefix}owner \nUsar asi: ${usedPrefix}🌹 OWNER 🌹
+${usedPrefix}infobot \nUsar asi: ${usedPrefix}🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾`
+
 } catch {
 
 }
@@ -828,14 +828,14 @@ break
 //Juegos
 
 case `juegos`:
-  try {
-resp = `${packname} Ahí te van los comandos de juegos\n✨${userm}✨\ndel ${wm}\npowered by\n*${namerepream}*
+try {
+resp = `${packname} Ahí te van los comandos de juegos\n✨${userm}✨\ndel ${wm}\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *JUEGOS ${wm}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
-┣ *🎖️️ MATEMATICAS*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + mates  <noob / easy / medium / hard / extreme /impossible /impossible2> \nUsar asi: *${usedPrefix}mates* 
+┣ *🎖️️ MATEMATICAS*\nDescripcion: \nComando:\nEl prefijo actual: ${usedPrefix} + mates<noob / easy / medium / hard / extreme /impossible /impossible2> \nUsar asi: *${usedPrefix}mates* 
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *🎖️️ PIEDRA, PAPEL O TIJERAS*\nDescripcion: \nEl juego ppt (papel tijera piedra)\nUsar asi:\n*${usedPrefix}ppt papel*\n*${usedPrefix}ppt tijera*\n*${usedPrefix}ppt piedra*
 ━━━━━━━━━━━━━━━━━━━━
@@ -885,7 +885,7 @@ resp = `${packname} Ahí te van los comandos de juegos\n✨${userm}✨\ndel ${wm
 ━━━━━━━━━━━━━━━━━━━━
 ┣🎖️ FORMAR PAREJA*\nDescripcion: Formar pareja \nComando:\nEl prefijo actual: ${usedPrefix} + formarpareja \nUsar asi: *${usedPrefix}formarpareja* 
 ━━━━━━━━━━━━━━━━━━━━
-┣🎖️ FORMAR  TRIO*\nDescripcion: Formar trio \nComando:\nEl prefijo actual: ${usedPrefix} + formartrio \nUsar asi: *${usedPrefix}formartrio* 
+┣🎖️ FORMARTRIO*\nDescripcion: Formar trio \nComando:\nEl prefijo actual: ${usedPrefix} + formartrio \nUsar asi: *${usedPrefix}formartrio* 
 ━━━━━━━━━━━━━━━━━━━━
 ┣🎖️ VERDAD*\nDescripcion: juego de la Verdad, \nComando:\nEl prefijo actual: ${usedPrefix} + verdad \nUsar asi: *${usedPrefix}verdad* 
 ━━━━━━━━━━━━━━━━━━━━
@@ -897,7 +897,7 @@ resp = `${packname} Ahí te van los comandos de juegos\n✨${userm}✨\ndel ${wm
 contextinfo = contextInfo
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS DE JUEGOS\n✨${userm}✨\n\npowered by\n*${namerepream}*
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE JUEGOS\n✨${userm}✨\n\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
@@ -934,7 +934,7 @@ resp = `
 ┣ *ඬ⃟ 🎖️* _${usedPrefix}reto_
 ┣ *ඬ⃟ 🎖️* _${usedPrefix}cancion_
 ┣ *ඬ⃟ 🎖️* _${usedPrefix}pista_
-    
+
 ${usedPrefix}donar \nUsar asi: ${usedPrefix}📮 𝙳𝙾𝙽𝙰𝚁 📮 
 ${usedPrefix}terminosycondiciones \nUsar asi: ${usedPrefix}📋 𝚃𝙴𝚁𝙼𝙸𝙽𝙾𝚂 𝚈 𝙲𝙾𝙽𝙳𝙸𝙲𝙸𝙾𝙽𝙴𝚂 📋 
 ${usedPrefix}infobot \nUsar asi: ${usedPrefix}🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾 
@@ -944,15 +944,15 @@ break
 //logos y efectos de estos
 
 case `logosefectos`:
-  try {
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${userm}✨
-    *📅 ${gtam} Fecha: ${week}, ${date}*
-    *📈 Tiempo activo ${gtam}: ${uptime}*
-    *📊 Registrados: ${rtotalreg}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${userm}✨
+*📅 ${gt} Fecha: ${week}, ${date}*
+*📈 Tiempo activo ${gt}: ${uptime}*
+*📊 Registrados: ${rtotalreg}*
 * 
 ━━━━━━━━━━━━━━━━━━━━
-┣ *EFECTOS Y LOGOS ${wm}*\npowered by\n*${namerepream}*
+┣ *EFECTOS Y LOGOS ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -982,14 +982,14 @@ resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${use
 contextinfo = contextInfo
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${userm}✨*
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE LOS EFECTOS Y LOGOS\n✨${userm}✨*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📊 USUARIOS: ${rtotalreg}*
-  
+
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}mensajefalso *<nombre|mensaje>*_
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}phmaker *<opcion> <imagen>*_
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}logos *<efecto> <texto>*_
@@ -1002,10 +1002,10 @@ resp = `
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}itssostupid_
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}pixelar_
 ┣ *ඬ⃟ 🖍️* _${usedPrefix}blur_
-  
+
 ${usedPrefix}donar para 📮 𝙳𝙾𝙽𝙰𝚁 📮 
 ${usedPrefix}terminosycondiciones para 📋 𝚃𝙴𝚁𝙼𝙸𝙽𝙾𝚂 𝚈 𝙲𝙾𝙽𝙳𝙸𝙲𝙸𝙾𝙽𝙴𝚂 📋
-${usedPrefix}infobot para 🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾  
+${usedPrefix}infobot para 🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾
 `
 }
 break
@@ -1028,11 +1028,11 @@ case `cmd`:
 try {
 resp = `*${wm}*\n*⿻ - ̗̀↳ MENU PRINCIPAL* 
 ━━━━━━━━━━━━━━━━━━━━
-*📅 ${gtam} Fecha: ${week}, ${date}*
-*📈 Tiempo activo ${gtam}: ${uptime}*
+*📅 ${gt} Fecha: ${week}, ${date}*
+*📈 Tiempo activo ${gt}: ${uptime}*
 *📊 Registrados: ${rtotalreg}*
 ━━━━━━━━━━━━━━━━━━━━
-*${gtam} ESTOS SON LOS COMANDOS DEL MENU PRINCIPAL ✨${userm}✨*\nUselos de la siguiente manera:
+*${gt} ESTOS SON LOS COMANDOS DEL MENU PRINCIPAL ✨${userm}✨*\nUselos de la siguiente manera:
 *⿻ - ̗̀↳ LISTA DE OPCIONES*
 ┏━━━━━━━━━━━━━━━━━━━┓
 ┣ *- ̗̀✎ ⿻ - ̗̀↳ bot* *(uso sin prefijo)* 
@@ -1063,7 +1063,7 @@ resp = `*${wm}*\n*⿻ - ̗̀↳ MENU PRINCIPAL*
 *⿻ - ̗̀↳ 🔗 REDES SOCIALES*
 ━━━━━━━━━━━━━━━━━━━━
 *BUSCANOS EN FACEBOOK:* ${hp_otkstogthr}\n${hp_animxscans}
-━━━━━━━━━━━━━━━━━━━━\nPowered by\n*${namerepream}*\nTiempo en México\n*${time}*`
+━━━━━━━━━━━━━━━━━━━━\nPowered by\n*${namerepre}*\nTiempo en México\n*${time}*`
 contextinfo = contextInfo
 } catch {
 resp = `
@@ -1072,7 +1072,7 @@ resp = `
 ┣ *📅 FECHA: ${week}, ${date}*
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
 ┣ *📊 USUARIOS: ${rtotalreg}*
-  
+
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *ඬ⃟ 💟* _Bot_ (_uso sin prefijo_)
 ┣ *ඬ⃟ 🎖️ *JUEGOS*, \nComando:* _${usedPrefix}juegos_
@@ -1086,7 +1086,7 @@ resp = `
 ┣ *ඬ⃟ 🎤*EFECTOS DE AUDIOS*, *- RESPONDE A UN AUDIO O NOTA DE VOZ usando* _${usedPrefix}audioefect_
 ┣ *ඬ⃟ 📳*CHAT ANONIMO*, \nComando:* _${usedPrefix}chatanonimo_
 ┣ *ඬ⃟ 🔍*BUSCADORES*, \nComando:* _${usedPrefix}buscar_
-┣ *ඬ⃟ 🔊 *AUDIOS*,  *- ESCRIBE LAS PALABRAS O FRASES SIN NINGUN PREFIJO* _${usedPrefix}audios-bot_
+┣ *ඬ⃟ 🔊 *AUDIOS*,*- ESCRIBE LAS PALABRAS O FRASES SIN NINGUN PREFIJO* _${usedPrefix}audios-bot_
 ┣ *ඬ⃟ 🛠️ *HERRAMIENTAS*, \nComando:* _${usedPrefix}herramientas_
 ┣ *ඬ⃟ 💵 *RPG - LIMITES - ECONOMIA*, \nComando:* _${usedPrefix}rpg_
 ┣ *ඬ⃟ 👽 *STICKERS*, \nComando:* _${usedPrefix}stickermenu_
@@ -1110,10 +1110,10 @@ break
 //Owners o propietarios
 
 case `owners`:
-  try {
-  
-resp = `${gtam}✨${userm}✨ ESTE ES EL MENU DE LOS COMANDOS SOLO para PERSONAL CON TITULO DE OWNER O SIMILAR
-┣ *OWNERS Y MODERADORES ${wm}*\npowered by\n*${namerepream}*
+try {
+
+resp = `${gt}✨${userm}✨ ESTE ES EL MENU DE LOS COMANDOS SOLO para PERSONAL CON TITULO DE OWNER O SIMILAR
+┣ *OWNERS Y MODERADORES ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1286,10 +1286,10 @@ break
 //Ramdon
 
 case `random`:
-  try{
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨
-┣ *MENU RANDOM ${wm}*\npowered by\n*${namerepream}*
+try{
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨
+┣ *MENU RANDOM ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1425,7 +1425,7 @@ resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨
 contextinfo = contextInfo
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨*
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS RANDOM\n✨${userm}✨*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1508,10 +1508,10 @@ break
 //RPG, Limites y economia para juegos de rol
 
 case `rpg`:
-  try {
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS DE ROL para GRUPOS\n✨${userm}✨\nAsi que: Compra, Adquiere Recuersos, Mejora Tú Nivel y Rango!!
-┣ *RPG, LIMITES Y ECONOMIA ${wm}*\npowered by\n*${namerepream}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS DE ROL para GRUPOS\n✨${userm}✨\nAsi que: Compra, Adquiere Recuersos, Mejora Tú Nivel y Rango!!
+┣ *RPG, LIMITES Y ECONOMIA ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1587,7 +1587,7 @@ contextinfo = contextInfo
 
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS DE ROL \nUsar asi: *${usedPrefix}GRUPOS\n✨${userm}✨\nAsi que: Compra, Adquiere Recuersos, Mejora Tú Nivel y Rango!!
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE ROL \nUsar asi: *${usedPrefix}GRUPOS\n✨${userm}✨\nAsi que: Compra, Adquiere Recuersos, Mejora Tú Nivel y Rango!!
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
@@ -1617,13 +1617,13 @@ break
 //solo mayores de 18 (requiere registro)
 
 case `nsfw`:
-  try {
-  if (!db.data.chats[m.chat].modohorny && !db.data.users[m.sender].register && m.isGroup) {
+try {
+if (!db.data.chats[m.chat].modohorny && !db.data.users[m.sender].register && m.isGroup) {
 resp = `*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO ${usedPrefix}enable modohorny*`
 }
-  
-resp = `${gtam} ✨${userm}✨(PUERCO🐽) ESTE ES EL MENU DE LOS COMANDOS +18
-┣ *COMANDOS +18 ${wm}*\npowered by\n*${namerepream}*
+
+resp = `${gt} ✨${userm}✨(PUERCO🐽) ESTE ES EL MENU DE LOS COMANDOS +18
+┣ *COMANDOS +18 ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA PUERCA🐷*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1691,7 +1691,7 @@ resp = `${gtam} ✨${userm}✨(PUERCO🐽) ESTE ES EL MENU DE LOS COMANDOS +18
 contextinfo = contextInfo
 } catch {
 resp = `
-┣ *${gtam}* ✨${userm}✨(PUERCO🐽) ESTE ES EL MENU DE LOS COMANDOS +18
+┣ *${gt}* ✨${userm}✨(PUERCO🐽) ESTE ES EL MENU DE LOS COMANDOS +18
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
@@ -1739,10 +1739,10 @@ break
 //Stickers
 
 case `stickermenu`:
-  try {
-  
-resp = `${gtam} ESTE ES EL MENU DE LOS COMANDOS para HACER STICKERS\n✨${userm}✨
-┣ *STICKERS ${wm}*\npowered by\n*${namerepream}*
+try {
+
+resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS para HACER STICKERS\n✨${userm}✨
+┣ *STICKERS ${wm}*\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *LISTA DE OPCIONES*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1795,10 +1795,10 @@ contextinfo = contextInfo
 resp += `\n\nPor si quieres mas info:\n\n`
 resp += `*💎 GRUPOS OFICIALES 💎* usa el comando: *${usedPrefix}grupos*\n` 
 resp += `*🤴 OWNER 🤴* usa el comando: *${usedPrefix}owner*\n` 
-resp += `*🔰 INFOBOT 🔰* usa el comando: *${usedPrefix}infobot*`   
+resp += `*🔰 INFOBOT 🔰* usa el comando: *${usedPrefix}infobot*` 
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS \nUsar asi: ${usedPrefix}HACER STICKERS\n✨${userm}✨
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS \nUsar asi: ${usedPrefix}HACER STICKERS\n✨${userm}✨
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📈 TIEMPO ACTIVO: ${uptime}*
@@ -1839,12 +1839,12 @@ break
 //Youtube opciones
 
 case `youtube`:
-  try {
-  
-     resp = `${c} ESTE ES EL MENU DE LOS COMANDOS DE YOUTUBE\n✨${userm}✨\npowered by\n*${namerepream}*
-    *📅 ${gtam} Fecha: ${week}, ${date}*
-    *📈 Tiempo activo: ${gtam}: ${uptime}*
-    *📊 Registrados: ${rtotalreg}*
+try {
+
+ resp = `${c} ESTE ES EL MENU DE LOS COMANDOS DE YOUTUBE\n✨${userm}✨\npowered by\n*${namerepre}*
+*📅 ${gt} Fecha: ${week}, ${date}*
+*📈 Tiempo activo: ${gt}: ${uptime}*
+*📊 Registrados: ${rtotalreg}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *YOUTUBE ${wm}*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1856,11 +1856,11 @@ case `youtube`:
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📥 Youtube AUDIO (force)*\nDescripcion: Use el \nComando:\nEl prefijo actual: ${usedPrefix} + ytmp3doc + enlace \nUsar asi: ${usedPrefix}ytmp3doc
 ━━━━━━━━━━━━━━━━━━━━
-┣ *📥 Youtube VIDEO (force)*\nDescripcion: Use el \nComando:\nEl prefijo actual: ${usedPrefix} + ytmp4doc + enlace \nUsar asi: ${usedPrefix}ytmp4doc`   
+┣ *📥 Youtube VIDEO (force)*\nDescripcion: Use el \nComando:\nEl prefijo actual: ${usedPrefix} + ytmp4doc + enlace \nUsar asi: ${usedPrefix}ytmp4doc` 
 contextInfo 
 } catch {
 resp = `
-┣ *${gtam}* ESTE ES EL MENU DE LOS COMANDOS DE YOUTUBE\n✨${userm}✨\npowered by\n*${namerepream}*
+┣ *${gt}* ESTE ES EL MENU DE LOS COMANDOS DE YOUTUBE\n✨${userm}✨\npowered by\n*${namerepre}*
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *📅 FECHA: ${week}, ${date}*
 ━━━━━━━━━━━━━━━━━━━━
@@ -1877,7 +1877,7 @@ resp = `
 ┣ *${usedPrefix}terminosycondiciones para 📋 𝚃𝙴𝚁𝙼𝙸𝙽𝙾𝚂 𝚈 𝙲𝙾𝙽𝙳𝙸𝙲𝙸𝙾𝙽𝙴𝚂 📋
 ━━━━━━━━━━━━━━━━━━━━
 ┣ *${usedPrefix}infobot para 🐾 𝙸𝙽𝙵𝙾𝙱𝙾𝚃 🐾` 
-  
+
 }
 default:
 break;
@@ -1887,19 +1887,19 @@ resp = `*[❗INFO❗] EL MENU ${command} TIENE UN ERROR Y NO FUE POSIBLE ENVIARL
 }
 let txt = '';
 let count = 0;
-  for (const c of resp) {
-  await new Promise(resolve => setTimeout(resolve, 1));
-  txt += c;
-  count++;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 1));
+txt += c;
+count++;
 
-  if (count % 10 === 0) {
-  await conn.sendPresenceUpdate('composing' , m.chat);
-  }
+if (count % 10 === 0) {
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
 }
 if (resp && contextinfo) {
-  return conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextinfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendMessage(m.chat, { text: txt.trim(), contextInfo: contextinfo, mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 } else {
-  return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 }
 
@@ -1909,8 +1909,8 @@ handler.command = [`asistente`, `audioefect`, `audios`, `buscar`, `cajafuerte`, 
 export default handler
 
 function clockString(ms) {
-    let h = isNaN(ms) ? `--` : Math.floor(ms / 3600000)
-    let m = isNaN(ms) ? `--` : Math.floor(ms / 60000) % 60
-    let s = isNaN(ms) ? `--` : Math.floor(ms / 1000) % 60
-    return [h, m, s].map(v => v.toString().padStart(2, 0)).join(`:`)
-  }
+let h = isNaN(ms) ? `--` : Math.floor(ms / 3600000)
+let m = isNaN(ms) ? `--` : Math.floor(ms / 60000) % 60
+let s = isNaN(ms) ? `--` : Math.floor(ms / 1000) % 60
+return [h, m, s].map(v => v.toString().padStart(2, 0)).join(`:`)
+}
