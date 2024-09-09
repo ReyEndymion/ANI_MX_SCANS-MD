@@ -65,7 +65,7 @@ await global.db.read().catch(console.error);
 global.db.READ = null;
 global.db.data = {
 bot: {
-[conn.user.jid]: {
+[conn?.user.jid]: {
 chats: {},
 stats: {},
 msgs: {},
@@ -106,6 +106,9 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 } catch (error) {
 console.log('errorInicializacion: ', error)
 }
+} else {
+onBot(authFolder)
+
 }
 
 function validateJSON(filePath) {
@@ -269,7 +272,6 @@ defaultQueryTimeoutMs: undefined,
 global.conn = makeWASocket(connectionOptions)
 conn.isInit = false;
 conn.well = false;
-loadDatabase(global.conn);
 const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
 
 if (!opts['test']) {
@@ -393,6 +395,7 @@ await wait(CLOSE_CHECK_INTERVAL);
 }
 }
 if (connection == 'open') {
+loadDatabase(global.conn);
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
 if (update.receivedPendingNotifications) { 
 waitTwoMinutes()
