@@ -42,19 +42,6 @@ ESCRIBE LOS SIGUIENTES COMANDOS UNO POR UNO:
 > rm -rf session.data.json
 > npm start
 ```
-### `—◉ 🔥 ACTIVAR EN FLAREXCLOUD 🔥`
-<a href="https://flarex.cloud/"><img src="https://cdn.flarex.cloud/deploy.png" height="60" alt="JPG"/></a>
-<p>> - Pagina Web Oficial:
-<a href="https://flarex.cloud">https://flarex.cloud</a>
-<p>> - Tutorial: en proceso
-<p>> - Área de Pagos: 
-<a href="https://billing.flarex.cloud">https://billing.flarex.cloud</a>
-<p>> - Game Panel: 
-<a href="https://gamepanel.flarex.cloud">https://gamepanel.flarex.cloud</a>
-<p>> - Contacto: 
-<a href="hi@flarex.cloud">hi@flarex.cloud</a> / <a href="support@flarex.cloud">support@flarex.cloud</a> / <a href="partnerships@flarex.cloud">partnerships@flarex.cloud</a>
-<p>> - Discord: 
-<a href="https://discord.flarex.cloud">https://discord.flarex.cloud</a>
 
 | TEMA | DESCRIPCIÓN | ATAJO |
 |------|-------------|-------|
