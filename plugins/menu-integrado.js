@@ -18,7 +18,7 @@ const inDBChat = m.isGroup ? groups : privs
 const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chats] || {}
 const users = m.isGroup ? chat.users || {} : privs || {}
 const user = m.isGroup ? users[m.sender] || {} : privs[m.sender]
-let vn = `./media/audios/menu.mp3`
+let vn = `./media/audios/otaku.mp3`
 let img = imagen4
 let pp = await prepareWAMessageMedia({ image: imagen1}, { upload: conn.waUploadToServer })
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender 
@@ -123,9 +123,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)} catch {
 let str = `
 *HOLA ✨${userm}✨, ESTE ES EL MENU DE *ACTIVAR O DESACTIVAR LOS ASISTENTES DE GRUPO* DE ${wm}*
@@ -234,9 +233,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m) 
 
 } catch {
@@ -323,8 +321,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.writing(m.chat, resp)
+return conn.sendInteractiveResponse(m.chat, listMessage, estado)
 
 let str = `${userm} POR SI QUIERES MAS INFORMACION AQUI UNOS BOTONES 
 `.trim()
@@ -376,8 +374,8 @@ rows: [
 {title: `🌹 OWNER 🌹`, id: `${usedPrefix}owner`},
 {title: `🐾 INFOBOT 🐾`, id: `${usedPrefix}infobot`}]}
 ]
-let resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS PARA DESCARGAR ✨${userm}✨`
-let title = `*COMANDOS PARA DESCARGAR ${wm}*\npowered by\n*${igfg}*`
+let resp = `${gt} ESTE ES EL MENU DE LOS COMANDOS PARA BUSCAR ✨${userm}✨`
+let title = `*COMANDOS PARA BUSCAR ${wm}*\npowered by\n*${igfg}*`
 const listMessage = {
 body: {text: resp},
 header: {
@@ -404,10 +402,9 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
-return conn.sendAudioRecording(m.chat, vn, `../media/menu.mp3`, null, m, true, { type: `audioMessage`, ptt: true})
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
+return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
 }
@@ -488,9 +485,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 
 } catch {
@@ -540,9 +536,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
@@ -594,9 +589,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
@@ -667,9 +661,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
@@ -718,9 +711,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
@@ -789,9 +781,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 
@@ -853,12 +844,10 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.writing(m.chat, resp)
+let q = await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 
 try {
-let vn = `./media/menu.mp3`
-let pp = `./Menu.png`
 let str = `https://www.facebook.com/ANIMxSCANS`.trim()
 conn.sendButton(m.chat, str, wm, pp, [
 [`📮 DONAR 📮`, `/donasi`],
@@ -866,14 +855,13 @@ conn.sendButton(m.chat, str, wm, pp, [
 [`🐾 INFOBOT 🐾`, `/infobot`]
 ], m,)
 await delay(1 * 1000)
-return conn.sendAudioRecording(m.chat, vn, `../media/menu.mp3`, null, m, true, { type: `audioMessage`, ptt: true})
+return conn.sendAudioRecording(m.chat, vn, q)
 } catch (e) {
-conn.reply(m.chat, `*[❗INFO❗] EL MENU TIENE UN ERROR Y NO FUE POSIBLE ENVIARLO, REPORTELO AL PROPIETARIO DEL BOT*`, m)
-throw e
+return conn.sendWritingText(m.chat, `*[❗INFO❗] EL MENU TIENE UN ERROR Y NO FUE POSIBLE ENVIARLO, REPORTELO AL PROPIETARIO DEL BOT*`, m)
 }
 } catch {
 let str = `
-*HOLA ✨${userm}✨, ESTE ES EL MENU DE MENUS DE ${igfg}*
+*HOLA ✨${userm}✨, ESTE ES EL MENU DE HERRAMIENTAS DE ${igfg}*
 *📅 FECHA: ${week}, ${date}*
 *📈 TIEMPO ACTIVO: ${uptime}*
 *📊 USUARIOS: ${rtotalreg}*
@@ -1089,7 +1077,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
@@ -1209,7 +1197,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
@@ -1285,7 +1273,7 @@ rows: [
 {title: `🔰 *REPORTES DE FALLOS*`, description: `reporta los fallos despues del comando ${usedPrefix}reporte *texto*`, id: `${usedPrefix}reporte`},
 {title: `📥*DESCARGAS*`, description: `Comando: ${usedPrefix}descargas (menu descargas)`, id: `${usedPrefix}descargas`},
 {title: `💎*ADMINS-GRUPOS*`, description: `Comando: ${usedPrefix}gAdmin (Solo admins)`, id: `${usedPrefix}gAdmin`},
-{title: `💎*DUEÑO (OWNERs)*`, description: `Comando: ${usedPrefix}owners (Solo owners)`, id: `${usedPrefix}gAdmin`}, 
+{title: `💎*DUEÑO (OWNERs)*`, description: `Comando: ${usedPrefix}owners (Solo owners)`, id: `${usedPrefix}owners`}, 
 {title:`🧧*CONVERTIDORES*`, description: `Comando: ${usedPrefix}convert (para convertidores`, id: `${usedPrefix}convert`},
 {title:`🖍️*EFECTOS Y LOGOS*`, description: `Comando: ${usedPrefix}logosefectos (para optener efectos y logos)`, id: `${usedPrefix}logosefectos`},
 {title:`👾*RANDOM*`, description: `Comando: ${usedPrefix}random `, id: `${usedPrefix}random`},
@@ -1337,7 +1325,7 @@ sections,
 footer: {text: `${wm}`},
 }
 await conn.writing(m.chat, resp)
-let q = await conn.sendMessageList(m.chat, listMessage, estado)
+let q = await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 let quoted = await conn.chats[m.chat].messages[q]
 console.log('menu: ', quoted)
 
@@ -1398,7 +1386,7 @@ body: null,
 thumbnail: img,
 sourceUrl: paypal
 }}}
-let q = await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
+let q = await conn.sendButton(m.chat, buttonMessage, { quoted: m })
 return conn.sendAudioRecording(m.chat, vn, q)
 
 }
@@ -1490,9 +1478,8 @@ sections,
 footer: {text: `${wm}`},
 }
 
-await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
-await delay(1 * 1000)
+await conn.writing(m.chat, resp)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
 let str = `
@@ -1681,7 +1668,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
@@ -1856,9 +1843,9 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
-return conn.sendAudioRecording(m.chat, vn, `../media/menu.mp3`, null, m, true, { type: `audioMessage`, ptt: true})
+return conn.sendAudioRecording(m.chat, vn, m)
 
 } catch {
 let str = `
@@ -1978,7 +1965,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 return conn.sendAudioRecording(m.chat, vn, m)
 handler.register = true
@@ -2109,7 +2096,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 try {
 let vn = `./media/menu.mp3`
@@ -2226,7 +2213,7 @@ footer: {text: `${wm}`},
 }
 
 await delay(1 * 1000)
-await conn.sendMessageList(m.chat, listMessage, estado)
+await conn.sendInteractiveResponse(m.chat, listMessage, estado)
 await delay(1 * 1000)
 return conn.sendAudioRecording(m.chat, vn, m)
 } catch {
