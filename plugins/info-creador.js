@@ -18,7 +18,7 @@ for (const c of text) {
 }
 const documentUrl = 'https://www.facebook.com/groups/otakustogether';
   const mimetype = `application/${document}`;
-  const fileName = namerepream;
+  const fileName = namerepre;
   const thumbnailUrl = imagen1;
   const sourceUrl = 'https://www.facebook.com/groups/otakustogether';
 
@@ -33,7 +33,7 @@ const documentUrl = 'https://www.facebook.com/groups/otakustogether';
       forwardingScore: 200,
       isForwarded: false,
       externalAdReply: {
-        mediaUrl: 'https://github.com/ReyEndymion/Bot-Comedia-MD',
+        mediaUrl: 'https://github.com/ReyEndymion',
         mediaType: 2,
         previewType: 'pdf',
         title: 'Bot exclusivo de:',

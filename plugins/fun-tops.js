@@ -26,7 +26,7 @@ let resp = `*_1.- ${user(a)}_*
 *_10.- ${user(j)}_*`
 
 if (command == 'topgays') {
-let vn = join(media, 'audios/gay2.mp3')
+let vn = fs.readFileSync(join(media, 'gay2.mp3'))
 let top = `*🌈TOP 10 GAYS/LESBIANAS DEL GRUPO🌈*\n\n${resp}`
 let txt = '';
 let count = 0;
@@ -36,24 +36,21 @@ for (const c of top) {
     count++;
 
     if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-   let q = await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    const stats = fs.statSync(vn).size / 1024;
-    const fileSizeInMiliSeconds = Math.round((stats / 112) * 1000);
-    for (let i = 0; i < fileSizeInMiliSeconds; i++) {
-          await new Promise(resolve => setTimeout(resolve, 1));
-          
-          if ((i + 1) % 10 === 0) {
-             await conn.sendPresenceUpdate('recording', m.chat);
-            }
-      }
- return conn.sendMessage(m.chat, { audio: {url: vn}, ptt: true, mimetype: 'audio/mpeg', fileName: vn }, { quoted: q, ephemeralExpiration: 2*60*1000 })
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    async function ejecutarEnIntervalo() {
+      await conn.sendPresenceUpdate('recording', m.chat);
+        }
+        const intervalID = setInterval(ejecutarEnIntervalo, 1 * 100);
+        await new Promise(resolve => setTimeout(resolve, 20 * 100));
+        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 24*60*1000})
+        clearInterval(intervalID);
 }
     
 if (command == 'topotakus') {
-let vn = join(media, 'audios/otaku.mp3')
+let vn = fs.readFileSync(join(media, 'otaku.mp3'))
 let top = `*🌸 TOP 10 OTAKUS DEL GRUPO 🌸*\n\n${resp}`
 let txt = '';
 let count = 0;
@@ -63,20 +60,17 @@ for (const c of top) {
     count++;
 
     if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
-    let q = await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    const stats = fs.statSync(vn).size / 1024;
-    const fileSizeInMiliSeconds = Math.round((stats / 112) * 1000);
-    for (let i = 0; i < fileSizeInMiliSeconds; i++) {
-          await new Promise(resolve => setTimeout(resolve, 1));
-          
-          if ((i + 1) % 10 === 0) {
-             await conn.sendPresenceUpdate('recording', m.chat);
-            }
-      }
- return conn.sendMessage(m.chat, { audio: {url: vn}, ptt: true, mimetype: 'audio/mpeg', fileName: vn }, { quoted: q, ephemeralExpiration: 2*60*1000 })
+    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+    async function ejecutarEnIntervalo() {
+  await conn.sendPresenceUpdate('recording', m.chat);
+    }
+    const intervalID = setInterval(ejecutarEnIntervalo, 1 * 100);
+    await new Promise(resolve => setTimeout(resolve, 60 * 100));
+    await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 24*60*1000})
+    clearInterval(intervalID);
 }    
 }
 handler.help = handler.command = ['topgays','topotakus']

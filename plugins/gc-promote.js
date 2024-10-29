@@ -8,36 +8,36 @@ var number = text
 }
 	
 if(!text && !m.quoted) {
-    let resp = `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix}daradmin @tag*\n*┠≽ ${usedPrefix}darpoder -> responder a un mensaje*\n*┷┯*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
+let resp = `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix}daradmin @tag*\n*┠≽ ${usedPrefix}darpoder -> responder a un mensaje*\n*┷┯*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-      
+if (count % 10 === 0) {
+
 await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 if(number.length > 13 || (number.length < 11 && number.length > 0)) {
-    let resp = `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
+let resp = `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`
+let txt = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 15));
+txt += c;
+count++;
 
-    if (count % 10 === 0) {
-      
+if (count % 10 === 0) {
+
 await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
+}
+return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }	
 try {
 if(text) {
@@ -59,7 +59,7 @@ txt += c;
 count++;
 
 if (count % 10 === 0) {
-  
+
 await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }

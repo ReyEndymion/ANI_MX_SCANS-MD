@@ -9,7 +9,7 @@ for (const c of mat) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
   if (args.length < 1) return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
@@ -28,7 +28,7 @@ for (const c of resp) {
     txt += c;
     count++;
     if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
    return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: global.math[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
@@ -41,7 +41,7 @@ for (const c of resp) {
     count++;
 
     if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
+      await conn.sendPresenceUpdate('composing' , m.chat);
     }
 }
 global.math[id] = [
@@ -51,15 +51,15 @@ setTimeout(async () => {
       if (global.math[id]) {
         let resp = `*[❗INFO❗] SE HA FINALIZADO EL TIEMPO PARA RESPONDER*\n\n*LA RESPUESTA ES ${math.result}*`;
         for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 50));
+          new Promise(resolve => setTimeout(resolve, 50));
           txt += c;
           count++;
       
           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
+            await conn.sendPresenceUpdate('composing' , m.chat);
           }
       }
-      conn.sendMessage(m.chat, { text: resp, mentions: conn.parseMention(txt) }, {quoted: global.math[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+      await conn.sendMessage(m.chat, { text: resp, mentions: conn.parseMention(txt) }, {quoted: global.math[id][0], ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
         delete global.math[id];
       }
     }, math.time)

@@ -10,15 +10,9 @@ let bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
-let chat, users, user
-if (m.chat.endsWith(userID)) {
-chat = privs[m.chat] || {}
-user = privs[m.sender] || {}
-} else if (m.chat.endsWith(groupID)) {
-chat = groups[m.chat] || {}
-users = chat.users || {}
-user = users[m.sender] || {}
-} else return
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+const user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 
@@ -69,7 +63,7 @@ for (const c of info) {
 let res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(info)}}}, {userJid: conn.user.jid})
 conn.relayMessage(m.chat,  res.message, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //console.log('y esto: ', res)
-conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepream}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepre}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']

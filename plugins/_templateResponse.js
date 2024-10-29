@@ -71,7 +71,7 @@ continue
 }
 isIdMessage = true
 }}
-const messages = await generateWAMessage(m.chat, {text: isIdMessage ? id : text, mentions: m.mentionedJid}, {
+const messages = await generateWAMessage(m.chat, {text: id, mentions: m.mentionedJid}, {
 userJid: this.user.id,
 quoted: m.quoted && m.quoted.fakeObj,
 })
