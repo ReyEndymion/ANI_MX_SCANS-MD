@@ -1,6 +1,6 @@
 import fg from 'api-dylux' 
 import fetch from 'node-fetch'
-import { savefrom, facebookdl, facebookdlv2 } from '@bochilteam/scraper'
+import { savefrom, facebookdl } from '@bochilteam/scraper'
 import fbDownloader from 'fb-downloader-scrapper'
 let handler = async (m, { conn, args, command, usedPrefix }) => {
 let resp, video
@@ -8,8 +8,8 @@ if (!args[0]) {resp = `*[❗INFO❗] INGRESE UN ENLACE DE FACEBOOK, EJEMPLO: ${u
 if (!args[0].match(/www.facebook.com|fb.watch/g)) {resp = `*[❗INFO❗] INGRESE UN ENLACE DE FACEBOOK, EJEMPLO: ${usedPrefix + command}* https://fb.watch/fOTpgn6UFQ/`}
 try {
 resp = `*[❗] DESCARGANDO SU VIDEO, AGUARDE UN MOMENTO POR FAVOR, ESTE PROCESO PUEDE DURAR ENTRE 2 Y 10 MINUTOS DEPENDIENDO DE LA DURACIÓN DEL VIDEO...*`
-switch (command) {   
-case "facebook": case "fb": case "facebookdl": case "fbdl":                                  
+switch (command) { 
+case "facebook": case "fb": case "facebookdl": case "fbdl":
 try {
 let res = await fbDownloader(args[0])
 for (let result of res.download) {
@@ -17,50 +17,51 @@ video = result.url
 resp ='*AQUI ESTA SU VIDEO*'
 }
 } catch (error) {
-resp = `${error}`   
+resp = `${error}` 
 }
-break           
-case "facebook2": case "fb2": case "facebookdl2": case "fbdl2":           
+break 
+case "facebook2": case "fb2": case "facebookdl2": case "fbdl2": 
 try {
 let ress = await fg.fbdl(args[0])
-video = await ress.data[0].url    
+video = await ress.data[0].url
 resp = '*AQUI ESTA SU VIDEO*'
 } catch (error) {
-resp = `${error}`   
+resp = `${error}` 
 }
 break
-case "facebook3": case "fb3": case "facebookdl3": case "fbdl3":        
+case "facebook3": case "fb3": case "facebookdl3": case "fbdl3":
 try {
-let vio = await fetch(`https://api.violetics.pw/api/downloader/facebook?apikey=beta&url=${args[0]}`)  
+let vio = await fetch(`https://api.violetics.pw/api/downloader/facebook?apikey=beta&url=${args[0]}`)
 let vioo = await vio.json()
 video = `${vioo.result.hd.url || vioo.result.sd.url}`
 resp = '*AQUI ESTA SU VIDEO*'
 } catch (error) {
-resp = `${error}`   
+resp = `${error}` 
 }
-break   
-case "facebook4": case "fb4": case "facebookdl4": case "fbdl4":           
+break 
+case "facebook4": case "fb4": case "facebookdl4": case "fbdl4": 
 try {
-const { result } = await facebookdl(args[0]).catch(async _ => await facebookdlv2(args[0]))
+console.log('dlfbs: ', await facebookdl(args[0]))
+const result  = await facebookdl(args[0])
 for (const { url, isVideo } of result.reverse()) {
 `facebook.${!isVideo ? 'bin' : 'mp4'}`
 video = url
 resp = '*AQUI ESTA SU VIDEO*'
 }
 } catch (error) {
-resp = `${error}`   
+resp = `${error.stack}` 
 }
-break          
-case "facebook5": case "fb5": case "facebookdl5": case "fbdl5":        
+break
+case "facebook5": case "fb5": case "facebookdl5": case "fbdl5":
 try {
-let res3 = await fetch(`https://latam-api.vercel.app/api/facebookdl?apikey=brunosobrino&q=${args[0]}`)  
+let res3 = await fetch(`https://latam-api.vercel.app/api/facebookdl?apikey=brunosobrino&q=${args[0]}`)
 let json = await res3.json()
 video = await json.video
-resp = '*AQUI ESTA SU VIDEO*'    
+resp = '*AQUI ESTA SU VIDEO*'
 } catch (error) {
-resp = `${error}`   
-}   
-break    
+resp = `${error}` 
+} 
+break
 }} catch {
 resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO, SI EL ERROR SIGUE, PRUEBE CON OTRA OPCION (${usedPrefix}fb, ${usedPrefix}fb2, ${usedPrefix}fb3, ${usedPrefix}fb4, ${usedPrefix}fb5)*`
 /*let res = await facebookDl(args[0]).catch(async _ => await savefrom(args[0])).catch(_ => null)

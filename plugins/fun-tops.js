@@ -26,54 +26,20 @@ let resp = `*_1.- ${user(a)}_*
 *_10.- ${user(j)}_*`
 
 if (command == 'topgays') {
-let vn = fs.readFileSync(join(media, 'gay2.mp3'))
+let vn = join(media, 'audios/gay2.mp3')
 let top = `*🌈TOP 10 GAYS/LESBIANAS DEL GRUPO🌈*\n\n${resp}`
-let txt = '';
-let count = 0;
-for (const c of top) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    txt += c;
-    count++;
+let q = await conn.sendWritingText(m.chat, top, m );
+return conn.sendAudioRecording(m.chat, vn, q)
+}
 
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    async function ejecutarEnIntervalo() {
-      await conn.sendPresenceUpdate('recording', m.chat);
-        }
-        const intervalID = setInterval(ejecutarEnIntervalo, 1 * 100);
-        await new Promise(resolve => setTimeout(resolve, 20 * 100));
-        await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 24*60*1000})
-        clearInterval(intervalID);
-}
-    
 if (command == 'topotakus') {
-let vn = fs.readFileSync(join(media, 'otaku.mp3'))
+let vn = join(media, 'audios/otaku.mp3')
 let top = `*🌸 TOP 10 OTAKUS DEL GRUPO 🌸*\n\n${resp}`
-let txt = '';
-let count = 0;
-for (const c of top) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+let q = await conn.sendWritingText(m.chat, top, m );
+return conn.sendAudioRecording(m.chat, vn, q)
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    async function ejecutarEnIntervalo() {
-  await conn.sendPresenceUpdate('recording', m.chat);
-    }
-    const intervalID = setInterval(ejecutarEnIntervalo, 1 * 100);
-    await new Promise(resolve => setTimeout(resolve, 60 * 100));
-    await conn.sendFile(m.chat, vn, 'error.mp3', null, m, true, {type: 'audioMessage', ptt: true, quoted: m, ephemeralExpiration: 24*60*1000})
-    clearInterval(intervalID);
-}    
 }
 handler.help = handler.command = ['topgays','topotakus']
 handler.tags = ['games']
 handler.group = true
-export default handler  
+export default handler
