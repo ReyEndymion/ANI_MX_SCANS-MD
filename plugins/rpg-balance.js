@@ -1,4 +1,11 @@
-let handler = async (m, {conn, usedPrefix}) => {	
+let handler = async (m, {conn, usedPrefix}) => {
+const bot = global.db.data.bot[conn.user.jid]
+const chats = bot.chats
+const privs = chats.privs
+const groups = chats.groups
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs
+
 let who
 if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
 else who = m.sender
@@ -6,23 +13,13 @@ let name = who.split`@`[0]//conn.getName(who)
 let resp = `
 ┌───⊷ *BALANCE* ⊶
 ▢ *Nombre:* @${name}
-▢ *Diamantes:* ${global.db.data.bot[conn.user.jid].users[who].limit}💎
+▢ *Diamantes:* ${users[who].limit}💎
 └──────────────
 *NOTA:* 
 *Puedes comprar diamantes 💎 usando los comandos*
 ❏ *${usedPrefix}buy <cantidad>*
 ❏ *${usedPrefix}buyall*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+return conn.sendWritingText(m.chat, resp, m );
 }
 handler.help = ['bal']
 handler.tags = ['xp']

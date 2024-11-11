@@ -2,11 +2,11 @@ let { downloadContentFromMessage } = (await import('@whiskeysockets/baileys'));
 
 export async function before(m, {conn, isAdmin, isBotAdmin }) {
 if (m.chat == 'status@broadcast') return
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats
-const privs = chats.privs
-const groups = chats.groups
-const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
 let settings = bot.settings || {}
 if (/^[.~#/\$,](read)?viewonce/.test(m.text)) return
 if (!chat.antiviewonce || chat.isBanned) return

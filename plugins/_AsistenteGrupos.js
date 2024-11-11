@@ -1,18 +1,10 @@
 export async function before (m, { conn, text, participants }) {
+if (m.quoted?.fromMe||m.chat.endsWith('@newsletter')) return
 let bot = global.db.data.bot[conn.user.jid]
 let chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
-let chat, users, user
-if (m.chat.endsWith(userID)) {
-chat = privs[m.chat] || {}
-user = privs[m.sender] || {}
-} else if (m.chat.endsWith(groupID)) {
-chat = groups[m.chat] || {}
-users = chat.users || {}
-user = users[m.sender] || {}
-} else return
-//console.log(`chats: `, chat)
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
 //.asistente = true || {}
 const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
@@ -33,7 +25,7 @@ resp = `K.I.R.R. la inteligencia artificial programada por ${ow}`
 } 
 
 if (m.text.match(/eres un bot$/i)) {
-resp = `	@${who.split("@s.whatsapp.net")[0]}, yo soy el asistente virtual de este grupo`
+resp = `@${who.split("@s.whatsapp.net")[0]}, yo soy el asistente virtual de este grupo`
 } 
 if (m.text.match(/Lenin|creador$/gi)) {
 resp = `${ow}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
