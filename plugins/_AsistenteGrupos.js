@@ -1,10 +1,16 @@
 export async function before (m, { conn, text, participants }) {
-if (m.quoted?.fromMe||m.chat.endsWith('@newsletter')) return
-let bot = global.db.data.bot[conn.user.jid]
+if (m.chat.endsWith(newsletter) || m.chat.endsWith(statusBC)) return
+m.chat === 'status@broadcast'
+let bot = global.db.data.bot[conn.user.jid] || {}
 let chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
 const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+const user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
+const groupID = m.chat
+const userID = m.sender
+//console.log(`chats: `, chat)
 //.asistente = true || {}
 const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
@@ -14,8 +20,8 @@ let ow = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(ent
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
 let resp
-if(chat.asistente && !chat.isBanned) {
-if (m.text.match(/buen día|buen dia|hola|Buenos días|qué tal|𝐇𝐨𝐥𝐚$/gi)) {
+if(chat.asistente && !chat.isBanned && !m.fromMe) {
+if (m.text.match(/buen día|buen dia|hola|Buenos días|qué tal|𝐇𝐨𝐥𝐚$/gi && !m.fromMe)) {
 resp = 	`Hola @${who.split("@s.whatsapp.net")[0]} en un momento te respondemos...
 por el momento te dejaré las preguntas básicas....
 ¿Todo bien todo correcto?`
@@ -76,7 +82,7 @@ resp = `Se les invita al grupo de aportes de
 
 Quien quiera pertenecer a ese grupo y tenga aportes me dice para prestarle admin porque no se puede chatear en aquel grupo por respeto a los aportadores oficiales
 
-https://chat.whatsapp.com/DhvxhmZ4lMkLppU0obHWp4
+${gaportes}
 
 Se puede aportar hasta el momento cualquier tipo de contenido incluyendo películas que no tengan relación con anime...
 
@@ -91,7 +97,7 @@ if (m.text.match(/grupo de aportes forever$/gi)) {
 resp = `Este es el grupo de aportes de
 🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂千ㄖ尺乇ᐯ乇尺🍜⃢⃟ᭀᬽ
 
-https://chat.whatsapp.com/DhvxhmZ4lMkLppU0obHWp4
+${gaportes}
 
 ⚡Este grupo es *No Chat*⚡
 
@@ -144,14 +150,11 @@ https://facebook.com/groups/849679409107132`
 if (m.text.match(/^(enlace de invitación|link|enlace del grupo)$/gi)) {
 resp = `Solo tienes dos opciones para llegar al grupo principal @${who.split("@s.whatsapp.net")[0]}
 
-ℂ𝕒𝕗𝕖𝕔𝕚𝕥𝕠 ℍ𝕠𝕣𝕚-𝕊𝕒𝕟𝕕𝕚𝕒🍉☕🥢
-https://chat.whatsapp.com/H0SheP7ippc1dF9uxL04Gt
+Unirte a la comunidad:
+${community}
 
-o
-
-しᝪᗷᗷᎩ de 
-ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺
-https://chat.whatsapp.com/L4VRAzaYc11D4LSpt8rB9W
+o entrar al grupo de entrevistas:
+${lobby}
 
 Ahí se les realizará una entrevista dónde tendrán que responder las siguientes preguntas
 

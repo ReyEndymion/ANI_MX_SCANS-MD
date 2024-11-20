@@ -8,8 +8,8 @@ let user = m.sender.split`@`[0]
 let resp = `✳️ @${user} Anti árabes está activo para evitar spam\n\nHasta la próxima`
 	
 if (!m.isGroup) return !1
-let bot = global.db.data.bot[conn.user.jid]
-let chats = global.db.data.bot[conn.user.jid].chats || {}
+let bot = global.db.data.bot[conn.user.jid] || {}
+let chats = bot.chats || {}
 let chat = chats.groups[m.chat] || {}
 let settings = bot.settings || {}
 if (isBotAdmin && chat.antiArab && !isAdmin && !isOwner && !isROwner && settings.restrict) {

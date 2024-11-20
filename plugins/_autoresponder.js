@@ -46,7 +46,7 @@ mentionedJid: conn.parseMention(txt),
 "containsAutoReply": true,
 "mediaType": 1, 
 "thumbnail": imagen1,
-"mediaUrl": suppbot,
+"mediaUrl": ganisubbots,
 "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.join&type=phone_number&app_absent=0`
 }
 }

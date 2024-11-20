@@ -16,6 +16,7 @@ users[who].banned = true
 resp = `*[❗INFO❗] EL USUARIO FUE BANEADO CON ÉXITO*\n*—◉ EL USUARIO YA NO PODRÁ USAR EL BOT HASTA QUE SEA DESBANEADO*`
 } else if (/^unbanuser$/i.test(command)) {
 users[who].banned = false
+users[who].bannedMessageCount = 0
 resp = `*[❗INFO❗] EL CHAT FUE DESBANEADO CON ÉXITO*\n*—◉ EL USUARIO YA PUEDE USAR EL BOT*`
 }
 } catch (error) {

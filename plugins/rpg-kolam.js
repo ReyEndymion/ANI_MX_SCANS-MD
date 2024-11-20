@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 let handler = async (m, { conn }) => {
-let grupos = [suppbot, gofwhabot]
+let grupos = [ganisubbots, ganicmd]
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let pp =  await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png' )
 //let enlace = { contextInfo: { externalAdReply: {title: wm, body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}

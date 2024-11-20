@@ -45,7 +45,7 @@ const handler = async (m, {conn, text, usedPrefix, command}) => {
           sourceUrl: `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`
         },
       }
-      return conn.sendMessage(m.chat, {document: { url: hp_otkstogthr }, caption: txt, mimetype: `application/zip`, fileName: namerepream, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
+      return conn.sendMessage(m.chat, {document: { url: hp_otkstogthr }, caption: txt, mimetype: `application/zip`, fileName: namerepre, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
     }
     } catch (error) {
       console.log('error: ', error)

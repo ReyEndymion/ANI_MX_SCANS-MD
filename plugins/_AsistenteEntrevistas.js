@@ -1,16 +1,13 @@
 export async function before(m, {conn}) {
-if (m.chat == 'status@broadcast') return
-
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats
-const privs = chats.privs
-const groups = chats.groups
-const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
-
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {}: privs[m.chat] || {}
 if (chat.asistente && !chat.isBanned) {
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let resp
-if (/aclaración$/i.test(m.text)) {
+if (/aclaración$/i.test(m.text) && !m.fromMe) {
 resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
 *ㄖㄒ卂Ҡ凵丂*
 *ㄒㄖᎶ乇ㄒ卄乇尺.*
@@ -44,7 +41,7 @@ resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY d
 🚨🚨🚨🚨🚨🚨🚨🚨🚨`.trim()
 } 
 
-if (/^ficha$/i.test(m.text)) {
+if (/^ficha$/i.test(m.text) && !m.fromMe) {
 resp = 	
 `*ɴᴏᴍʙʀᴇ*:
 
@@ -72,7 +69,7 @@ resp =
 
 **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
 } 
-if (/^Moonficha|Sailorficha|moon ficha$/i.test(m.text)) {
+if (/^Moonficha|Sailorficha|moon ficha$/i.test(m.text) && !m.fromMe) {
 resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
 
 
@@ -100,11 +97,11 @@ resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏʏ ʙᴜ�
 8.💜 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*💜:`.trim()
 } 
 
-if (/^No gracias$/i.test(m.text)) {
+if (/^No gracias$/i.test(m.text) && !m.fromMe) {
 resp = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
 
 } 
-if (resp == undefined) return
+/**if (resp == undefined) return
 let txt = '';
 let count = 0;
 for (const c of resp) {
@@ -117,6 +114,7 @@ conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-
-} 
+ */
+ return conn.sendWritingText(m.chat, resp, m)
+}
 }

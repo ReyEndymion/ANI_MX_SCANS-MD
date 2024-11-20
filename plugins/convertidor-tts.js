@@ -7,37 +7,29 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
 let lang = args[0]
 let text = args.slice(1).join(' ')
-let res
 if ((args[0] || '').length !== 2) {
 lang = defaultLang
 text = args.join(' ')
-res = await tts(text, defaultLang)
 }
 if (!text && m.quoted?.text) text = m.quoted.text
-try { 
-console.log('gtts: ', res)
-if (!text) {
-return conn.sendWritingText(m.chat, `*[❗INFO❗] INSERTE EL TEXTO QUE QUIERA CONVERTIR A NOTA DE VOZ, EJEMPLO: ${usedPrefix + command} es Hola Mundo*`, m)
-} else { 
-}
 
-} catch (e) {
-return conn.sendWritingText(m.chat, e + '', m)
-} finally {
+let res
+try { res = await tts(text, lang) }
+catch (e) {
+m.reply(e + '')
 text = args.join(' ')
-res = await tts(text, lang)
-if (res) {
-//return conn.sendMessage(m.chat, { audio: res/*, seconds: '3600'*/, ptt: true, mimetype: 'audio/mpeg', fileName: `a.mp3` }, { quoted: m, ephemeralExpiration: 2*60*1000 })
-return conn.sendAudioRecording(m.chat, res, m)
-}
-}
-}
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] INSERTE EL TEXTO QUE QUIERA CONVERTIR A NOTA DE VOZ, EJEMPLO: ${usedPrefix + command} es Hola Mundo*`, m)
+res = await tts(text, defaultLang)
+} finally {
+if (res) conn.sendFile(m.chat, res, 'tts.opus', null, m, true)
+}}
 handler.help = ['tts <lang> <teks>']
 handler.tags = ['tools']
 handler.command = /^g?tts$/i
 export default handler
 
 function tts(text, lang = 'es') {
+console.log(lang, text)
 return new Promise((resolve, reject) => {
 try {
 let tts = gtts(lang)

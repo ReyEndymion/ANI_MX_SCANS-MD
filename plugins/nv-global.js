@@ -2,6 +2,8 @@
 import fs from "fs"
 import path from 'path'
 export async function before(m, {conn}) {
+if (m.chat == statusBC || m.chat.endsWith(newsletter)) return
+
 let chat = m.isGroup ? global.db.data.bot[conn.user.jid].chats.groups[m.chat] : global.db.data.bot[conn.user.jid].chats.privs[m.chat]
 if (/^hola$/i.test(m.text) && chat.audios && !chat.isBanned) {
 let vn = path.join(media, 'audios/Hola.mp3')
@@ -214,18 +216,5 @@ return conn.sendAudioRecording(m.chat, vn, m)
 if (!chat.isBanned && chat.audios && m.text.match(/(shitpost)/gi)) {
 let vn = path.join(media, 'audios/shitpost.mp3')
 return conn.sendAudioRecording(m.chat, vn, m)
-}
- 
-async function sendAudioRecording(filePath) {
-const stats = fs.statSync(filePath).size / 1024;
-const fileSizeInMiliSeconds = Math.round((stats / 112) * 1000);
-for (let i = 0; i < fileSizeInMiliSeconds; i++) {
-await new Promise(resolve => setTimeout(resolve, 1));
-
-if ((i + 1) % 10 === 0) {
-await conn.sendPresenceUpdate('recording', m.chat);
-}
-}
-return conn.sendMessage(m.chat, {audio: {url: filePath}, fileName: 'error.mp3', mimetype: 'audio/mpeg', ptt: true}, {quoted: m, ephemeralExpiration: 2*60*1000})
 }
 }

@@ -1,4 +1,5 @@
 export async function before(m, {conn}) {
+if (m.chat == 'status@broadcast' || m.chat.endsWith(newsletter)) return
 const bot = global.db.data.bot[conn.user.jid]
 const chats = bot.chats
 const privs = chats.privs

@@ -25,49 +25,66 @@ const { child, spawn, exec } = await import('child_process');
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js';
 import { makeInMemoryStore } from '@whiskeysockets/baileys'
-import store from '../lib/store.js'
+import {onBot} from '../main.js'
+import { limpCarpetas, purgeOldFiles } from "../lib/functions.js";
 
 if (global.conns instanceof Array) {console.log()} else {global.conns = []}
 if (!(global.dataconst instanceof Array)) global.dataconst = [];
-let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
-let resp, sock, chat, imagen, code8, q, contextInfo
 let lastConnectionMessageTime = 0;
-let parentw = conn
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? parentw.user.jid : m.sender
-let uniqid = `${who.split`@`[0]}`//parentw.getName(who)
-var bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
-const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false // stoled from aiden hehe
+let usedPrefixP = '', argsP = [], commandP = '', mP = ''
+let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
+if (m.isGroup) return
+usedPrefixP = usedPrefix
+argsP = args
+commandP = command
+mP = m
+//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? sockP.user.jid : m.sender
+let uniqid = `${m.sender.split`@`[0]}`//sockP.getName(who)
+const bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
 if (!global.db.data.bot[conn.user.jid].settings.modejadibot) {
-resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / PROPIETARIO DEL BOT*`
-sock = conn
-chat = m.chat
+let resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / PROPIETARIO DEL BOT*`
 return conn.sendWritingText(m.chat, resp, m)
 }
 /***
 if (conn.user.jid !== global.conn.user.jid) {
 resp = `*[❗] Este comando solo puede ser usado en un Bot principal!!*\n\n*—◉ Da click aquí o en la imagen para ir:*\n*◉* https://api.whatsapp.com/send/?phone=${global.conn.user.jid.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`;
-chat = m.chat
-sock = parentw
+
 contextInfo = true
 }
  */
-async function jddt() {
+jddt(bot, conn)
+}
+handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
+handler.tags = ['jadibot']
+handler.command = /^(jadibot|serbot|rentbot)/i
+handler.before = async function before(m, {conn, args, isOwner}) {
+if (m.text.match(/initbot/i) && isOwner) {
+const bot = path.join(jadibts, conn.formatNumberWA(m.text.split(/initbot/i)[1]))
+jddt(bot, conn)
+console.log('serbotInitBot: ', bot)
+}
+}
+//handler.private = true 
+export default handler
+async function jddt(folderPath, sockP) {
+const mcode = argsP[0] && argsP[0].includes("--code") ? true : argsP[1] && argsP[1].includes("--code") ? true : false 
+// stoled from aiden hehe
 if (mcode) {
-args[0] = args[0].replace("--code", "").trim()
-if (args[1]) args[1] = args[1].replace("--code", "").trim()
-if (args[0] == "") args[0] = undefined
+argsP[0] = argsP[0].replace("--code", "").trim()
+if (argsP[1]) argsP[1] = argsP[1].replace("--code", "").trim()
+if (argsP[0] == "") argsP[0] = undefined
 console.log(args[0])}
-if (!fs.existsSync(bot)){
-fs.mkdirSync(bot, { recursive: true });
+if (!fs.existsSync(folderPath)){
+fs.mkdirSync(folderPath, { recursive: true });
 } else {
 
 }
-const credsBot = path.join(bot, "creds.json")
-args[0] ? fs.writeFileSync(credsBot, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, `\t`)) : ""
+const credsBot = path.join(folderPath, "creds.json")
+argsP[0] ? fs.writeFileSync(credsBot, JSON.stringify(JSON.parse(Buffer.from(argsP[0], "base64").toString("utf-8")), null, `\t`)) : ""
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
-const { state, saveState, saveCreds } = await useMultiFileAuthState(bot)
+const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath)
 const logger = pino({ level: `silent`})
 const useStore = !process.argv.includes('--no-store');
 const store = useStore ? makeInMemoryStore({ logger }) : undefined;
@@ -108,14 +125,11 @@ connectTimeoutMs: 60_000,
 defaultQueryTimeoutMs: 0,
 patchMessageBeforeSending,
 }
-let conn = makeWASocket(connectionOptions)
-conn.isInit = false
-conn.uptime = Date.now();
+const sock = makeWASocket(connectionOptions)
+sock.isInit = false
+sock.uptime = Date.now();
 let isInit = true
 
-function wait(ms) {
-return new Promise((resolve) => setTimeout(resolve, ms));
-}
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
 
@@ -125,12 +139,12 @@ const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
 let lastQr, shouldSendLogin, errorCount = 0;
 
 async function connectionUpdate(update) {
-let i = global.conns.indexOf(conn)
+let i = global.conns.indexOf(sock)
 global.timestamp.connect = new Date
 const { connection, lastDisconnect, isNewLogin, qr } = update
-if (isNewLogin) conn.isInit = false
+if (isNewLogin) sock.isInit = false
 if (qr && !mcode) {
-resp = `*${wm}*
+const resp = `*${wm}*
  *SER SUB-BOT*
 
 *Escanea este codigo QR para convertirte en un Bot (SubBot), puedes usar otro dispositivo para escanear*
@@ -142,18 +156,16 @@ resp = `*${wm}*
 *El codigo QR expira en 60 segundos!!*
 
 *—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
-sock = parentw
-imagen = await qrcode.toBuffer(qr, { scale: 8 })
-chat = m.chat
-q = await parentw.sendWritingImage(m.chat, imagen, resp, m)
+const imagen = await qrcode.toBuffer(qr, { scale: 8 })
+let q = await sockP.sendWritingImage(mP.chat, imagen, resp, mP)
 if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
 await lastQr.delete() 
 }
-//lastQr = await parentw.sendWritingImage(m.chat, imagen, resp, q)
+//lastQr = await sockP.sendWritingImage(mP.chat, imagen, resp, q)
 errorCount++
 } else if (qr && mcode) {
-resp = `*${wm}*
+const resp = `*${wm}*
 *SER SUB-BOT*
 
 *El codigo a continuacion se usara para convertirte en un Bot (SubBot)*
@@ -168,119 +180,95 @@ O lo puede intentar:
 *El codigo expira en 60 segundos!!*
 
 *—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
-chat = m.chat
-sock = parentw
-let q = await parentw.sendWritingText(m.chat, resp, m)
+let q = await sockP.sendWritingText(mP.chat, resp, mP)
 await wait(5000)
-code8 = await conn.requestPairingCode((m.sender.split`@`[0]))
-return parentw.sendWritingText(m.chat, code8, q)
+const code8 = await sock.requestPairingCode((mP.sender.split`@`[0]))
+return sockP.sendWritingText(mP.chat, code8, q)
 }
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
 if (global.db.data == null) loadDatabase()
- let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
+let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 console.log('jadibotReason: ', reason)
 if (connection === 'close') { 
 if (code === DisconnectReason.badSession) {
-conn.logger.error(`[ ⚠ ] ${code} Sesión incorrecta, por favor elimina la carpeta ${authFolderAniMX + '/' + uniqid} y escanea nuevamente.`);
+sock.logger.error(`[ ⚠ ] ${code} Sesión incorrecta, por favor elimina la carpeta ${authFolderAniMX + '/' + uniqid} y escanea nuevamente.`);
 } else if (code === DisconnectReason.connectionClosed) {
-conn.logger.warn(`[ ⚠ ] ${code} Conexión cerrada, reconectando...`);
+sock.logger.warn(`[ ⚠ ] ${code} Conexión cerrada, reconectando...`);
 if (lastDisconnect?.error && lastDisconnect?.error.output && lastDisconnect?.error.output.statusCode === 428 && lastDisconnect?.error.output.error === 'Precondition Required') {
 return creloadHandler(true).catch(console.error)
 }
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionLost) {
 // && now - lastConnectionMessageTime >= oneDay
-conn.logger.warn(`[ ⚠ ] ${code} Conexión perdida con el servidor, reconectando...`);
+sock.logger.warn(`[ ⚠ ] ${code} Conexión perdida con el servidor, reconectando...`);
 resp = "La conexión se perdio, se intentara reconectar automáticamente..."
-sock = conn
-chat = conn.user.jid
-await conn.sendWritingText(chat, resp, m)
+await sock.sendWritingText(sock.user.jid, resp, mP)
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionReplaced) {
-conn.logger.error(`[ ⚠ ] ${code} Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
-conn.ws.close()
+sock.logger.error(`[ ⚠ ] ${code} Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
+sock.ws.close()
 //delete global.conns[i]
 global.conns.splice(i, 1)
-resp = code + " remplazando conexión actual..."
-sock = parentw
-chat = m.chat
+const resp = code + " remplazando conexión actual..."
+await sockP.sendWritingText(mP.chat, resp, mP)
 } else if (code === DisconnectReason.loggedOut) {
-conn.logger.error(`[ ⚠ ] ${code} Conexion cerrada, por favor elimina la carpeta ${bot} y escanea nuevamente.`);
-resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
-sock = parentw
-chat = m.chat
-await conn.sendWritingText(chat, resp, m)
-conn.ev.removeAllListeners()
+sock.logger.error(`[ ⚠ ] ${code} Conexion cerrada, por favor elimina la carpeta ${bot} y escanea nuevamente.`);
+const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
+await sockP.sendWritingText(mP.chat, resp, mP)
+sock.ev.removeAllListeners()
 delete global.conns[i]
 return deleteSesionSB()
 } else if (code === DisconnectReason.restartRequired) {
-conn.logger.info(`[ ⚠ ] ${code} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
-return creloadHandler(true).catch(console.error)
+sock.logger.info(`[ ⚠ ] ${code} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
 global.conns.splice(i, 1)
+return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.timedOut) {
-conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
-resp = "La conexión se cerró, Tendras que conectarte manualmente..."
-sock = parentw
-chat = m.chat
-conn.ev.removeAllListeners()
+sock.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
+const resp = "La conexión se cerró, Tendras que conectarte manualmente..."
+await sockP.sendWritingText(mP.chat, resp, mP)
+sock.ev.removeAllListeners()
 delete global.conns[i]
 await creloadHandler(true).catch(console.error)
 global.conns.splice(i, 1)
 } else if (code === 403) {
-conn.logger.warn(`[ ⚠ ] ${code} Razón de desconexión revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
-conn.ev.removeAllListeners()
+sock.logger.warn(`[ ⚠ ] ${code} Razón de desconexión revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
+sock.ev.removeAllListeners()
 delete global.conns[i]
 deleteSesionSB()
 } else if (code === (500 || 503)) {
-conn.logger.warn(`[ ⚠ ] ${code} Razón de desconexión desconocida. : ${connection || ''}`);
+sock.logger.warn(`[ ⚠ ] ${code} Razón de desconexión desconocida. : ${connection || ''}`);
 return creloadHandler(true).catch(console.error)
 } else if (code === 405 || code == 404 ) {
-conn.logger.warn(`[ ⚠ ] ${code} Method Not Allowed solicitud no compatible con el servidor. ${connection || ''}`);
+sock.logger.warn(`[ ⚠ ] ${code} Method Not Allowed solicitud no compatible con el servidor. ${connection || ''}`);
 deleteSesionSB()
-return jddt()
+//return jddt()
 } else {
-conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
+sock.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
 errorCount++
-conn.ev.removeAllListeners()
+sock.ev.removeAllListeners()
 delete global.conns[i]
 await creloadHandler(true).catch(console.error)
 global.conns.splice(i, 1)
 }
-/*if (errorCount >= MAX_CLOSE_COUNT) {
-console.log(chalk.red(`La conexión cerrada ocurrió ${errorCount} veces. Reiniciando el servidor...`));
-errorCount = 0;
-await wait(RESET_INTERVAL);
-} else {
-await wait(CLOSE_CHECK_INTERVAL);
-}
-conn.ev.removeAllListeners()
-delete global.conns[i]
-global.conns.splice(i, 1)
-errorCount++
- && code !== 401*/
 } 
 if (connection == 'open') {
-conn.isInit = true
-global.conns.push(conn)
+let resp = ''
+sock.isInit = true
+global.conns.push(sock)
+limpCarpetas()
 //if (now - lastConnectionMessageTime >= oneDay) {
-dataconst[conn.user.id.split('@')] = 1;
-resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefix + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefix + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefix + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefix + command}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefix + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefix + command}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots tambien lo haran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${global.timestamp.connect = new Date}`
-sock = parentw
-chat = m.chat
-let q = await parentw.sendWritingText(m.chat, resp, m)
+dataconst[sock.user.id.split('@')] = 1;
+resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefixP + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefixP + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefixP + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefixP + commandP}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefixP + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefixP + commandP}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots tambien lo haran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${global.timestamp.connect = new Date}`
+let q = await sockP.sendWritingText(mP.chat, resp, mP)
 let chatjid = state.creds.me.jid
 console.log('jadibotCheck: ', chatjid)
-resp = `*${suppbot}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
-sock = parentw
-chat = m.chat
-let qq = parentw.sendWritingText(m.chat, resp, q)
+resp = `*${ganisubbots}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
+let qq = sockP.sendWritingText(mP.chat, resp, q)
 resp = `hello ${chat.split`@`[0]}\n\n` + mensajeidioma.trim()
-sock = conn
-chat = chatjid
-await conn.sendWritingText(chatjid, resp, qq)
+await sock.sendWritingText(chatjid, resp, qq)
 try {
 wait(40000)
-return conn.groupAcceptInvite(suppbot.replace('https://chat.whatsapp.com/', ''));
+return sock.groupAcceptInvite(ganisubbots.replace('https://chat.whatsapp.com/', ''));
 } catch (error) {
 console.log('Error al enviar invitación del grupo:', error.stack);
 }
@@ -293,12 +281,13 @@ wait(8000000)
 lastConnectionMessageTime = now;
 
 }
-	setInterval(async () => {
-if (!conn.user) {
-try { conn.ws.close() } catch { }
-conn.ev.removeAllListeners()
+setInterval(async () => {
+purgeOldFiles(folderPath)
+if (!sock.user) {
+try { sock.ws.close() } catch { }
+sock.ev.removeAllListeners()
 
-let i = global.conns.indexOf(conn)
+let i = global.conns.indexOf(sock)
 						
  if (i < 0) return
 delete global.conns[i]
@@ -321,88 +310,60 @@ if (Object.keys(Handler || {}).length) handler = Handler
 console.error(e)
 }
 if (restatConn) {
-//const oldChats = conn.chats
-try { conn.ws.close() } catch { }
-conn.ev.removeAllListeners()
-const oldChats = conn.chats;
-conn = makeWASocket(connectionOptions, { chats: oldChats })
-conn.uptime = Date.now();
+//const oldChats = sock.chats
+try { sock.ws.close() } catch { }
+sock.ev.removeAllListeners()
+const oldChats = sock.chats;
+sock = makeWASocket(connectionOptions, { chats: oldChats })
+sock.uptime = Date.now();
 isInit = true
 }
 if (!isInit) {
-conn.ev.off('messages.upsert', conn.handler)
-conn.ev.off('group-participants.update', conn.participantsUpdate)
-conn.ev.off('groups.update', conn.groupsUpdate)
-conn.ev.off('message.delete', conn.onDelete)
-conn.ev.off('call', conn.onCall)
-conn.ev.off('connection.update', conn.connectionUpdate)
-conn.ev.off('creds.update', conn.credsUpdate)
+sock.ev.off('messages.upsert', sock.handler)
+sock.ev.off('group-participants.update', sock.participantsUpdate)
+sock.ev.off('groups.update', sock.groupsUpdate)
+sock.ev.off('message.delete', sock.onDelete)
+sock.ev.off('call', sock.onCall)
+sock.ev.off('connection.update', sock.connectionUpdate)
+sock.ev.off('creds.update', sock.credsUpdate)
 }
 
-conn.handler = handler.handler.bind(conn)
-conn.participantsUpdate = handler.participantsUpdate.bind(conn)
-conn.groupsUpdate = handler.groupsUpdate.bind(conn)
-conn.onDelete = handler.deleteUpdate.bind(conn)
-conn.onCall = handler.callUpdate.bind(conn)
-conn.connectionUpdate = connectionUpdate.bind(conn)
-conn.credsUpdate = saveCreds.bind(conn, true)
+sock.handler = handler.handler.bind(sock)
+sock.participantsUpdate = handler.participantsUpdate.bind(sock)
+sock.groupsUpdate = handler.groupsUpdate.bind(sock)
+sock.onDelete = handler.deleteUpdate.bind(sock)
+sock.onCall = handler.callUpdate.bind(sock)
+sock.connectionUpdate = connectionUpdate.bind(sock)
+sock.credsUpdate = saveCreds.bind(sock, true)
 
-conn.ev.on('messages.upsert', conn.handler)
-conn.ev.on('group-participants.update', conn.participantsUpdate)
-conn.ev.on('groups.update', conn.groupsUpdate)
-conn.ev.on('message.delete', conn.onDelete)
-conn.ev.on('call', conn.onCall)
-conn.ev.on('connection.update', conn.connectionUpdate)
-conn.ev.on('creds.update', conn.credsUpdate)
+sock.ev.on('messages.upsert', sock.handler)
+sock.ev.on('group-participants.update', sock.participantsUpdate)
+sock.ev.on('groups.update', sock.groupsUpdate)
+sock.ev.on('message.delete', sock.onDelete)
+sock.ev.on('call', sock.onCall)
+sock.ev.on('connection.update', sock.connectionUpdate)
+sock.ev.on('creds.update', sock.credsUpdate)
 isInit = false
 wait(3000)
 //process.send('reset');
 return true
 }
 creloadHandler(false)
+}
 /**
 */
-}
-jddt()
-let txt = '';
-let count = 0;
-if (resp === undefined) return
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await sock.sendPresenceUpdate('composing', chat);
-}
-}
-if (imagen) {
-await sock.sendMessage(chat, {image: imagen, caption : txt}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-} else if (code8) {
-q = await sock.sendMessage(chat, {text: txt, mentions: sock.parseMention(txt) }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-await wait(5000)
-return sock.sendMessage(chat, {text: code8, mentions: sock.parseMention(txt) }, { quoted: q, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-} else if (contextInfo) {
-let contextInfo = {
-mentionedJid: conn.parseMention(txt),
-"externalAdReply": {
-"showAdAttribution": true,
-"containsAutoReply": true,
-"renderLargerThumbnail": true,
-"title": wmam, 
-"containsAutoReply": true,
-"mediaType": 1, 
-"thumbnail": imagen1am,//apii.res.url,
-"mediaUrl": `https://api.whatsapp.com/send/?phone=${global.conn.user.jid.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`,
-"sourceUrl": `https://api.whatsapp.com/send/?phone=${global.conn.user.jid.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`
-}
-}
-return sock.sendMessage(chat, {text: txt.trim(), contextInfo: contextInfo, mentions: sock.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+/*if (errorCount >= MAX_CLOSE_COUNT) {
+console.log(chalk.red(`La conexión cerrada ocurrió ${errorCount} veces. Reiniciando el servidor...`));
+errorCount = 0;
+await wait(RESET_INTERVAL);
 } else {
-return sock.sendMessage(chat, {text: txt, mentions: sock.parseMention(txt) }, { quoted: q, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+await wait(CLOSE_CHECK_INTERVAL);
 }
+conn.ev.removeAllListeners()
+delete global.conns[i]
+global.conns.splice(i, 1)
+errorCount++
+ && code !== 401*/
+function wait(ms) {
+return new Promise((resolve) => setTimeout(resolve, ms));
 }
-handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
-handler.tags = ['jadibot']
-handler.command = /^(jadibot|serbot|rentbot)/i
-handler.private = true 
-export default handler

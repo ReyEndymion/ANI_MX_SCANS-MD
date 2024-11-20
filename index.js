@@ -48,9 +48,9 @@ p.on('message', data => {
 console.log('[RECEIVED]', data)
 switch (data) {
 case 'reset':
-p.process.kill()
 p.removeAllListeners('exit')
 p.removeAllListeners('message')
+p.process.kill()
 start('main.js')
 break
 case 'uptime':

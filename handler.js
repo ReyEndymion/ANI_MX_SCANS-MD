@@ -33,7 +33,7 @@ let m = chatUpdate.messages[chatUpdate.messages.length - 1];
 if (!m) {
 return;
 }
-if (global.db.data.bot[this.user.jid] == null) await global.loadDatabase(conn);
+if (global.db.data == null) await global.loadDatabase();
 try {
 m = smsg(this, m) || m;
 if (!m) {
@@ -849,15 +849,14 @@ users: {}
 let users = global.db.data.bot[this.user.jid].chats.groups[group].users;
 if (typeof users !== 'object') global.db.data.bot[this.user.jid].chats.groups[group].users = {};
 if (users) {
-//const participant = groupMetadata.participants
 if (participants !== undefined) {
-for (const usersGroup of participants) {
-const userGroup = usersGroup.id
+for (const participant of participants) {
+const userGroup = participant.id
 let username = await conn.getName(userGroup)
 if (!userGroup.endsWith(userID)) continue
-let user = global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup];
+let user = global.db.data.bot[this.user.jid].chats.groups[group].users[participant];
 if (typeof user !== 'object') {
-global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {};
+global.db.data.bot[this.user.jid].chats.groups[group].users[participant] = {};
 }
 if (user) {
 // Nuevo contador de mensajes 
@@ -884,7 +883,7 @@ if (!isNumber(user.money)) user.money = 0;
 if (!isNumber(user.limit)) user.limit = 10;
 if (!isNumber(user.lastclaim)) user.lastclaim = 0;
 } else {
-global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {
+global.db.data.bot[this.user.jid].chats.groups[group].users[participant] = {
 msgcount: {count: 0, time: 0},
 exp: 0,
 limit: 10,
@@ -940,8 +939,8 @@ const group = id
 if (!group) return
 let groups = global.db.data.bot[this.user.jid].chats.groups;
 if (typeof groups !== 'object') global.db.data.bot[this.user.jid].chats.groups = {};
+const participant = participants[0]
 if (groups) {
-const groupMetadata = await this.groupMetadata(group) || (this.chats[group] || {}).metadata;
 const chat = global.db.data.bot[this.user.jid].chats.groups[group];
 if (typeof chat != 'object') global.db.data.bot[this.user.jid].chats.groups[group] = {}
 if (chat) {
@@ -998,16 +997,13 @@ users: {}
 };
 let users = global.db.data.bot[this.user.jid].chats.groups[group].users;
 if (typeof users !== 'object') global.db.data.bot[this.user.jid].chats.groups[group].users = {};
+console.log('participantsUpdate: ', participant)
 if (users) {
-const participant = groupMetadata.participants
-for (const usersGroup of participant) {
-const userGroup = usersGroup.id
-let username = await conn.getName(userGroup)
-if (!userGroup.endsWith(userID)) continue
-let user = global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup];
+let user = global.db.data.bot[this.user.jid].chats.groups[group].users[participant];
 if (typeof user !== 'object') {
-global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {};
+global.db.data.bot[this.user.jid].chats.groups[group].users[participants] = {};
 }
+let username = await conn.getName(participant)
 if (user) {
 // Nuevo contador de mensajes 
 if (!('msgcount' in user)) user.msgcount = {};
@@ -1033,7 +1029,7 @@ if (!isNumber(user.money)) user.money = 0;
 if (!isNumber(user.limit)) user.limit = 10;
 if (!isNumber(user.lastclaim)) user.lastclaim = 0;
 } else {
-global.db.data.bot[this.user.jid].chats.groups[group].users[usersGroup] = {
+global.db.data.bot[this.user.jid].chats.groups[group].users[participant] = {
 msgcount: {count: 0, time: 0},
 exp: 0,
 limit: 10,
@@ -1056,8 +1052,7 @@ lastweekly: 0,
 lastmonthly: 0,
 };
 }
-if (!userGroup.endsWith(userID)) delete users[userGroup]
-}
+if (!participant.endsWith(userID)) delete users[participant]
 } else {
 global.db.data.bot[this.user.jid].chats.groups[group].users = {};
 }
@@ -1069,20 +1064,21 @@ users: {}
 }
 }
 if (action === ('add')) {
-global.db.data.bot[this.user.jid].chats.groups[group].users[participants] = {}
+global.db.data.bot[this.user.jid].chats.groups[group].users[participant] = {}
 } else if (action === 'remove') {
-delete global.db.data.bot[this.user.jid].chats.groups[group].users[participants]
+delete global.db.data.bot[this.user.jid].chats.groups[group].users[participant]
 }
-console.log('participantsUpdate: ', participants)
 global.db.write()
 }
 
 
-export async function callUpdate( callUpdate, conn, isAdmin, isBotAdmin, isOwner, isROwner, participants) {
-let ow = global.owner.filter((entry) => typeof entry[0] === 'string' && !isNaN(entry[0])).map((entry) => ({ jid: entry[0] })).slice(0).map(({ jid }) => `${participants.some((p) => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `;
-let adm = global.espadmins.filter((entry) => typeof entry[0] === 'string' && !isNaN(entry[0])).map((entry) => ({ jid: entry[0] })).slice(0).map(({ jid }) => `${participants.some((p) => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join`, `;
-console.log(some);
-let sender = `@${m.sender.split`@`[0]}`;
+export async function callUpdate( callUpdate) {
+let ow = global.owner.filter((entry) => typeof entry[0] === 'string' && !isNaN(entry[0])).map((entry) => ({ jid: entry[0] })).slice(0).map(({ jid }) => `@${jid.split`@`[0]}`).join` y `;
+let adm = global.espadmins.filter((entry) => typeof entry[0] === 'string' && !isNaN(entry[0])).map((entry) => ({ jid: entry[0] })).slice(0).map(({ jid }) => `${jid.split`@`[0]}`).join`, `;
+let isAnticall = global.db.data.bot[this.user.jid].settings.antiCall;
+if (!isAnticall) return;
+for (let nk of callUpdate) {
+let sender = `@${nk.from.split`@`[0]}`;
 if (adm.includes(sender)) {
 console.log(
 `Este remitente ${sender} está en la lista, no lo puedo bloquear.`
@@ -1090,31 +1086,15 @@ console.log(
 } else {
 console.log(`Bloqueando usuario ${sender} con la función antiprivate.`);
 }
-let isAnticall = global.db.data.bot[this.user.jid].settings[this.user.jid].antiCall;
-if (!isAnticall) return;
-for (let nk of callUpdate) {
 if (nk.isGroup == false) {
 if (nk.status == 'offer') {
 let callmsg = `Hola *@${nk.from.split('@')[0]}*, las ${nk.isVideo ? 'videollamadas' : 'llamadas'} no están permitidas, serás bloqueado.\n-\nSi accidentalmente llamaste póngase en contacto con mi creador ${ow} para que te desbloquee!`;
-let txt = '';
-let count = 0;
-for (const c of callmsg) {
-await new Promise((resolve) => setTimeout(resolve, 5));
-txt += c;
-count++;
-if (count % 10 === 0) {
-conn.sendPresenceUpdate('composing', m.chat);
-}
-}
-await conn.sendMessage(nk.from, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100});
+await conn.sendWritingText(nk.from, callmsg);
 //let data = global.owner.filter(([id, isCreator]) => id && isCreator)
 //await this.sendContact(nk.from, data.map(([id, name]) => [id, name]), false, { quoted: callmsg })
 let vcard = `BEGIN:VCARD\nVERSION:3.0\nN:;ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃;;;\nFN:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nORG:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nTITLE:\nitem1.TEL;waid=5215517489568:+521 5517489568\nitem1.X-ABLabel:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nX-WA-BIZ-DESCRIPTION:[❗] ᴄᴏɴᴛᴀᴄᴛᴀ ᴀ ᴇsᴛᴇ ɴᴜᴍ ᴘᴀʀᴀ ᴄᴏsᴀs ɪᴍᴘᴏʀᴛᴀɴᴛᴇs.\nX-WA-BIZ-NAME:ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃\nEND:VCARD`;
-await this.sendMessage(
-nk.from,
-{ contacts: { displayName: 'ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃', contacts: [{ vcard }] } },
-{quoted: callmsg, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100});
-await this.updateBlockStatus(nk.from, 'block');
+//await conn.sendMessage(nk.from, { contacts: { displayName: 'ℛℯ𝓎 ℰ𝓃𝒹𝓎𝓂𝒾ℴ𝓃', contacts: [{ vcard }] } }, {quoted: callmsg, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100});
+return conn.updateBlockStatus(nk.from, 'block');
 }
 }
 }
@@ -1141,7 +1121,7 @@ let resp = `
 *—◉ #enable delete*
 ━━━━⬣*ANTI DELETE*⬣━━━━
 `.trim();
-await conn.sendWritinText(msg.chat, resp, msg)
+await conn.sendWritingText(msg.chat, resp, msg)
 this.copyNForward(msg.chat, msg).catch((e) => console.log(e, msg));
 } catch (e) {
 console.error(e);

@@ -68,7 +68,7 @@ let apiUrl = global.API('https://some-random-api.ml/canvas/', encodeURIComponent
 avatar: url
 })
 try {
-let stiker = await sticker(null, apiUrl, global.gt, global.author)
+let stiker = await sticker(null, apiUrl, global.packname, global.author)
 //conn.sendFile(m.chat, stiker, null, { asSticker: true })
 conn.sendMessage(m.chat, {sticker: {url: stiker}?stiker : {url: stiker},mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
 

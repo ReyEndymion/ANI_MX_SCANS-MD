@@ -1,7 +1,7 @@
 import { mediafiredl } from '@bochilteam/scraper'
 let handler = async (m, { conn, args, usedPrefix, command }) => {
 let resp, document, fileName, mimetype, fileLength
-if (!args[0]) {resp = `*[❗INFO❗] INGRESE UN ENLACE VALIDO DE MEDIAFIRE, EJEMPLO: ${usedPrefix + command} https://www.mediafire.com/file/zrx6r0jlui6gb0e/FREE_FIRE_Actualizado_1.103.2_by_TelleZ.apk/file*`
+if (!args[0]) {resp = `*[❗INFO❗]* INGRESE UN ENLACE VALIDO DE MEDIAFIRE, EJEMPLO: *${usedPrefix + command} https://www.mediafire.com/file/zrx6r0jlui6gb0e/FREE_FIRE_Actualizado_1.103.2_by_TelleZ.apk/file*`
 return conn.sendWritingText(m.chat, resp, m)
 } else {
 try {
@@ -28,7 +28,7 @@ return conn.sendMessage(m.chat, {document: { url: document }, caption: txt.trim(
 //await conn.sendFile(m.chat, url, filename, '', m, null, { mimetype: ext, asDocument: true })filesize.includes('GB') || 
 }
 } catch (e) {
-resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉https://www.mediafire.com/file/0j2hmyq7hgb2uqn/Bully_Anniversary_Edition_2022.zip/file*\n\n${e}`
+resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉https://www.mediafire.com/file/0j2hmyq7hgb2uqn/Bully_Anniversary_Edition_2022.zip/file*\n\n${e.stack}`
 return conn.sendWritingText(m.chat, resp, m)
 }
 }

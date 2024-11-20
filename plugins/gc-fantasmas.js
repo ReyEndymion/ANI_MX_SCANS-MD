@@ -1,5 +1,10 @@
+import { Low, JSONFile } from 'lowdb';
+const databaseFile = './countMessagesReg.json';
+const adapter = new JSONFile(databaseFile);
+const db = new Low(adapter);
 let handler = async (m, { conn, text, participants }) => {
-let chat = global.db.data.bot[conn.user.jid].chats.groups[m.chat]
+await db.read();
+let chat = db.data.bot[conn.user.jid].chats.groups[m.chat]
 let resp = '', ghost = false
 let participantIds = new Set(participants.map(u => u.id));
 let users = chat.users
@@ -9,16 +14,16 @@ for (let participant of participants) {
 let user = participant.id;
 console.log('mentioned: ', users[user] && users[user].msgcount && users[user].msgcount.count)
 if (!(user in users)) {
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
 msgcount: {
 count: 0,
 time: 0
 }
 };
-await global.db.write();
+await db.write();
 console.log(`Usuario ${user} inicializado en la base de datos.`);
 } else if ((users[user] && users[user].msgcount && users[user].msgcount.count && users[user].msgcount.time) === undefined) {
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
 msgcount: {
 count: 0,
 time: 0
@@ -78,6 +83,7 @@ return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(
 }
 }
 handler.command = /^((ver)?fantasmas|sider|ghosts)$/i
-handler.admin = true
-handler.botAdmin = true
+handler.group = true
+//handler.botAdmin = true
+//handler.admin = true
 export default handler

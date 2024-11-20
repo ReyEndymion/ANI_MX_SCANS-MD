@@ -152,7 +152,7 @@ return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) },
 return `${Math.floor(Math.random() * 10000)}${ext}`;
 };
 handler.before = async (m, { conn, args}) => {
-if (m.chat == 'status@broadcast') return
+if (m.chat == statusBC || m.chat.endsWith(newsletter)) return
 
 const bot = global.db.data.bot[conn.user.jid]
 const chats = bot.chats

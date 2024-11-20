@@ -10,9 +10,15 @@ let bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
-const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
-const users = m.isGroup ? chat.users || {} : privs || {}
-const user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
+let chat, users, user
+if (m.chat.endsWith(userID)) {
+chat = privs[m.chat] || {}
+user = privs[m.sender] || {}
+} else if (m.chat.endsWith(groupID)) {
+chat = groups[m.chat] || {}
+users = chat.users || {}
+user = users[m.sender] || {}
+} else return
 
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 

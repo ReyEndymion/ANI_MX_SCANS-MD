@@ -1,4 +1,7 @@
 import fetch from 'node-fetch'
+import * as cheerio from 'cheerio'
+import axiox from 'axios'
+import * as scraper from '@bochilteam/scraper';
 let handler = async (m, { conn, args, command, usedPrefix }) => {
 if (!db.data.chats[m.chat].modohorny && m.isGroup) {
 return conn.sendWritingText(m.chat, '*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*', m)

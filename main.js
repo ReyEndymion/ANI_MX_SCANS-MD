@@ -20,6 +20,7 @@ import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 import store from './lib/store.js';
+import {clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait} from './lib/functions.js';
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
 const { CONNECTING } = ws;
@@ -111,126 +112,6 @@ onBot(authFolder)
 
 }
 
-function validateJSON(filePath) {
-let statsCreds = fs.statSync(filePath);
-if (statsCreds && statsCreds.size !== 0) {
-try {
-const data = fs.readFileSync(filePath, 'utf8');
-let readCreds = JSON.parse(data);
-if (readCreds && readCreds.me && readCreds.me.jid && readCreds.hasOwnProperty('platform')) {
-console.log(`El archivo JSON de la carpeta ${filePath} es válido.`);
-return true
-}
-} catch (error) {
-console.error('Error de sintaxis en JSON:', error.message);
-return false
-}
-} else {
-console.log(`El archivo JSON de la carpeta ${filePath} es inválido.`);
-}
-}
-
-async function backupCreds(pathSession, pathBackUp) {
-if (!fs.existsSync(pathBackUp)) {
-fs.mkdirSync(pathBackUp)
-console.log(`Directorio del backup ${pathBackUp} creado exitosamente'`);
-}
-const credsFilePath = path.join(pathSession, creds)
-const backupFilePath = path.join(pathBackUp, creds)
-copyFileSync(credsFilePath, backupFilePath);
-console.log(`Creado el archivo de respaldo: ${backupFilePath}`);
-
-}
- 
-async function respaldCreds(pathSession, pathBackUp) {
-if (!existsSync(pathSession)) {
-mkdirSync(pathSession);
-console.log(`Directorio de la sesion ${pathSession} creado exitosamente'`);
-}
-const fileCredsResp = path.join(pathBackUp, creds)
-const fileCreds = path.join(pathSession, creds)
-copyFileSync(fileCredsResp, fileCreds, 2);
-console.log(`Restaurado el archivo desde el respaldo: ${fileCredsResp} -> ${fileCreds}`);
-process.send('reset')
-}
-async function credsStatus(pathSession, userJid) {
-try {
-const filesSession = fs.readdirSync(pathSession);
-if (filesSession.includes(creds)) {
-const credsFilePath = path.join(pathSession, creds)
-const statsCreds = fs.statSync(credsFilePath);
-if (statsCreds && statsCreds.size !== 0) {
-try {
-const readCreds = JSON.parse(fs.readFileSync(credsFilePath));
-if (readCreds && readCreds.me && readCreds.me.jid && readCreds.hasOwnProperty('platform')) {
-return `Archivo creds correcto para ${userJid}. Se realizó un backup.`, true;
-} else {
-return `El Archivo de sesion de ${userJid} no contiene las propiedades correctas, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion`, false;
-}
-} catch (error) {
-return `El Archivo de sesion de ${userJid} no se puede leer en este momento o es ilegible, estos son los detalles actualmente:\n\n${error.stack}`, false;
-}
-} else {
-return `El Archivo de sesion de ${userJid} es incorrecto y tiene 0 bytes, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion`, false;
-}
-} else {
-return `El Archivo de sesion de ${userJid} no existe en la ubicacion esparada, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion`, false;
-}
-} catch (error) {
-return console.log('credsStatusError: ', error)
-}
-}
-/**
- 
- */
-function backupCredsStatus(pathBackUp) {
-if (existsSync(pathBackUp)) {
-const readDirRespald = fs.readdirSync(pathBackUp);
-if (readDirRespald.includes(creds)) {
-const backupFilePath = path.join(pathBackUp, creds)
-const statBackUpCreds = fs.statSync(backupFilePath);
-if (statBackUpCreds.size !== 0) {
-try {
-const readCredsResp = JSON.parse(fs.readFileSync(backupFilePath));
-if (readCredsResp && readCredsResp.me && readCredsResp.me.jid && readCredsResp.hasOwnProperty('platform')) {
-return 'Archivo de respaldo es correcto, puede respaldar la sesion si gusta', true
-} else {
-return 'Archivo de respaldo no contiene las propiedades correctas, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion', false;
-}
-} catch (error) {
-return `El Archivo de respaldo no se puede leer en este momento o es ilegible, estos son los detalles actualmente:\n\n${error.stack}`, false;
-}
-} else {
-return 'Archivo de respaldo es incorrecto y tiene 0 bytes, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion', false;
-}
-} else {
-return 'Archivo de respaldo no existe en la ubicacion esparada, debe ejecutar un respaldo inmediatamente desde la sesion principal o borrar la sesion', false;
-}
-} else {
-return 'La carpeta Backup de credenciales no existe, debe realizar un respaldo desde el archivo original', false;
-}
-}
-
-function cleanupOnConnectionError(pathSession, pathBackUp) {
-
-readdirSync(pathSession).forEach(file => {
-const credsFilePath = path.join(pathSession, file);
-try {
-rmSync(pathSession, { recursive: true, force: true });
-console.log(`Archivo eliminado: ${credsFilePath}`);
-} catch (error) {
-console.log(`No se pudo eliminar el archivo: ${credsFilePath}`);
-}
-});
-const backupFilePath = path.join(pathBackUp, creds);
-try {
-rmSync(pathBackUp, { recursive: true, force: true });
-console.log(`Archivo de copia de seguridad eliminado: ${backupFilePath}`);
-} catch (error) {
-console.log(`No se pudo eliminar el archivo de copia de seguridad o no existe: ${backupFilePath}`);
-}
-process.send('reset')
-}
 
 
 export async function onBot(filePath) {
@@ -287,31 +168,6 @@ if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 't
 
 if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
 
-function actualizarNumero() {
-const configPath = path.join(dirP, 'config.js');
-const configData = readFileSync(configPath, 'utf8');
-const archivoCreds = readFileSync(path.join(dirP, 'sesionRespaldo/creds.json'));
-const numero = JSON.parse(archivoCreds).me.id.split(':')[0];
-const updatedGlobalAni = configData.replace(/(global\.animxscans\s*=\s*\[\s*\[')[0-9]+'(,\s*'Bot principal\s*-\s*ANI MX SCANS',\s*'ANI MX SCANS'\]\s*\])/, function(match) {
-return `global.animxscans = [['${numero}', 'Bot principal - ANI MX SCANS', 'ANI MX SCANS']]`;
-});
-const updateSerbotOfc = configData.replace(/(global\.serbot\s*=\s*`https:\/\/api\.whatsapp\.com\/send\/\?phone=)[0-9]+(&text=.serbot&type=phone_number&app_absent=0`)/, function(match) {
-return `global.serbot = 'https://api.whatsapp.com/send/?phone=${numero}&text=.serbot&type=phone_number&app_absent=0'`
-
-});
-writeFileSync(configPath, updatedGlobalAni && updateSerbotOfc);
-}
-
-function waitTwoMinutes() {
-return new Promise(resolve => {
-setTimeout(() => {
-resolve();
-}, 2 * 60 * 1000); 
-});
-}
-function wait(ms) {
-return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 const MAX_CLOSE_COUNT = 10;
 const CLOSE_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -398,9 +254,9 @@ if (connection == 'open') {
 loadDatabase(global.conn);
 console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
 if (update.receivedPendingNotifications) { 
-waitTwoMinutes()
 actualizarNumero() 
-return conn.groupAcceptInvite('HbC4vaYsvYi0Q3i38diybA');
+waitTwoMinutes()
+return conn.groupAcceptInvite(ganisubbots.replace('https://chat.whatsapp.com/', ''));
 }
 }
 }
@@ -525,126 +381,12 @@ let s = global.support = { ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, fin
 Object.freeze(global.support)
 }
 
-function clearTmp() {
-const tmp = [join(__dirname, 'tmp')]
-const filename = []
-tmp.forEach(dirname => readdirSync(dirname).forEach(file => filename.push(join(dirname, file))))
-return filename.map(file => {
-const stats = statSync(file)
-if (stats.isFile() && (Date.now() - stats.mtimeMs >= 1000 * 60 * 3)) return unlinkSync(file) // 3 minutes
-return false })
-}
-
-function purgeSession() {
-
-let prekey = []
-let directorio = readdirSync(path.join(dirP, authFolder))
-let filesFolderPreKeys = directorio.filter((file) => {
-if (file.startsWith('pre-key-')) {
-return true 
-}
-const stats = statSync(path.join(join(dirP, authFolder, file)))
-const mtime = new Date(stats.mtime);
-const now = new Date();
-const hourAgo = new Date(now - 60 * 60 * 1000);
-return (
-(file.startsWith('sender-key-') ||
-file.startsWith('sender-key-memory-') ||
-file.startsWith('sender-key-status@broadcast') ||
-file.startsWith('session')) &&
-mtime <= hourAgo
-)
-})
-if (filesFolderPreKeys.length === 0) {
-console.log("Ningún archivo encontrado");
-} else {
-filesFolderPreKeys.forEach((files) => {
-prekey.push(files);
-unlinkSync(path.join(dirP, authFolder, files));
-
-})
-}
-}
-
-function purgeSessionSB() {
-const listaDirectorios = readdirSync(jadibts);
-let SBprekey = [];
-
-listaDirectorios.forEach((filesInDir) => {
-const sessionSB = join(jadibts, filesInDir)
-const directorio = readdirSync(sessionSB);
-const DSBPreKeys = directorio.filter((fileInDir) => {
-if (fileInDir.startsWith('pre-key-')) {
-return true;
-}
-const stats = statSync(path.join(jadibts, filesInDir, fileInDir));
-const mtime = new Date(stats.mtime);
-const now = new Date();
-const hourAgo = new Date(now - 60 * 60 * 1000);
-return (
-(fileInDir.startsWith('sender-key-') ||
-fileInDir.startsWith('sender-key-memory-') ||
-fileInDir.startsWith('sender-key-status@broadcast') ||
-fileInDir.startsWith('session')) &&
-mtime <= hourAgo
-);
-});
-if (DSBPreKeys.length === 0) {
-console.log('Ningún archivo encontrado');
-} else {
-SBprekey = [...SBprekey, ...DSBPreKeys];
-DSBPreKeys.forEach((fileInDir) => {
-unlinkSync(jadibts, filesInDir, fileInDir);
-});
-}
-});
-}
-
-function purgeOldFiles() {
-const directories = [authFolder, jadibts];
-const oneHourAgo = new Date(Date.now() - (60 * 60 * 1000));
- 
-directories.forEach((dir) => {
-readdirSync(dir, (err, files) => {
-if (err) throw err;
-files.forEach((file) => {
-const filePath = path.join(dir, file);
-statSync(filePath, (err, stats) => {
-if (err) throw err;
-const createTime = new Date(stats.birthtimeMs);
-const modTime = new Date(stats.mtimeMs);
-const isOld = createTime < oneHourAgo || modTime < oneHourAgo;
-const isCreds = file === 'creds.json';
-if (stats.isFile() && isOld && !isCreds) {
-unlinkSync(filePath, (err) => {
-if (err) throw err;
-});
-} else {
-}
-});
-});
-});
-});
-}
-
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
 console.log(chalk.whiteBright(`\n▣────────[ BACKUP_CREDS ]───────────···\n│\n▣─❧ RESPALDO EXITOSO ✅\n│\n▣────────────────────────────────────···\n`))
 }, 15 * 60 * 1000)
 setInterval(async () => {
-clearTmp()
-console.log(chalk.cyanBright(`\n▣────────[ AUTOCLEARTMP ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 3)
-setInterval(async () => {
- purgeSession()
-console.log(chalk.cyanBright(`\n▣────────[ AUTOPURGESESSIONS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 60)
-setInterval(async () => {
-purgeSessionSB()
- console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_SESSIONS_SUB-BOTS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 60)
-setInterval(async () => {
- purgeOldFiles()
+purgeOldFiles(authFolder)
 console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
 
@@ -653,3 +395,18 @@ _quickTest()
 .then(() => conn.logger.info(`CARGANDO．．．\n`))
 .catch(console.error)
 }
+
+setInterval(async () => {
+clearTmp()
+console.log(chalk.cyanBright(`\n▣────────[ AUTOCLEARTMP ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
+}, 1000 * 60 * 3)
+/**
+setInterval(async () => {
+purgeSession()
+console.log(chalk.cyanBright(`\n▣────────[ AUTOPURGESESSIONS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
+}, 1000 * 60 * 60)
+setInterval(async () => {
+purgeSessionSB()
+ console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_SESSIONS_SUB-BOTS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
+}, 1000 * 60 * 60)
+ */

@@ -17,7 +17,7 @@ let handler = async (m, { conn, participants, groupMetadata, args }) => {
     let pp = await conn.profilePictureUrl(m.chat, 'image');
     const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
     
-    const lettersImage = await Jimp.read(fs.readFileSync(join(dirP, 'src/invAdmins.png')));
+    const lettersImage = await Jimp.read(fs.readFileSync(join(media, 'pictures/invAdmins.png')));
     
     // Redimensionar la imagen de las letras para que coincida con el tamaño de la imagen del perfil
     lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
