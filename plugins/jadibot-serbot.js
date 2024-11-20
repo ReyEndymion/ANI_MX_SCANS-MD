@@ -31,15 +31,20 @@ import { limpCarpetas, purgeOldFiles } from "../lib/functions.js";
 if (global.conns instanceof Array) {console.log()} else {global.conns = []}
 if (!(global.dataconst instanceof Array)) global.dataconst = [];
 let lastConnectionMessageTime = 0;
-let usedPrefixP = '', argsP = [], commandP = '', mP = ''
+let usdePrefix = '', args = [], command = '', m = ''
+
+const data = {}
+
 let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
 if (m.isGroup) return
-usedPrefixP = usedPrefix
-argsP = args
-commandP = command
-mP = m
-//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? sockP.user.jid : m.sender
-let uniqid = `${m.sender.split`@`[0]}`//sockP.getName(who)
+data.usedPrefix = usedPrefix
+data.args = args
+data.command = command
+data.m = m
+data.conn = conn
+console.log('serbot: ', args[0])
+//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let uniqid = `${m.sender.split`@`[0]}`//conn.getName(who)
 const bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
 if (!global.db.data.bot[conn.user.jid].settings.modejadibot) {
 let resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / PROPIETARIO DEL BOT*`
@@ -48,39 +53,41 @@ return conn.sendWritingText(m.chat, resp, m)
 /***
 if (conn.user.jid !== global.conn.user.jid) {
 resp = `*[❗] Este comando solo puede ser usado en un Bot principal!!*\n\n*—◉ Da click aquí o en la imagen para ir:*\n*◉* https://api.whatsapp.com/send/?phone=${global.conn.user.jid.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`;
-
 contextInfo = true
 }
  */
-jddt(bot, conn)
+jddt(bot, data)
 }
 handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
 handler.tags = ['jadibot']
 handler.command = /^(jadibot|serbot|rentbot)/i
-handler.before = async function before(m, {conn, args, isOwner}) {
+handler.before = async function before(m, {conn, isOwner}) {
 if (m.text.match(/initbot/i) && isOwner) {
-const bot = path.join(jadibts, conn.formatNumberWA(m.text.split(/initbot/i)[1]))
-jddt(bot, conn)
-console.log('serbotInitBot: ', bot)
+const args = m.text.split(/initbot/i)
+console.log('serbotInitBot: ', args)
+const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
+const bot = path.join(jadibts, conn.formatNumberWA(args[1]))
+jddt(bot, datas)
 }
 }
 //handler.private = true 
 export default handler
-async function jddt(folderPath, sockP) {
-const mcode = argsP[0] && argsP[0].includes("--code") ? true : argsP[1] && argsP[1].includes("--code") ? true : false 
+async function jddt(folderPath, data) {
+const { conn, args, usedPrefix, command, m } = data
+const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
 // stoled from aiden hehe
 if (mcode) {
-argsP[0] = argsP[0].replace("--code", "").trim()
-if (argsP[1]) argsP[1] = argsP[1].replace("--code", "").trim()
-if (argsP[0] == "") argsP[0] = undefined
-console.log(args[0])}
+args[0] = args[0].replace("--code", "").trim()
+if (args[1]) args[1] = args[1].replace("--code", "").trim()
+if (args[0] == "") args[0] = undefined
+}
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
 } else {
 
 }
 const credsBot = path.join(folderPath, "creds.json")
-argsP[0] ? fs.writeFileSync(credsBot, JSON.stringify(JSON.parse(Buffer.from(argsP[0], "base64").toString("utf-8")), null, `\t`)) : ""
+args[0] ? fs.writeFileSync(credsBot, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, `\t`)) : ""
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
@@ -105,7 +112,7 @@ return conn.chats[key.remoteJid] && conn.chats[key.remoteJid].messages[key.id] ?
 return { conversation: 'recargando mensaje' } || proto.Message.fromObject({})
 }
 async function patchMessageBeforeSending(message) {
-const requiresPatch = !!( message.buttonsMessage || message.templateMessage || message.listMessage );
+const requiresPatch = !!( message.buttonsMessage || message.temlateMessage || message.listMessage );
 if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
 return message;
 }
@@ -157,12 +164,12 @@ const resp = `*${wm}*
 
 *—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
-let q = await sockP.sendWritingImage(mP.chat, imagen, resp, mP)
+let q = await conn.sendWritingImage(m.chat, imagen, resp, m)
 if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
 await lastQr.delete() 
 }
-//lastQr = await sockP.sendWritingImage(mP.chat, imagen, resp, q)
+//lastQr = await conn.sendWritingImage(m.chat, imagen, resp, q)
 errorCount++
 } else if (qr && mcode) {
 const resp = `*${wm}*
@@ -180,10 +187,10 @@ O lo puede intentar:
 *El codigo expira en 60 segundos!!*
 
 *—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
-let q = await sockP.sendWritingText(mP.chat, resp, mP)
+let q = await conn.sendWritingText(m.chat, resp, m)
 await wait(5000)
-const code8 = await sock.requestPairingCode((mP.sender.split`@`[0]))
-return sockP.sendWritingText(mP.chat, code8, q)
+const code8 = await sock.requestPairingCode((m.sender.split`@`[0]))
+return conn.sendWritingText(m.chat, code8, q)
 }
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
 if (global.db.data == null) loadDatabase()
@@ -202,19 +209,19 @@ return creloadHandler(true).catch(console.error)
 // && now - lastConnectionMessageTime >= oneDay
 sock.logger.warn(`[ ⚠ ] ${code} Conexión perdida con el servidor, reconectando...`);
 resp = "La conexión se perdio, se intentara reconectar automáticamente..."
-await sock.sendWritingText(sock.user.jid, resp, mP)
+await sock.sendWritingText(sock.user.jid, resp, m)
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionReplaced) {
-sock.logger.error(`[ ⚠ ] ${code} Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
+sock.logger.error(`[ ⚠ ] ${code} Conexión reemlazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
 sock.ws.close()
 //delete global.conns[i]
 global.conns.splice(i, 1)
-const resp = code + " remplazando conexión actual..."
-await sockP.sendWritingText(mP.chat, resp, mP)
+const resp = code + " remlazando conexión actual..."
+await conn.sendWritingText(m.chat, resp, m)
 } else if (code === DisconnectReason.loggedOut) {
 sock.logger.error(`[ ⚠ ] ${code} Conexion cerrada, por favor elimina la carpeta ${bot} y escanea nuevamente.`);
 const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
-await sockP.sendWritingText(mP.chat, resp, mP)
+await conn.sendWritingText(m.chat, resp, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
 return deleteSesionSB()
@@ -223,9 +230,9 @@ sock.logger.info(`[ ⚠ ] ${code} Reinicio necesario, reinicie el servidor si pr
 global.conns.splice(i, 1)
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.timedOut) {
-sock.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
+sock.logger.warn(`[ ⚠ ] Tiemo de conexión agotado, reconectando...`);
 const resp = "La conexión se cerró, Tendras que conectarte manualmente..."
-await sockP.sendWritingText(mP.chat, resp, mP)
+await conn.sendWritingText(m.chat, resp, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
 await creloadHandler(true).catch(console.error)
@@ -239,7 +246,7 @@ deleteSesionSB()
 sock.logger.warn(`[ ⚠ ] ${code} Razón de desconexión desconocida. : ${connection || ''}`);
 return creloadHandler(true).catch(console.error)
 } else if (code === 405 || code == 404 ) {
-sock.logger.warn(`[ ⚠ ] ${code} Method Not Allowed solicitud no compatible con el servidor. ${connection || ''}`);
+sock.logger.warn(`[ ⚠ ] ${code} Method Not Allowed solicitud no comatible con el servidor. ${connection || ''}`);
 deleteSesionSB()
 //return jddt()
 } else {
@@ -258,12 +265,12 @@ global.conns.push(sock)
 limpCarpetas()
 //if (now - lastConnectionMessageTime >= oneDay) {
 dataconst[sock.user.id.split('@')] = 1;
-resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefixP + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefixP + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefixP + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefixP + commandP}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefixP + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefixP + commandP}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots tambien lo haran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${global.timestamp.connect = new Date}`
-let q = await sockP.sendWritingText(mP.chat, resp, mP)
+resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usdePrefix + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usdePrefix + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usdePrefix + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usdePrefix + command}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usdePrefix + 'codetoken'}*\n\nPara volver a conectarte usa ${usdePrefix + command}*\n\n*Nota:* Esto es temoral\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots tambien lo haran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${global.timestamp.connect = new Date}`
+let q = await conn.sendWritingText(m.chat, resp, m)
 let chatjid = state.creds.me.jid
 console.log('jadibotCheck: ', chatjid)
 resp = `*${ganisubbots}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
-let qq = sockP.sendWritingText(mP.chat, resp, q)
+let qq = conn.sendWritingText(m.chat, resp, q)
 resp = `hello ${chat.split`@`[0]}\n\n` + mensajeidioma.trim()
 await sock.sendWritingText(chatjid, resp, qq)
 try {

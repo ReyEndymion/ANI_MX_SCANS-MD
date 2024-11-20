@@ -2,13 +2,14 @@ import similarity from 'similarity'
 const threshold = 0.72
 let handler = m => m
 handler.before = async function (m, {conn}) {
-if (m.chat == 'status@broadcast') return
+if (m.chat == statusBC || m.chat.endsWith(newsletter)) return
 const bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
 const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
 const users = m.isGroup ? chat.users || {} : privs || {}
+const user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 if (user.banned) return
 let id = m.chat
 if (!m.quoted || !m.quoted.fromMe || !m.quoted.isBaileys || !/^ⷮ/i.test(m.quoted.text)) return !0
