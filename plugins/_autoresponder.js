@@ -15,7 +15,7 @@ users = chat.users || {}
 user = users[m.sender] || {}
 } else return
 
-if (m.mentionedJid.includes(conn.user.jid) && m.isGroup && !chat.isBanned) {
+if (m.mentionedJid.includes(conn.user.jid) && m.isGroup && !chat.isBanned && !m.fromMe) {
 let stiker = await sticker(stickerAMX, false, global.gt, global.author)
 //conn.sendFile(m.chat, stiker, 'sticker.webp', null, m, false, {contextInfo: { externalAdReply: { title: wm, body: author, sourceUrl: md, thumbnail: imagen2am}}})
 return conn.sendMessage(m.chat, {sticker: stiker,mimetype: 'image/webp', asSticker: true, contextInfo: { externalAdReply: { title: wm, body: author, sourceUrl: md, thumbnail: stickerAMX}}}, {quoted: m, ephemeralExpiration: 2*60*1000 });
@@ -25,7 +25,7 @@ let emot = pickRandom(['🎃', '❤', '😘', '😍', '💕', '😎', '🙌', '�
 conn.sendMessage(m.chat, { react: { text: emot, key: m.key }});
 }
 if ((m.mtype === 'groupInviteMessage' || m.text.startsWith('https://chat') || m.text.startsWith('Abre este enlace')) && !m.isBaileys && !m.isGroup) {
-let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${m.sender.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* https://chat.whatsapp.com/J11cCrX3DBoGJJGN3SKqn1\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo https://chat.whatsapp.com/BW4PAJNxiBYIfVS8RpKNbp`.trim() 
+let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${m.sender.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* ${ganicmd}\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo ${ganisubbots}`.trim() 
 let txt = '';
 let count = 0;
 for (const c of join) {

@@ -7,7 +7,7 @@ await db.read();
 let chat = db.data.bot[conn.user.jid].chats.groups[m.chat]
 let resp = '', ghost = false
 let participantIds = new Set(participants.map(u => u.id));
-let users = chat.users
+let users = chat.users || {}
 var sum = participants.length
 
 for (let participant of participants) {

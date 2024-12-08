@@ -5,9 +5,10 @@ import fetch from 'node-fetch'
  * @type {import('@whiskeysockets/baileys')}
  */
 const { getBinaryNodeChild, getBinaryNodeChildren } = (await import('@whiskeysockets/baileys')).default
-let handler = async (m, { conn, text, participants, usedPrefix, command, args }) => {
+let handler = async (m, { conn, text, participants, usedPrefix, command, args, isAdmin, isBotAdmin, isOwner, isROwner }) => {
 if (!global.db.data.bot[conn.user.jid].settings.restrict) {return conn.sendWritingText(m.chat, '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*', m)
 } else {
+if (isBotAdmin && (isAdmin || isOwner || isROwner)) {
 if (!args[0]) {
 return conn.sendWritingText(m.chat, `*[❗] INGRESE EL USUARIO QUE DESEE AGREGAR*\n\nAhora en caso de que el usuario tenga activadas las configuraciones de proteccion de grupos, use *${usedPrefix+command} el numero y un mensaje personalizado* para que se envie la invitacion a su privado\n\nEjemplo: ${usedPrefix+command} 54321678900 tienes que entrar a este grupo`, m)
 } else {
@@ -43,6 +44,11 @@ return conn.sendWritingText(m.chat, resp + e.stack, m)
 
 ///**/
 }
+}
+} else {
+//const resp
+return conn.sendWritingText(m.chat, `*[❗] NO SOY ADMIN EN ESTE GRUPO*`, m)
+
 }
 }
 }

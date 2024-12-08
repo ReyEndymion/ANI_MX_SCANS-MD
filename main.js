@@ -16,10 +16,10 @@ import { format } from 'util';
 import pino from 'pino';
 import {Boom} from '@hapi/boom';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
-import { makeInMemoryStore } from '@whiskeysockets/baileys'
+//import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import { Low, JSONFile } from 'lowdb';
 import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
-import store from './lib/store.js';
+import store, {makeInMemoryStore, storeChatsS, storeContactsS} from './lib/store.js';
 import {clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait} from './lib/functions.js';
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
@@ -83,10 +83,12 @@ const creds = 'creds.json';
 const readBotPath = fs.readdirSync(global.authFolder)
 if (readBotPath.includes(creds)) {
 const filePathCreds = path.join(authFolder, creds)
+const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
+const fileCredsResp = path.join(botDirRespald, creds)
 try {
 const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
-const userJid = readCreds && readCreds.me && readCreds.me.jid.split('@')[0]
-const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
+console.log('mainCheck: ', readCreds && readCreds.me && readCreds.me.hasOwnProperty('jid'))
+const userJid = readCreds && readCreds.me && readCreds.me.hasOwnProperty('jid') ? readCreds && readCreds.me && readCreds.me.jid.split('@')[0] : readCreds && readCreds.me && readCreds.me.id.split(':')[0]
 
 if (credsStatus(authFolder, userJid) && validateJSON(filePathCreds)) {
 backupCreds(authFolder, botDirRespald)
@@ -94,7 +96,6 @@ onBot(authFolder)
 } else {
 const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
-const fileCredsResp = path.join(botDirRespald, creds)
 if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
 respaldCreds(authFolder, botDirRespald)
 } else {
@@ -106,6 +107,17 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } catch (error) {
 console.log('errorInicializacion: ', error)
+const readBotDirBackup = fs.readdirSync(botDirRespald)
+if (readBotDirBackup.includes(creds)) {
+if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
+respaldCreds(authFolder, botDirRespald)
+process.send('reset')
+} else {
+cleanupOnConnectionError(authFolder, botDirRespald)
+}
+} else {
+cleanupOnConnectionError(authFolder, botDirRespald)
+}
 }
 } else {
 onBot(authFolder)
@@ -114,12 +126,18 @@ onBot(authFolder)
 
 
 
-export async function onBot(filePath) {
-const { state, saveState, saveCreds } = await useMultiFileAuthState(filePath);
+export async function onBot(folderPath) {
+const nameFolderBot = path.basename(folderPath)
+const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath);
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const {version} = await fetchLatestBaileysVersion();
 const logger = pino({level: 'silent'})
-const storeReload = makeInMemoryStore({logger })
+const dbBot = path.join(dataBases, nameFolderBot)
+if (!existsSync(dbBot)) mkdirSync(dbBot, { recursive: true })
+const storeFile = path.join(dbBot, `${nameFolderBot}-${opts._[0] || 'data'}.store.json`)
+const storeReload = makeInMemoryStore()
+
+storeReload.readFromFile(storeFile)
 async function getMessage(key) {
 if (storeReload) {
 const msg = await storeReload.loadMessage(key?.remoteJid, key?.id);
@@ -162,6 +180,7 @@ if (global.db.data) {
 await global.db.write()
 }
 if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))
+storeReload.writeToFile(storeFile)
 }, 30 * 1000);
 }
 }
@@ -202,6 +221,7 @@ return;
 
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
+
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
 conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
@@ -223,7 +243,7 @@ conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesi�
 //process.exit();
 } else if (reason === DisconnectReason.loggedOut) {
 conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
-cleanupOnConnectionError(filePath, botDirRespald)
+cleanupOnConnectionError(folderPath, botDirRespald)
 //process.exit();
 } else if (reason === DisconnectReason.restartRequired) {
 conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
@@ -233,7 +253,7 @@ conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
 process.send('reset');
 } else if (reason === 403) {
 conn.logger.warn(`[ ⚠ ] Razón de desconexión revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
-cleanupOnConnectionError(filePath, botDirRespald)
+cleanupOnConnectionError(folderPath, botDirRespald)
 } else if (code === 503){
 global.reloadHandler(true).catch(console.error)
 } else {
@@ -252,7 +272,7 @@ await wait(CLOSE_CHECK_INTERVAL);
 }
 if (connection == 'open') {
 loadDatabase(global.conn);
-console.log(chalk.yellow('▣─────────────────────────────···\n│\n│❧ CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│\n▣─────────────────────────────···'))
+console.log(chalk.yellow(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${path.basename(folderPath)}\n│\n▣─────────────────────────────···`))
 if (update.receivedPendingNotifications) { 
 actualizarNumero() 
 waitTwoMinutes()
@@ -289,6 +309,7 @@ conn.ev.off('message.delete', conn.onDelete);
 conn.ev.off('call', conn.onCall);
 conn.ev.off('connection.update', conn.connectionUpdate);
 conn.ev.off('creds.update', conn.credsUpdate);
+conn.ev.off('chats.set', conn.storeChatsS)
 }
 
 conn.handler = handler.handler.bind(global.conn);
@@ -298,6 +319,8 @@ conn.onDelete = handler.deleteUpdate.bind(global.conn);
 conn.onCall = handler.callUpdate.bind(global.conn);
 conn.connectionUpdate = connectionUpdate.bind(global.conn);
 conn.credsUpdate = saveCreds.bind(global.conn, true);
+conn.storeChatsS = storeChatsS(global.conn)
+conn.storeContactsS = storeContactsS(global.conn)
 
 conn.ev.on('messages.upsert', conn.handler);
 conn.ev.on('group-participants.update', conn.participantsUpdate);
@@ -306,13 +329,8 @@ conn.ev.on('message.delete', conn.onDelete);
 conn.ev.on('call', conn.onCall);
 conn.ev.on('connection.update', conn.connectionUpdate);
 conn.ev.on('creds.update', conn.credsUpdate);
-conn.ev.on('chats.set', () => {
-console.log('got chats', storeReload.chats.all())
-})
-
-conn.ev.on('contacts.set', () => {
-console.log('got contacts', Object.values(storeReload.contacts))
-})
+conn.ev.on('chats.set', conn.storeChatsS)
+conn.ev.on('contacts.set', conn.storeContactsS)
 isInit = false;
 return true;
 };

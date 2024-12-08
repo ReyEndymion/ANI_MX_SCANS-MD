@@ -62,6 +62,7 @@ p.on('exit', (_, code) => {
 isRunning = false
 console.error('❎ㅤOcurrio un error inesperado:', code)
 if (code === 0) return
+if (code === 'SIGKILL') p.emit('message', 'reset')
 watchFile(args[0], () => {
 unwatchFile(args[0])
 start(file)

@@ -1,5 +1,6 @@
 
-let handler = async (m, { conn, args, text }) => {
+let handler = async (m, { conn, args, text, isBotAdmin, isAdmin }) => {
+if (isBotAdmin && isAdmin) {
 if (!text && !m.quoted) {
 let resp = `*[❗INFO❗] INGRESE EL NOMBRE QUE DESEA QUE SEA EL NUEVO NOMBRE DEL GRUPO O CONTESTE A UN MENSAJE QUE TENGA UN TAG Y SEA COMPATIBLE CON LA CANTIDAD DE 25 CARÁCTERES*`;
 
@@ -30,8 +31,14 @@ conn.groupUpdateSubject(m.chat, txto);
 let resp = `*[❗INFO❗] LO SIENTO HUBO UN ERROR ${e.stack}, EL NOMBRE NO PUEDE SER MAS DE 25 CARACTERES*`;
 return conn.sendWritingText(m.chat, resp, m);
 }
+} else if (!isBotAdmin && isAdmin)  {
+let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
+} else {
+let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
+}
 };
-
 handler.help = ['setname <text>'];
 handler.tags = ['group'];
 handler.command = /^(setname)$/i;

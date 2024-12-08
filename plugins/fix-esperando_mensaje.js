@@ -11,7 +11,7 @@ return conn.sendMessage(m.chat, {text: '*[❗] Utiliza este comando directamente
 const chatId = m.isGroup ? [m.chat, m.sender] : [m.sender];
 const sessionPath = authFolder;
 try {
-purgeSessionSB()
+purgeOldFiles(sessionPath)
 const files = await fs.readdir(sessionPath);
 let filesDeleted = 0;
 for (const file of files) {

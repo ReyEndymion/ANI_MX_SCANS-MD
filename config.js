@@ -155,6 +155,7 @@ global.userID = `@s.whatsapp.net`
 global.groupID = '@g.us'
 global.newsletter = '@newsletter'
 global.statusBC = 'status@broadcast'
+global.lid = '@lid'
 global.suittag = ['5215532867844'] 
 global.espadmins = []
 global.prems = [] 

@@ -1,33 +1,34 @@
-let handler = async (m, { conn, text, isROwner, isOwner, isAdmin }) => {
+let handler = async (m, { conn, text, isROwner, isOwner, isAdmin, isBotAdmin }) => {
 const bot = global.db.data.bot[conn.user.jid]
 const chats = bot.chats
 const privs = chats.privs
 const groups = chats.groups
 const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
-let resp = ''
-if (!isAdmin) {resp = 'Tienes que ser admin o el bot tiene que ser admin para usar este comando'}
-if (!text) {
-resp = `*[❗] INGRESE EL MENSAJE DE DESPEDIDA QUE DESEE AGREGAR, USE:*\n*- @user (mención)*`
-} else {
+
+if (isBotAdmin && isAdmin) {
+if (text === 'clear') {
+chat.sBye = ''
+let resp = '*[❗] MENSAJE DE DESPEDIDA BORRADO CORRECTAMENTE PARA ESTE GRUPO*'
+return conn.sendWritingText(m.chat, resp, m);
+} else if (text) {
 chat.sBye = text
-resp = '*[❗] MENSAJE DE DESPEDIDA CONFIGURADO CORRECTAMENTE PARA ESTE GRUPO*'
+let resp = '*[❗] MENSAJE DE DESPEDIDA CONFIGURADO CORRECTAMENTE PARA ESTE GRUPO*'
+return conn.sendWritingText(m.chat, resp, m);
+} else {
+let resp = `*[❗] INGRESE EL MENSAJE DE DESPEDIDA QUE DESEE AGREGAR, USE:*\n*- @user (mención)*`
+return conn.sendWritingText(m.chat, resp, m);
 }
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
+} else if (!isBotAdmin && isAdmin)  {
+let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
+} else {
+let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
 }
 
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['setbye <text>']
 handler.tags = ['group']
 handler.command = ['setbye']
 handler.group = true
-//handler.admin = true
 export default handler

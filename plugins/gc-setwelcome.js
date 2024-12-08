@@ -1,30 +1,31 @@
-let handler = async (m, { conn, text, isROwner, isOwner }) => {
+let handler = async (m, { conn, text, isROwner, isOwner, isAdmin, isBotAdmin }) => {
 let resp
 const bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const groups = chats.groups || {}
 const chat = groups[m.chat] || {}
 
-if (text) {
+if (isBotAdmin && isAdmin) {
+if (text === 'clear') {
+chat.sWelcome = ''
+resp = '*[❗] MENSAJE DE BIENVENIDA BORRADO CORRECTAMENTE PARA ESTE GRUPO*'
+} else if (text) {
 chat.sWelcome = text
 resp = '*[❗] MENSAJE DE BIENVENIDA CONFIGURADO CORRECTAMENTE PARA ESTE GRUPO*'
 } else {
 resp = `*[❗] INGRESE EL MENSAJE DE BIENVENIDA QUE DESEE AGREGAR, USE:*\n*- @user (mención)*\n*- @group (nombre de grupo)*\n*- @desc (description de grupo)*`
 }
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
+return conn.sendWritingText(m.chat, resp, m);
+} else if (!isBotAdmin && isAdmin)  {
+let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
+} else {
+let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
+return conn.sendWritingText(m.chat, resp, m);
 }
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['setwelcome <text>']
 handler.tags = ['group']
 handler.command = ['setwelcome'] 
-handler.group = handler.admin = true
+handler.group = true
 export default handler
