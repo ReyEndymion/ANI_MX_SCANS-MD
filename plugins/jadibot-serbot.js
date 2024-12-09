@@ -25,7 +25,6 @@ const { child, spawn, exec } = await import('child_process');
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js';
 import { makeInMemoryStore } from '../lib/store.js'
-import {onBot} from '../main.js'
 import { limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds } from "../lib/functions.js";
 
 if (global.conns instanceof Array) {console.log()} else {global.conns = []}

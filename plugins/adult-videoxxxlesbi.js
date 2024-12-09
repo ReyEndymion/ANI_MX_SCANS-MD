@@ -2,7 +2,13 @@
 /*viewOnce by rey Endymion*/
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let handler  = async (m, { conn, usedPrefix, command }) => {
-if (!db.data.chats[m.chat].modohorny && m.isGroup) throw '*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*'   
+const bot = global.db.data.bot[conn.user.jid] || {}
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+let user = m.isGroup ? chat.users[m.sender] || {} : privs[m.sender] || {}
+if (!chat.modohorny && m.isGroup) return conn.sendWritingText(m.chat, '*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*', m)
 let res = await pickRandom(asupan)
 conn.sendFile (m.chat, res, null, '*DISFRUTA DEL VIDEO 🥵*', m, null, {viewOnce: true})
     await delay(1 * 10000)

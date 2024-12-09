@@ -1,5 +1,5 @@
 export async function before (m, { conn, text, participants }) {
-if (m.chat.endsWith(newsletter) || m.chat.endsWith(statusBC)) return
+if (m.chat.endsWith(newsletterID) || m.chat.endsWith(sBroadCastID)) return
 m.chat === 'status@broadcast'
 let bot = global.db.data.bot[conn.user.jid] || {}
 let chats = bot.chats || {}

@@ -1,6 +1,6 @@
 export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, participants}) {
 if (m.isGroup) return !0
-if (m.chat == 'status@broadcast' || m.chat.endsWith(newsletter)) return !0
+if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return !0
 if (m.isBaileys && m.fromMe) return !0
 if (!m.message) return !0
 let bot = global.db.data.bot[conn.user.jid]

@@ -2,7 +2,7 @@
 import fs from "fs"
 import path from 'path'
 export async function before(m, {conn}) {
-if (m.chat == statusBC || m.chat.endsWith(newsletter)) return
+if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
 
 let chat = m.isGroup ? global.db.data.bot[conn.user.jid].chats.groups[m.chat] : global.db.data.bot[conn.user.jid].chats.privs[m.chat]
 if (/^hola$/i.test(m.text) && chat.audios && !chat.isBanned) {

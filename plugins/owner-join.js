@@ -55,7 +55,7 @@ handler.tags = ['premium']
 handler.command = /^join|nuevogrupo$/i
 export default handler
 handler.before = async function before(m, {conn, isOwner}) {
-if ((m.chat.endsWith(statusBC) || m.chat.endsWith(groupID) || m.chat.endsWith(lid)) && m.fromMe) return
+if ((m.chat.endsWith(sBroadCastID) || m.chat.endsWith(groupID) || m.chat.endsWith(lid)) && m.fromMe) return
 
 if (/join/i.test(m.text) && m.mtype === 'groupInviteMessage' && !m.fromMe) {
 const groupJid = m.message.groupInviteMessage.groupJid

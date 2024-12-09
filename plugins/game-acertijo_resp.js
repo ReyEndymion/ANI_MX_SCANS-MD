@@ -2,7 +2,7 @@ import similarity from 'similarity'
 const threshold = 0.72
 let handler = m => m
 handler.before = async function (m, {conn}) {
-if (m.chat == statusBC || m.chat.endsWith(newsletter)) return
+if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
 const bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const privs = chats.privs || {}

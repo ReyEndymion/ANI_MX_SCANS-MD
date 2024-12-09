@@ -1,4 +1,3 @@
-//import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 const {
 default: _makeWaSocket,
 makeWALegacySocket,
@@ -30,25 +29,6 @@ if (texto !== undefined) {
 }
 handler.command = /^(hidetag|notificar|notify)$/i
 handler.group = true
-//handler.admin = true
-handler.before = async function before(m, {conn, text}) {
-console.log('texto: ', text)
-const MediaType = ['imageMessage', 'videoMessage', 'audioMessage', 'stickerMessage', 'documentMessage', 'groupMentionedMessage', 'botInvokeMessage'];
-if (m.mtype === 'groupMentionedMessage') {
-return conn.sendMessage(m.chat, { text: text, contextInfo: {
-groupMentions: [
- {
-groupJid: text,
-groupSubject: await conn.getName(text)
-},
- {
-groupJid: texto,
-groupSubject: 'text'
-}
-],
-}})
-}
-}
 export default handler
 
 /**
