@@ -33,6 +33,20 @@ delete confirm[m.sender]
 handler.command = handler.help = ['listjadibot','bots','subsbots']
 handler.tags = ['jadibot']
 handler.before = async function before (m, {conn}) {
+if (m.text.toLowerCase() === 'botsmain') {
+const confirmacion = Object.values(confirm).find(c => c.sender === m.sender);
+if (!confirmacion) return;
+//const {sender, q, totalUsers} = confirmacion
+let bots = '';
+for (let i of readdirSync(global.authFolderAniMX)) {
+var bot = i.match(/\d+/g);
+if (bot) {
+bots += `@${bot[0]}\n`;
+}
+}
+bots = bots.trim();
+return conn.sendMessage(m.chat, {text: `Bots actuales:\n${bots}`, mentions: conn.parseMention(bots) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
 }
 export default handler
 async function ajusteTiempo(ms) {
