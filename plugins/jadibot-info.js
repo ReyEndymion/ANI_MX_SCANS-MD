@@ -45,7 +45,8 @@ bots += `@${bot[0]}\n`;
 }
 }
 bots = bots.trim();
-return conn.sendMessage(m.chat, {text: `Bots actuales:\n${bots}`, mentions: conn.parseMention(bots) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+const resp = `Bots actuales:\n${bots}`
+return conn.sendWritingText(m.chat, resp, m)
 }
 }
 export default handler
