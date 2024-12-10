@@ -38,7 +38,7 @@ const confirmacion = Object.values(confirm).find(c => c.sender === m.sender);
 if (!confirmacion) return;
 //const {sender, q, totalUsers} = confirmacion
 let bots = '';
-for (let i of readdirSync(global.authFolderAniMX)) {
+for (let i of readdirSync(jadibts)) {
 var bot = i.match(/\d+/g);
 if (bot) {
 bots += `@${bot[0]}\n`;
