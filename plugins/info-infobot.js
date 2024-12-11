@@ -6,19 +6,13 @@ import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 //import fs from 'fs'
 import { performance } from 'perf_hooks'
 let handler = async (m, { conn, usedPrefix, participants }, jid) => {
-let bot = global.db.data.bot[conn.user.jid] || {}
+const bot = global.db.data.bot[conn.user.jid] || {}
 const chats = bot.chats || {}
 const privs = chats.privs || {}
 const groups = chats.groups || {}
-let chat, users, user
-if (m.chat.endsWith(userID)) {
-chat = privs[m.chat] || {}
-user = privs[m.sender] || {}
-} else if (m.chat.endsWith(groupID)) {
-chat = groups[m.chat] || {}
-users = chat.users || {}
-user = users[m.sender] || {}
-} else return
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime) 
@@ -27,7 +21,7 @@ const connchats = Object.entries(conn.chats).filter(([id, data]) => id && data.i
 const groupsIn = connchats.filter(([id]) => id.endsWith('@g.us'))
 const conngroups = connchats.filter(([id]) => id.endsWith('@g.us'))
 const used = process.memoryUsage()
-const { restrict, antiCall, antiprivado } = global.db.data.bot[conn.user.jid].settings || {}
+const { restrict, antiCall, antiprivado } = bot.settings || {}
 const { autoread, gconly, pconly, self } = global.opts || {}
 let old = performance.now()
 let neww = performance.now()
