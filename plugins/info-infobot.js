@@ -46,24 +46,15 @@ hola @${m.sender.split`@`[0]}
 ╠➥ [💬] PCONLY: ${pconly ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
 ╠➥ [🏢] GCONLY: ${gconly ? '*𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*' : '*𝚍𝚎𝚜𝚊𝚌𝚝𝚒𝚟𝚊𝚍𝚘*'}
 ╠➥ [🌎] MODO: ${self ? '*𝚙𝚛𝚒𝚟𝚊𝚍𝚘*' : '*𝚙𝚞𝚋𝚕𝚒𝚌𝚘*'}
-╠➥ [👨‍🦯] VELOCIDAD:  *${speed} MILISEGUNDOS*
+╠➥ [👨‍🦯] VELOCIDAD: *${speed} MILISEGUNDOS*
 ╠°°° El grupo oficial es:\n${urlgofc}
 ╠═〘 *${wm}* 〙 ═
 `.trim() 
-let txt = '';
-let count = 0;
-for (const c of info) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
+await conn.writing(m.chat, info)
 let res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: info, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(info)}}}, {userJid: conn.user.jid})
-conn.relayMessage(m.chat,  res.message, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+conn.relayMessage(m.chat, res.message, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 //console.log('y esto: ', res)
-conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepre}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendMessage(m.chat, {text: info, contextInfo: {mentionedJid: conn.parseMention(info), externalAdReply :{ mediaUrl: null, mediaType: 1, description: null, title: 'INFO DEL BOT', body: `${igfg} by ${namerepre}`, previewType: 0, thumbnail: imagen1, sourceUrl: md}}}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 handler.help = ['infobot', 'speed']
 handler.tags = ['info', 'tools']
