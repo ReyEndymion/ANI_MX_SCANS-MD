@@ -1,6 +1,7 @@
 import ws from 'ws';
 import fs, { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat, mkdirSync, rename } from 'fs';
 import path, { join } from 'path'
+import {limpCarpetas} from '../lib/functions.js'
 let confirm = {}
 let handler = async (m, { conn, usedPrefix, args, participants })=> {
 var resp = ''
@@ -34,6 +35,7 @@ handler.command = handler.help = ['listjadibot','bots','subsbots']
 handler.tags = ['jadibot']
 handler.before = async function before (m, {conn}) {
 if (m.text.toLowerCase() === 'botsmain') {
+await limpCarpetas(jadibts)
 const confirmacion = Object.values(confirm).find(c => c.sender === m.sender);
 if (!confirmacion) return;
 //const {sender, q, totalUsers} = confirmacion
