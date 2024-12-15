@@ -14,17 +14,17 @@ const __dirname = global.__dirname(import.meta.url)
 
 
 global.owner = [
-['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
-['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
+['','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
+['51910471065', 'Lilya - Creador 👑', true]
 ] // Cambia los numeros que quieras
 
 /**********GLOBAL INFO*****************/
 global.packname = '(☞ﾟ∀ﾟ)☞'
 global.gt = '(☞ﾟ∀ﾟ)☞'
 global.amsicon = `🌎`
-global.author = '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷'
-global.wm = '🌎ANI MX SCANS🌏'
-global.igfg = '★🌎ANI MX SCANS🌏★'
+global.author = 'Lylia'
+global.wm = 'Lylia'
+global.igfg = '★Lylia★'
 global.paypal = `https://www.paypal.me/AMxScan`
 global.urlgofc = 'https://www.facebook.com/groups/otakustogether'
 global.otkstgthr = 'ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺'
@@ -43,7 +43,7 @@ global.gaportes = 'https://chat.whatsapp.com/JArEosfq4x89SGKnQKH6Td'
 
 /***************GLOBAL CONFIG****************/
 global.raiz = `./`
-global.anidir = `ANI_MX_SCANS`
+global.anidir = `Lylia bot`
 global.dirP = !fs.existsSync(anidir) ? __dirname : join(raiz, anidir) //Solo si quieres arrancar el bot desde una carpeta diferente, por ejemplo: /ANI_MX_SCANS
 global.sessionNameAni = `ANIMXSCANS`
 global.authFolder = join(dirP, sessionNameAni)
@@ -156,7 +156,7 @@ global.groupID = '@g.us'
 global.sBroadCastID = `status@broadcast`
 global.newsletterID = `@newsletter`
 global.lid = '@lid'
-global.suittag = ['5215532867844'] 
+global.suittag = ['51010471065'] 
 global.espadmins = []
 global.prems = [] 
 /********QUOTEDS*************** */
