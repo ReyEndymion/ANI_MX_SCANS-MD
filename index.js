@@ -45,13 +45,19 @@ args: args.slice(1),
 })
 let p = fork()
 p.on('message', data => {
+if (data.type === 'ask') {
+rl.question(data.text, (answer) => {
+p.send({ type: 'response', answer: answer.trim() });
+});
+} else {
 console.log('[RECEIVED]', data)
+}
 switch (data) {
 case 'reset':
 p.removeAllListeners('exit')
 p.removeAllListeners('message')
 p.process.kill()
-start('main.js')
+start(file)
 break
 case 'uptime':
 p.send(process.uptime())
@@ -61,18 +67,28 @@ break
 p.on('exit', (_, code) => {
 isRunning = false
 console.error('❎ㅤOcurrio un error inesperado:', code)
+p.removeAllListeners('exit')
+p.removeAllListeners('message')
 if (code === 0) return
-if (code === 'SIGKILL') p.emit('message', 'reset')
+if (code !== 0 || code === 'SIGKILL') p.emit('message', 'reset')
 watchFile(args[0], () => {
 unwatchFile(args[0])
 start(file)
 })
 })
 let opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-if (!opts['test'])
-if (!rl.listenerCount()) rl.on('line', line => {
+if (!opts['test']) {
+if (!rl.listenerCount()) {
+rl.on('line', line => {
 p.emit('message', line.trim())
 })
 }
+rl.prompt()
+}
+}
+rl.on('SIGINT', () => {
+console.log('\n❎ㅤSaliendo...');
+process.exit(0);
+});
 
-start('main.js')
+start('start.js')

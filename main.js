@@ -1,133 +1,33 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = true;
-import './config.js';
-import { createRequire } from 'module'; 
 import path, { join } from 'path'
-import { fileURLToPath, pathToFileURL } from 'url'
-import { platform } from 'process'
 import * as ws from 'ws';
-import { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat, mkdirSync } from 'fs';
-import yargs from 'yargs';
-import { spawn } from 'child_process';
-import lodash from 'lodash';
+import { Boom } from '@hapi/boom';
+import NodeCache from 'node-cache';
+import readline from 'readline';
+import fs, { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat, mkdirSync } from 'fs';
 import chalk from 'chalk';
 import syntaxerror from 'syntax-error';
 import { tmpdir } from 'os';
 import { format } from 'util';
 import pino from 'pino';
-import {Boom} from '@hapi/boom';
 import { makeWASocket, protoType, serialize } from './lib/simple.js';
 //import { makeInMemoryStore } from '@whiskeysockets/baileys'
-import { Low, JSONFile } from 'lowdb';
-import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 import store, {makeInMemoryStore, storeChatsS, storeContactsS} from './lib/store.js';
-import {clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait} from './lib/functions.js';
+import {question, clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait, _quickTest} from './lib/functions.js';
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
 const { CONNECTING } = ws;
-const { chain } = lodash;
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import {jddt} from './plugins/jadibot-serbot.js';
+const __dirname = global.__dirname(import.meta.url);
 protoType();
 serialize();
 
-global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
-return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString();
-};
-global.__dirname = function dirname(pathURL) {
-return path.dirname(global.__filename(pathURL, true));
-};
-global.__require = function require(dir = import.meta.url) {
-return createRequire(dir);
-};
-
-global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({...query, ...(apikeyqueryname ? {[apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name]} : {})})) : '');
-
-global.timestamp = { start: new Date };
-const __dirname = global.__dirname(import.meta.url);
-
-global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
-global.prefix = new RegExp('^[' + (opts['prefix'] || '*/i!#$%+£¢€¥^°=¶∆×÷π√✓©®?&.\\-.@').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']');
-
-global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`));
-
-global.DATABASE = global.db;
-global.loadDatabase = async function loadDatabase(conn) {
-if (global.db.READ) {
-return new Promise((resolve) => setInterval(async function() {
-if (!global.db.READ) {
-clearInterval(this);
-resolve(global.db.data == null ? global.loadDatabase(conn) : global.db.data);
-}
-}, 1 * 1000));
-}
-if (global.db.data !== null) return;
-global.db.READ = true;
-await global.db.read().catch(console.error);
-global.db.READ = null;
-global.db.data = {
-bot: {
-[conn?.user.jid]: {
-chats: {},
-stats: {},
-msgs: {},
-sticker: {},
-settings: {},
-}
-},
-...(global.db.data || {}),
-};
-global.db.chain = chain(global.db.data);
-};
-const creds = 'creds.json';
-
-const readBotPath = fs.readdirSync(global.authFolder)
-if (readBotPath.includes(creds)) {
-const filePathCreds = path.join(authFolder, creds)
-const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
-const fileCredsResp = path.join(botDirRespald, creds)
-try {
-const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
-console.log('mainCheck: ', readCreds && readCreds.me && readCreds.me.hasOwnProperty('jid'))
-const userJid = readCreds && readCreds.me && readCreds.me.hasOwnProperty('jid') ? readCreds && readCreds.me && readCreds.me.jid.split('@')[0] : readCreds && readCreds.me && readCreds.me.id.split(':')[0]
-
-if (credsStatus(authFolder, userJid) && validateJSON(filePathCreds)) {
-backupCreds(authFolder, botDirRespald)
-onBot(authFolder)
-} else {
-const readBotDirBackup = fs.readdirSync(botDirRespald)
-if (readBotDirBackup.includes(creds)) {
-if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
-respaldCreds(authFolder, botDirRespald)
-} else {
-cleanupOnConnectionError(authFolder, botDirRespald)
-}
-} else {
-cleanupOnConnectionError(authFolder, botDirRespald)
-}
-}
-} catch (error) {
-console.log('errorInicializacion: ', error)
-const readBotDirBackup = fs.readdirSync(botDirRespald)
-if (readBotDirBackup.includes(creds)) {
-if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
-respaldCreds(authFolder, botDirRespald)
-process.send('reset')
-} else {
-cleanupOnConnectionError(authFolder, botDirRespald)
-}
-} else {
-cleanupOnConnectionError(authFolder, botDirRespald)
-}
-}
-} else {
-onBot(authFolder)
-
-}
-
-
-
+const readJadibtsSession = fs.readdirSync(jadibts); 
+if (readJadibtsSession.length == 0) global.aniJdbts = false;
 export async function onBot(folderPath) {
 const nameFolderBot = path.basename(folderPath)
+const msgRetryCounterCache = new NodeCache();
 const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath);
 const msgRetryCounterMap = (MessageRetryMap) => { };
 const {version} = await fetchLatestBaileysVersion();
@@ -154,16 +54,17 @@ return message;
 }
 
 const connectionOptions = {
-printQRInTerminal: true,
+printQRInTerminal: qrTerminal,
 patchMessageBeforeSending,
 getMessage,
+msgRetryCounterCache,
 msgRetryCounterMap,
 logger,
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, logger),
 },
-browser: ['ANI MX SCANS','Edge','1.0.0'],
+browser: usePairingCode ? ["Ubuntu", "Chrome", "20.0.04"] : ['ANI MX SCANS','Edge','1.0.0'],
 version,
 defaultQueryTimeoutMs: undefined,
 };
@@ -172,7 +73,53 @@ global.conn = makeWASocket(connectionOptions)
 conn.isInit = false;
 conn.well = false;
 const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
+const connCreds = conn.authState.creds
+// Código de emparejamiento para clientes web
+if (!connCreds.registered) {
+if (usePairingCode) {
+if (useMobile) {
+throw new Error('No se puede usar el código de emparejamiento con API móvil');
+}
 
+const phoneNumber = await question('Ingrese su número de teléfono móvil:\n', (answer) => /^\d+$/.test(answer));
+console.log(`mainCheck: ${phoneNumber}`);
+if (/\d+/.test(phoneNumber)) {
+const code = await conn.requestPairingCode(conn.formatNumberWA(phoneNumber));
+console.log(`Pairing code: ${code}`);
+} else {
+throw new Error('Número de teléfono no válido\nDeben ser numeros sin espacios');
+}
+}
+
+// Si se eligió el móvil, solicite el código
+if (useMobile) {
+ const { registration } = connCreds || { registration: {} };
+
+if (!registration.phoneNumber) {
+registration.phoneNumber = await question('Ingrese su número de teléfono móvil:\n');
+}
+
+const libPhonenumber = require('libphonenumber-js');
+const phoneNumber = libPhonenumber.parsePhoneNumber(registration.phoneNumber);
+if (!phoneNumber?.isValid()) {
+throw new Error('Número de teléfono no válido: ' + registration.phoneNumber);
+}
+
+registration.phoneNumber = phoneNumber.format('E.164');
+registration.phoneNumberCountryCode = phoneNumber.countryCallingCode;
+registration.phoneNumberNationalNumber = phoneNumber.nationalNumber;
+const mcc = PHONENUMBER_MCC[phoneNumber.countryCallingCode];
+if (!mcc) {
+throw new Error('No pude encontrar MCC para el número de teléfono: ' + registration.phoneNumber + '\nEspecifique el MCC manualmente.');
+ }
+
+registration.phoneNumberMobileCountryCode = mcc;
+
+askForOTP(conn, registration);
+}
+} else {
+
+}
 if (!opts['test']) {
 if (global.db) {
 setInterval(async () => {
@@ -202,24 +149,14 @@ await global.reloadHandler(true).catch(console.error);
 global.timestamp.connect = new Date;
 }
 if (global.db.data == null) loadDatabase();
-if (update.qr != 0 && update.qr != undefined) {
+if (qrTerminal && update.qr != 0 && update.qr != undefined) {
 console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
 }
 if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
-if (connection === undefined) {
+if (connection === undefined) return //conn.ev.removeAllListeners();
 
-await wait(5000); 
-if (conn?.ws?.readyState !== CONNECTING && conn?.ws?.readyState !== undefined) {
-console.log(chalk.yellow(`La conexión ya está abierta: ${connection}`));
-} else {
-await wait(10000)
-console.log(chalk.red(`La conexión aún no está lista, esperando conexión: ${connection}`));
-}
-return;
-
-}
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 
 if (connection == 'close') {
@@ -240,6 +177,7 @@ return global.reloadHandler(true).catch(console.error)
  // process.send('reset');
 } else if (reason === DisconnectReason.connectionReplaced) {
 conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
+stopConn(conn)
 //process.exit();
 } else if (reason === DisconnectReason.loggedOut) {
 conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
@@ -252,10 +190,17 @@ conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta a
 conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
 process.send('reset');
 } else if (reason === 403) {
-conn.logger.warn(`[ ⚠ ] Razón de desconexión revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
+conn.logger.warn(`[ ⚠ ] Razón de desconexión: revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
 cleanupOnConnectionError(folderPath, botDirRespald)
-} else if (code === 503){
 global.reloadHandler(true).catch(console.error)
+} else if (reason === 405) {
+conn.logger.warn(`[ ⚠ ] No alojado. ${reason || ''}: ${connection || ''}`);
+if (!connCreds.registered) {
+conn.ws.close()
+cleanupOnConnectionError(folderPath, botDirRespald)
+}
+global.reloadHandler(true).catch(console.error)
+} else if (code === 503){
 } else {
 conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
 //process.exit();
@@ -284,6 +229,13 @@ return conn.groupAcceptInvite(ganisubbots.replace('https://chat.whatsapp.com/', 
 process.on('uncaughtException', console.error);
 
 let isInit = true;
+
+async function stopConn(sock) {
+isInit = false
+sock.ev.removeAllListeners()
+sock.ws.close()
+}
+
 let handler = await import('./handler.js');
 global.reloadHandler = async function(restatConn) {
 try {
@@ -309,7 +261,9 @@ conn.ev.off('message.delete', conn.onDelete);
 conn.ev.off('call', conn.onCall);
 conn.ev.off('connection.update', conn.connectionUpdate);
 conn.ev.off('creds.update', conn.credsUpdate);
-conn.ev.off('chats.set', conn.storeChatsS)
+//conn.ev.off('chats.set', conn.storeChatsS)
+//conn.ev.off('contacts.set', conn.storeContactsS)
+
 }
 
 conn.handler = handler.handler.bind(global.conn);
@@ -319,8 +273,8 @@ conn.onDelete = handler.deleteUpdate.bind(global.conn);
 conn.onCall = handler.callUpdate.bind(global.conn);
 conn.connectionUpdate = connectionUpdate.bind(global.conn);
 conn.credsUpdate = saveCreds.bind(global.conn, true);
-conn.storeChatsS = storeChatsS(global.conn)
-conn.storeContactsS = storeContactsS(global.conn)
+//conn.storeChatsS = storeChatsS(global.conn)
+//conn.storeContactsS = storeContactsS(global.conn)
 
 conn.ev.on('messages.upsert', conn.handler);
 conn.ev.on('group-participants.update', conn.participantsUpdate);
@@ -329,12 +283,17 @@ conn.ev.on('message.delete', conn.onDelete);
 conn.ev.on('call', conn.onCall);
 conn.ev.on('connection.update', conn.connectionUpdate);
 conn.ev.on('creds.update', conn.credsUpdate);
-conn.ev.on('chats.set', conn.storeChatsS)
-conn.ev.on('contacts.set', conn.storeContactsS)
+//conn.ev.on('chats.set', conn.storeChatsS)
+//conn.ev.on('contacts.set', conn.storeContactsS)
 isInit = false;
 return true;
 };
-
+if (global.aniJdbts) {
+for (const session of readJadibtsSession) {
+const bot = path.join(jadibts, session)
+await jddt(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: null })
+}
+}
 const pluginFolder = global.__dirname(join(__dirname, './plugins/index'));
 const pluginFilter = (filename) => /\.js$/.test(filename);
 global.plugins = {};
@@ -376,28 +335,6 @@ global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b
 Object.freeze(global.reload)
 watch(pluginFolder, global.reload)
 await global.reloadHandler()
-async function _quickTest() {
-let test = await Promise.all([
-spawn('ffmpeg'),
-spawn('ffprobe'),
-spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-filter_complex', 'color', '-frames:v', '1', '-f', 'webp', '-']),
-spawn('convert'),
-spawn('magick'),
-spawn('gm'),
-spawn('find', ['--version'])
-].map(p => {
-return Promise.race([
-new Promise(resolve => {
-p.on('close', code => {
-resolve(code !== 127)
-})}),
-new Promise(resolve => {
-p.on('error', _ => resolve(false))
-})])}))
-let [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test
-let s = global.support = { ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find }
-Object.freeze(global.support)
-}
 
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
@@ -428,3 +365,51 @@ purgeSessionSB()
  console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_SESSIONS_SUB-BOTS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
  */
+async function enterCode(conn, registration) {
+try {
+const code = await question('Please enter the one time code:\n');
+const response = await conn.register(code.replace(/["']/g, '').trim().toLowerCase());
+console.log('Registró con éxito su número de teléfono.');
+console.log(response);
+rl.close();
+} catch (error) {
+console.error('No se pudo registrar su número de teléfono.Inténtalo de nuevo.\n', error);
+await askForOTP(conn, registration);
+}
+}
+
+async function enterCaptcha(conn, registration) {
+const response = await conn.requestRegistrationCode({ ...registration, method: 'captcha' });
+const path = __dirname + '/captcha.png';
+fs.writeFileSync(path, Buffer.from(response.image_blob, 'base64'));
+
+open(path);
+const code = await question('Ingrese el código Captcha:\n');
+fs.unlinkSync(path);
+registration.captcha = code.replace(/["']/g, '').trim().toLowerCase();
+}
+
+async function askForOTP(conn, registration) {
+if (!registration.method) {
+let code = await question('¿Cómo le gustaría recibir el código único para el registro?"SMS" o "voz"\n');
+code = code.replace(/["']/g, '').trim().toLowerCase();
+if (code !== 'sms' && code !== 'voice') {
+ return await askForOTP(conn, registration);
+}
+
+registration.method = code;
+}
+
+try {
+await conn.requestRegistrationCode(registration);
+await enterCode(conn, registration);
+} catch (error) {
+console.error('No se pudo solicitar el código de registro. Inténtalo de nuevo.\n', error);
+
+if (error?.reason === 'code_checkpoint') {
+await enterCaptcha(conn, registration);
+}
+
+await askForOTP(conn, registration);
+}
+}
