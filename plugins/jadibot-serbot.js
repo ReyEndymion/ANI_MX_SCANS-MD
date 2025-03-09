@@ -152,7 +152,7 @@ limpCarpetas()
 export default handler
 
 
-async function jddt(folderPath, data) {
+export async function jddt(folderPath, data) {
 const { conn, args, usedPrefix, command, m } = data
 conn.messageJdb = false
 const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
@@ -224,7 +224,9 @@ let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
-
+if (!sock.authState.creds.registered) {
+deleteSesionSB(folderPath)
+}
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
 
@@ -252,6 +254,8 @@ const resp = `*${wm}*
 
 *—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
+
+if (m === null) return
 let q = await conn.sendWritingImage(m.chat, imagen, resp, m)
 if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
@@ -294,7 +298,9 @@ return creloadHandler(true).catch(console.error)
 // && now - lastConnectionMessageTime >= oneDay
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión perdida con el servidor, reconectando...`);
 const resp = "La conexión se perdio, se intentara reconectar automáticamente..."
-//await conn.sendWritingText(m.chat, resp, m)
+if (m !== null) {
+await conn.sendWritingText(m.chat, resp, m)
+}
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionReplaced) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión remplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
@@ -302,11 +308,14 @@ sock.ws.close()
 //delete global.conns[i]
 global.conns.splice(i, 1)
 const resp = code + " remplazando conexión actual..."
+if (m !== null) {
 await conn.sendWritingText(m.chat, resp, m)
+}
 } else if (code === DisconnectReason.loggedOut) {
 sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
-await conn.sendWritingText(m.chat, resp, m)
+if (m !== null) {
+await conn.sendWritingText(m.chat, resp, m)}
 sock.ev.removeAllListeners()
 delete global.conns[i]
 return deleteSesionSB(folderPath)
@@ -317,6 +326,7 @@ return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.timedOut) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Tiempo de conexión agotado, reconectando...`);
 const resp = "La conexión se cerró, Tendras que conectarte manualmente..."
+if (m === null) return
 await conn.sendWritingText(m.chat, resp, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
@@ -346,10 +356,11 @@ global.conns.splice(i, 1)
 if (connection == 'open') {
 console.log(chalk.blue(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${folderPath}\n│\n▣─────────────────────────────···`))
 global.conns.push(sock)
-limpCarpetas()
+limpCarpetas(folderPath)
 dataconst[sock.user.id.split('@')] = 1;
 sock.isInit = true
 let resp = '', q = ''
+if (m === null) return
 if (conn.messageJdb) {
 resp = `*[❗] reconectado con exito, se paciente los mensajes se estan cargando...*`
 q = await conn.sendWritingText(m.chat, resp, m)
@@ -361,6 +372,7 @@ q = await conn.sendWritingText(m.chat, resp, m)
 if (now - lastConnectionMessageTime >= oneDay) {
 } else {
 resp = `listo`
+if (m === null) return
 q = await conn.sendWritingText(m.chat, resp, m)
 }
 let chatjid = state.creds.me.jid
