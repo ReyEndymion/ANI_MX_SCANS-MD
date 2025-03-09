@@ -1,5 +1,6 @@
 import translate from '@vitalets/google-translate-api'
 import { watchFile, unwatchFile } from 'fs'
+import { createRequire } from "module";
 import chalk from 'chalk'
 import fs from 'fs'
 import * as cheerio from 'cheerio'
@@ -10,36 +11,51 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import moment from 'moment-timezone' 
 import { platform } from 'process'
 global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') { return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString() }; global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) }; global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
+global.__dirname = function dirname(pathURL) { return path.dirname(global.__filename(pathURL, true)) };
+global.__require = function require(dir = import.meta.url) { return createRequire(dir) }
 const __dirname = global.__dirname(import.meta.url)
-
+const require = createRequire(__dirname)
+const { name, nameProyect, author, description, repository } = require(join(__dirname, 'package.json'))
 
 global.owner = [
 ['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
 ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
 ] // Cambia los numeros que quieras
-
 /**********GLOBAL INFO*****************/
 global.packname = '(☞ﾟ∀ﾟ)☞'
 global.gt = '(☞ﾟ∀ﾟ)☞'
 global.amsicon = `🌎`
-global.author = '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷'
-global.wm = '🌎ANI MX SCANS🌏'
-global.igfg = '★🌎ANI MX SCANS🌏★'
-global.paypal = `https://www.paypal.me/AMxScan`
-global.urlgofc = 'https://www.facebook.com/groups/otakustogether'
+global.author = author.name
+global.wm = nameProyect
+global.igfg = `★${nameProyect}★`
+global.paypal = author.donate
 global.otkstgthr = 'ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺'
 global.namerepre = `「 Traducciones de Manga 」`
-global.animxscans = [['1234567890', 'Bot principal - ANI MX SCANS', true]]
-global.me = animxscans
+global.gitAuthor = author.git
+global.repoProyect = repository.url
+global.md = repoProyect
+global.urlgofc = 'https://www.facebook.com/groups/otakustogether'
 global.hp_animxscans = 'https://www.facebook.com/ANIMxSCANS' 
 global.hp_otkstogthr = 'https://www.facebook.com/OtakusTogether' 
-global.md = 'https://github.com/ReyEndymion'
-global.animxscansmd = 'https://github.com/ReyEndymion/ANI_MX_SCANS-MD'
 global.ganisubbots = 'https://chat.whatsapp.com/IgcrWQHcxpoD1dgSvTGQ7Y'
 global.ganicmd = 'https://chat.whatsapp.com/KL6BBEMQoH6KVLy7wjs5St'
 global.lobby = 'https://chat.whatsapp.com/DV5v6atFvtAKaq5mWOFPNb'
 global.community = 'https://chat.whatsapp.com/LpIcN0eoJYXDmT65IwixPk'
 global.gaportes = 'https://chat.whatsapp.com/JArEosfq4x89SGKnQKH6Td'
+/************ Config Terminal **************/
+const useStore = process.argv.includes('--no-store');
+const doReplies = process.argv.includes('--no-reply');
+const usePairingCode = true//process.argv.includes('--use-pairing-code');
+const useMobile = process.argv.includes('--mobile');
+
+/**Configuracion de arranque */
+global.restartClean = false
+global.doReplies = false
+global.qrTerminal = false
+global.usePairingCode = false
+global.useMobile = false
+global.useStore = false;
+global.aniJdbts = true
 
 /***************GLOBAL CONFIG****************/
 global.raiz = `./`
@@ -172,3 +188,12 @@ watchFile(file, () => {
 unwatchFile(file)
 console.log(chalk.redBright("Actualizado 'config.js'"))
 import(`${file}?update=${Date.now()}`)})
+
+export {
+require,
+useStore,
+doReplies,
+usePairingCode,
+useMobile,
+__dirname
+}

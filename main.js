@@ -14,6 +14,7 @@ import { makeWASocket, protoType, serialize } from './lib/simple.js';
 //import { makeInMemoryStore } from '@whiskeysockets/baileys'
 import store, {makeInMemoryStore, storeChatsS, storeContactsS} from './lib/store.js';
 import {question, clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait, _quickTest} from './lib/functions.js';
+import { terminalQuestion } from './start.js';
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
 const { CONNECTING } = ws;
@@ -23,7 +24,7 @@ const __dirname = global.__dirname(import.meta.url);
 protoType();
 serialize();
 
-const readJadibtsSession = fs.readdirSync(jadibts); 
+const readJadibtsSession = fs.readdirSync(jadibts);
 if (readJadibtsSession.length == 0) global.aniJdbts = false;
 export async function onBot(folderPath) {
 const nameFolderBot = path.basename(folderPath)
@@ -73,53 +74,8 @@ global.conn = makeWASocket(connectionOptions)
 conn.isInit = false;
 conn.well = false;
 const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
-const connCreds = conn.authState.creds
-// Código de emparejamiento para clientes web
-if (!connCreds.registered) {
-if (usePairingCode) {
-if (useMobile) {
-throw new Error('No se puede usar el código de emparejamiento con API móvil');
-}
-
-const phoneNumber = await question('Ingrese su número de teléfono móvil:\n', (answer) => /^\d+$/.test(answer));
-console.log(`mainCheck: ${phoneNumber}`);
-if (/\d+/.test(phoneNumber)) {
-const code = await conn.requestPairingCode(conn.formatNumberWA(phoneNumber));
-console.log(`Pairing code: ${code}`);
-} else {
-throw new Error('Número de teléfono no válido\nDeben ser numeros sin espacios');
-}
-}
-
 // Si se eligió el móvil, solicite el código
-if (useMobile) {
- const { registration } = connCreds || { registration: {} };
-
-if (!registration.phoneNumber) {
-registration.phoneNumber = await question('Ingrese su número de teléfono móvil:\n');
-}
-
-const libPhonenumber = require('libphonenumber-js');
-const phoneNumber = libPhonenumber.parsePhoneNumber(registration.phoneNumber);
-if (!phoneNumber?.isValid()) {
-throw new Error('Número de teléfono no válido: ' + registration.phoneNumber);
-}
-
-registration.phoneNumber = phoneNumber.format('E.164');
-registration.phoneNumberCountryCode = phoneNumber.countryCallingCode;
-registration.phoneNumberNationalNumber = phoneNumber.nationalNumber;
-const mcc = PHONENUMBER_MCC[phoneNumber.countryCallingCode];
-if (!mcc) {
-throw new Error('No pude encontrar MCC para el número de teléfono: ' + registration.phoneNumber + '\nEspecifique el MCC manualmente.');
- }
-
-registration.phoneNumberMobileCountryCode = mcc;
-
-askForOTP(conn, registration);
-}
-} else {
-
-}
+terminalQuestion(conn)
 if (!opts['test']) {
 if (global.db) {
 setInterval(async () => {

@@ -364,6 +364,10 @@ if (plugin.register == true && _user.registered == false) { // Butuh daftar?
 fail('unreg', m, this);
 continue;
 }
+if (plugin.disable === true) {
+fail('disable', m, this)
+continue;
+}
 m.isCommand = true;
 let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17; // XP Earning per command
 if (xp > 200) {
@@ -648,6 +652,7 @@ unreg:
 '*[ 🛑 HEY!! ALTO, NO ESTAS REGISTRADO 🛑 ]*\n\n*—◉ PARA USAR ESTE COMANDO DEBES REGISTRARTE, USA EL COMANDO*\n*➣ #verificar nombre.edad*',
 restrict:
 '*[ ⚠️ ALERTA ⚠️ ] ESTE COMANDO ESTA RESTRINGIDO/DESACTIVADO POR DESICION DEL PROPIETARIO/A (OWNER) DEL BOT*',
+disable: '*[ ⚠️ INFO ⚠️ ] ESTE COMANDO ESTA DESHABILITADO. LA CAUSA PUEDE DEBERSE A AJUSTES O A FINALIZACION DE ESTE COMANDO. DEBE PREGUNTAR AL OWNER LA SITUACION*'
 }[type];
 if (msg) {
 return conn.sendWritingText(m.chat, msg, m);
@@ -657,6 +662,6 @@ return conn.sendWritingText(m.chat, msg, m);
 let file = global.__filename(import.meta.url, true);
 watchFile(file, async () => {
 unwatchFile(file);
+await global.reloadHandler(true).catch((err) => console.log('Error Handler: ', err));
 console.log(chalk.redBright(`Se actualizo "handler.js"`));
-if (global.reloadHandler) console.log(await global.reloadHandler());
 });

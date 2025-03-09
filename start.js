@@ -1,12 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 import './config.js';
-import pino from 'pino'
+import { useMobile, usePairingCode } from './config.js';
 import { createRequire } from 'module'; 
 import yargs from 'yargs';
 import { Low, JSONFile } from 'lowdb';
 import lodash from 'lodash';
-import { mongoDB, mongoDBV2 } from './lib/mongoDB.js';
 import { onBot } from './main.js';
 const { chain } = lodash;
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -75,6 +74,7 @@ const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
 if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
 respaldCreds(authFolder, botDirRespald)
+process.send('reset')
 } else {
 cleanupOnConnectionError(authFolder, botDirRespald)
 }
@@ -114,6 +114,59 @@ console.log('No has seleccionado una opcion valida, reiniciando...');
 }
 } else {
 onBot(authFolder)
+}
+
+}
+/**
+ * Código de emparejamiento para clientes web
+ */
+export async function terminalQuestion(conn) {
+const connCreds = conn.authState.creds
+
+if (!connCreds.registered) {
+if (usePairingCode) {
+if (useMobile) {
+throw new Error('No se puede usar el código de emparejamiento con API móvil');
+}
+
+const phoneNumber = await question('Ingrese su número de teléfono móvil\n*Debe ir sin espacios y con el codigo del país completo:\n', (answer) => /^\d+$/.test(answer));
+console.log(`mainCheck: ${phoneNumber}`);
+if (/\d+/.test(phoneNumber)) {
+const code = await conn.requestPairingCode(conn.formatNumberWA(phoneNumber));
+console.log(`Pairing code: ${code}`);
+} else {
+throw new Error('Número de teléfono no válido\nDeben ser numeros sin espacios');
+}
+}
+
+// Si se eligió el móvil, solicite el código
+if (useMobile) {
+ const { registration } = connCreds || { registration: {} };
+
+if (!registration.phoneNumber) {
+registration.phoneNumber = await question('Ingrese su número de teléfono móvil:\n');
+}
+
+const libPhonenumber = require('libphonenumber-js');
+const phoneNumber = libPhonenumber.parsePhoneNumber(registration.phoneNumber);
+if (!phoneNumber?.isValid()) {
+throw new Error('Número de teléfono no válido: ' + registration.phoneNumber);
+}
+
+registration.phoneNumber = phoneNumber.format('E.164');
+registration.phoneNumberCountryCode = phoneNumber.countryCallingCode;
+registration.phoneNumberNationalNumber = phoneNumber.nationalNumber;
+const mcc = PHONENUMBER_MCC[phoneNumber.countryCallingCode];
+if (!mcc) {
+throw new Error('No pude encontrar MCC para el número de teléfono: ' + registration.phoneNumber + '\nEspecifique el MCC manualmente.');
+ }
+
+registration.phoneNumberMobileCountryCode = mcc;
+
+askForOTP(conn, registration);
+}
+} else {
+
 }
 
 }
