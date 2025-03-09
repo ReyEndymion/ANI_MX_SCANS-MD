@@ -303,13 +303,12 @@ return;
 return;
 }
 		
-if (botSpam.antispam && m.text && user && user.lastCommandTime && (Date.now() - user.lastCommandTime) < 5000 && !isROwner) {
+if (settings.antispam && m.text && user && user.lastCommandTime && (Date.now() - user.lastCommandTime) < 5000 && !isROwner) {
 if (user.commandCount === 2) {
 const remainingTime = Math.ceil((user.lastCommandTime + 5000 - Date.now()) / 1000);
 if (remainingTime > 0) {
 const messageText = `*[ ⚠ ] Espera ${remainingTime} segundos antes de usar otro comando*`;
-m.reply(messageText);
-return;
+return this.sendWritingText(m.chat, messageText, m);
 } else {
 user.commandCount = 0;
 }
@@ -376,6 +375,10 @@ await this.sendWritingText(m.chat, resp, m)
 } // Hehehe
 else {
 m.exp += xp;
+}
+if (m.limit) { 
+let resp = +m.limit + ' DIAMANTE 💎 USADO';
+await this.sendWritingText(m.chat, resp, m)
 }
 if (!isPrems && plugin.limit && (m.isGroup ? global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] : global.db.data.bot[this.user.jid].chats.privs[m.sender]).limit < plugin.limit * 1) {
 let resp = `*[! INFO!] SUS DIAMANTES SE HAN AGOTADO, PUEDE COMPRAR MÁS USANDO EL COMANDO ${usedPrefix}buy <cantidad>*`;
@@ -446,10 +449,6 @@ await plugin.after.call(this, m, extra);
 console.error(e);
 }
 }
-if (m.limit) { 
-let resp = +m.limit + ' DIAMANTE 💎 USADO';
-await this.sendWritingText(m.chat, resp, m)
-}
 }
 break;
 }
@@ -497,7 +496,7 @@ stat.lastSuccess = now;
 }
 }
 }
-
+}
 try {
 if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this);
 } catch (e) {
