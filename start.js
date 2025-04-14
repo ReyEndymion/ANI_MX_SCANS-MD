@@ -84,6 +84,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } catch (error) {
 console.log('errorInicializacion: ', error)
+if (fs.existsSync(botDirRespald)) {
 const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
 if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
@@ -94,6 +95,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } else {
 cleanupOnConnectionError(authFolder, botDirRespald)
+}
 }
 }
 } else {
