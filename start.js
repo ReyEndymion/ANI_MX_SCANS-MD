@@ -84,6 +84,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } else {
 fs.rmSync(authFolder, { recursive: true, force: true })
+process.send('reset')
 }
 }
 } catch (error) {
@@ -102,6 +103,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } else {
 fs.rmSync(authFolder, { recursive: true, force: true })
+process.send('reset')
 }
 
 }
