@@ -83,7 +83,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } else {
-fs.rmdirSync(authFolder, { recursive: true, force: true })
+fs.rmSync(authFolder, { recursive: true, force: true })
 }
 }
 } catch (error) {
@@ -100,7 +100,10 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 } else {
 cleanupOnConnectionError(authFolder, botDirRespald)
 }
+} else {
+fs.rmSync(authFolder, { recursive: true, force: true })
 }
+
 }
 } else {
 if (!aniJdbts) {
