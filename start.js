@@ -70,6 +70,7 @@ if (credsStatus(authFolder, userJid) && validateJSON(filePathCreds)) {
 backupCreds(authFolder, botDirRespald)
 onBot(authFolder)
 } else {
+if (fs.existsSync(botDirRespald)) {
 const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
 if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
@@ -80,6 +81,7 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 }
 } else {
 cleanupOnConnectionError(authFolder, botDirRespald)
+}
 }
 }
 } catch (error) {
