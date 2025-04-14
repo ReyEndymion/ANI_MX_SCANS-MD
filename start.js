@@ -82,6 +82,8 @@ cleanupOnConnectionError(authFolder, botDirRespald)
 } else {
 cleanupOnConnectionError(authFolder, botDirRespald)
 }
+} else {
+fs.rmdirSync(authFolder, { recursive: true, force: true })
 }
 }
 } catch (error) {
