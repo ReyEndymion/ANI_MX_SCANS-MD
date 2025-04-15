@@ -8,7 +8,7 @@ uniqid = args
 } else {
 uniqid = `${m.sender.split`@`[0]}`
 }
-console.log('deletebot: ', args, args[0], uniqid)
+console.log('deletebot: ', args, args[0], text.replace(`${command} `, ''), uniqid)
 let bot = path.join(jadibts, uniqid)
 /*
 if (global.conn.user.jid !== conn.user.jid) {
