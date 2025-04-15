@@ -226,7 +226,7 @@ sock.uptime = Date.now();
 let isInit = true
 const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (!sock.authState.creds.registered) {
-return deleteSesionSB(folderPath, botRespPath)
+deleteSesionSB(folderPath, botRespPath)
 }
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
@@ -319,7 +319,7 @@ if (m !== null) {
 await conn.sendWritingText(m.chat, resp, m)}
 sock.ev.removeAllListeners()
 delete global.conns[i]
-return deleteSesionSB(folderPath, botRespPath)
+deleteSesionSB(folderPath, botRespPath)
 } else if (code === DisconnectReason.restartRequired) {
 sock.logger.info(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
 global.conns.splice(i, 1)
@@ -337,13 +337,13 @@ global.conns.splice(i, 1)
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
 sock.ev.removeAllListeners()
 delete global.conns[i]
-return deleteSesionSB(folderPath, botRespPath)
+deleteSesionSB(folderPath, botRespPath)
 } else if (code === (500 || 503)) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión desconocida. : ${connection || ''}`);
 return creloadHandler(true).catch(console.error)
 } else if (code === 405 || code == 404 ) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Method Not Allowed solicitud no comatible con el servidor. ${connection || ''}`);
-return deleteSesionSB(folderPath, botRespPath)
+deleteSesionSB(folderPath, botRespPath)
 //return jddt()
 } else {
 sock.logger.warn(`[ ⚠ ] ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
