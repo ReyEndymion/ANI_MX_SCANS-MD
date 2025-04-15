@@ -157,12 +157,12 @@ const { conn, args, usedPrefix, command, m } = data
 conn.messageJdb = false
 const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
 // stoled from aiden hehe
-const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (mcode) {
 args[0] = args[0].replace("--code", "").trim()
 if (args[1]) args[1] = args[1].replace("--code", "").trim()
 if (args[0] == "") args[0] = undefined
 }
+const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
 } else {
