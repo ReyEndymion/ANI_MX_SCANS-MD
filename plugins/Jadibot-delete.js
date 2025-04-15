@@ -3,12 +3,12 @@ import path, { join } from 'path'
 let handler= async (m, { conn, args, command, isROwner, text }) => {
 let uniqid //parentw.getName(who)
 if (isROwner) {
-let args = conn.formatNumberWA(text.replace(`${command} `, ''))
+let args = conn.formatNumberWA(m.text.replace(`${command} `, ''))
 uniqid = args
 } else {
 uniqid = `${m.sender.split`@`[0]}`
 }
-console.log('deletebot: ', args, args[0], text.replace(`${command} `, ''), uniqid)
+console.log('deletebot: ', args, args[0], m.text.replace(`${command} `, ''), uniqid)
 let bot = path.join(jadibts, uniqid)
 /*
 if (global.conn.user.jid !== conn.user.jid) {
