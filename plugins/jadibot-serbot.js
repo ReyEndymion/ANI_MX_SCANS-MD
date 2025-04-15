@@ -162,7 +162,6 @@ args[0] = args[0].replace("--code", "").trim()
 if (args[1]) args[1] = args[1].replace("--code", "").trim()
 if (args[0] == "") args[0] = undefined
 }
-const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
 } else {
@@ -177,6 +176,7 @@ if (!fs.existsSync(credsBot) || !readCreds.hasOwnProperty('platform')) {conn.mes
 } catch (error) {
 conn.messageJdb = false
 }
+const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
