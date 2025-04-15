@@ -41,7 +41,6 @@ data.args = args
 data.command = command
 data.m = m
 data.conn = conn
-console.log('serbot: ', args[0])
 //let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let uniqid = `${m.sender.split`@`[0]}`//conn.getName(who)
 const bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
@@ -162,6 +161,7 @@ args[0] = args[0].replace("--code", "").trim()
 if (args[1]) args[1] = args[1].replace("--code", "").trim()
 if (args[0] == "") args[0] = undefined
 }
+console.log('serbot: ', !fs.existsSync(folderPath))
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
 }
@@ -357,7 +357,9 @@ if (connection == 'open') {
 console.log(chalk.blue(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${folderPath}\n│\n▣─────────────────────────────···`))
 global.conns.push(sock)
 limpCarpetas(folderPath)
+if (!fs.existsSync(botRespPath)) {
 fs.mkdirSync(botRespPath, { recursive: true });
+}
 dataconst[sock.user.id.split('@')] = 1;
 sock.isInit = true
 let resp = '', q = ''
