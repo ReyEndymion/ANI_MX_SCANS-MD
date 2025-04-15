@@ -25,7 +25,7 @@ const { child, spawn, exec } = await import('child_process');
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js';
 import { makeInMemoryStore } from '../lib/store.js'
-import { limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds } from "../lib/functions.js";
+import { limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds, cleanupOnConnectionError } from "../lib/functions.js";
 
 if (global.conns instanceof Array) {console.log()} else {global.conns = []}
 if (!(global.dataconst instanceof Array)) global.dataconst = [];
@@ -124,10 +124,10 @@ if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
 respaldCreds(botPath, botDirRespald)
 jddt(botPath, datas)
 } else {
-deleteSesionSB(botPath, botDirRespald)
+cleanupOnConnectionError(botPath, botDirRespald)
 }
 } else {
-deleteSesionSB(botPath, botDirRespald)
+cleanupOnConnectionError(botPath, botDirRespald)
 }
 }
 continue
@@ -138,7 +138,7 @@ const fileRespPathCreds = path.join(botRespPath, creds)
 if (backupCredsStatus(botRespPath) && validateJSON(fileRespPathCreds)) {
 respaldCreds(botPath, botRespPath)
 } else {
-deleteSesionSB(botPath, botRespPath)
+cleanupOnConnectionError(botPath, botRespPath)
 }
 }
 } else {
@@ -157,6 +157,7 @@ const { conn, args, usedPrefix, command, m } = data
 conn.messageJdb = false
 const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
 // stoled from aiden hehe
+const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (mcode) {
 args[0] = args[0].replace("--code", "").trim()
 if (args[1]) args[1] = args[1].replace("--code", "").trim()
@@ -164,6 +165,7 @@ if (args[0] == "") args[0] = undefined
 }
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
+fs.mkdirSync(botRespPath, { recursive: true });
 } else {
 
 }
@@ -225,7 +227,7 @@ sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
 if (!sock.authState.creds.registered) {
-deleteSesionSB(folderPath)
+return cleanupOnConnectionError(folderPath, botRespPath)
 }
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
@@ -318,7 +320,7 @@ if (m !== null) {
 await conn.sendWritingText(m.chat, resp, m)}
 sock.ev.removeAllListeners()
 delete global.conns[i]
-return deleteSesionSB(folderPath)
+return cleanupOnConnectionError(folderPath, botRespPath)
 } else if (code === DisconnectReason.restartRequired) {
 sock.logger.info(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
 global.conns.splice(i, 1)
@@ -336,13 +338,13 @@ global.conns.splice(i, 1)
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
 sock.ev.removeAllListeners()
 delete global.conns[i]
-deleteSesionSB(folderPath)
+return cleanupOnConnectionError(folderPath, botRespPath)
 } else if (code === (500 || 503)) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión desconocida. : ${connection || ''}`);
 return creloadHandler(true).catch(console.error)
 } else if (code === 405 || code == 404 ) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Method Not Allowed solicitud no comatible con el servidor. ${connection || ''}`);
-deleteSesionSB(folderPath)
+return cleanupOnConnectionError(folderPath, botRespPath)
 //return jddt()
 } else {
 sock.logger.warn(`[ ⚠ ] ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
