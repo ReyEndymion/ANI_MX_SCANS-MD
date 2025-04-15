@@ -1,9 +1,10 @@
 import fs, { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, rmSync} from "fs"
 import path, { join } from 'path'
-let handler= async (m, { conn, args, isROwner }) => {
+let handler= async (m, { conn, args, command, isROwner, text }) => {
 let uniqid //parentw.getName(who)
 if (isROwner) {
-uniqid = `${m.sender.split`@`[0]}`
+let args = conn.formatNumberWA(text.replace(`${command} `, ''))
+uniqid = args
 } else {
 uniqid = `${m.sender.split`@`[0]}`
 }
