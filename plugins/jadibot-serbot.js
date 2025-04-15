@@ -164,8 +164,6 @@ if (args[0] == "") args[0] = undefined
 }
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
-} else {
-
 }
 const credsBot = path.join(folderPath, "creds.json")
 args[0] ? fs.writeFileSync(credsBot, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, `\t`)) : ""
@@ -204,9 +202,10 @@ const requiresPatch = !!( message.buttonsMessage || message.temlateMessage || me
 if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
 return message;
 }
+
 const connectionOptions = {
 version,
-printQRInTerminal: true,
+printQRInTerminal: mcode ? false : true,
 logger: logger,
 auth: state,
 browser: ["Ubuntu", "Chrome", "20.0.04"],
