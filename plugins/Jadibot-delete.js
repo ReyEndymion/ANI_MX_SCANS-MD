@@ -1,26 +1,17 @@
 import fs, { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, rmSync} from "fs"
 import path, { join } from 'path'
-let handler= async (m, { conn, args }) => {
-let parentw = conn
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let uniqid = `${m.sender.split`@`[0]}` //parentw.getName(who)
-let bot = path.join(jadibts, uniqid)
-/**if (global.conn.user.jid !== conn.user.jid) {
-let resp = `Por qué no vas directamente con el numero del Bot @${uniqid}?`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+let handler= async (m, { conn, args, isROwner }) => {
+let uniqid //parentw.getName(who)
+if (isROwner) {
+uniqid = `${m.sender.split`@`[0]}`
 } else {
- }
+uniqid = `${m.sender.split`@`[0]}`
+}
+console.log('deletebot: ', args, args[0], uniqid)
+let bot = path.join(jadibts, uniqid)
+/*
+if (global.conn.user.jid !== conn.user.jid) {
+let resp = `Por qué no vas directamente con el numero del Bot @${uniqid}?`
 */
 try {
 conn.isInit = false
@@ -28,18 +19,7 @@ conn.isInit = false
 fs.rmSync(bot, { recursive: true, force: true })
 console.log('se han eliminado todos los archivos')
 let resp = "Adiós Bot\n\nTodos los archivos fueron eliminados"
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendWritingText(m.chat, resp, m )
 
 
  /*fs.unlink("./jadibts/" + uniqid + "/creds.json")
@@ -50,20 +30,9 @@ console.log('Folder removed')
 await conn.sendMessage(m.chat, {text : "la carpeta fue eliminada " } , { quoted: m })*/
 } catch(err) {
 console.error('La carpeta o archivo de sesion no existen ', err)
- let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
- let txt = '';
- let count = 0;
- for (const c of resp) {
- await new Promise(resolve => setTimeout(resolve, 15));
- txt += c;
- count++;
- 
- if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
- }
- }
- await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
- }
+let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+return conn.sendWritingText(m.chat, resp, m )
+}
 }
 handler.help = ['delete']
 handler.tags = ['General']
