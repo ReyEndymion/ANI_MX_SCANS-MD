@@ -224,9 +224,6 @@ sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
 const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
-if (!sock.authState.creds.registered) {
-deleteSesionSB(folderPath, botRespPath)
-}
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
 
@@ -354,6 +351,9 @@ global.conns.splice(i, 1)
 }
 } 
 if (connection == 'open') {
+if (!sock.authState.creds.registered) {
+deleteSesionSB(folderPath, botRespPath)
+}
 console.log(chalk.blue(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${folderPath}\n│\n▣─────────────────────────────···`))
 global.conns.push(sock)
 limpCarpetas(folderPath)
