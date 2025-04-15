@@ -176,7 +176,6 @@ if (!fs.existsSync(credsBot) || !readCreds.hasOwnProperty('platform')) {conn.mes
 } catch (error) {
 conn.messageJdb = false
 }
-const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
 const msgRetryCache = new NodeCache()
@@ -225,6 +224,7 @@ let sock = makeWASocket(connectionOptions)
 sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
+const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 if (!sock.authState.creds.registered) {
 return deleteSesionSB(folderPath, botRespPath)
 }
