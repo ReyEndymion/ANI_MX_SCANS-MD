@@ -1,14 +1,14 @@
 import fs, { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, rmSync} from "fs"
 import path, { join } from 'path'
-let handler= async (m, { conn, args, command, isROwner, text }) => {
+let handler= async (m, { conn, args, usedPrefix, command, isROwner, text }) => {
 let uniqid //parentw.getName(who)
-if (isROwner) {
-let args = conn.formatNumberWA(m.text.replace(`${command} `, ''))
-uniqid = args
+if (isROwner && args) {
+const number = m.text.split(`${usedPrefix+command} `)[1].replace(/ /g, '')
+uniqid = conn.formatNumberWA(number)
 } else {
 uniqid = `${m.sender.split`@`[0]}`
 }
-console.log('deletebot: ', args, args[0], m.text.replace(`${command} `, ''), uniqid)
+console.log('deletebot: ', m.text.split(`${usedPrefix+command} `)[1].replace(/ /g, ''), uniqid)
 let bot = path.join(jadibts, uniqid)
 /*
 if (global.conn.user.jid !== conn.user.jid) {

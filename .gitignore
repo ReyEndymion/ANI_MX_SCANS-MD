@@ -5,6 +5,7 @@ ANI_MX_SCANS/
 ANIMXSCANS/
 sesionRespaldo/
 /.git/
+/.vscode/
 #| Files |#
 creds.json
 database.json
@@ -13,3 +14,4 @@ session.data.json
 ANI_MX_SCANS-MD.zip
 package-lock.json
 ANIMXSCANS.zip
+sftp.json
