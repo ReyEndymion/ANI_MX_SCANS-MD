@@ -165,7 +165,6 @@ if (args[0] == "") args[0] = undefined
 }
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
-fs.mkdirSync(botRespPath, { recursive: true });
 } else {
 
 }
@@ -359,6 +358,7 @@ if (connection == 'open') {
 console.log(chalk.blue(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${folderPath}\n│\n▣─────────────────────────────···`))
 global.conns.push(sock)
 limpCarpetas(folderPath)
+fs.mkdirSync(botRespPath, { recursive: true });
 dataconst[sock.user.id.split('@')] = 1;
 sock.isInit = true
 let resp = '', q = ''
