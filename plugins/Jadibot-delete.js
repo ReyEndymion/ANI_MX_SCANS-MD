@@ -41,7 +41,8 @@ return conn.sendWritingText(m.chat, resp, m )
 }
 }
 } else {
-let resp = `Es posible que la sesion no exista o el bot principal Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+if (m.fromMe) return
+let resp = `Es posible que la sesion no exista o este es el bot principal de (${wm}).\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
 
 }
