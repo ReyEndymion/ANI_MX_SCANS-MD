@@ -2,8 +2,8 @@ import fs, { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch,
 import path, { join } from 'path'
 let handler= async (m, { conn, args, usedPrefix, command, isROwner, text }) => {
 let uniqid //parentw.getName(who)
-console.log('deletebot: ', isROwner)
-if (isROwner && args[1]) {
+console.log('deletebot: ', m.isROwner)
+if (m.isROwner && args[1]) {
 const number = m.text.split(`${usedPrefix+command} `)[1].replace(/ /g, '')
 uniqid = conn.formatNumberWA(number)
 } else {
@@ -11,6 +11,9 @@ uniqid = `${m.sender.split`@`[0]}`
 }
 let bot = path.join(jadibts, uniqid)
 if (fs.existsSync(bot)) {
+const valuesConns = Array.from(global.conns.values())
+if (global.conns.has(bot)) {
+const sock = global.conns.get(bot)
 /*
 if (global.conn.user.jid !== conn.user.jid) {
 let resp = `Por qué no vas directamente con el numero del Bot @${uniqid}?`
@@ -18,6 +21,7 @@ let resp = `Por qué no vas directamente con el numero del Bot @${uniqid}?`
 try {
 conn.isInit = false
 //conn.ws.close()
+sock.logout()
 fs.rmSync(bot, { recursive: true, force: true })
 console.log('se han eliminado todos los archivos')
 let resp = "Adiós Bot\n\nTodos los archivos fueron eliminados"
@@ -34,6 +38,7 @@ await conn.sendMessage(m.chat, {text : "la carpeta fue eliminada " } , { quoted:
 console.error('La carpeta o archivo de sesion no existen ', err)
 let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
+}
 }
 } else {
 let resp = `Es posible que la sesion no exista o el bot principal Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
