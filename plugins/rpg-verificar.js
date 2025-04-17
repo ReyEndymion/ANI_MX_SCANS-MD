@@ -19,7 +19,7 @@ if (!m.text || !Reg.test(m.text)) {resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n
 }
 console.log('verificar: ', consola = text)
 if (text) {
-let [_, name, splitter, age] = consola = text.match(Reg)//`${text.match(Reg)}`
+let [_, name, splitter, age] = consola = m.text.match(Reg)//`${text.match(Reg)}`
 if (resp == (null || undefined)) {resp = `verificar: ${consola}`}
 if (!name) {resp = '*[❗INFO❗] DEBES PONER UN NOMBRE*'
 }
