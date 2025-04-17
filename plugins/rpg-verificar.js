@@ -12,14 +12,14 @@ const users = m.isGroup ? chat.users || {} : privs || {}
 let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 if (m.fromMe) return
+console.log('verificar: ', m.fromMe, m.text)
 let name2 = await conn.getName(who)
 if (user.registered === true) {resp = `*[❗INFO❗] HEY! YA ESTÁS REGISTRADO*\n\n*QUIERES QUITAR TU REGISTRO? USA EL COMANDO ${usedPrefix}unreg <numero de serie>*\n\n*SI NO RECUERDAS TU NÚMERO DE SERIE PUEDES USAR EL COMANDO ${usedPrefix}myns*`
 }
-if (!m.text || !Reg.test(m.text)) {resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n*—◉ USO DEL COMANDO: ${usedPrefix + command} nombre.edad*\n*—◉ Ejemplo: ${usedPrefix + command} ${name2.replace(' ', '')}.18*`
-}
-console.log('verificar: ', consola = text)
-if (text) {
-let [_, name, splitter, age] = consola = m.text.match(Reg)//`${text.match(Reg)}`
+if (!m.text || !Reg.test(m.text)) {
+resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n*—◉ USO DEL COMANDO: ${usedPrefix + command} nombre.edad*\n*—◉ Ejemplo: ${usedPrefix + command} ${name2.replace(' ', '')}.18*`
+} else {
+let [_, name, splitter, age] = m.text.match(Reg)//`${text.match(Reg)}`
 if (resp == (null || undefined)) {resp = `verificar: ${consola}`}
 if (!name) {resp = '*[❗INFO❗] DEBES PONER UN NOMBRE*'
 }
@@ -49,18 +49,9 @@ resp = `\n\n¡¡AHORA TE HE REGISTRADO!!\n\n┏┅ ━━━━━━━━━�
 ┗┅ ━━━━━━━━━━━━ ┅ ━\n\n¡TU NÚMERO DE SERIE TE SERVIRÁ TÚ POR SI DESEAS BORRAR TU REGISTRO DEL BOT ${wm}!\nPara corroborar tu informacion usa:\n'${usedPrefix}profile y si quieres tu numero de serie agrega al comando la frase "numero de serie"` 
 global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].money += 10000
 global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].exp += 10000
-}/** */
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 10));
-txt += c;
-count++;
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
 }
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+/** */
+return conn.sendWritingText(m.chat, resp, m );
 }
 handler.help = ['verificar']
 handler.tags = ['xp']
