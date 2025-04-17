@@ -43,9 +43,9 @@ handler.command = /^(verify|register|verificar|reg|registrar)$/i
 handler.before = async function before(m, {conn}) {
 const datos = Object.values(data).find(c => c.name2)
 console.log('verificar: ', m.text.match(Reg), data, datos)
-if (!data) return
+if (!data && m.fromMe) return
 let {name2, _, name, splitter, age, user} = data
-await conn.sendWritingText(m.chat, `Deseas que use tu nickname como nombre o prefieres el que has elegido, contesta si, de lo contrario contesta no`, m );
+//await conn.sendWritingText(m.chat, `Deseas que use tu nickname como nombre o prefieres el que has elegido, contesta si, de lo contrario contesta no`, m );
 if (/si/i.test(m.text.toLowerCase())) {
 name = name2
 } else if (/no/.test(m.text.toLowerCase())) {
