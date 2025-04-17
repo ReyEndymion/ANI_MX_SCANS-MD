@@ -11,10 +11,11 @@ const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
 const users = m.isGroup ? chat.users || {} : privs || {}
 let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+if (m.fromMe) return
 let name2 = await conn.getName(who)
 if (user.registered === true) {resp = `*[❗INFO❗] HEY! YA ESTÁS REGISTRADO*\n\n*QUIERES QUITAR TU REGISTRO? USA EL COMANDO ${usedPrefix}unreg <numero de serie>*\n\n*SI NO RECUERDAS TU NÚMERO DE SERIE PUEDES USAR EL COMANDO ${usedPrefix}myns*`
 }
-if (!text || !Reg.test(text)) {resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n*—◉ USO DEL COMANDO: ${usedPrefix + command} nombre.edad*\n*—◉ Ejemplo: ${usedPrefix + command} ${name2.replace(' ', '')}.18*`
+if (!m.text || !Reg.test(m.text)) {resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n*—◉ USO DEL COMANDO: ${usedPrefix + command} nombre.edad*\n*—◉ Ejemplo: ${usedPrefix + command} ${name2.replace(' ', '')}.18*`
 }
 console.log('verificar: ', consola = text)
 if (text) {
