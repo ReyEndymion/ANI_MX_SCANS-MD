@@ -1,7 +1,13 @@
 let handler  = async (m, { conn, command, args, usedPrefix }) => {
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
 
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+const bot = global.db.data.bot[conn.user.jid]
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 let pescarUsuario = await conn.getName(m.sender)
 let gancho = user.pancingan
 let canaDePescar = user.pancing

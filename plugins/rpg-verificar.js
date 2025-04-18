@@ -38,8 +38,8 @@ resp = 'Se acabó el tiempo'
 delete data[who]}, 60 * 1000)
 }
 /*.length == 0, datos*/
-}
 resp = `Deseas que use tu nickname como name o prefieres el que has elegido?, contesta si, de lo contrario contesta no`
+}
 }
 return conn.sendWritingText(m.chat, resp, m );
 }
@@ -64,27 +64,33 @@ console.log('verificar: ', name)
 //`${text.match(Reg)}`, splitter, age, user.registered, name.match(Reg)m.text, datos.length === 0
 if (!name) {
 resp = '*[❗INFO❗] DEBES PONER UN name*'
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 }
 if (name.length >= 30) {
 resp = '[❗INFO❗] EL name ES DEMACIADO LARGO' 
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 }
 if (name.length <= 1) {
 resp = '[❗INFO❗] EL name ES DEMACIADO CORTO'
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 } 
 age = parseInt(age)
 if (!age) {
 resp = '*[❗INFO❗] LA EDAD NO PUEDE ESTAR VACIA*'
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 }
 if (age > 100) {
 resp = '*[❗] Kheee, como sigues vivo con esa edad? 👴🏻*'
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 }
 if (age < 5) {
 resp = '*[❗] Kheee, un bebé que sabe usar WhatsApp? 😲*'
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 } 
 user.name = name
