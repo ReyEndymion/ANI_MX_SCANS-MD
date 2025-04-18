@@ -24,6 +24,7 @@ return conn.sendWritingText(m.chat, resp, m );
 } else {
 let [_, name, splitter, age] = m.text.match(Reg)
 data[who] = {
+who,
 usedPrefix,
 command,
 nameWA,
@@ -50,7 +51,7 @@ let resp = ''
 const datos = Object.values(data)//.find(c => c.nameWA)
 if (m.fromMe) return
 if (datos.length === 0) return
-let [{usedPrefix, command, nameWA, _, name, splitter, age, user}] = datos
+let [{who, usedPrefix, command, nameWA, _, name, splitter, age, user}] = datos
 if (/si/i.test(m.text.toLowerCase())) {
 name = nameWA
 }
@@ -101,6 +102,7 @@ resp = `\n\n¡¡AHORA TE HE REGISTRADO!!\n\n┏┅ ━━━━━━━━━�
 ┗┅ ━━━━━━━━━━━━ ┅ ━\n\n¡TU NÚMERO DE SERIE TE SERVIRÁ TÚ POR SI DESEAS BORRAR TU REGISTRO DEL BOT ${wm}!\nPara corroborar tu informacion usa:\n'${usedPrefix}profile y si quieres tu numero de serie agrega al comando la frase "numero de serie"` 
 user.money += 10000
 user.exp += 10000
+delete data[who]
 return conn.sendWritingText(m.chat, resp, m );
 }
 export default handler
