@@ -16,9 +16,11 @@ if (m.fromMe) return
 let nameWA = await conn.getName(who)
 if (user.registered === true) {
 resp = `*[❗INFO❗] HEY! YA ESTÁS REGISTRADO*\n\n*QUIERES QUITAR TU REGISTRO? USA EL COMANDO ${usedPrefix}unreg <numero de serie>*\n\n*SI NO RECUERDAS TU NÚMERO DE SERIE PUEDES USAR EL COMANDO ${usedPrefix}myns*`
+return conn.sendWritingText(m.chat, resp, m );
 } else {
 if (!m.text || !Reg.test(m.text)) {
 resp = `*[❗INFO❗] FORMATO INCORRECTO*\n\n*—◉ USO DEL COMANDO: ${usedPrefix + command} name.edad*\n*—◉ Ejemplo: ${usedPrefix + command} ${nameWA.replace(' ', '')}.18*`
+return conn.sendWritingText(m.chat, resp, m );
 } else {
 let [_, name, splitter, age] = m.text.match(Reg)
 data[who] = {
@@ -55,8 +57,8 @@ name = nameWA
 if (/no/i.test(m.text.toLowerCase())) {
 let regex = new RegExp(`^\\s*\\${usedPrefix}\\s*${command}\\s+`, 'i')
 name = name.replace(regex, '').trim()
-console.log('verificar: ', name)
 }
+console.log('verificar: ', name)
 
 //`${text.match(Reg)}`, splitter, age, user.registered, name.match(Reg)m.text, datos.length === 0
 if (!name) {
