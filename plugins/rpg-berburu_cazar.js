@@ -1,5 +1,11 @@
 let handler = async (m, { conn, usedPrefix }) => {
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+const bot = global.db.data.bot[conn.user.jid]
+const chats = bot.chats || {}
+const privs = chats.privs || {}
+const groups = chats.groups || {}
+const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
+const users = m.isGroup ? chat.users || {} : privs || {}
+let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
 let randomaku1 = `${Math.floor(Math.random() * 5)}`
 let randomaku2 = `${Math.floor(Math.random() * 5)}`
 let randomaku4 = `${Math.floor(Math.random() * 5)}`

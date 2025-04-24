@@ -9,7 +9,6 @@ let handler = async (m, {command, conn}) => {
 let fgif = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "5215532867844-1600616542@g.us" } : {})},message: {"videoMessage": { "title":`️u`, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': wm, 'jpegThumbnail': false }}}
 let apikey = keysxxx
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let user = global.db.data.bot[conn.user.jid].users[who]
 let name = await conn.getName[who]
 if (command == 'wpmontaña') {
 let haha = await conn.getFile(`https://api-reysekha.herokuapp.com/api/wallpaper/mountain?apikey=APIKEY`)
@@ -25,6 +24,8 @@ if (command == 'wpgaming') {
 let haha = await conn.getFile(`https://api-reysekha.herokuapp.com/api/wallpaper/gaming?apikey=APIKEY`)
 await conn.reply(m.chat, global.wait, m)
 //conn.sendMessage(m.chat, { text: `_${command}_`.trim(), `*◈•@${who.split("@s.whatsapp.net")[0]}*`, haha.data, [['🔄 SIGUIENTE 🔄', `/${command}`]], fgif, { mentions: [who] })
+return conn.sendWritingImage(m.chat, haha.data, '', m)
+console.log('random-wp: ', haha)
      }
 if (command == 'wpaesthetic') {
 let haha = await conn.getFile(`https://api-reysekha.herokuapp.com/api/wallpaper/wallhp?apikey=APIKEY`)
