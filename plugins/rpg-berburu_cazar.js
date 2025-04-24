@@ -63,21 +63,21 @@ let hsl = `
  *🐐 ${ar4} ${anti4}*			 *🐗 ${ar10} ${anti10}*
  *🐼 ${ar5} ${anti5}*			 *🐖 ${ar11} ${anti11}*
  *🐊 ${ar6} ${anti6}*		    *🐓 ${ar12} ${anti12}*`.trim()
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].banteng += rbrb1
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].harimau += rbrb2
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].gajah += rbrb3
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kambing += rbrb4
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].panda += rbrb5
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cocodrilo += rbrb6
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kerbau += rbrb7
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].sapi += rbrb8
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].monyet += rbrb9
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].babihutan += rbrb10
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cerdo += rbrb11
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].pollo += rbrb12
+user.banteng += rbrb1
+user.harimau += rbrb2
+user.gajah += rbrb3
+user.kambing += rbrb4
+user.panda += rbrb5
+user.cocodrilo += rbrb6
+user.kerbau += rbrb7
+user.sapi += rbrb8
+user.monyet += rbrb9
+user.babihutan += rbrb10
+user.cerdo += rbrb11
+user.pollo += rbrb12
 	
-let time = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastberburu + 2700000 //45 Minutos
-if (new Date - global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastberburu < 2700000){ 
+let time = user.lastberburu + 2700000 //45 Minutos
+if (new Date - user.lastberburu < 2700000){ 
     let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${wm}\n\nPara:\n\n🏞️ ANIMALES CAPTURADOS usa: *${usedPrefix}kandang*\n🎒 INVENTARIO usa: *${usedPrefix}inventario*`
     let txt = '';
     let count = 0;
