@@ -33,7 +33,7 @@ var isRunning = false
 function start(file) {
 let args = [join(__dirname, file), ...process.argv.slice(2)]
 
-say(`${description}\n\nAjuste la pantalla para escanear el codigo QR`, {
+say(`${description}\n\nPor favor sigue las instrucciones`, {
 font: 'console',
 align: 'center',
 gradient: ['red', 'magenta']
@@ -70,7 +70,7 @@ console.error('❎ㅤOcurrio un error inesperado:', code)
 p.removeAllListeners('exit')
 p.removeAllListeners('message')
 if (code === 0) return
-if (code !== 0 || code === 'SIGKILL') p.emit('message', 'reset')
+if (code !== 0 || code === 'SIGKILL' || code === 'SIGABRT') p.emit('message', 'reset')
 watchFile(args[0], () => {
 unwatchFile(args[0])
 start(file)
