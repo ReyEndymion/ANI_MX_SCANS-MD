@@ -18,8 +18,8 @@ const require = createRequire(__dirname)
 const { name, nameProyect, author, description, repository } = require(join(__dirname, 'package.json'))
 
 global.owner = [
-['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
-['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
+['51919199620','~N~L~A~™- Creador 👁️', false],
+['51994114690', '~N~L~A~™¥- Creador 👑', true]
 ] // Cambia los numeros que quieras
 /**********GLOBAL INFO*****************/
 global.packname = '(☞ﾟ∀ﾟ)☞'
