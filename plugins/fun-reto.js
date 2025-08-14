@@ -1,26 +1,21 @@
-let handler  = async (m, { conn }) => {
-let resp = `*┌────「 RETO 」─*\n*“${pickRandom(global.bucin)}”*\n*└────「 ${wm} 」─*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-      
-await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+let handler= async (m, {conn, db, userdb, senderJid}) => {
+const {info} = await import('../config.js')
+let resp = `*┌────「 RETO 」─*\n*“${pickRandom(global.bucin)}”*\n*└「 ${info.nanie} 」─*`
+await conn.sendWritingText(m.chat, resp, userdb, m);
 }
 handler.help = ['reto']
 handler.tags = ['fun']
 handler.command = /^reto/i
+handler.menu = [
+{title: "🎖️ RETO", description: "usa #reto", id: `reto`},
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler
 
 function pickRandom(list) {
-  return list[Math.floor(list.length * Math.random())]
+return list[Math.floor(list.length * Math.random())]
 }
 
 global.bucin = [
@@ -32,7 +27,7 @@ global.bucin = [
 "Envíame una fotografía tuya",
 "Debes de dibujar en alguna parte de tu cuerpo el nombre de algún integrante del grupo, luego realiza una foto y envíala",
 "Hazte una foto dándole un beso a una Televisión",
- "Mándame una fotografía en ropa interior",
+"Mándame una fotografía en ropa interior",
 "Escribe en tu estado de WhatsApp que te gusta comer tierra",
 "Debes de poner la fotografía de un participante del grupo que sea del sexo opuesto al tuyo en tu perfil de WhatsApp durante 3 días 📸📸",
 "Tienes que mandar un audio cantando la canción: Un pato que va cantando alegremente cua cua 🦆",

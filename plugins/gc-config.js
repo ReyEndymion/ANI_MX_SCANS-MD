@@ -1,13 +1,7 @@
-let handler = async (m, { conn, args, usedPrefix, command, botAdmin }) => {
-if (!m.isGroup) resp = `Esta accion solo puede ser usada en grupos`
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats || {}
-const groups = chats.groups || {}
-const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
-const users = m.isGroup ? chat.users || {} : privs || {}
-let user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
-var resp = ''
-if (botAdmin) {
+let handler = async (m, {conn, args, usedPrefix, command, isBotAdmin, db, chatdb, userdb, senderJid}) => {
+if (!m.isGroup) return conn.sendWritingText(m.chat, `Esta accion solo puede ser usada en grupos`, userdb, m)
+
+if (isBotAdmin) {
 let isClose = { // Switch Case Like :v
 'open': 'not_announcement',
 'close': 'announcement',
@@ -17,27 +11,34 @@ let isClose = { // Switch Case Like :v
 'cerrar': 'announcement',
 }[(args[0] || '')]
 if (isClose === undefined) {
-resp = `
+let resp = `
 *[❗] FORMATO ERRONEO!!*
 
 *┏━━━❲ ✨EJEMPLO✨ ❳━━━┓* 
 *┠┉↯ ${usedPrefix + command} abrir*
 *┠┉↯ ${usedPrefix + command} cerrar*
 `.trim()
-} else {
+return conn.sendWritingText(m.chat, resp, userdb, m)
+}
 await conn.groupSettingUpdate(m.chat, isClose)
-resp = '*[ ✔ ] GRUPO CONFIGURADO CORRECTAMENTE*'
-if (isClose === ('cerrado' || 'cerrar' || 'close') && !botAdmin) chat.isBanned = true
-if (isClose === ('abierto' || 'abrir' || 'open') && !botAdmin) chat.isBanned = false
-
-}
+let resp = '*[ ✔ ] GRUPO CONFIGURADO CORRECTAMENTE*'
+if (isClose === ('cerrado' || 'cerrar' || 'close') && !isBotAdmin) chatdb.isBanned = true
+if (isClose === ('abierto' || 'abrir' || 'open') && !isBotAdmin) chatdb.isBanned = false
+return conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
-resp = `No soy admin: no puedo realizar esta accion`
+let resp = `No soy admin: no puedo realizar esta accion`
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
-return conn.sendWritingText(m.chat, resp, m)
 }
 handler.help = ['group open / close', 'grupo abrir / cerrar']
 handler.tags = ['group']
 handler.command = /^(group|grupo)$/i
+handler.admin = true
 handler.group = handler.admin = handler.botAdmin = true
+handler.menu = [
+{title:"💎 ABRE O CIERRA EL GRUPO", description: "abrir o cerrar el grupo para controlar la conversacion usando #grupo", id: `grupo`},
+];
+handler.type = "gadmin";
+handler.disabled = false;
+
 export default handler

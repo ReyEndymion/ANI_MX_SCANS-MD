@@ -1,7 +1,7 @@
 // creditos a https://github.com/FG98F
-let handler = async (m, { conn, isPrems}) => {
+let handler = async (m, {conn, isPrems, db, userdb, senderJid}) => {
 global.work = [`Trabajas como cortador de galletas y ganas`, `Trabaja para una empresa militar privada, ganando`, `Organiza un evento de cata de vinos y obtiene`,
- `Te secuestran y te llevan a un coliseo subterráneo donde luchaste contra monstruos con personas que nunca antes habías conocido. Ganas`, `Limpias la chimenea y encuentras`, 
+`Te secuestran y te llevan a un coliseo subterráneo donde luchaste contra monstruos con personas que nunca antes habías conocido. Ganas`, `Limpias la chimenea y encuentras`, 
 `Desarrollas juegos para ganarte la vida y ganas`, 
 `¿Por qué este comando se llama trabajo? Ni siquiera estás haciendo nada relacionado con el trabajo. Sin embargo, ganas`, `Trabajaste en la oficina horas extras por`, 
 `Trabajas como secuestrador de novias y ganas`, 
@@ -12,7 +12,7 @@ global.work = [`Trabajas como cortador de galletas y ganas`, `Trabaja para una e
 `Desarrollas juegos para ganarte la vida y ganas`, 
 `Ganas un concurso de comer chili picante. ¡El premio es`, 
 `Trabajas todo el día en la empresa por`, 
-`Ayudas a moderar el grupo de @${conn.user.jid[0][0]} por`, `Diseñaste un logo para *${wm}* por`, 
+`Ayudas a moderar el grupo de @${conn.user.jid[0][0]} por`, `Diseñaste un logo para *${info.nanie}* por`, 
 `Moderaste el grupo cuando *FG* no estaba, el pago fue`, 
 `¡Trabajó lo mejor que pudo en una imprenta que estaba contratando y ganó su bien merecido!`, 
 `Trabajas como podador de arbustos para *${author}* y ganas`, `La demanda de juegos para dispositivos móviles ha aumentado, por lo que creas un nuevo juego lleno de micro-transacciones. Con tu nuevo juego ganas un total de`, 
@@ -22,28 +22,22 @@ global.work = [`Trabajas como cortador de galletas y ganas`, `Trabaja para una e
 `Llevas mujeres a la tienda por`
 ]
 let hasil = Math.floor(Math.random() * 5000)
-let time = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastwork + 600000
-if (new Date - global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastwork < 600000) throw `*Estás cansado debes descansar como mínimo ${msToTime(time - new Date())} para volver a trabajar!*`
-
+let time = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid].lastwork + 600000
+if (new Date - db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid].lastwork < 600000) return conn.sendWritingText(m.chat, `*Estás cansado debes descansar como mínimo ${msToTime(time - new Date())} para volver a trabajar!*`, userdb, m)
 let resp = `${pickRandom(global.work)} *${hasil} XP*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].lastwork = new Date * 1
+
+await conn.sendWritingText(m.chat, txt, userdb, m);
+db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid].lastwork = new Date * 1
 }
 handler.help = ['work']
 handler.tags = ['xp']
 handler.command = ['work', 'trabajar']
 handler.fail = null
 handler.exp = 0
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 function msToTime(duration) {

@@ -1,50 +1,58 @@
-let handler = async (m, { conn, command, usedPrefix, participants }) => {
-let picture = imagen1
-let name = await conn.getName(m.sender)
+import { clockString } from '../lib/functions.js'
+let handler = async (m, {conn, info, command, usedPrefix, participants, db, objs, userdb, senderJid}) => {
+const fs = await import('fs')
+const {owner} = await import('../config.js')
+const {imagen1} = objs
+let picture = fs.readFileSync(imagen1)
+let name = await conn.getName(senderJid)
 //sort
 //tonumber
-let me = global.me.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`)
 let _uptime = process.uptime() * 1000
 let _muptime
 if (process.send) { process.send('uptime')
 _muptime = await new Promise(resolve => { process.once('message', resolve) 
 setTimeout(resolve, 1000) }) * 1000}
 let uptime = clockString(_uptime)
+const used = process.memoryUsage()
+const toMB = bytes => (bytes / 1024 / 1024).toFixed(2) + ' MB';
+const memory = Object.entries(used).map(([key, value]) => `│      ${key}: ${toMB(value)}`).join('\n')
+console.log('estado: ', used)
 let estado =`
-╭─[ *${igfg}* ]
-│ *➤ HOLA @${m.sender.split`@`[0]}*
+╭─[ *${info.nani}* ]
+│ *➤ HOLA @${senderJid.split`@`[0]}*
 │
-│ *ESTADO DE @${conn.user.jid.split`@`[0]}*
+│ *ESTADO DE @${conn.user.jid.split('@')[0]}:*
 │ *=> BOT ACTIVO ✅*
 │ *=> BOT DE USO PUBLICO ✅*
 │ *=> TIEMPO ACTIVO: ${uptime}*
+│ *=> MEMORIA USADA:*\n${memory}
 ╰───────────────
-${hp_animxscans}\n\n${wm}
+${info.hp_animxscans}\n\n${info.nanie}
 `.trim()
-let txt = '';
-let count = 0;
-for (const c of estado) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+let contextInfo = {
+mentionedJid: conn.parseMention(estado),
+"externalAdReply": {
+//"showAdAttribution": true,
+"containsAutoReply": true,
+"renderLargerThumbnail": true,
+"title": info.nanie, 
+"containsAutoReply": false,
+"mediaType": 2, 
+"thumbnail": picture,
+"mediaUrl": info.ganisubbots,
+"sourceUrl": info.ganisubbots
 }
-conn.sendMessage(m.chat, {image: picture, caption: estado, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [['https://www.facebook.com/groups/otakustogether', 'FACEBOOK'], 
-['MENU PRINCIPAL', '/menu']]/*,
- '')}
-conn.sendHydrated(m.chat, estado, wm, picture, 'https://www.facebook.com/ANIMxSCANS', 'FACEBOOK', null, null, [
-['MENU PRINCIPAL', '/menu']
-]*/)}
+}
+return conn.sendWritingTextCI(m.chat, estado, contextInfo, userdb, m)
+}
 
 handler.help = ['estado']
 handler.tags = ['main']
 handler.command = /^(estado|status|estate|state|stado|stats)$/i
-export default handler
+handler.menu = [
+{title:"💎 ESTADO", description: "muestra el estado del bot usando #estado", id: `estado`}
+];
+handler.type = "info";
+handler.disabled = false;
 
-function clockString(ms) {
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}
+export default handler

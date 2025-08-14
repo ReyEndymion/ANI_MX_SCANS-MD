@@ -1,20 +1,18 @@
 /* CREDITOS A https://github.com/FG98F */
 
-let handler = async (m, { args, usedPrefix, command }) => {
+let handler = async (m, {args, usedPrefix, command, userdb, db, senderJid}) => {
 let fa = `
 *[❗] INGRESA LA CANTIDAD QUE DESEA APOSTAR* 
 
 *📌 EJEMPLO:*
 *${usedPrefix + command} 100*`.trim()
-if (!args[0]) throw fa
-if (isNaN(args[0])) throw fa
+if (!args[0] && isNaN(args[0])) {resp = fa} else {
 let apuesta = parseInt(args[0])
-let users = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
-let time = users.lastslot + 10000
-if (new Date - users.lastslot < 10000) throw `*⏳ ESPERE ${msToTime(time - new Date())} PARA VOLVER A APOSTAR*`
-if (apuesta < 100) throw '*[❗] EL MINIMO PARA APOSTAR ES DE 100 XP*'
-if (users.exp < apuesta) {
-throw `*[❗] TU XP NO ES SUFICIENTE PARA APOSTAR ESA CANTIDAD, JUEGA OTROS JUEGOS O INTERACTUA CON EL BOT PARA GANAR MAS XP*`
+let time = userdb.lastslot + 10000
+if (new Date - userdb.lastslot < 10000) return conn.sendWritingText(m.chat, `*⏳ ESPERE ${msToTime(time - new Date())} PARA VOLVER A APOSTAR*`, userdb, m)
+if (apuesta < 100) return conn.sendWritingText(m.chat, `*[❗] EL MINIMO PARA APOSTAR ES DE 100 XP*`, userdb, m)
+if (userdb.exp < apuesta) {
+return conn.sendWritingText(m.chat, `*[❗] TU XP NO ES SUFICIENTE PARA APOSTAR ESA CANTIDAD, JUEGA OTROS JUEGOS O INTERACTUA CON EL BOT PARA GANAR MAS XP*`, m)
 }
 let emojis = ["🐋", "🐉", "🕊️"];
 let a = Math.floor(Math.random() * emojis.length);
@@ -38,31 +36,41 @@ z[i] = emojis[c];
 c++;
 if (c == emojis.length) c = 0;
 }
-let end;
+
 if (a == b && b == c) {
-end = `*GANASTE! 🎁 +${apuesta + apuesta} XP*`
-users.exp += apuesta
+resp = `*GANASTE! 🎁 +${apuesta + apuesta} XP*`
+userdb.exp += apuesta
 } else if (a == b || a == c || b == c) {
-end = `*🔮 CASI LO LOGRAS!, SIGUE INTENTANDO*\n*TOMA +10 XP*`
-users.exp += 10
+resp = `*🔮 CASI LO LOGRAS!, SIGUE INTENTANDO*\n*TOMA +10 XP*`
+userdb.exp += 10
 } else {
-end = `*❌ PERDISTE -${apuesta} XP*`
-users.exp -= apuesta
+resp = `*❌ PERDISTE -${apuesta} XP*`
+userdb.exp -= apuesta
 }
-users.lastslot = new Date * 1
-return await m.reply(
-        `
+userdb.lastslot = new Date * 1
+resp = `
 🎰 | *SLOTS* 
 ────────
 ${x[0]} : ${y[0]} : ${z[0]}
 ${x[1]} : ${y[1]} : ${z[1]}
 ${x[2]} : ${y[2]} : ${z[2]}
 ────────
-🎰 | ${end}`) 
+🎰 | ${resp}`
+}
+
+
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 handler.help = ['slot <apuesta>']
 handler.tags = ['game']
 handler.command = ['slot']
+handler.group = true
+handler.menu = [
+{title: "🎰 SLOTS", description: "Apuesta XP en el juego de slots", id: `slot`}
+];
+handler.type = "juegos";
+handler.disabled = false;
+
 export default handler
 
 function msToTime(duration) {

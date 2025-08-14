@@ -1,5 +1,7 @@
-let handler  = async (m, { conn, command, args, usedPrefix, DevMode }) => {
-let resp = ` @${m.sender.split('@')[0]} Estos son los métodos para poder instalar el bot
+let handler = async (m, {conn, info, command, args, usedPrefix, DevMode, db, objs, userdb, senderJid}) => {
+const fs = await import('fs')
+const {imagen1} = objs
+let resp = ` @${senderJid.split('@')[0]} Estos son los métodos para poder instalar el bot
 
 *—◉ METODOS DE INSTALACIÓN*
 
@@ -13,11 +15,11 @@ let resp = ` @${m.sender.split('@')[0]} Estos son los métodos para poder instal
 > Soporte: https://discord.gg/84qsr4v 
 -----------------------------------------------------------
 
-*—◉ TUTORIAL ZIPPONODES HOST*
-> Pagina: https://www.zipponodes.com/
-> Informacion: https://docs.zipponodes.com/inicio/enlaces
-> Soporte: https://chat.whatsapp.com/EKQaXhfAO1D5ojNMcRdRVF
+*—◉ TUTORIAL CAFIREXOS HOST*
+> Pagina: https://www.cafirexos.com/
+> Informacion: https://docs.cafirexos.com/inicio/enlaces
 > Tutorial: https://youtu.be/nbjvreJ0tUk
+
 *NOTA IMPORTANTE*: En cada host hay algunos inicios de sesión muy similares por lo que deben cambiar algunas partes del tutorial sobre todo los enlaces para que puedan realizar su cuenta
 -----------------------------------------------------------
 
@@ -33,31 +35,22 @@ let resp = ` @${m.sender.split('@')[0]} Estos son los métodos para poder instal
 > pkg install ffmpeg -y
 > pkg install imagemagick -y
 > pkg install yarn
-> git clone ${md}
-> cd ANI_MX_SCANS-MD
+> git clone ${info.repoProyect}
+> cd ani_mx_scans-md
 > yarn install 
 > npm install
 > npm update
 > npm install 
 > npm start` 
-let txt = '';
-let count = 0;
-let context = { text: resp.trim(),  contextInfo: {mentionedJid: conn.parseMention(resp), externalAdReply :{ mediaUrl: null, mediaType: 1, description: resp, 
-title: 'INFORMACION - INSTALARBOT',
-body: wm,         
-previewType: 0, thumbnail: imagen1,
-sourceUrl: md}}}
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, context, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-//m.reply(text/*, m.chat, m, */)   
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 handler.command = /^(instalarbot)/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [
+{title:"💎 INSTALAR BOT", description: "muestra información de como instalar el bot usando #instalarbot", id: `instalarbot`}
+];
+handler.type = "info";
+handler.disabled = false;
+
 export default handler

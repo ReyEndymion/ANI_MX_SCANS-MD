@@ -1,9 +1,10 @@
-import { youtubeSearch } from '@bochilteam/scraper'
+import { youtubeSearch } from '../lib/ytscraper.js'
+import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
 import fetch from 'node-fetch'
-let handler = async (m, { conn, command, text, usedPrefix }) => {
-if (!text) throw `*[❗INFO❗] NOMBRE DE LA CANCION FALTANTE, POR FAVOR INGRESE EL COMANDO MAS EL NOMBRE /TITULO DE UNA CANCION*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} Good Feeling - Flo Rida*`
+let handler = async (m, {conn, command, text, usedPrefix, db, userdb, senderJid}) => {
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] NOMBRE DE LA CANCION FALTANTE, POR FAVOR INGRESE EL COMANDO MAS EL NOMBRE /TITULO DE UNA CANCION*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} Good Feeling - Flo Rida*`, m)
 let vid = (await youtubeSearch(text)).video[0]
-if (!vid) throw '*[❗INFO❗] LO SIENTO, NO SE PUDO ENCONTRAR EL AUDIO/ VIDEO, INTENTE CON OTRO NOMBRE/TITULO*'
+if (!vid) return conn.sendWritingText(m.chat, `*[❗INFO❗] LO SIENTO, NO SE PUDO ENCONTRAR EL AUDIO/ VIDEO, INTENTE CON OTRO NOMBRE/TITULO*`, m)
 try {
 let { title, description, thumbnail, videoId, durationH, viewH, publishedTime } = vid
 const urll = 'https://www.youtube.com/watch?v=' + videoId
@@ -20,22 +21,12 @@ let texto1 = `*◉—⌈🔊 PLAY DOCUMENT 🔊⌋—◉*\n
 ❏ 👀 *VISTAS:* ${viewH}
 ❏ 📇 *DESCRIPCION:* ${description}
 ❏ 🔗 *LINK:* ${urll}`.trim()
-let buttonMessage = `{ "document": { url: ${md}}, "fileName": '❏ 🌿 REPRODUCTOR DE YOUTUBE', "mimetype": 'application/vnd.ms-excel', "caption": texto1, "fileLength": '99999999999999', "mentions": [m.sender], "footer": wm, "buttons": buttons, "headerType": 4, contextInfo: { "mentionedJid": [m.sender], "externalAdReply": { "showAdAttribution": true, "title": ${title}, "mediaType": 2, "previewType": "VIDEO", "thumbnail": await (await fetch(thumbnail)).buffer(), "mediaUrl": ${urll}, "sourceUrl": ${urlgofc} }}} `
-let txt = '';
-let count = 0;
-for (const c of texto1+'\n'+buttons+'\n'+buttonMessage) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
+let buttonMessage = `{ "document": { url: ${info.repoProyect}}, "fileName": '❏ 🌿 REPRODUCTOR DE YOUTUBE', "mimetype": 'application/vnd.ms-excel', "caption": texto1, "fileLength": '99999999999999', "mentions": [senderJid], "footer": info.nanie, "buttons": buttons, "headerType": 4, contextInfo: { "mentionedJid": [senderJid], "externalAdReply": { "showAdAttribution": true, "title": ${title}, "mediaType": 2, "previewType": "VIDEO", "thumbnail": await (await fetch(thumbnail)).buffer(), "mediaUrl": ${urll}, "sourceUrl": ${urlgofc} }}} `
 
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendWritingText(m.chat, texto1, userdb, m)
 } catch {
-    throw '*[❗INFO❗] ERROR, POR FAVOR VUELAVA A INTENTARLO*'}
-try {  
+return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR, POR FAVOR VUELAVA A INTENTARLO*`, m)}
+try { 
 let vid2 = await (await fetch(API('rrul', '/api/yt/yts', { q: text }))).json()
 let { url, title, description, image, seconds, timestamp, ago, views } = await vid2.result[0]
 let ytLink = await fetch(`https://api.lolhuman.xyz/api/ytplay2?apikey=${lolkeysapi}&query=${text}`)
@@ -46,11 +37,15 @@ const buttons = [{buttonId: `#playlist ${title}`, buttonText: {displayText: '�
 const buttonMessage = { image: {url: image}, caption: capt, footer: '*ENVIANDO AUDIO, AGUARDE UN MOMENTO...*', buttons: buttons, headerType: 4 }
 let msg = await conn.sendMessage(m.chat, buttonMessage, { quoted: m })
 conn.sendMessage(m.chat, { document: { url: aud }, mimetype: 'audio/mpeg', fileName: `${title}.mp3`}, {quoted: msg})
-} catch {  
-throw '*[❗INFO❗] ERROR, POR FAVOR VUELAVA A INTENTARLO*'}
+} catch { 
+return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR, POR FAVOR VUELAVA A INTENTARLO*`, m)}
 }
 
 handler.help = ['playdoc', 'play3'].map(v => v + ' <pencarian>')
 handler.tags = ['downloader']
 handler.command = /^playdoc$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

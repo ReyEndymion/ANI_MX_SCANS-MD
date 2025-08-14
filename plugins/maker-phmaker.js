@@ -1,44 +1,12 @@
 import uploadFile from '../lib/uploadFile.js'
 import uploadImage from '../lib/uploadImage.js'
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-let q = m.quoted ? m.quoted : m
-let mime = (q.msg || q).mimetype || ''
-if (!mime) {
-    let resp = '*[❗] RESPONDA / ETIQUETE A UNA IMAGEN*'
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 1));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-    await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-}
-if (!/image\/(jpe?g|png)/.test(mime)) {
-    let resp = `*[❗] EL TIPO DE ARC𝙷IVO ${mime} NO ES CORRECTO, RECUERDE QUE DEBE SER IMAGEN, JPG, JPEG O PNG*`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 1));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-    await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-}
-if (!text){ 
-    let resp = `*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
-—◉ #phmaker (opcion) <responder / etiquetar a una imagen>
+let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
+if (/^(phmaker|phmarker|phmarke|phmake)list$/i.test(command)) {
+let resp = `*[❗INFO❗] COMO USAR ESTE COMANDO:*
+—◉ ${usedPrefix + command.replace(/list$/, '')} (opcion) <responder / etiquetar a una imagen>
 
 *EJEMPLO:*
-—◉ ${usedPrefix + command} artist_in_the_dark <responder / etiquetar a una imagen>
+—◉ ${usedPrefix + command.replace(/list$/, '')} artist_in_the_dark <responder / etiquetar a una imagen>
 
 *< LISTA DE OPCIONES />*
 ° ඬ⃟💫 ${usedPrefix + command} 2colors-canvas
@@ -320,7 +288,7 @@ if (!text){
 ° ඬ⃟💫 ${usedPrefix + command} pink-panther
 ° ඬ⃟💫 ${usedPrefix + command} pinkify
 ° ඬ⃟💫 ${usedPrefix + command} pisa_street
-° ඬ⃟💫 ${usedPrefix + command} playful-gato
+° ඬ⃟💫 ${usedPrefix + command} playful-cat
 ° ඬ⃟💫 ${usedPrefix + command} polaroid_dress
 ° ඬ⃟💫 ${usedPrefix + command} portrait
 ° ඬ⃟💫 ${usedPrefix + command} portrait_on_the_wall
@@ -468,51 +436,42 @@ if (!text){
 ° ඬ⃟💫 ${usedPrefix + command} woven-sketch
 ° ඬ⃟💫 ${usedPrefix + command} xmas_tree
 ° ඬ⃟💫 ${usedPrefix + command} yellow_wall`.trim()
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
-{
-let resp ='*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
+if (/^phmaker|phmarker|phmarke|phmake$/i.test(command)) {
+let q = m.quoted ? m.quoted : m
+let mime = (q.msg || q).mimetype || ''
+if (!mime) return conn.sendWritingText(m.chat, `*[❗] RESPONDA / ETIQUETE A UNA IMAGEN*`, userdb, m)
+if (!/image\/(jpe?g|png)/.test(mime)) return conn.sendWritingText(m.chat, `*[❗] EL TIPO DE ARCHIVO ${mime} NO ES CORRECTO, RECUERDE QUE DEBE SER IMAGEN, JPG, JPEG O PNG*`, m)
+if (!text) {
+let resp = `*[❗INFO❗] ¿COMO USAR ESTE COMANDO?*
+—◉ #phmaker (opcion) <responder / etiquetar a una imagen>
 
-let q = conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-}
+*EJEMPLO:*
+—◉ ${usedPrefix + command} artist_in_the_dark <responder / etiquetar a una imagen>
+Consulte la lista de efectos disponibles con el comando *${usedPrefix + command}list*`.trim()  
+if (!mime) return conn.sendWritingText(m.chat, resp, userdb, m)
+} else {
+await conn.sendWritingText(m.chat, `*[❗] REALIZANDO DISEÑO, AGUARDE UN MOMENTO...*`, m)
 let img = await q.download?.()
 let url = await uploadImage(img)
 let images = `https://violetics.pw/api/photomaker/${encodeURIComponent(text)}?apikey=beta&image=${encodeURIComponent(url)}`
 let caption = `*⎔┉━「 PHMAKER 」━┉⎔*
 *💟 EFECTO:* ${text}\n\n[['💫 MAS OPCIONES 💫 usa el comando *${usedPrefix}phmakerlist*]]`.trim()
-let txt = '';
-let count = 0;
-for (const c of caption) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+return conn.sendImageWriting(m.chat, images, caption, userdb, m)
 }
-return conn.sendMessage(m.chat, {image: {url: images}, caption: caption + '\n\n' + wm, mentions: conn.parseMention(txt)}, {quoted: q, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
-handler.command = /^(phmaker|phmarker|phmarke|phmake)$/i
+}
+handler.command = /^(phmaker|phmarker|phmarke|phmake)(list)?$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [
+{title: 'phmaker', description: 'Crea un diseño con el efecto seleccionado.', id: 'phmaker'},
+{title: 'phmakerlist', description: 'Lista de efectos disponibles para PHMAKER.', id: 'phmakerlist'}
+];
+handler.type = "logosefectos";
+handler.disabled = false;
+
 export default handler
 const isUrl = (text) => {
 return text.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)(jpe?g|gif|png)/, 'gi'))}

@@ -1,16 +1,11 @@
-export async function before(m, {conn}) {
+export async function before(m, {conn, chatdb, db, userdb, senderJid}) {
+const { info, newsletterID, sBroadCastID } = await import('../config.js')
 if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats
-const privs = chats.privs
-const groups = chats.groups
-const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-
-if (/ficha$/i.test(m.text) && chat.gruposrol && !chat.isBanned) {
- let resp = 	
+let resp = ''
+if (/ficha$/i.test(m.text) && chatdb.gruposrol && !chatdb.isBanned) {
+resp = 	
 `❢◥ ▬▬▬▬▬▬ ◆ ▬▬▬▬▬▬ ◤❢
- *_𐂡MAGIC MEDIEVAL TECNOLOGÍ𐂡_*
+*_𐂡MAGIC MEDIEVAL TECNOLOGÍ𐂡_*
 ❢◥ ▬▬▬▬▬▬ ◆ ▬▬▬▬▬▬ ◤❢
 *~_FICHA ÚNICA DE PERSONAJE, EVITE LA PERDIDA DE SU FICHA AL COMPLETARLA_~*
 
@@ -128,19 +123,10 @@ Imagen o descripción
 *_✿:･HISTORIA DE PERSONAJE･:✿_*
 
 ⌦`.trim()
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 20));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 
 } 
+//console.log('sgr: ', resp.length === 0)
+if (resp.length === 0) return
+return conn.sendWritingText(m.chat, resp, userdb, m)
 
 }

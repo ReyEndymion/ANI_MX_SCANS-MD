@@ -1,21 +1,11 @@
-import fs from 'fs';
-import fetch from 'node-fetch';
+let { default: fs } = await import('fs');
+let { default: fetch } = await import('node-fetch');
 import axiostal from "axios"
-let handler = async(m, { conn, text, usedPrefix, xteamkey }) => {
+let handler = async(m, {conn, text, usedPrefix, xteamkey, db, userdb, senderJid}) => {
 if (!text) {
 let resp = '*[❗INFO❗] INGRESE UN ENLACE/URL EL CUAL DESEA ACORTAR*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
 
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 try {
 
@@ -33,18 +23,8 @@ const ownerJid = conn.user.jid;
 
 // Enviar mensaje al owner para solicitar el token
 let resp = 'Por favor, proporciona el Access Token de Bitly para acortar enlaces.'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 5));
-txt += c;
-count++;
 
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(ownerJid, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+await conn.sendWritingText(ownerJid, resp, userdb, m);
 
 // Esperar a recibir el mensaje del owner con el token
 const { text } = await conn.onMessage({ from: ownerJid, pattern: /^Token: (.+)$/ });
@@ -89,21 +69,11 @@ let respchatme = 'Para usar Bitly, necesitas una cuenta en https://bitly.com. Po
 `${usedPrefix}userbitly (usuario o correo)\n${usedPrefix}tokenbitly (contraseña)`
 for (let ow of owner){
 let resp = `@${ow[0]} revisa el chat privado de @${me[0][0]} `
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
 
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(ow + global.userID, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+await conn.sendWritingText(ow + global.userID, resp, userdb, m);
 console.log(ow + userID)
 }
-await conn.sendMessage(userJid, { text: respchatme.trim(), mentions: conn.parseMention(respchatme) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+await conn.sendWritingText(userJid, resp, userdb, m);
 
 // Esperar a recibir el mensaje con el usuario o correo
 const { text } = await conn.onMessage({ from: userJid, pattern: /^userbitly (.+)$/ });
@@ -155,22 +125,12 @@ console.error('Error:', error);
 main();
 
 } catch (error) {
- let json = await (await fetch(`https://api.xteam.xyz/shorturl/tinyurl?url=${text}&apikey=cb15ed422c71a2fb`)).json()
+let json = await (await fetch(`https://api.xteam.xyz/shorturl/tinyurl?url=${text}&apikey=cb15ed422c71a2fb`)).json()
 if (!json.status) throw json
 let hasil = `*LINK ACORTADO CORECTAMENTE!!*\n\n*LINK ANTERIOR:*\n${text}\n*LINK ACORTADO:*\n*${json.result}*`.trim() 
 //m.reply(hasil)
-let txt = '';
-let count = 0;
-for (const c of hasil) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
 
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ); 
+await conn.sendWritingText(m.chat, hasil, userdb, m); 
 }
 
 
@@ -179,4 +139,8 @@ handler.help = ['tinyurl','acortar'].map(v => v + ' <link>')
 handler.tags = ['tools']
 handler.command = /^(tinyurl|short|acortar|corto)$/i
 handler.fail = null
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

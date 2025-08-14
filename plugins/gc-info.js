@@ -1,10 +1,7 @@
 import path, {join} from 'path';
-let handler = async (m, { conn, participants, groupMetadata }) => {
+let handler = async (m, {conn, participants, groupMetadata, groupsdb, db, userdb, senderJid}) => {
 if (!m.isGroup) return
-let bot = global.db.data.bot[conn.user.jid] || {}
-let chats = bot.chats || {}
-let groups = chats.groups || {}
-const group = groups[m.chat]
+const group = groupsdb[m.chat]
 const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || join(media, 'pictures/avatar_contact.png')
 const { antiToxic, antiTraba, antiviewonce, isBanned, welcome, detect, sWelcome, sBye, sPromote, sDemote, antiLink, antiLink2, modohorny, autosticker, modoadmin, audios, delete: del, anticall, antiprivado, asistente, gruposrol} = group
 const groupAdmins = participants.filter(p => p.admin)
@@ -45,10 +42,15 @@ ${listAdmin}
 —◉ ASISTENTE: ${asistente ? '✅' : '❌'} 
 —◉ GRUPOSROL: ${gruposrol ? '✅' : '❌'} 
 `.trim()
-conn.sendFile(m.chat, pp, 'error.jpg', text, m, false, { mentions: [...groupAdmins.map(v => v.id), owner] })
+//, false, { mentions: [...groupAdmins.map(v => v.id), owner] }
+return conn.sendImageWriting(m.chat, pp, text, userdb, m)
 }
 handler.help = ['infogrup']
 handler.tags = ['group']
-handler.command = /^(infogrupo|gro?upinfo|info(gro?up|gc))$/i
+handler.command = /^(infog(rupo|roup)?|ginfo)$/i
 handler.group = true
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

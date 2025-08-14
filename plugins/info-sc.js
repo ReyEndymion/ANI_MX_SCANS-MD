@@ -1,43 +1,40 @@
-let handler = async (m, { conn, usedPrefix }) => {
+let handler = async (m, {conn, info, usedPrefix, db, userdb, senderJid, objs}) => {
+const {imagen1} = objs
+const fs = await import('fs')
 var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
-var document = doc[Math.floor(Math.random() * doc.length)]    
-let texto = `Este es el script de para que puedas instalarlo *@${m.sender.replace('@s.whatsapp.net', '')}*\n\n *${md}*`
-let txt = '';
-let count = 0;
-for (const c of texto) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-let documentMessage = {
-'document': { url: hp_animxscans },
+var document = doc[Math.floor(Math.random() * doc.length)]
+let texto = `Este es el script de para que puedas instalarlo *@${senderJid.replace('@s.whatsapp.net', '')}*\n\n *${info.repoProyect}*`
+const message = {
+'caption': texto,
 'mimetype': `application/${document}`,
-'fileName': `「Traducciones de Manga」`,
+'fileName': info.namerepre,
 'fileLength': 99999999999999,
 'pageCount': 200,
+//'headerType': 6,
 'contextInfo': {
-'mentionedJid': conn.parseMention(txt),  
+'mentionedJid': conn.parseMention(texto),
 'forwardingScore': 0,
 'isForwarded': false,
 'externalAdReply': {
-"showAdAttribution": true,  
+'title': `Bot promocional del proyecto ${info.nani}`,
+//"showAdAttribution": true,
+"renderLargerThumbnail": true,
 "containsAutoReply": true,
-"renderLargerThumbnail": true,  
-'title': `Bot promocional del proyecto ${igfg}`,
-"containsAutoReply": true,  
-"mediaType": 1,   
-'thumbnail': imagen1,
-'mediaUrl': serbot,
-'sourceUrl': serbot }},
-'caption': txt,
-'headerType': 6 }
+"mediaType": 1, 
+'thumbnail': fs.readFileSync(imagen1),
+'mediaUrl': info.paypal,
+'sourceUrl': info.paypal }}
+}
+return conn.sendDocumentWriting(m.chat, info.hp_animxscans, message, userdb, m)
 
-conn.sendMessage(m.chat, documentMessage, { quoted: m, ephemeralExpiration: 24 * 60 * 100, disappearingMessagesInChat: 24 * 60 * 100  })
-        
 }
 handler.command = ['sc','script']
+handler.help = [];
+handler.tags = [];
+handler.menu = [
+{title:"💎 SCRIPT", description: "muestra información del enlace para descargar el bot usando #script", id: `script`},
+];
+handler.type = "info";
+handler.disabled = false;
+
 export default handler

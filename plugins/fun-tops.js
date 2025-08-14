@@ -1,7 +1,7 @@
 import path, { join } from 'path'
 import fs from 'fs'
 let user = a => '@' + a.split('@')[0]
-async function handler(m, { groupMetadata, command, conn, participants }) {
+async function handler(m, { groupMetadata, command, conn, participants, db, userdb, senderJid }) {
 let ps = groupMetadata.participants.map(v => v.id)
 let a = ps.getRandom()
 let b = ps.getRandom()
@@ -28,18 +28,25 @@ let resp = `*_1.- ${user(a)}_*
 if (command == 'topgays') {
 let vn = join(media, 'audios/gay2.mp3')
 let top = `*🌈TOP 10 GAYS/LESBIANAS DEL GRUPO🌈*\n\n${resp}`
-let q = await conn.sendWritingText(m.chat, top, m );
+let q = await conn.sendWritingText(m.chat, top, userdb, m );
 return conn.sendAudioRecording(m.chat, vn, q)
 }
 
 if (command == 'topotakus') {
 let vn = join(media, 'audios/otaku.mp3')
 let top = `*🌸 TOP 10 OTAKUS DEL GRUPO 🌸*\n\n${resp}`
-let q = await conn.sendWritingText(m.chat, top, m );
+let q = await conn.sendWritingText(m.chat, top, userdb, m );
 return conn.sendAudioRecording(m.chat, vn, q)
 }
 }
 handler.help = handler.command = ['topgays','topotakus']
 handler.tags = ['games']
 handler.group = true
+handler.menu = [
+{title: "🎖️ JODA TOP GAYS", description: "Top gays usa #topgays ", id: `topgays`}, 
+{title: "🎖️ JODA TOP OTAKUS", description: "Top otakus usa #topotakus ", id: `topotakus`}, 
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler

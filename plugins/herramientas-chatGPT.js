@@ -1,15 +1,57 @@
-import { Configuration, OpenAIApi } from "openai";
-const configuration = new Configuration({ apiKey: `remplaza por tu apikey segun el tutorial`})
-let handler = async (m, {conn, text, usedPrefix, command }) => {
-var resp = ''
-if (!text) {resp = `*[❗] INGRESE UNA PETICION O UNA ORDEN PARA USAR LA FUNCION DE CHATGPT*\n\n*—◉ EJEMPLOS DE PETICIONES Y ORDENES:*\n*◉ ${usedPrefix + command} Reflexion sobre la serie Merlina 2022 de netflix*\n*◉ ${usedPrefix + command} Codigo en JS para un juego de cartas*`}
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
+import fetch from 'node-fetch'
+import axios from 'axios';
+import translate from '@vitalets/google-translate-api';
+import {Configuration, OpenAIApi} from 'openai';
+let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
+console.log('chatgpt: ', OpenAIApi, Configuration)
+const orgOpenai = `org-sHjQj1orPaHZGszldM1hMs3m`
+const apiOpenai = `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`//`sk-8nSBib8FojMSlVehJqUjT3BlbkFJVysEP08CyZKwmbcyKIzhAt`
+//`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`
+//const configuration = new Configuration({ apiKey: apiOpenai})
+const configImagKey = new Configuration({apikey: `f30d8faae3ad41fe82cee15c137fd73a`})
+const configuration = new Configuration({organization: orgOpenai, apiKey: apiOpenai});
+const openaiii = new OpenAIApi(configuration);
+if (!text) {
+let resp = `Muestra:\n${usedPrefix + command} Que es OpenAi`
+return conn.sendWritingText(m.chat, resp, userdb, m);
+}
+function extractMentionedJid(text) {
+const regex = /@(\d+)(?:\w|\.)?/g;
+const matches = text.match(regex);
+if (matches && matches.length > 0) {
+return matches[0];
+} else {
+return null;
+}
+}
+
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid;
 let txtoint = m.quoted ? m.quoted.text : text
 let name = await conn.getName(who);
 let usertoname = txtoint.replace('@' + who.split`@`[0], name)
-let entrance =`${(text || txtoint || txtoint.includes(usertoname))} el quoted fue: ${txtoint//.includes(usertoname)
+let entrance =`${(text || txtoint || txtoint.includes(usertoname))}\n\nEl quoted fue: ${txtoint//.includes(usertoname)
 }` 
+for (let i = 0; i < who.length; i++) {
+let txtoint = text || m.quoted;
+const name = await conn.getName(who[i]);
+
+// Modificar la mención de usuario en txtoint
+const tag = `(@${who[i]} = ${name})`;
+txtoint = txtoint.replace(tag, name);
+
+// Verificar si la mención de usuario fue reemplazada por el nombre
+if (txtoint.includes(name)) {
+// Agregar la mención de usuario y nombre a entrance
+entrance += ` ${tag}`;
+} else {
+// Agregar solo el nombre a entrance
+entrance += ` ${name}`;
+}
+}
+
+
 const openai = new OpenAIApi(configuration);
+let sistema1 = `Actuaras como un Bot de WhatsApp el cual fue creado por Rey Endymion, tu seras El bot Comedia.`;
 try {
 const response = await openai.createCompletion({
 model: "text-davinci-003",
@@ -20,30 +62,33 @@ top_p: 1,
 frequency_penalty: 0.0,
 presence_penalty: 0,
 })
-resp = response.data.choices[0].text;
-return conn.sendWritingText(m.chat, resp, m );
-} catch (error) {
-resp = `
-Error en la generación de respuesta o posible apikey vencida: ${error}
-Aquí te presento un breve tutorial para crear una cuenta y obtener una API key en OpenAI:
+const chatCompletion = await openai.createChatCompletion({
+model: "gpt-3.5-turbo",
+messages: [{role: "user", content: "Hello world"}],
+});
+let resp = response.data.choices[0].text;//chatCompletion.data.choices[0].message
+return conn.sendWritingText(m.chat, resp, userdb, m);
 
-Ve a la página web de OpenAI: https://openai.com/
-Haz clic en "Sign Up" en la esquina superior derecha de la página.
-Se te pedirá que proporciones tu nombre, dirección de correo electrónico y una contraseña. Ingresa esta información y haz clic en "Sign Up".
-Una vez que hayas iniciado sesión en tu cuenta, ve a la página de "API Tokens" (https://beta.openai.com/account/api-keys).
-Haz clic en "Create New API Key".
-Se te pedirá que proporciones un nombre para tu clave API y selecciones las capacidades que deseas que tenga. También se te proporcionará una vista previa de la cantidad de créditos que se utilizarán para cada capacidad. Haz clic en "Create API Key".
-Se te proporcionará una clave API. Copia y pega esta clave remplazando el texto que esta entre las comillas en esta parte del codigo: [const configuration = new Configuration({ apiKey: 'remplaza por tu apikey segun el tutorial'})] en este plugin para usar la API de OpenAI.
-¡Y eso es todo! Ahora puedes usar la API de OpenAI en tus proyectos de programación sin fines de lucro. Asegúrate de revisar los términos y condiciones de OpenAI para asegurarte de cumplir con los requisitos de uso.
-`.trim()
+
+} catch (error) {
+console.log('error?: ', error)
+let err = await translate(`${error}`, { to: 'es', autoCorrect: true })
+let errorstatus = await translate(`${error.response.statusText}`, { to: 'es', autoCorrect: true })
+let resp = `Error en la generación de respuesta: ${err.text} \n\nMotivo: ${errorstatus.text}`
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
-return conn.sendWritingText(m.chat, resp, m );
 }
-handler.help = ['ai <peticion>']
-handler.tags = ['ai']
-handler.command = new RegExp(`^(ia|openai|chatgpt|robot)$`, 'i');
-handler.limit = false
-handler.register = false
-//|${conn?.user?.jid.replace('@s.whatsapp.net', '')}
+handler.command = ['openai', 'chatgpt']
 export default handler
-//original de https://github.com/ReyEndymion
+/*
+if (!text) return conn.sendWritingText(m.chat, `*[❗] INGRESE UNA PETICION O UNA ORDEN PARA USAR LA 𝙵UNCION DE CHATGPT*\n\n*—◉ EJEMPLOS DE PETICIONES 𝚈 ORDENES*\n*◉ ${usedPrefix + command} Reflexion sobre la serie Merlina 2022 de netflix*\n*◉ ${usedPrefix + command} Codigo en JS para un juego de cartas*`, userdb, m)
+try {
+await conn.sendWritingText(m.chat, `*[❗] ESPERE UN MOMENTO EN LO QUE MANDO LO QUE ME PIDIO*`, userdb, m)
+const {lolkeysapi} = (await import('../api.js')).keysapi
+let tiores = await fetch(`https://api.lolhuman.xyz/api/openai?apikey=${lolkeysapi}&text=${text}&user=user-unique-id`)
+let hasil = await tiores.json()
+m.reply(`${hasil.result}`.trim())
+} catch (e) {
+return conn.sendWritingText(m.chat, `*[❗] ERROR, VUELVA A INTENTARLO:\n${e.message}`, userdb, m)
+}
+*/

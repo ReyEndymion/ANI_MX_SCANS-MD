@@ -1,10 +1,11 @@
 /**comando kick desarrollado por ReyEndymion */
-
+const {  formatNumberWA  } = await import('../lib/functions.js');
+const {  owner  } = await import('../config.js');
 import { areJidsSameUser } from '@whiskeysockets/baileys'
-let handler = async (m, {text, args, conn, participants, command, usedPrefix, isAdmin, groupMetadata, isBotAdmin }) => {
+let handler = async (m, {text, args, conn, participants, command, usedPrefix, isAdmin, groupMetadata, isBotAdmin, botdb, db, userdb, senderJid}) => {
 let resp, res, consola
 let messageToSend = '';
-if (!global.db.data.bot[conn.user.jid].settings.restrict) {
+if (!botdb.settings.restrict) {
 resp = '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
 }
 let usuariosNoRegistrados = [];
@@ -13,7 +14,7 @@ let usuariosAEliminar = [];
 let kickUser = '';
 let _participants = participants.map(user => user.id)
 const creator = groupMetadata.owner || '';
-const owners = global.owner.map(([number]) => (conn.formatNumberWA(number) + '@s.whatsapp.net'))
+const owners = owner.map(([number]) => (formatNumberWA(number) + '@s.whatsapp.net'))
 let numeros = args.join(' ').split(/[\s,]+/).map(v => v.replace(/@/g, '')).map(v => v.replace(/@[^0-9]/g, '')).filter(v => v.length > 4 && v.length < 20);
 try {
 if (isBotAdmin) {
@@ -48,11 +49,11 @@ kickUser = m.quoted.sender;
 usuariosAEliminar.push(kickUser);
 await remove(kickUser)
 } else {
-kickUser = m.sender;
+kickUser = senderJid;
 messageToSend = `*[❗] ETIQUETÉ A UNA PERSONA O PERSONAS O RESPONDA A UN MENSAJE DEL USUARIO EN EL GRUPO PARA ELIMINAR A DICHO USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${conn.user.jid.split('@')[0]}*\n\nAhora se puede eliminar en silencio sin etiquetar a alguien:\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} 5215533827255 5215535705067*\n\n*[❗] ADVERTENCIA:* @${kickUser.split('@')[0]} este comando no es para jugar y aunque seas admin, si lo usas 2 veces mas te expulso de verdad`
 }
 } else {
-kickUser = m.sender;
+kickUser = senderJid;
 messageToSend = `**[❗]** Solo los admins pueden hacer uso de este comando\n\nEl comando no es para jugar @${kickUser.split('@')[0]} si lo usas 2 veces mas te expulso de verdad`
 }
 } else {
@@ -79,7 +80,7 @@ messageToSend += `Los siguientes números no están registrados en WhatsApp:\n${
 if (!messageToSend) {
 messageToSend = 'No se encontraron números válidos para eliminar.';
 }
-return conn.sendWritingText(m.chat, messageToSend, m);
+return conn.sendWritingText(m.chat, messageToSend, userdb, m);
 
 async function remove (user) {
 const remove = await conn.groupParticipantsUpdate(m.chat, [user], 'remove')
@@ -95,8 +96,10 @@ handler.help = ['kick']
 handler.tags = ['group']
 handler.command = /^(kick|echar|hechar|sacar)$/i
 handler.admin = handler.group = handler.botAdmin = true
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-

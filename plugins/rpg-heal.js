@@ -1,43 +1,56 @@
 import { join } from 'path' 
 import { promises } from 'fs'
-let handler = async (m, { conn, args, usedPrefix, __dirname }) => {
-let resp, imagen
-let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
-if (user.health >= 100) {
-resp = `Tu salud está llena ❤️\n\nSalud: ${user.health}%\n\n${wm}`
-} else if (user.potion < count) {
-const heal = 40 + (user.gato * 4)
-let count = Math.max(1, Math.min(Number.MAX_SAFE_INTEGER, (isNumber(args[0]) && parseInt(args[0]) || Math.round((90 - user.health) / heal)))) * 1
-resp = `${htki} Sin pociones ${htka}\nNecesitas ${count - user.potion} poción 🥤 para curarte\n\nSalud » ${user.health} ❤️\nPoción» ${user.potion} 🥤\nCompra poción o pídele a alguien que te transfiera\n\n*Poción baja?*\n\nComprar poción use:\n${usedPrefix}buy potion ${count - user.potion} 🥤\nPide ayuda así:\n📣${usedPrefix}pedirayuda *Por Favor alguien ayudeme con ${count - user.potion} de POCION* 🥤\n\n*» Ayuda transfiriendo:*\n*${usedPrefix}transfer potion ${count - user.potion}* @${conn.getName(m.sender)}`.trim()
+import { owner, temp, newsletterID, sBroadCastID, groupID, media} from '../config.js'
+import { isNumber } from '../lib/functions.js'
+import { rpg, rpgg } from '../rpg.js'
+let handler = async (m, {conn, start, info, args, usedPrefix, pluginsPath, userdb, db, senderJid}) => {
+if (userdb.health >= 100) {
+const resp = `Tu salud está llena ❤️\n\nSalud: ${userdb.health}%\n\n`
+const buff = info.nanie
+const buttons = [
+[`🏕️ AVENTURAR`, `${usedPrefix}adventure`], [`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
+if (start.buttons) {
+return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+}
+} else if (userdb.potion < count) {
+const heal = 40 + (userdb.gato * 4)
+let count = Math.max(1, Math.min(Number.MAX_SAFE_INTEGER, (isNumber(args[0]) && parseInt(args[0]) || Math.round((90 - userdb.health) / heal)))) * 1
+const resp = `${htki} Sin pociones ${htka}\nNecesitas ${count - userdb.potion} poción 🥤 para curarte\n\nSalud » ${userdb.health} ❤️\nPoción» ${userdb.potion} 🥤\nCompra poción o pídele a alguien que te transfiera\n\n*Poción baja?*\n\n`.trim()
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buttons = [[`Comprar poción 🥤`, `${usedPrefix}buy potion ${count - userdb.potion}`],
+[`Pedir ayuda ☘️`, `${usedPrefix}pedirayuda *Por Favor alguien ayudeme con ${count - userdb.potion} de POCION* 🥤 
+*» AYUDA TRANSFIRIENDO:*
+*${usedPrefix}transfer potion ${count - userdb.potion}* @${conn.getName(senderJid)}`]]
+if (start.buttons) {
+return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+}
 } else {
 imagen = flaaa.getRandom()
-user.potion -= count * 1 //1 potion = count (1) 
-user.health += heal * count 
-resp = `*━┈━《 ✅ Salud completa 》━┈━*\n\nUso exitoso de poción 🥤\n\n Quedan *${count}*  para recuperar su salud\n\𝚗Salud » ${user.health} ❤️\n\nSalud completada`
-//conn.sendMessage(m.chat, {image:{url: imgr + ''}, caption: resp}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, [[`𝙰𝚅𝙴𝙽𝚃𝚄𝚁𝙰𝚁 🏕️`, `${usedPrefix}adventure`]], m)
-}
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-if (resp && imagen) {
-return conn.sendMessage(m.chat, { image: {url: imagen}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+userdb.potion -= count * 1 //1 potion = count (1) 
+userdb.health += heal * count 
+const resp = `*━┈━《 ✅ Salud completa 》━┈━*\n\nUso exitoso de poción 🥤\n\n Quedan *${count}* para recuperar su salud\n\𝚗Salud » ${userdb.health} ❤️\n\nSalud completada`
+const buff = info.nanie
+const buttons = [
+[`🏕️ AVENTURAR`, `${usedPrefix}adventure`], [`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
+if (start.buttons) {
+return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+return conn.sendImageWriting(m.chat, imagen, resp+'\n'+cmds+'\n'+info.nanie, m );
+}
 }
 }
 handler.help = ['heal']
 handler.tags = ['rpg']
 handler.command = /^(heal|curar)$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
-function isNumber(number) {
-if (!number) return number
-number = parseInt(number)
-return typeof number == 'number' && !isNaN(number)}

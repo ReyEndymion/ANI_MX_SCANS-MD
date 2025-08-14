@@ -1,50 +1,49 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let pptUsage = {}
-let handler = async (m, { conn, text, command, usedPrefix, args }) => {
-      // Check if user is banned
-  if (pptUsage[m.sender] && pptUsage[m.sender].bannedUntil > Date.now()) {
-    let timeLeft = Math.ceil((pptUsage[m.sender].bannedUntil - Date.now()) / 1000 / 60)
-    throw `Lo siento, estás baneado del uso de este comando durante ${timeLeft} minutos.`
-  }
+let handler = async (m, {conn, info, start, text, command, usedPrefix, args, db, userdb, senderJid}) => {
+const buff = info.nanie
 
-  // Increment usage count for user
-  if (!pptUsage[m.sender]) {
-    pptUsage[m.sender] = { count: 0 }
-  }
-  pptUsage[m.sender].count++
-
-  // Check if user has exceeded usage limit
-  if (pptUsage[m.sender].count > 10) {
-    // Ban user for 20 minutes
-    pptUsage[m.sender].bannedUntil = Date.now() + 20 * 60 * 1000
-    let resp = `Has sido baneado del uso de este comando durante 20 minutos.`
-    let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+// Check if user is banned
+if (pptUsage[senderJid] && pptUsage[senderJid].bannedUntil > Date.now()) {
+let timeLeft = Math.ceil((pptUsage[senderJid].bannedUntil - Date.now()) / 1000 / 60)
+return conn.sendWritingText(m.chat, `Lo siento, estás baneado del uso de este comando durante ${timeLeft} minutos.`, m)
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-  }
+
+// Increment usage count for user
+if (!pptUsage[senderJid]) {
+pptUsage[senderJid] = { count: 0 }
+}
+pptUsage[senderJid].count++
+
+// Check if user has exceeded usage limit
+if (pptUsage[senderJid].count > 10) {
+// Ban user for 20 minutes
+pptUsage[senderJid].bannedUntil = Date.now() + 20 * 60 * 1000
+let resp = `Has sido baneado del uso de este comando durante 20 minutos.`
+return conn.sendWritingText(m.chat, resp, userdb, m);
+}
 let pp = 'https://www.bighero6challenge.com/images/thumbs/Piedra,-papel-o-tijera-0003318_1584.jpeg'
-let resp = `*_PIEDRA, PAPEL O TIJERA_*\n\n _Puedes usar los *comandos* para jugar o también puedes usar estos comandos_:\n.ppt *_piedra_*\n.ppt *_papel_*\n.ppt *_tijera_*\n\n*Use en minúsculas*\n\n['*_Piedra_* 🪨', ${usedPrefix + command} piedra],
-['*_Papel_* 📄', ${usedPrefix + command} papel],
-['*_Tijera_* ✂️', ${usedPrefix + command} tijera]`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+if (!args[0]) {
+let resp = `*_PIEDRA, PAPEL O TIJERA vs BOT_*\n\n`
+//['PIEDRA 🗿', 'Piedra'], ['PAPEL 📄', 'Papel'], ['TIJERA ✂️', 'Tijera']
+const buttons = [['*_Piedra_* 🪨', `${usedPrefix + command} piedra`],
+['*_Papel_* 📄', `${usedPrefix + command} papel`],
+['*_Tijera_* ✂️', `${usedPrefix + command} tijera`]]
+if (start.buttons) {
+resp += `_Puedes usar los siguientes *BOTONES* para jugar_`
+const messageObj = {
+text: resp,
+footer: buff
 }
-if (!args[0]) throw conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, null, null, null, null, [])
+return conn.sendButton(m.chat, messageObj, {url: pp}, buttons, userdb, m)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+resp += `puedes usar estos comandos_:\n${cmds}\n`
+//await conn.sendImageWriting(room.p, imgplay, resp.trim(), userdb, m)
+return conn.sendImageWriting(m.chat, pp, resp+'\n'+cmds+'\n'+''+buff, userdb, m)
+//return conn.sendWritingText(m.chat, , m );
+}
+}
 var astro = Math.random()
 if (astro < 0.34) {
 astro = 'piedra' 
@@ -53,172 +52,35 @@ astro = 'tijera'
 } else {
 astro = 'papel'
 }
-if (text == astro) {
-global.db.data.users[m.sender].exp += 500
-let resp = `🔰 Empate!\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +500 XP*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+const ganaA = {
+piedra: 'tijera',
+papel: 'piedra',
+tijera: 'papel'
 }
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-} else if (text == 'papel') {
-if (astro == 'piedra') {
-global.db.data.users[m.sender].exp += 1000
-let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+let result
+
+if (text === astro) {
+userdb.exp += 500
+result = `🔰 Empate!\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +500 XP*`
+} else if (ganaA[text] === astro) {
+userdb.exp += 1000
+result = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
 } else {
-global.db.data.users[m.sender].exp -= 300
-let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+userdb.exp -= 300
+result = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
 }
-} else if (text == 'tijera') {
-if (astro == 'papel') {
-global.db.data.users[m.sender].exp += 1000
-let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-} else {
-global.db.data.users[m.sender].exp -= 300
-let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+return conn.sendWritingText(m.chat, result, userdb, m)
 }
-} else if (text == 'tijera') {
-if (astro == 'papel') {
-global.db.data.users[m.sender].exp += 1000
-let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-} else {
-global.db.data.users[m.sender].exp -= 300
-let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
-} else if (text == 'papel') {
-if (astro == 'piedra') {
-global.db.data.users[m.sender].exp += 1000
-let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-} else {
-global.db.data.users[m.sender].exp -= 300
-let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
-} else if (text == 'piedra') {
-if (astro == 'tijera') {
-global.db.data.users[m.sender].exp += 1000
-let resp = `🥳 Tú ganas! 🎉\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n🎁 Premio +1000 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-} else {
-global.db.data.users[m.sender].exp -= 300
-let resp = `☠️ Tú pierdes! ❌\n\n*👉🏻 Tu: ${text}\n👉🏻 El Bot: ${astro}\n❌ Premio -300 XP*`
-       let txt = '';
-       let count = 0;
-       for (const c of resp) {
-           await new Promise(resolve => setTimeout(resolve, 15));
-           txt += c;
-           count++;
-           if (count % 10 === 0) {
-             await conn.sendPresenceUpdate('composing' , m.chat);
-           }
-       }
-           await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
-}}
 handler.help = ['ppt']
 handler.tags = ['games']
 handler.command = /^(ppt)$/i
+handler.menu = [
+{title: "🎖️ PIEDRA, PAPEL O TIJERA", description: "Juega al piedra, papel o tijera con el bot", id: `ppt`}
+];
+handler.type = "juegos";
+handler.disabled = false;
+
 export default handler
+

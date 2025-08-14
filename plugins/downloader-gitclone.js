@@ -1,8 +1,8 @@
 import fetch from 'node-fetch'
 const regex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i
-let handler = async (m, {conn, args, usedPrefix, command }) => {
-if (!args[0]) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE UN ENLACE DE GITHUB, EJEMPLO: ${usedPrefix + command} ${md}*`, m)
-if (!regex.test(args[0])) return conn.sendWritingText(m.chat, '*[❗INFO❗] LINK INCORRECTO!*', m)
+let handler = async (m, {conn, args, usedPrefix, command, db, userdb, senderJid}) => {
+if (!args[0]) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE UN ENLACE DE GITHUB, EJEMPLO: ${usedPrefix + command} ${info.repoProyect}*`, m)
+if (!regex.test(args[0])) return conn.sendWritingText(m.chat, `'*[❗INFO❗] LINK INCORRECTO!*'`, userdb, m)
 let [_, user, repo] = args[0].match(regex) || []
 repo = repo.replace(/.git$/, '')
 let url = `https://api.github.com/repos/${user}/${repo}/zipball`
@@ -13,4 +13,8 @@ return conn.sendFile(m.chat, url, filename, null, m)
 handler.help = ['gitclone <url>']
 handler.tags = ['downloader']
 handler.command = /gitclone/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

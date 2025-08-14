@@ -1,5 +1,5 @@
 let handler = m => {
-let msgs = global.db.data.bot[conn.user.jid].msgs
+let msgs = db.data.bot[conn.user.jid].msgs
 m.reply(`
 *🔰 LISTA DE TEXTOS/MENSAJES/PALABRAS CLAVE 🔰*
 
@@ -10,4 +10,8 @@ ${Object.keys(msgs).map(v => '*👉🏻 ' + v).join('*\n*')}*
 handler.help = ['vn', 'msg', 'video', 'audio', 'img', 'sticker'].map(v => 'list' + v)
 handler.tags = ['database']
 handler.command = /^lista(vn|msg|video|audio|img|sticker)$/
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

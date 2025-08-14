@@ -1,49 +1,24 @@
-let handler = async (m, { conn, isPrems}) => {
+let handler = async (m, {conn, isPrems, userdb, db, senderJid}) => {
 if (!m.isGroup) return
-let bot = global.db.data.bot[conn.user.jid] || {}
-const chats = bot.chats || {}
-const groups = chats.groups || {}
-const chat = groups[m.chat] || {}
-const users = chat.users || {}
 let hasil = Math.floor(Math.random() * 1000)
-let time = users[m.sender].lastmiming + 600000
-if (new Date - users[m.sender].lastmiming < 600000) {
+let time = userdb.lastmiming + 600000
+if (new Date - userdb.lastmiming < 600000) {
 let resp = `*[ ⏲️ ] _Espera_ ${msToTime(time - new Date())} _para volver a minar_*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+return await conn.sendWritingText(m.chat, resp, m );
 }
 let resp = `*[ 🎉 ] Genial, minaste ${hasil} XP*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-
-users[m.sender].lastmiming = new Date * 1
-  
+userdb.lastmiming = new Date * 1
+return await conn.sendWritingText(m.chat, resp, m );
 }
 handler.help = ['minar']
 handler.tags = ['xp']
 handler.command = ['minar', 'miming', 'mine'] 
 handler.fail = null
 handler.exp = 0
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 function msToTime(duration) {

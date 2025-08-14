@@ -1,7 +1,7 @@
 import { areJidsSameUser } from '@whiskeysockets/baileys'
-let handler = async (m, { conn, text, participants, args, command }) => {
+let handler = async (m, {conn, text, participants, args, command, db, userdb, senderJid}) => {
 
-let chat = global.db.data.bot[conn.user.jid].chats.groups[m.chat]
+let chat = db.data.bot[conn.user.jid].chats.groups[m.chat]
 let resp = '', ghostKick = false
 let participantIds = new Set(participants.map(u => u.id));
 let users = chat.users
@@ -13,16 +13,16 @@ let groupOwner = (await conn.groupMetadata(m.chat)).owner;
 for (let participant of participants) {
 let user = participant.id;
 if (!(user in users)) {
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
 msgcount: {
 count: 0,
 time: 0
 }
 };
-await global.db.write();
+await db.write();
 console.log(`Usuario ${user} inicializado en la base de datos.`);
 } else if ((users[user] && users[user].msgcount && users[user].msgcount.count && users[user].msgcount.time) === undefined) {
-global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
+db.data.bot[conn.user.jid].chats.groups[m.chat].users[user] = {
 msgcount: {
 count: 0,
 time: 0
@@ -52,7 +52,7 @@ tags += `@${tag} con ${count} mensajes\n`;
 }
 
 if (usersToKick.length > 0) {
-const date = new Date(users[m.sender].msgcount.time);
+const date = new Date(users[senderJid].msgcount.time);
 const day = date.getDate();
 const monthNames = [
 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -78,7 +78,7 @@ conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 if (ghostKick) {
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendWritingText(m.chat, resp, userdb, m)
 chat.welcome = false;
 await delay(20000);
 txt = ''
@@ -90,14 +90,20 @@ await delay(10000);
 }
 chat.welcome = true;
 txt = `La eliminacion fue exitosa`
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }
 handler.command = /^(kick|sacar)fantasmas$/i
 handler.admin = true
 handler.botAdmin = true
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 

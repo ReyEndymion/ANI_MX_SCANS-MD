@@ -1,49 +1,56 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = true;
-import path, { join } from 'path'
-import * as ws from 'ws';
-import { Boom } from '@hapi/boom';
-import NodeCache from 'node-cache';
-import readline from 'readline';
-import fs, { writeFileSync, readdirSync, statSync, unlinkSync, existsSync, readFileSync, copyFileSync, watch, rmSync, readdir, stat, mkdirSync } from 'fs';
+import path from 'path';
+import fs from 'fs';
 import chalk from 'chalk';
-import syntaxerror from 'syntax-error';
-import { tmpdir } from 'os';
-import { format } from 'util';
-import pino from 'pino';
-import { makeWASocket, protoType, serialize } from './lib/simple.js';
-//import { makeInMemoryStore } from '@whiskeysockets/baileys'
-import store, {makeInMemoryStore, storeChatsS, storeContactsS} from './lib/store.js';
-import {question, clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait, _quickTest} from './lib/functions.js';
-import { terminalQuestion } from './start.js';
-const { proto } = (await import('@whiskeysockets/baileys')).default;
-const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
-const { CONNECTING } = ws;
-const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
-import {jddt} from './plugins/jadibot-serbot.js';
-const __dirname = global.__dirname(import.meta.url);
+import { opts, __filename, dirname, terminalQuestion, question, clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, cleanupOnConnectionError, backupCreds, wait, _quickTest, reload, filesInit, plugins, dataBot, sessionCheck, watchPluginsDirs} from './lib/functions.js';
+import { dataBases, authFolderRespald, raizPath, media } from './config.js';
+import { Low, JSONFile } from 'lowdb';
+export const anidir = `ANI_MX_SCANS`
+export const dirP = !fs.existsSync(anidir) ? raizPath : path.join(raizPath, anidir) //Solo si quieres arrancar el bot desde una carpeta diferente, por ejemplo: /ANI_MX_SCANS
+export const sessionNameAni = `ANIMXSCANS`
+export const authFolder = path.join(dirP, sessionNameAni)
+const botDirRespald = path.join(authFolderRespald, sessionNameAni)
+const nameReg = 'ani'
+export const jadibts = path.join(dirP, 'jadibts')
+const anipp = path.join(media,`pictures/ANI.jpg`)
+const imagen1 = path.join(media,`pictures/Menu2.jpg`)
+const imagen2 = path.join(media,`pictures/nuevobot.jpg`)
+const imagen3 = path.join(media,`pictures/Pre Bot Publi.png`)
+const imagen4 = path.join(media,`pictures/Menu.png`)
+const stickerAMX = path.join(media,`stickers/ANIMXSCANS.webp`)
+export async function onBot(folderPath) {
+let { loadDatabase, registrerBot, configDinamics, groupFetchAllParticipatingJson } = await import('./lib/database.js')
+const { makeWASocket, protoType, serialize } = await import('./lib/simple.js');
+const {start, info} = (await configDinamics())
 protoType();
 serialize();
+const { timestamp } = await import('./lib/constants.js');
+const { proto } = (await import('@whiskeysockets/baileys')).default;
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
 
-const readJadibtsSession = fs.readdirSync(jadibts);
-if (readJadibtsSession.length == 0) global.aniJdbts = false;
-export async function onBot(folderPath) {
 const nameFolderBot = path.basename(folderPath)
-const msgRetryCounterCache = new NodeCache();
-const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath);
-const msgRetryCounterMap = (MessageRetryMap) => { };
-const {version} = await fetchLatestBaileysVersion();
-const logger = pino({level: 'silent'})
-const dbBot = path.join(dataBases, nameFolderBot)
-if (!existsSync(dbBot)) mkdirSync(dbBot, { recursive: true })
-const storeFile = path.join(dbBot, `${nameFolderBot}-${opts._[0] || 'data'}.store.json`)
-const storeReload = makeInMemoryStore()
 
-storeReload.readFromFile(storeFile)
-async function getMessage(key) {
-if (storeReload) {
-const msg = await storeReload.loadMessage(key?.remoteJid, key?.id);
-return msg.message || proto.Message.fromObject({}) || undefined;
-}
+const pathBotDBs = path.join(dataBases, nameFolderBot)
+if (!fs.existsSync(pathBotDBs)) fs.mkdirSync(pathBotDBs, { recursive: true })
+if (!fs.existsSync(botDirRespald)) fs.mkdirSync(botDirRespald, { recursive: true })
+const db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}${pathBotDBs}/database.json`));
+const dbGFAPFile = path.join(pathBotDBs, 'groupFetchAllParticipatingJson.json')
+const createJson = new JSONFile(dbGFAPFile)
+const dbGroups = new Low(createJson)
+
+const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath);
+const {default: NodeCache} = await import('node-cache');
+const {default: libstore} = await import('./lib/store.js');
+const msgRetryCounterCache = new NodeCache();
+const {pino} = await import('pino');
+const logger = pino({ level: 'silent'})
+const {version} = await fetchLatestBaileysVersion();
+const inMstore = libstore.makeInMemoryStore({ logger })
+const storeFile = path.join(pathBotDBs, `${nameFolderBot}-${opts._[0] || 'data'}.store.json`)
+try {
+inMstore.readFromFile(storeFile)
+} catch (error) {
+inMstore.writeToFile(storeFile)
 }
 
 async function patchMessageBeforeSending(message) {
@@ -55,41 +62,43 @@ return message;
 }
 
 const connectionOptions = {
-printQRInTerminal: qrTerminal,
-patchMessageBeforeSending,
-getMessage,
-msgRetryCounterCache,
-msgRetryCounterMap,
+printQRInTerminal: start.qrTerminal,
 logger,
+version,
+syncFullHistory: false,
+markOnlineOnConnect: true,
+connectTimeoutMs: 60_000,
+getMessage: async (key) => (inMstore.loadMessage(key.remoteJid, key.id) || libstore.loadMessage(key.id) || {}).message || null,
+cachedGroupMetadata: async (jid) => msgRetryCounterCache.get(jid),
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, logger),
 },
-browser: usePairingCode ? ["Ubuntu", "Chrome", "20.0.04"] : ['ANI MX SCANS','Edge','1.0.0'],
-version,
+patchMessageBeforeSending,
+browser: start.usePairingCode ? ["Ubuntu", "Chrome", "20.0.04"] : ['ANI MX SCANS','Edge','1.0.0'],
 defaultQueryTimeoutMs: undefined,
 };
+const options = {
+storeFile,
+inMstore,
+libstore
+}
 
-global.conn = makeWASocket(connectionOptions)
+let conn = makeWASocket(connectionOptions, options)
 conn.isInit = false;
 conn.well = false;
-const botDirRespald = path.join(global.authFolderRespald, sessionNameAni)
-// Si se eligió el móvil, solicite el código
 terminalQuestion(conn)
 if (!opts['test']) {
-if (global.db) {
+if (db) {
 setInterval(async () => {
-if (global.db.data) {
-await global.db.write()
+if (db.data) {
 }
-if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))
-storeReload.writeToFile(storeFile)
 }, 30 * 1000);
 }
 }
 
-if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
-
+const PORT = process.env.PORT || process.env.SERVER_PORT || 3000;
+if (opts['server']) (await import('./server.js')).default(conn, PORT);
 
 const MAX_CLOSE_COUNT = 10;
 const CLOSE_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
@@ -97,51 +106,51 @@ const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
 let consecutiveCloseCount = 0
 
 async function connectionUpdate(update) {
+const { CONNECTING } = await import('ws');
 const { connection, lastDisconnect, isNewLogin } = update;
 if (isNewLogin) conn.isInit = true;
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
 if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState == null || undefined || CONNECTING) {
 await global.reloadHandler(true).catch(console.error);
-global.timestamp.connect = new Date;
+timestamp.connect = new Date;
 }
-if (global.db.data == null) loadDatabase();
-if (qrTerminal && update.qr != 0 && update.qr != undefined) {
+if (db.data == null) await loadDatabase(db);
+if (start.qrTerminal && update.qr != 0 && update.qr != undefined) {
 console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
+const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
+conn.logger.error('El terminal de código QR no se agregó como dependencia');
+});
+QR === null || QR === void 0 ? void 0 : QR.generate(update.qr, { small: true });
 }
 if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
 if (connection === undefined) return //conn.ev.removeAllListeners();
-
+console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
+const { Boom } = await import('@hapi/boom');
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
-
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
 conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
 return global.reloadHandler(true).catch(console.error)
-//process.exit();
 } else if (reason === DisconnectReason.preconditionRequired){
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
 return global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.connectionClosed) {
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando...`);
 return global.reloadHandler(true).catch(console.error)
-//process.send('reset');
+//428
 } else if (reason === DisconnectReason.connectionLost) {
 conn.logger.warn(`[ ⚠ ] Conexión perdida con el servidor, reconectando...`);
-return global.reloadHandler(true).catch(console.error)
- // process.send('reset');
+return global.reloadHandler(true).catch(console.error)// process.send('reset');
 } else if (reason === DisconnectReason.connectionReplaced) {
 conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
 stopConn(conn)
-//process.exit();
 } else if (reason === DisconnectReason.loggedOut) {
 conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
 cleanupOnConnectionError(folderPath, botDirRespald)
-//process.exit();
 } else if (reason === DisconnectReason.restartRequired) {
 conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
-//process.send('reset');
 } else if (reason === DisconnectReason.timedOut) {
 conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
 process.send('reset');
@@ -151,7 +160,7 @@ cleanupOnConnectionError(folderPath, botDirRespald)
 global.reloadHandler(true).catch(console.error)
 } else if (reason === 405) {
 conn.logger.warn(`[ ⚠ ] No alojado. ${reason || ''}: ${connection || ''}`);
-if (!connCreds.registered) {
+if (!conn.authState.creds.registered) {
 conn.ws.close()
 cleanupOnConnectionError(folderPath, botDirRespald)
 }
@@ -159,7 +168,6 @@ global.reloadHandler(true).catch(console.error)
 } else if (code === 503){
 } else {
 conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
-//process.exit();
 consecutiveCloseCount++;
 console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${global.authFolder} y reescanee el codigo QR`));
 }
@@ -172,13 +180,22 @@ await wait(CLOSE_CHECK_INTERVAL);
 }
 }
 if (connection == 'open') {
-loadDatabase(global.conn);
+global.userBot = conn.user.jid
+loadDatabase(db);
 console.log(chalk.yellow(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${path.basename(folderPath)}\n│\n▣─────────────────────────────···`))
 if (update.receivedPendingNotifications) { 
 actualizarNumero() 
 waitTwoMinutes()
-return conn.groupAcceptInvite(ganisubbots.replace('https://chat.whatsapp.com/', ''));
+return conn.groupAcceptInvite(info.ganisubbots.replace('https://chat.whatsapp.com/', ''));
 }
+const now = Date.now(); 
+const data = await dataBot(nameReg).catch(await registrerBot(nameReg, conn.user))
+const lastGroupFetchAll = data.lastGroupFetchAll
+const diff = now - lastGroupFetchAll
+if (!lastGroupFetchAll || diff >= 3 * 24 * 60 * 60 * 1000 ) {
+await groupFetchAllParticipatingJson(conn, dbGroups, data, nameReg, registrerBot)
+}
+await registrerBot(nameReg, conn.user)
 }
 }
 
@@ -192,6 +209,8 @@ sock.ev.removeAllListeners()
 sock.ws.close()
 }
 
+
+const pluginFolder = dirname(path.join(raizPath, './plugins/index'));
 let handler = await import('./handler.js');
 global.reloadHandler = async function(restatConn) {
 try {
@@ -201,12 +220,12 @@ if (Object.keys(Handler || {}).length) handler = Handler;
 console.error(e);
 }
 if (restatConn) {
-const oldChats = global.conn.chats;
+const oldChats = (inMstore.chats || conn.chats);
 try {
-global.conn.ws.close();
+conn.ws.close();
 } catch { }
 conn.ev.removeAllListeners();
-global.conn = makeWASocket(connectionOptions, { chats: oldChats });
+conn = makeWASocket(connectionOptions, {storeFile, inMstore, libstore,  chats: oldChats });
 isInit = true;
 }
 if (!isInit) {
@@ -217,20 +236,23 @@ conn.ev.off('message.delete', conn.onDelete);
 conn.ev.off('call', conn.onCall);
 conn.ev.off('connection.update', conn.connectionUpdate);
 conn.ev.off('creds.update', conn.credsUpdate);
-//conn.ev.off('chats.set', conn.storeChatsS)
-//conn.ev.off('contacts.set', conn.storeContactsS)
 
 }
+const pluginsPath = pluginFolder.replace('/index', '')
+let func = {}
+try {const {call} = await import('./plugins/_anticall.js') 
+const {fail} = await import('./plugins/_dFailMessages.js')
+func = {call, fail}
+} catch (e) {console.log('Objs: ', e.stack)}
+const botObj = {sessionNameAni, nameReg, authFolder, botDirRespald, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
 
-conn.handler = handler.handler.bind(global.conn);
-conn.participantsUpdate = handler.participantsUpdate.bind(global.conn);
-conn.groupsUpdate = handler.groupsUpdate.bind(global.conn);
-conn.onDelete = handler.deleteUpdate.bind(global.conn);
-conn.onCall = handler.callUpdate.bind(global.conn);
-conn.connectionUpdate = connectionUpdate.bind(global.conn);
-conn.credsUpdate = saveCreds.bind(global.conn, true);
-//conn.storeChatsS = storeChatsS(global.conn)
-//conn.storeContactsS = storeContactsS(global.conn)
+conn.handler = function(chatUpdate) { return handler.handler.call(conn, chatUpdate, botObj);}
+conn.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(conn, participantUpdate, botObj)}//bind(conn);
+conn.groupsUpdate = function(groupsUpdate) { return handler.groupsUpdate.call(conn, groupsUpdate, botObj)};
+conn.onDelete = function(message) { return handler.deleteUpdate.call(conn, message, botObj)}
+conn.onCall = function(callUpdate) { return handler.callUpdate.call(conn, callUpdate, botObj);}
+conn.connectionUpdate = connectionUpdate.bind(conn);
+conn.credsUpdate = saveCreds.bind(conn, true);
 
 conn.ev.on('messages.upsert', conn.handler);
 conn.ev.on('group-participants.update', conn.participantsUpdate);
@@ -239,59 +261,27 @@ conn.ev.on('message.delete', conn.onDelete);
 conn.ev.on('call', conn.onCall);
 conn.ev.on('connection.update', conn.connectionUpdate);
 conn.ev.on('creds.update', conn.credsUpdate);
-//conn.ev.on('chats.set', conn.storeChatsS)
-//conn.ev.on('contacts.set', conn.storeContactsS)
+inMstore.bind(conn.ev, {
+groupMetadata: conn.groupMetadata
+})
+
 isInit = false;
 return true;
 };
-if (global.aniJdbts) {
+let readJadibtsSession = []
+if (fs.existsSync(jadibts)) {
+readJadibtsSession = fs.readdirSync(jadibts);
+if (readJadibtsSession.length == 0) start.aniJdbts = false;
+}
+if (start.aniJdbts) {
+const {verifyBot} = await import('./plugins/jadibot-serbot.js');
 for (const session of readJadibtsSession) {
 const bot = path.join(jadibts, session)
-await jddt(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: null })
+await verifyBot(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: null })
 }
 }
-const pluginFolder = global.__dirname(join(__dirname, './plugins/index'));
-const pluginFilter = (filename) => /\.js$/.test(filename);
-global.plugins = {};
-async function filesInit() {
-for (let filename of readdirSync(pluginFolder).filter(pluginFilter)) {
-try {
-let file = global.__filename(join(pluginFolder, filename))
-const module = await import(file)
-global.plugins[filename] = module.default || module
-} catch (e) {
-conn.logger.error(e)
-delete global.plugins[filename]
-}}}
-filesInit().then(_ => Object.keys(global.plugins)).catch(console.error)
-
-global.reload = async (_ev, filename) => {
-if (pluginFilter(filename)) {
-let dir = global.__filename(join(pluginFolder, filename), true)
-if (filename in global.plugins) {
-if (existsSync(dir)) conn.logger.info(`plugin actualizado - '${filename}'`)
-else {
-conn.logger.warn(`plugin eliminado - '${filename}'`)
-return delete global.plugins[filename]
-}
-} else conn.logger.info(`nuevo plugin - '${filename}'`)
-let err = syntaxerror(readFileSync(dir), filename, {
-sourceType: 'module',
-allowAwaitOutsideFunction: true
-})
-if (err) conn.logger.error(`Error de sintaxis mientras se carga '${filename}'\n${format(err)}`)
-else try {
-const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`))
-global.plugins[filename] = module.default || module
-} catch (e) {
-conn.logger.error(`Hay un error que requiere atención en '${filename}\n${format(e)}'`)
-} finally {
-global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)))
-}}}
-Object.freeze(global.reload)
-watch(pluginFolder, global.reload)
 await global.reloadHandler()
-
+/*
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
 console.log(chalk.whiteBright(`\n▣────────[ BACKUP_CREDS ]───────────···\n│\n▣─❧ RESPALDO EXITOSO ✅\n│\n▣────────────────────────────────────···\n`))
@@ -301,26 +291,14 @@ purgeOldFiles(authFolder)
 console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
 
-
-_quickTest()
-.then(() => conn.logger.info(`CARGANDO．．．\n`))
-.catch(console.error)
-}
-
 setInterval(async () => {
 clearTmp()
 console.log(chalk.cyanBright(`\n▣────────[ AUTOCLEARTMP ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 3)
-/**
-setInterval(async () => {
-purgeSession()
-console.log(chalk.cyanBright(`\n▣────────[ AUTOPURGESESSIONS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 60)
-setInterval(async () => {
-purgeSessionSB()
- console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_SESSIONS_SUB-BOTS ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 60)
- */
+*/
+_quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
+return watchPluginsDirs(pluginFolder, conn)
+}
 async function enterCode(conn, registration) {
 try {
 const code = await question('Please enter the one time code:\n');
@@ -336,7 +314,7 @@ await askForOTP(conn, registration);
 
 async function enterCaptcha(conn, registration) {
 const response = await conn.requestRegistrationCode({ ...registration, method: 'captcha' });
-const path = __dirname + '/captcha.png';
+const path = raizPath + '/captcha.png';
 fs.writeFileSync(path, Buffer.from(response.image_blob, 'base64'));
 
 open(path);
@@ -349,8 +327,7 @@ async function askForOTP(conn, registration) {
 if (!registration.method) {
 let code = await question('¿Cómo le gustaría recibir el código único para el registro?"SMS" o "voz"\n');
 code = code.replace(/["']/g, '').trim().toLowerCase();
-if (code !== 'sms' && code !== 'voice') {
- return await askForOTP(conn, registration);
+if (code !== 'sms' && code !== 'voice') {return await askForOTP(conn, registration);
 }
 
 registration.method = code;

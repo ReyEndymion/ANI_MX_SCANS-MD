@@ -1,12 +1,16 @@
 import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
-let handler = async (m, { conn, text }) => {
-conn.reply(m.chat, Object.entries(await stylizeText(text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text)).map(([name, value]) => `*${name}*\n${value}`).join`\n\n`, m)
+let handler = async (m, {conn, text, db, userdb, senderJid}) => {
+conn.sendWritingText(m.chat, Object.entries(await stylizeText(text ? text : m.quoted && m.quoted.text ? m.quoted.text : m.text)).map(([name, value]) => `*${name}*\n${value}`).join`\n\n`, m)
 }
 handler.help = ['style'].map(v => v + ' <text>')
 handler.tags = ['tools']
 handler.command = /^(style(text)?)$/i
 handler.exp = 0
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 async function stylizeText(text) {

@@ -1,10 +1,10 @@
 import util from 'util'
 import path from 'path'
 import fs from 'fs'
-import axios from 'axios';
+let { default: axios } = await import('axios');
 let user = a => '@' + a.split('@')[0]
-async function handler(m, { groupMetadata, command, conn, text, usedPrefix}) {
-if (!text) return conn.sendWritingText(m.chat, `Ejemplo de uso:\n.top *texto*`, m) 
+async function handler(m, {conn, groupMetadata, command, text, usedPrefix, db, userdb, senderJid }) {
+if (!text) return conn.sendWritingText(m.chat, `Ejemplo de uso:\n.top *texto*`, userdb, m)
 let ps = groupMetadata.participants.map(v => v.id)
 let a = ps.getRandom()
 let b = ps.getRandom()
@@ -31,12 +31,18 @@ let top = `*${x} Top 10 ${text} ${x}*
 *8. ${user(h)}*
 *9. ${user(i)}*
 *10. ${user(j)}*`
-return conn.sendWritingText(m.chat, top, m );
+return conn.sendWritingText(m.chat, top, userdb, m );
 }
 handler.help = handler.command = ['top']
 handler.tags = ['fun']
 handler.group = true
 handler.limit = 2
+handler.menu = [
+{title: "🎖️ TOP", description: "Top del grupo usa #top <tema a eleccion>", id: `top`}, 
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler
 function pickRandom(list) {
 return list[Math.floor(Math.random() * list.length)]}

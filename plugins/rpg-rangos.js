@@ -2,13 +2,13 @@ import { xpRange } from '../lib/levelling.js'
 import PhoneNumber from 'awesome-phonenumber'
 import { promises } from 'fs'
 import { join } from 'path'
-let handler = async (m, { conn, usedPrefix, command, args, usedPrefix: _p, __dirname, isOwner, text, isAdmin, isROwner }) => {
-  
-  
-const { levelling } = '../lib/levelling.js'
-//let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text }) => {
+let handler = async (m, {conn, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, text, isAdmin, isROwner, usersdb, userdb, db, senderJid}) => {
 
-let { exp, limit, level, role } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+
+const { levelling } = '../lib/levelling.js'
+//let handler = async (m, {conn, usedPrefix, usedPrefix: _p, pluginsPath, text, db, userdb, senderJid}) => {
+
+let { exp, limit, level, role } = userdb
 let { min, xp, max } = xpRange(level, global.multiplier)
 
 let d = new Date(new Date + 3600000)
@@ -39,11 +39,11 @@ process.once('message', resolve)
 setTimeout(resolve, 1000)
 }) * 1000
 }
-let { money } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let { money } = userdb
 let muptime = clockString(_muptime)
 let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.bot[conn.user.jid].users).length
-let rtotalreg = Object.values(global.db.data.bot[conn.user.jid].users).filter(user => user.registered == true).length
+let totalreg = Object.keys(usersdb).length
+let rtotalreg = Object.values(usersdb).filter(user => user.registered == true).length
 let replace = {
 '%': '%',
 p: _p, uptime, muptime,
@@ -58,14 +58,14 @@ level, limit, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
 readmore: readMore
 }
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-  
-  
-//let name = await conn.getName(m.sender)
+
+
+//let name = await conn.getName(senderJid)
 let pp = './media/menus/Menuvid3.mp4'
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let mentionedJid = [who]
 let username = conn.getName(who)
-//let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+//let user = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid]
 //user.registered = false
 
 let menu = `
@@ -73,7 +73,7 @@ let menu = `
 𝙉𝙊𝙈𝘽𝙍𝙀
 ${username}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-𝙏𝙐  𝙍𝘼𝙉𝙂𝙊 𝘼𝘾𝙏𝙐𝘼𝙇
+𝙏𝙐 𝙍𝘼𝙉𝙂𝙊 𝘼𝘾𝙏𝙐𝘼𝙇
 ${role}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 👑 *∞ ÉLITE GLOBAL I* 💎🏁
@@ -118,11 +118,11 @@ ${role}
 *SUPER PRO IV* 🎩
 *SUPER PRO V* 🎩
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-*PRO EN ${wm} I* ${amsicon}
-*PRO EN ${wm} II* ${amsicon}
-*PRO EN ${wm} III* ${amsicon}
-*PRO EN ${wm} IV* ${amsicon}
-*PRO EN ${wm} V* ${amsicon}
+*PRO EN ${info.nanie} I* ${amsicon}
+*PRO EN ${info.nanie} II* ${amsicon}
+*PRO EN ${info.nanie} III* ${amsicon}
+*PRO EN ${info.nanie} IV* ${amsicon}
+*PRO EN ${info.nanie} V* ${amsicon}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 *DIAMANTE I* 💎
 *DIAMANTE II* 💎
@@ -174,32 +174,23 @@ ${role}
 ╰━━━━━━━━━━━━━━━━━━━⬣
 𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆: ${usedPrefix}top
 `.trim()
-//conn.sendHydrated(m.chat, menu, `𝙍𝘼𝙉𝙂𝙊𝙎 | ${wm}`, pp, 'https://github.com/GataNina-Li/${wm}-MD', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙈𝙚𝙣𝙪́ 𝙘𝙤𝙢𝙥𝙡𝙚𝙩𝙤 | 𝙁𝙪𝙡𝙡 𝙈𝙚𝙣𝙪 💫', '.allmenu'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', `${usedPrefix}top`], ['𝙈𝙚𝙣𝙪 𝙋𝙧𝙞𝙣𝙘𝙞𝙥𝙖𝙡 | 𝙈𝙖𝙞𝙣 𝙢𝙚𝙣𝙪 ⚡', '#menu']], m,)
-let txt = '';
-let count = 0;
-for (const c of menu) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-   await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
+//conn.sendHydrated(m.chat, menu, `𝙍𝘼𝙉𝙂𝙊𝙎 | ${info.nanie}`, pp, 'https://github.com/GataNina-Li/${info.nanie}-MD', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙈𝙚𝙣𝙪́ 𝙘𝙤𝙢𝙥𝙡𝙚𝙩𝙤 | 𝙁𝙪𝙡𝙡 𝙈𝙚𝙣𝙪 💫', '.allmenu'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', `${usedPrefix}top`], ['𝙈𝙚𝙣𝙪 𝙋𝙧𝙞𝙣𝙘𝙞𝙥𝙖𝙡 | 𝙈𝙖𝙞𝙣 𝙢𝙚𝙣𝙪 ⚡', '#menu']], m,)
 
-let contextInfo = {  
-mentionedJid: conn.parseMention(txt),  
-"externalAdReply": {  
-"showAdAttribution": true,  
+
+let contextInfo = { 
+mentionedJid: conn.parseMention(txt), 
+"externalAdReply": { 
+"showAdAttribution": true, 
 "containsAutoReply": true,
-"renderLargerThumbnail": true,  
-"title": wm,   
-"containsAutoReply": true,  
-"mediaType": 1,   
-"thumbnail": imagen2am,//apii.res.url,  
-"mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
-"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
-}  
-}  
+"renderLargerThumbnail": true, 
+"title": info.nanie,
+"containsAutoReply": true, 
+"mediaType": 1,
+"thumbnail": fs.readFileSync(imagen1),//apii.res.url, 
+"mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`, 
+"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0` 
+} 
+} 
 
 conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
 
@@ -210,6 +201,10 @@ handler.tags = ['group', 'owner']
 handler.command = /^(rol|rango|roles|rangos)$/i
 //handler.register = true
 handler.exp = 50
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 const more = String.fromCharCode(8206)

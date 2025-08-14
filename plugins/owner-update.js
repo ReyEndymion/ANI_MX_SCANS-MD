@@ -1,61 +1,38 @@
 import { execSync } from 'child_process'
-let handler = async (m, { conn, text }) => {
+let handler = async (m, {conn, text, db, userdb, senderJid}) => {
 try {
-    
-try {  
-if (global.conn.user.jid == conn.user.jid) {
+
+try { 
+if (global.userBot == conn.user.jid) {
 let stdout = execSync('git pull' + (m.fromMe && text ? ' ' + text : ''))
 let resp = `${stdout.toString()}`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-   await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 } catch {
-var update = execSync(`git remote set-url origin ${md}.git && git pull`)
+var update = execSync(`git remote set-url origin ${info.repoProyect}.git && git pull`)
 let resp = `${update.toString()}`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-   await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 } catch (error) {
-    console.error(error);
-    let errorMessage = 'Se produjo un error al ejecutar el comando.';
-    if (error.message) {
-      errorMessage += '\nError message: ' + error.message;
-    }
-    let resp = errorMessage
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
+console.error(error);
+let errorMessage = 'Se produjo un error al ejecutar el comando.';
+if (error.message) {
+errorMessage += '\nError message: ' + error.message;
+}
+let resp = errorMessage
 
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }
 handler.help = ['update']
 handler.tags = ['owner']
 handler.command = /^update|actualizar$/i
 handler.rowner = true
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

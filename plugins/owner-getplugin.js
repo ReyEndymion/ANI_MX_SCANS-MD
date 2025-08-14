@@ -1,117 +1,72 @@
 import cp, {exec as _exec} from 'child_process';
-import {promisify} from 'util';
-import fs from 'fs';
+const handler = async (m, {conn, info, isROwner, usedPrefix, command, text, db, userdb, senderJid, objs}) => {
+let {plugins, opts, prefix } = await import('../lib/functions.js');
+const {imagen1, pluginsPath} = objs//= await import('../config.js')
+const { promisify } = await import('util');
+let { default: fs } = await import('fs');
+const path = await import('path')
 const exec = promisify(_exec).bind(cp);
-const handler = async (m, {conn, isROwner, usedPrefix, command, text}) => {
-  const ar = Object.keys(plugins);
-  const ar1 = ar.map((v) => v.replace('.js', ''));
-  const bannedPlugins = ['jadibot-serbot', '_pruebasConsoleHandler', '_pruebasConsoleBefore', 'gc_invitamegGC', '_textos'];///jadibot-serbot|_pruebasConsoleHandler|_pruebasConsoleBefore|gc_invitamegGC|_textos$/ig.test(text)
-  if (!text) {
-    let resp = `*[❗] Ingresa el nombre de algún plugin (archivo) existente*\n\n*—◉ por ejemplo*\n*◉ ${usedPrefix + command}* info-infobot\n\n*—◉ Lista de plugins (archivos) existentes:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 1));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
+const ar = [...plugins.keys()];
+const ar1 = ar.map((v) => path.basename(v).replace('.js', ''));
+const bannedPlugins = ['jadibot-serbot', '_pruebasConsoleHandler', '_pruebasConsoleBefore', 'gc_invitamegGC', '_textos'];///jadibot-serbot|_pruebasConsoleHandler|_pruebasConsoleBefore|gc_invitamegGC|_textos$/ig.test(text):*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}
+if (!text) {
+let resp = `*[❗] Ingresa el nombre de algún plugin (archivo) existente*\n\n*—◉ por ejemplo*\n*◉ ${usedPrefix + command}* info-infobot\n\n—◉ Para la lista de plugins (archivos) existentes usa el comando\n*${usedPrefix}listinfoplugin*\nNota: solo el nombre sin la extensión (.js)`;
+return conn.sendWritingText(m.chat, resp, userdb, m)
+}
+if (ar.includes(text + '.js') && bannedPlugins.includes(text.toLowerCase())) {
+let resp = `Lo siento este codigo esta prohibido por el autor`
+return conn.sendWritingText(m.chat, resp, userdb, m)
+}
+if (!ar1.includes(text)) {
+let resp = `*[❗] No se encontró ningún plugin (archivo) llamado "${text}", ingresa alguno existente*\n\n*==================================*\n\n*—◉ Lista de archivos existentes:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
 
-    let contextInfo = {  
-    mentionedJid: conn.parseMention(txt),  
-    "externalAdReply": {  
-    "showAdAttribution": true,  
-    "containsAutoReply": true,
-    "renderLargerThumbnail": true,  
-    "title": wm,   
-    "containsAutoReply": true,  
-    "mediaType": 1,   
-    "thumbnail": imagen1,//apii.res.url,  
-    "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
-    "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
-    }  
-    }  
-
-    return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-  }
-  if (ar.includes(text + '.js') && bannedPlugins.includes(text.toLowerCase())) {
-    let resp = `Lo siento este codigo esta prohibido por el autor`
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 15));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-  }
-  if (!ar1.includes(text)) {
-    let resp = `*[❗] No se encontró ningún plugin (archivo) llamado "${text}", ingresa alguno existente*\n\n*==================================*\n\n*—◉  Lista de archivos existentes:*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}`;
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 1));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-    }
-
-    let contextInfo = {  
-    mentionedJid: conn.parseMention(txt),  
-    "externalAdReply": {  
-    "showAdAttribution": true,  
-    "containsAutoReply": true,
-    "renderLargerThumbnail": true,  
-    "title": wm,   
-    "containsAutoReply": true,  
-    "mediaType": 1,   
-    "thumbnail": imagen1,//apii.res.url,  
-    "mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
-    "sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
-    }  
-    }  
-
-    return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-  }  
+return conn.sendWritingText(m.chat, resp, userdb, m)
+} 
 let o;
-  try {
-    o = await exec(`cat ${dirP}plugins/` + text + '.js');
-  } catch (e) {
-    o = e;
-  } finally {
-    const {stdout, stderr} = o;
-    console.log ('gp: ', o)
-    if (stdout.trim()) {
-      let resp = stdout
-      let txt = '';
-      let count = 0;
-      for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 1));
-      txt += c;
-      count++;
-      if (count % 10 === 0) {
-         await conn.sendPresenceUpdate('composing' , m.chat);
-      }
-      }
-      const aa = await conn.sendMessage(m.chat, {text: txt}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-      await conn.sendMessage(m.chat, {document: fs.readFileSync(dirP + `plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-    }
-    if (stderr.trim()) {
-      const aa2 = await conn.sendMessage(m.chat, {text: stderr}, {quoted: m});
-      await conn.sendMessage(m.chat, {document: fs.readFileSync(dirP + `plugins/${text}.js`), mimetype: 'application/javascript', fileName: `${text}.js`}, {quoted: aa2, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-    }
-  }
+const file = path.join(pluginsPath, text + '.js')
+try {
+o = await exec(`cat ${file}`);
+} catch (e) {
+o = e;
+} finally {
+const {stdout, stderr} = o;
+console.log ('gp: ', o)
+if (stdout.trim()) {
+let resp = stdout
+const botNumber = conn.user.jid.split('@')[0]
+let contextInfo = { 
+mentionedJid: conn.parseMention(resp), 
+"externalAdReply": { 
+//"showAdAttribution": true, 
+"containsAutoReply": true,
+"renderLargerThumbnail": true, 
+"title": info.nanie,
+"containsAutoReply": true, 
+"mediaType": 2,
+"thumbnail": fs.readFileSync(imagen1),//apii.res.url, path.basename()
+"mediaUrl": `https://api.whatsapp.com/send/?phone=${botNumber}&text=.serbot&type=phone_number&app_absent=0`, 
+"sourceUrl": `https://api.whatsapp.com/send/?phone=${botNumber}&text=.serbot&type=phone_number&app_absent=0` 
+} 
+} 
+const aa = await conn.sendWritingTextCI(m.chat, resp, contextInfo, userdb, m)
+const message = {mimetype: 'application/javascript', fileName: `${text}.js`}
+return conn.sendDocumentWriting(m.chat, fs.readFileSync(file), message, userdb, aa)
+}
+if (stderr.trim()) {
+const aa2 = await conn.sendWritingText(m.chat, stderr, userdb, m);
+const message = {mimetype: 'application/javascript', fileName: `${text}.js`}
+return conn.sendDocumentWriting(m.chat, fs.readFileSync(file), message, userdb, aa2)
+}
+}
 };
 handler.help = ['getplugin'].map((v) => v + ' *<nombre>*');
 handler.tags = ['owner'];
 handler.command = /^(getplugin|gp)$/i;
 handler.rowner = true;
+handler.menu = [
+{title: 'SOLICITAR PLUGINS', description: ' Solicita cualquier plugin Que esté autorizado a mostrarse en público, Puedes usar el comando #listinfoplugin Para listar todos los plugins\n\nEjemplo: #getplugin _editConfig\nNota: no uses la extencion (.js) en el comando', id: 'gp'},
+];
+handler.type = "owners";
+handler.disabled = false;
+
 export default handler;

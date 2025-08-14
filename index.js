@@ -70,7 +70,7 @@ console.error('❎ㅤOcurrio un error inesperado:', code)
 p.removeAllListeners('exit')
 p.removeAllListeners('message')
 if (code === 0) return
-if (code !== 0 || code === 'SIGKILL' || code === 'SIGABRT') p.emit('message', 'reset')
+if (code !== 0 || code === 'SIGKILL' || code === 'SIGABRT') p.emit('message', 'reset');start(file)
 watchFile(args[0], () => {
 unwatchFile(args[0])
 start(file)

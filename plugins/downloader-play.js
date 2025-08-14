@@ -1,26 +1,27 @@
-import * as cheerio from 'cheerio';
-import fetch from 'node-fetch';
-import axios from 'axios';
-import { youtubeSearch, youtubedl, youtubedlv2 } from '@bochilteam/scraper-sosmed'
-import y2mateModule from '../lib/y2mate.js';
+import { owner, info, temp, newsletterID, sBroadCastID, groupID, media} from '../config.js'
+let cheerio = await import('cheerio');
+let { default: fetch } = await import('node-fetch');
+let { default: axios } = await import('axios');
+import { youtubeSearch, youtubedl, youtubedlv2 } from '../lib/ytscraper.js'
+import path from 'path';
+let { default: y2mateModule } = await import('../lib/y2mate.js');
 const { servers, ytv } = y2mateModule
-import fs from "fs";
-import ytdl from 'ytdl-core';
-import yts from 'yt-search';
+let { default: fs } = await import('fs');
+let { default: yts } = await import('yt-search');
 import translate from '@vitalets/google-translate-api'
 const API_KEY = "AIzaSyBAsJbDjVjlXtSugPgPmhIzLUcxmS6Nvb8";
 //import { parse } from 'node-html-parser';{ servers, ytv }
 
 let confirmations = {}
-async function handler(m, { conn, command, args, text, usedPrefix }) {
+async function handler(m, { conn, command, args, text, usedPrefix, db, userdb, senderJid }) {
 //process.env.TMPDIR = process.env.TEMP = process.env.TMP = `./tmp`;
-const bot = global.db.data.bot[conn.user.jid]
+const bot = db.data.bot[conn.user.jid]
 const chats = bot.chats
 const privs = chats.privs
 const groups = chats.groups
 const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
 let resp, q
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let {titleP, publishedTimeP, durationHP, viewHP, descriptionP, authorP, videoIdP, thumbnailP, urlP, vidP} = {}
 if (/^play$/ig.test(command)) {
 try {
@@ -48,31 +49,13 @@ let texto1 = `*◉—⌈🔊 YOUTUBE PLAY🔊⌋—◉*\n
 🆔 *ID:* ${videoIdP}
 🪬 *TIPO:* ${type}
 🔗 *LINK:* ${urlP}\n\n🎵 AUDIO 🎵\n\nPara descargar mencione la palabra 'audio' o pruebe con el comando \n\n${usedPrefix}ytmp3 ${urlP}\n\n🎥 VIDEO 🎥\n\nPara descargar mencione la palabra 'video' o pruebe con el comando${usedPrefix}ytmp4 ${urlP} \n\n📋 MAS RESULTADOS 📋\n\nPara ver mas resultados mencione la palabra 'mas' o pruebe con el comando \n${usedPrefix}playlist ${text}`.trim()
-let txt = '';
-let count = 0;
-for (const c of texto1) {
-await new Promise(resolve => setTimeout(resolve, 5));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
+
 q = await conn.sendMessage(m.chat, {image: {url: thumbnailP}, caption: txt.trim()}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
 }
 } catch (TypeError) {
 let resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*POSIBLEMENTE FALTE EL NOMBRE DE AUTOR O LA CANCION PARA MEJOR PRECISION*\n\nError: ${TypeError}`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
- q = await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
+q = await conn.sendWritingText(m.chat, resp, userdb, m)
 } finally {}
 }
 if (/^play2$/ig.test(command)) {
@@ -103,22 +86,22 @@ resp = `*◉—⌈🔊 YOUTUBE PLAY🔊⌋—◉*\n
 🔗 *LINK:* ${urlP}\n\n🎵 AUDIO 🎵\n\nPara descargar mencione la palabra 'audio' o pruebe con el comando:\n${usedPrefix}ytmp3 ${urlP}\n\n🎥 VIDEO 🎥\n\nPara descargar mencione la palabra 'video' o pruebe con el comando:\n${usedPrefix}ytmp4 ${urlP} \n\n📋 MAS RESULTADOS 📋\n\nPara ver mas resultados mencione la palabra 'mas' o pruebe con el comando \n${usedPrefix}playlist ${text}`.trim()
 } catch (error) {
 resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*POSIBLEMENTE FALTE EL NOMBRE DE AUTOR O LA CANCION PARA MEJOR PRECISION*\n\nError: ${error}`
-delete confirmations[m.sender]
+delete confirmations[senderJid]
 } finally {}
 }
 if (!text) {
 resp = `*[❗INFO❗] NOMBRE DE LA CANCION FALTANTE, POR FAVOR INGRESE EL COMANDO MAS EL NOMBRE/TITULO DE UNA CANCION*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} Good Feeling - Flo Rida*`
-delete confirmations[m.sender]
+delete confirmations[senderJid]
 } 
 if (!vidP) {
 resp = '*[❗INFO❗] LO SIENTO, NO PUDE ENCONTRAR EL AUDIO/VIDEO, INTENTE CON OTRO NOMBRE/TITULO*'
-delete confirmations[m.sender]
+delete confirmations[senderJid]
 }
 
 const type = (args[0] || '').toLowerCase()
 const countP = Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, (isNumber(args[1]) ? parseInt(args[1]) : 1))) * 1
-confirmations[m.sender] = {
-sender: m.sender,
+confirmations[senderJid] = {
+sender: senderJid,
 to: who, 
 titleP, publishedTimeP, durationHP, viewHP, descriptionP, authorP, videoIdP, thumbnailP, vidP, urlP,
 type,
@@ -127,41 +110,26 @@ q,
 countP,
 timeout: setTimeout(async () => {
 resp = 'Se acabó el tiempo'
-delete confirmations[m.sender]}, 60 * 1000)
+delete confirmations[senderJid]}, 60 * 1000)
 }
 resp = resp
 if (resp === undefined) return
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
+
 if (thumbnailP) {
 //q = await conn.sendMessage(m.chat, {image: {url: thumbnailP}, caption: txt.trim()}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
-return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
-return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
- }
- const getRandom = (ext) => {
+}
+const getRandom = (ext) => {
 return `${Math.floor(Math.random() * 10000)}${ext}`;
 };
-handler.before = async (m, { conn, args}) => {
+handler.before = async (m, { conn, args, chatdb, db, userdb, senderJid}) => {
 if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
 
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats
-const privs = chats.privs
-const groups = chats.groups
-const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
-
-if (!chat.isBanned) {
-const confirmation = Object.values(confirmations).find(c => c.sender === m.sender);
+if (!chatdb.isBanned) {
+const confirmation = Object.values(confirmations).find(c => c.sender === senderJid);
 if (!confirmation) return;
 
 const response = m.text.toLowerCase();
@@ -186,6 +154,7 @@ throw new Error('Error al realizar la solicitud: ' + respuesta.status);
 }
 }
 let resp 
+let { default: ytdl } = await import('ytdl-core');
 const infoYt = await ytdl.getInfo(urlP);
 const titleYt = infoYt.videoDetails.title;
 let stream
@@ -194,7 +163,7 @@ if (response === 'video') {
 const titleStringMp4 = `${titleYt}.mp4`
 const fileNameTmpMp4 = `${titleYt.replace(/[^a-zA-Z0-9]/g, '')}.mp4`
 const cookies = await obtenerPaginaYouTube();
-const tmpStringMp4 = `./tmp/${fileNameTmpMp4}` 
+const tmpStringMp4 = path.join(temp, `${fileNameTmpMp4}`) 
 //const randomName = getRandom('.mp4');
 for (let video of format) {
 // Elegir el formato de menor calidad
@@ -225,10 +194,10 @@ const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
 if (fileSizeInMegabytes <= 999) {
 //if (command == 'ytshort') {
 return conn.sendMessage( m.chat, {video: readFile, fileName: titleStringMp4, mimetype: 'video/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 }),
- fs.unlinkSync(tmpStringMp4, { recursive: true, force: true });
+fs.unlinkSync(tmpStringMp4, { recursive: true, force: true });
 } else {
 return conn.sendMessage( m.chat, {document: readFile, fileName: titleStringMp4, mimetype: 'video/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 }),
- fs.unlinkSync(tmpStringMp4, { recursive: true, force: true });
+fs.unlinkSync(tmpStringMp4, { recursive: true, force: true });
 }
 
 } 
@@ -238,7 +207,7 @@ if (response === 'audio') {
 const titleStringMp3 = `${titleYt}.mp3`
 const cookies = await obtenerPaginaYouTube();
 const fileNameTmpMp3 = `${titleYt.replace(/[^a-zA-Z0-9]/g, '')}.mp3`;
-const tmpStringMp3 = `./tmp/${fileNameTmpMp3}` 
+const tmpStringMp3 = path.join(temp, `${fileNameTmpMp3}`) 
 
 if (!format) {
 resp = 'No se encontraron formatos de audio disponibles.';
@@ -283,36 +252,30 @@ const fileSizeInBytes = stats.size;
 const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
 // console.log("Tamaño del video: " + fileSizeInMegabytes);
 if (fileSizeInMegabytes <= 999) {
- await conn.sendMessage( m.chat, {audio: readFile, fileName: titleStringMp3, mimetype: 'audio/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 });
- fs.unlinkSync(tmpStringMp3, { recursive: true, force: true });
+await conn.sendMessage( m.chat, {audio: readFile, fileName: titleStringMp3, mimetype: 'audio/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 });
+fs.unlinkSync(tmpStringMp3, { recursive: true, force: true });
 } else {
- await conn.sendMessage( m.chat, {document: readFile, fileName: titleStringMp3, mimetype: 'audio/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 });
- fs.unlinkSync(tmpStringMp3, { recursive: true, force: true });
+await conn.sendMessage( m.chat, {document: readFile, fileName: titleStringMp3, mimetype: 'audio/mp4'}, {quoted: m, ephemeralExpiration: 2*60*1000 });
+fs.unlinkSync(tmpStringMp3, { recursive: true, force: true });
 }
 } else {
 resp = 'No se encontraron formatos de audio disponibles.';
 }
 }
 if (resp === undefined) return
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
 
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
 
-return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}), clearTimeout(timeout), delete confirmations[m.sender];
+return conn.sendWritingText(m.chat, resp, userdb, m), clearTimeout(timeout), delete confirmations[senderJid];
 }
 };
 
 handler.help = ['play', 'play2'].map(v => v + ' <pencarian>')
 handler.tags = ['downloader']
 handler.command = /^play(2|3)?$/ig
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 function isNumber(x) {

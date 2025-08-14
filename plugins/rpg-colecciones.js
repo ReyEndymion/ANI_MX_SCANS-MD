@@ -1,4 +1,4 @@
-let handler = async (m, { command, usedPrefix, DevMode, args, conn }) => {
+let handler = async (m, {command, usedPrefix, DevMode, args, conn, db, userdb, senderJid}) => {
 const valoracion = { valorar1: 'Muy Alta 80% - 100%', valorar2: 'Alta 60% - 79%', valorar3: 'Media 40% - 59%', valorar4: 'Baja 20% - 39%', valorar5: 'Muy Baja 0% - 19%' }
 
 const categorias = {
@@ -20,19 +20,16 @@ abundancia: 'Medianamente poca'
 }
 }
 let resp = categorias.exp.utilidad
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+
+return conn.sendWritingText(m.chat, resp, userdb, m)
 
 }
 handler.command = /^(colección|coleccion|inforpg|set|collection)$/i
+
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
 export default handler

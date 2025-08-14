@@ -9,67 +9,69 @@ El codigo de este archivo fue parchado por:
 - BrunoSobrino (https://github.com/BrunoSobrino)
 Esta personalizado para el bot ANI MX SCANS
 */
-const { generateWAMessageFromContent } = (await import('@whiskeysockets/baileys')).default;
-const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys')
-import qrcode from "qrcode"
-import fetch from 'node-fetch';
 import NodeCache from "node-cache"
 import fs from "fs"
 import path, { join } from 'path';
 import pino from 'pino';
-import {Boom} from '@hapi/boom';
+const { Boom } = await import('@hapi/boom');
 import util from 'util' 
-import * as ws from 'ws';
+let ws = await import('ws');
 import chalk from 'chalk';
-const { child, spawn, exec } = await import('child_process');
 const { CONNECTING } = ws
 import { makeWASocket } from '../lib/simple.js';
-import { makeInMemoryStore } from '../lib/store.js'
-import { limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds} from "../lib/functions.js";
+import libstore from '../lib/store.js'
+import { dirname, limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds, formatNumberWA, opts, dataSubBot } from '../lib/functions.js';
+import { creds, timestamp } from '../lib/constants.js';
+import { loadDatabase, registrerSubBot, configDinamics, groupFetchAllParticipatingJson } from '../lib/database.js';
+import { authFolderRespald, raizPath, dataBases } from '../config.js';
+import { Low, JSONFile } from 'lowdb';
 
 if (global.conns instanceof Array) {console.log()} else {global.conns = []}
 if (!(global.dataconst instanceof Array)) global.dataconst = [];
 let lastConnectionMessageTime = 0;
-let usedPrefix = '', args = [], command = '', m = ''
 
 const data = {}
 
-let handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
+let handler = async (m, {conn, info, args, usedPrefix, command, isOwner, botdb, db, userdb, senderJid, objs}) => {
+const {sessionNameAni, authFolder, botDirRespald, pathBotDBs, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts} = objs
 if (m.isGroup) return
 data.usedPrefix = usedPrefix
 data.args = args
 data.command = command
 data.m = m
 data.conn = conn
-//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let uniqid = `${m.sender.split`@`[0]}`//conn.getName(who)
+data.userdb = userdb
+data.senderJid = senderJid
+data.info = info
+data.objs = objs
+//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
+let uniqid = `${senderJid.split`@`[0]}`//conn.getName(who)
 const bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
-if (!global.db.data.bot[conn.user.jid].settings.modejadibot) {
+if (!botdb.settings.modejadibot) {
 let resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / PROPIETARIO DEL BOT*`
-return conn.sendWritingText(m.chat, resp, m)
-}
+return conn.sendWritingText(m.chat, resp, userdb, m)}
 /***
-if (conn.user.jid !== global.conn.user.jid) {
-resp = `*[❗] Este comando solo puede ser usado en un Bot principal!!*\n\n*—◉ Da click aquí o en la imagen para ir:*\n*◉* https://api.whatsapp.com/send/?phone=${global.conn.user.jid.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`;
+if (conn.user.jid !== global.userBot) {
+resp = `*[❗] Este comando solo puede ser usado en un Bot principal!!*\n\n*—◉ Da click aquí o en la imagen para ir:*\n*◉* https://api.whatsapp.com/send/?phone=${global.userBot.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`;
 contextInfo = true
 }
- */
-jddt(bot, data)
+*/
+verifyBot(bot, data)
 }
 handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
 handler.tags = ['jadibot']
 handler.command = /^(jadibot|serbot|rentbot)/i
-handler.before = async function before(m, {conn, isOwner}) {
+handler.before = async function before(m, {conn, isOwner, userdb, db, objs}) {
+const {jadibts} = objs
 if (m.text.match(/^initbot/i) && isOwner) {
 const args = m.text.split(/initbot/i)
 console.log('serbotInitBot: ', args)
 const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
-const bot = path.join(jadibts, conn.formatNumberWA(args[1]))
+const bot = path.join(jadibts, formatNumberWA(args[1]))
 jddt(bot, datas)
 } else if (m.text.match(/^fullbots/i) && isOwner) {
 const args = m.text.split(/^fullbots/i)
 const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
-const creds = 'creds.json';
 const dirSessionsAni = []
 
 const readJadibtsSession = fs.readdirSync(jadibts) //fs.existsSync(jadibts) ?: []; 
@@ -91,7 +93,7 @@ try {
 const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
 const userJid = readCreds && readCreds.me && readCreds.me.jid.split('@')[0]
 const currentFolderName = path.basename(botPath);
-const botDirRespald = path.join(global.authFolderRespald, userJid)
+const botDirRespald = path.join(authFolderRespald, userJid)
 const newBotPath = path.join(path.dirname(botPath), userJid);
 
 if (userJid && currentFolderName !== userJid && currentFolderName !== sessionNameAni) {
@@ -148,20 +150,40 @@ limpCarpetas()
 }
 }
 //handler.private = true 
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 
-export async function jddt(folderPath, data) {
-const { conn, args, usedPrefix, command, m } = data
+async function jddt(folderPath, data) {
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, Browsers } = await import('@whiskeysockets/baileys')
+const { conn, args, usedPrefix, command, userdb, m, senderJid, info, objs } = data
+const {sessionNameAni, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, jadibts} = objs
 conn.messageJdb = false
+const nameFolderBot = path.basename(folderPath)
+const folderDB = path.join(dataBases, sessionNameAni)
+const pathBotDBs = path.join(folderDB, nameFolderBot)
+if (!fs.existsSync(pathBotDBs)) fs.mkdirSync(pathBotDBs, { recursive: true })
+const botRespPath = path.join(authFolderRespald, nameFolderBot)
+if (!fs.existsSync(botRespPath)) fs.mkdirSync(botRespPath, { recursive: true })
+const pathDB = path.join(pathBotDBs, `SubBot-database.json`)
+console.log('jadibotCheck: ', pathDB)
+const db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(pathDB));
+const dbGFAPFile = path.join(pathBotDBs, 'groupFetchAllParticipatingJson.json')
+const createJson = new JSONFile(dbGFAPFile)
+const dbGroups = new Low(createJson)
+const dbSubBotsFile = path.join(folderDB, 'Subbots_registred.json')
+const createSBJson = new JSONFile(dbSubBotsFile)
+const dbRegisterSubBot = new Low(createSBJson)
+
 const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
-// stoled from aiden hehe
 if (mcode) {
 args[0] = args[0].replace("--code", "").trim()
 if (args[1]) args[1] = args[1].replace("--code", "").trim()
 if (args[0] == "") args[0] = undefined
 }
-console.log('serbot: ', !fs.existsSync(folderPath))
 if (!fs.existsSync(folderPath)){
 fs.mkdirSync(folderPath, { recursive: true });
 }
@@ -176,32 +198,30 @@ conn.messageJdb = false
 }
 let { version, isLatest } = await fetchLatestBaileysVersion()
 const msgRetry = (MessageRetryMap) => { }
-const msgRetryCache = new NodeCache()
+const msgRetryCounterCache = new NodeCache();
 const { state, saveState, saveCreds } = await useMultiFileAuthState(folderPath)
 const logger = pino({ level: `silent`})
-const useStore = !process.argv.includes('--no-store');
-const store = useStore ? makeInMemoryStore({ logger }) : undefined;
-async function getMessage(key) {
-if (store) {
-const msg = await store.loadMessage(key?.remoteJid, key?.id);
-return msg?.message || undefined;
-}
-}
-async function getMessage2 (key) {
-if (store) {
-const msg = await store.loadMessage((key.remoteJid), key.id) 
-return msg.message || undefined
-} else if (store) {
-const msg = await store.loadMessage(key.remoteJid, key.id);
-return conn.chats[key.remoteJid] && conn.chats[key.remoteJid].messages[key.id] ? conn.chats[key.remoteJid].messages[key.id].message : undefined;
-}
-return { conversation: 'recargando mensaje' } || proto.Message.fromObject({})
-}
+const inMstore = libstore.makeInMemoryStore({ logger })
+const storeFile = path.join(pathBotDBs, `${nameFolderBot}-${opts._[0] || 'data'}.store.json`)
+inMstore.readFromFile(storeFile)
 async function patchMessageBeforeSending(message) {
 const requiresPatch = !!( message.buttonsMessage || message.temlateMessage || message.listMessage );
 if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
 return message;
 }
+function getRandomProperty(obj) {
+const keys = Object.keys(obj); // Obtiene un array con las claves
+const randomKey = keys[Math.floor(Math.random() * keys.length)]; // Selecciona una clave aleatoria
+return obj[randomKey]; // Devuelve la función correspondiente
+}
+const browserInfo = Object.entries(Browsers).reduce((acc, [browser, getInfo]) => {
+acc[browser] = getInfo(browser);
+return acc;
+}, {});
+
+//BrowsersbrowserInfo, []
+console.log('serbot: ', getRandomProperty(browserInfo))
+const browser = mcode ? getRandomProperty(browserInfo) : ''
 
 const connectionOptions = {
 version,
@@ -210,20 +230,23 @@ logger: logger,
 auth: state,
 browser: ["Ubuntu", "Chrome", "20.0.04"],
 msgRetry,
-msgRetryCache,
 syncFullHistory: false,
 markOnlineOnConnect: false,
 receivedPendingNotifications: false,
-getMessage: (getMessage || getMessage2),
-connectTimeoutMs: 60_000,
+getMessage: async (key) => (inMstore.loadMessage(key.remoteJid, key.id) || libstore.loadMessage(key.id) || {}).message || null,
+cachedGroupMetadata: async (jid) => msgRetryCounterCache.get(jid),connectTimeoutMs: 60_000,
 defaultQueryTimeoutMs: 0,
 patchMessageBeforeSending,
 }
-let sock = makeWASocket(connectionOptions)
+const options = {
+storeFile,
+inMstore,
+libstore
+}
+let sock = makeWASocket(connectionOptions, options)
 sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
-const botRespPath = path.join(authFolderRespald, path.basename(folderPath))
 let now = Date.now();
 const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
 
@@ -233,13 +256,14 @@ const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
 let lastQr, shouldSendLogin, errorCount = 0;
 
 async function connectionUpdate(update) {
+let qrcode = await import("qrcode")
 let i = global.conns.indexOf(sock)
-global.timestamp.connect = new Date
+timestamp.connect = new Date
 const { connection, lastDisconnect, isNewLogin, qr } = update
 if (isNewLogin) sock.isInit = false
 if (qr && !mcode) {
-const resp = `*${wm}*
- *SER SUB-BOT*
+const resp = `*${info.nanie}*
+*SER SUB-BOT*
 
 *Escanea este codigo QR para convertirte en un Bot (SubBot), puedes usar otro dispositivo para escanear*
 
@@ -249,19 +273,19 @@ const resp = `*${wm}*
 *3.- Escanee este codigo QR*
 *El codigo QR expira en 60 segundos!!*
 
-*—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+*—◉ ${info.nanie} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
 
 if (m === null) return
-let q = await conn.sendWritingImage(m.chat, imagen, resp, m)
+let q = await conn.sendImageWriting(m.chat, imagen, resp, userdb, m)
 if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
 await lastQr.delete() 
 }
-//lastQr = await conn.sendWritingImage(m.chat, imagen, resp, q)
+//lastQr = await conn.sendImageWriting(m.chat, imagen, resp, userdb, q)
 errorCount++
 } else if (qr && mcode) {
-const resp = `*${wm}*
+const resp = `*${info.nanie}*
 *SER SUB-BOT*
 
 *El codigo a continuacion se usara para convertirte en un Bot (SubBot)*
@@ -275,19 +299,19 @@ O lo puede intentar:
 *2.- Haga click en los 3 puntos ubicados en la esquina superior derecha en el inicio de su WhatsApp. Toca en donde dice dispositivos vinculados, vincular nuevo dispositivo y elegir vincular con el numero de telefono y el codigo que copio lo pegas en las casillas*
 *El codigo expira en 60 segundos!!*
 
-*—◉ ${wm} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
-let q = await conn.sendWritingText(m.chat, resp, m)
+*—◉ ${info.nanie} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+let q = await conn.sendWritingText(m.chat, resp, userdb, m)
 await wait(5000)
-const code8 = await sock.requestPairingCode((m.sender.split`@`[0]))
-return conn.sendWritingText(m.chat, code8, q)
+const code8 = await sock.requestPairingCode((senderJid.split`@`[0]))
+return conn.sendWritingText(m.chat, code8, userdb, q)
 }
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
-if (global.db.data == null) loadDatabase()
+if (db.data == null) loadDatabase(db)
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 console.log('jadibotReason: ', reason, conn.messageJdb)
 if (connection === 'close') { 
 if (code === DisconnectReason.badSession) {
-sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Sesión incorrecta, por favor elimina la carpeta ${authFolderAniMX + '/' + uniqid} y escanea nuevamente.`);
+sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Sesión incorrecta, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 } else if (code === DisconnectReason.connectionClosed) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión cerrada, reconectando...`);
 return creloadHandler(true).catch(console.error)
@@ -296,8 +320,7 @@ return creloadHandler(true).catch(console.error)
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión perdida con el servidor, reconectando...`);
 const resp = "La conexión se perdio, se intentara reconectar automáticamente..."
 if (m !== null) {
-await conn.sendWritingText(m.chat, resp, m)
-}
+await conn.sendWritingText(m.chat, resp, userdb, m)}
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionReplaced) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión remplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
@@ -306,13 +329,12 @@ sock.ws.close()
 global.conns.splice(i, 1)
 const resp = code + " remplazando conexión actual..."
 if (m !== null) {
-await conn.sendWritingText(m.chat, resp, m)
-}
+await conn.sendWritingText(m.chat, resp, userdb, m)}
 } else if (code === DisconnectReason.loggedOut) {
 sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
 if (m !== null) {
-await conn.sendWritingText(m.chat, resp, m)}
+await conn.sendWritingText(m.chat, resp, userdb, m)}
 sock.ev.removeAllListeners()
 delete global.conns[i]
 deleteSesionSB(folderPath, botRespPath)
@@ -324,7 +346,7 @@ return creloadHandler(true).catch(console.error)
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Tiempo de conexión agotado, reconectando...`);
 const resp = "La conexión se cerró, Tendras que conectarte manualmente..."
 if (m === null) return
-await conn.sendWritingText(m.chat, resp, m)
+await conn.sendWritingText(m.chat, resp, userdb, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
 await creloadHandler(true).catch(console.error)
@@ -354,6 +376,7 @@ if (connection == 'open') {
 if (!sock.authState.creds.registered) {
 deleteSesionSB(folderPath, botRespPath)
 }
+userdb.ia = false
 console.log(chalk.blue(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${folderPath}\n│\n▣─────────────────────────────···`))
 global.conns.push(sock)
 limpCarpetas(folderPath)
@@ -366,36 +389,37 @@ let resp = '', q = ''
 if (m === null) return
 if (conn.messageJdb) {
 resp = `*[❗] reconectado con exito, se paciente los mensajes se estan cargando...*`
-q = await conn.sendWritingText(m.chat, resp, m)
+q = await conn.sendWritingText(m.chat, resp, userdb, m)
 console.log('jadibotCheck: ', conn.messageJdb, resp)
 } else {
-resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefix + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefix + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefix + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefix + command}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefix + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefix + command}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots se apagaran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${global.timestamp.connect = new Date}`
-q = await conn.sendWritingText(m.chat, resp, m)
-
+resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefix + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefix + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefix + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefix + command}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefix + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefix + command}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots se apagaran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${timestamp.connect = new Date}`
+q = await conn.sendWritingText(m.chat, resp, userdb, m)
 if (now - lastConnectionMessageTime >= oneDay) {
 } else {
 resp = `listo`
 if (m === null) return
-q = await conn.sendWritingText(m.chat, resp, m)
-}
+q = await conn.sendWritingText(m.chat, resp, userdb, m)}
 let chatjid = state.creds.me.jid
-console.log('jadibotCheck: ', chatjid)
-resp = `*${ganisubbots}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
-let qq = await conn.sendWritingText(m.chat, resp, q)
+resp = `*${info.ganisubbots}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
+let qq = await conn.sendWritingText(m.chat, resp, userdb, q)
 //chatjid.split`@`[0]
 resp = `hello ${await conn.getName(chatjid)}\n\n` + mensajeidioma.trim()
 await sock.sendWritingText(chatjid, resp, qq)
 try {
 wait(40000)
-return sock.groupAcceptInvite(ganisubbots.replace('https://chat.whatsapp.com/', ''));
+return sock.groupAcceptInvite(info.ganisubbots.replace('https://chat.whatsapp.com/', ''));
 } catch (error) {
 console.log('Error al enviar invitación del grupo:', error.stack);
 }
 }
-//if (update.receivedPendingNotifications === true) return wait (10000)
-//onBots(authFolderAniMX + '/' + uniqid)
-//wait(8000000)
-//process.send('reset');
+const now = Date.now(); 
+const data = await dataSubBot(nameFolderBot, dbRegisterSubBot).catch(await registrerSubBot(nameFolderBot, sock.user, {dbRegisterSubBot}))
+const lastGroupFetchAll = data.lastGroupFetchAll
+const diff = now - lastGroupFetchAll
+if (!lastGroupFetchAll || diff >= 3 * 24 * 60 * 60 * 1000 ) {
+await groupFetchAllParticipatingJson(sock, dbGroups, data, nameFolderBot, registrerSubBot)//.catch(await dataBot(nameReg))
+}
+await registrerSubBot(nameFolderBot, sock.user, {dbRegisterSubBot})
 }
 lastConnectionMessageTime = now;
 
@@ -408,12 +432,12 @@ sock.ev.removeAllListeners()
 
 let i = global.conns.indexOf(sock)
 						
- if (i < 0) return
+if (i < 0) return
 delete global.conns[i]
 global.conns.splice(i, 1)
 }}, 60000)
 
-
+libstore.bind(sock)
 		 
 let handler = await import('../handler.js')
 let creloadHandler = async function (restatConn) {
@@ -428,7 +452,7 @@ if (restatConn) {
 try { sock.ws.close() } catch { }
 sock.ev.removeAllListeners()
 const oldChats = sock.chats;
-sock = makeWASocket(connectionOptions, { chats: oldChats })
+sock = makeWASocket(connectionOptions, {storeFile, inMstore, libstore, chats: oldChats })
 sock.uptime = Date.now();
 isInit = true
 }
@@ -442,13 +466,20 @@ sock.ev.off('connection.update', sock.connectionUpdate)
 sock.ev.off('creds.update', sock.credsUpdate)
 }
 
-sock.handler = handler.handler.bind(sock)
-sock.participantsUpdate = handler.participantsUpdate.bind(sock)
-sock.groupsUpdate = handler.groupsUpdate.bind(sock)
-sock.onDelete = handler.deleteUpdate.bind(sock)
-sock.onCall = handler.callUpdate.bind(sock)
-sock.connectionUpdate = connectionUpdate.bind(sock)
-sock.credsUpdate = saveCreds.bind(sock, true)
+let func = {}
+try {const {call} = await import('../plugins/_anticall.js') 
+const {fail} = await import('../plugins/_dFailMessages.js')
+func = {call, fail}
+} catch (e) {console.log('Objs: ', e.stack)}
+const botObj = {sessionNameAni, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
+
+sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);}//.bind(sock)
+sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)}//bind(sock);
+sock.groupsUpdate = function(groupsUpdate) { return handler.groupsUpdate.call(sock, groupsUpdate, botObj)};//bind(sock)
+sock.onDelete = function(message) { return handler.deleteUpdate.call(sock, message, botObj)}//bind(sock);
+sock.onCall = function(callUpdate) { return handler.callUpdate.call(sock, callUpdate, botObj);}//.bind(sock);
+sock.connectionUpdate = connectionUpdate.bind(sock);
+sock.credsUpdate = saveCreds.bind(sock, true);
 
 sock.ev.on('messages.upsert', sock.handler)
 sock.ev.on('group-participants.update', sock.participantsUpdate)
@@ -462,6 +493,9 @@ wait(3000)
 //process.send('reset');
 return true
 }
+inMstore.bind(conn.ev, {
+groupMetadata: conn.groupMetadata
+})
 creloadHandler(false)
 }
 
@@ -472,6 +506,87 @@ return fs.rmSync(folderPath, { recursive: true, force: true })
 }
 if (fs.existsSync(respaldPath)) {
 return fs.rmSync(respaldPath, { recursive: true, force: true })
+}
+}
+
+export async function verifyBot(filePath, datas) {
+if (fs.existsSync(filePath)) {
+try {
+const readBotPath = fs.readdirSync(filePath)
+if (readBotPath.includes(creds)) {
+const filePathCreds = path.join(filePath, creds)
+const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
+const userJid = readCreds && readCreds.me && readCreds.me.jid.split('@')[0]
+const currentFolderName = path.basename(filePath);
+const botDirRespald = path.join(authFolderRespald, userJid)
+const newBotPath = path.join(path.dirname(filePath), userJid);
+
+if (userJid && currentFolderName !== userJid && currentFolderName !== sessionNameAni) {
+if (!fs.existsSync(newBotPath)) {
+fs.mkdirSync(newBotPath);
+}
+
+const files = fs.readdirSync(filePath);
+files.forEach(file => {
+const oldPath = path.join(filePath, file);
+const newPath = path.join(newBotPath, file);
+fs.copyFileSync(oldPath, newPath);
+//fs.renameSync(oldPath, newPath);
+fs.unlinkSync(oldPath);
+});
+
+fs.rmdirSync(filePath);
+console.log(`Archivos movidos a ${newBotPath} y carpeta original eliminada.`);
+}
+
+if (credsStatus(filePath) && validateJSON(filePathCreds)) {
+backupCreds(filePath, botDirRespald)
+jddt(newBotPath, datas); // Lanzar bot como proceso separado
+} else {
+const readBotDirBackup = fs.readdirSync(botDirRespald)
+if (readBotDirBackup.includes(creds)) {
+const fileCredsResp = path.join(botDirRespald, creds)
+if (backupCredsStatus(botDirRespald) && validateJSON(fileCredsResp)) {
+respaldCreds(filePath, botDirRespald)
+jddt(filePath, datas)
+} else {
+deleteSesionSB(filePath, botDirRespald)
+}
+} else {
+deleteSesionSB(filePath, botDirRespald)
+}
+}
+} else {
+limpCarpetas(filePath)
+}
+} catch (error) {
+console.log('errorInicializacion: ', error.stack)
+const botRespPath = path.join(authFolderRespald, path.basename(filePath))
+if (fs.existsSync(botRespPath)) {
+try {
+const fileRespPathCreds = path.join(botRespPath, creds)
+const readBotPathBackUp = fs.readdirSync(filePath)
+if (readBotPathBackUp.includes(creds)) {
+
+if (backupCredsStatus(botRespPath) && validateJSON(fileRespPathCreds)) {
+respaldCreds(filePath, botRespPath)
+} else {
+deleteSesionSB(filePath, botRespPath)
+}
+
+} else {
+deleteSesionSB(filePath, botRespPath)
+limpCarpetas(filePath)
+}
+} catch (error) {
+console.log('errorbackup: ', error.stack)
+}
+} else {
+return fs.rmSync(filePath, { recursive: true, force: true })
+}
+}
+} else {
+jddt(filePath, datas)
 }
 }
 /**
@@ -491,5 +606,5 @@ conn.ev.removeAllListeners()
 delete global.conns[i]
 global.conns.splice(i, 1)
 errorCount++
- && code !== 401
- */
+&& code !== 401
+*/

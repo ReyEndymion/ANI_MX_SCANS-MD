@@ -1,55 +1,59 @@
-import path, { join } from 'path'
-import fetch from 'node-fetch';
-import Jimp from 'jimp';
-import fs from 'fs'
-let handler = async (m, { conn, participants, groupMetadata, args }) => {
-    function randomString(length) {
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
-        if (!length) {
-          length = Math.floor(Math.random() * chars.length);
-        }
-        var str = '';
-        for (var i = 0; i < length; i++) {
-          str += chars[Math.floor(Math.random() * chars.length)];
-        }
-        return str;
-      }
-    let pp = await conn.profilePictureUrl(m.chat, 'image');
-    const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
-    
-    const lettersImage = await Jimp.read(fs.readFileSync(join(media, 'pictures/invAdmins.png')));
-    
-    // Redimensionar la imagen de las letras para que coincida con el tamaño de la imagen del perfil
-    lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
-    
-    // Superponer las imágenes
-    profilePicture.composite(lettersImage, 0, 0);
-    
-    // Guardar la imagen combinada en un archivo local
-    const img = path.join(dirP, `tmp/${randomString(5)}.jpg`);
-    await profilePicture.writeAsync(img);
- 
+let handler = async (m, {conn, info, command, participants, groupMetadata, args, db, userdb, senderJid}) => {
+const path = await import('path')
+const fs = await import('fs')
+const { temp, media, userID, lid } = await import('../config.js')
 const groupAdmins = participants.filter(p => p.admin)
-const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
-const owner = groupMetadata.owner || groupAdmins.find(p => p.admin === 'superadmin')?.id || m.chat.split`-`[0] + '@s.whatsapp.net'
-let pesan = args.join` `
-let oi = `*MENSAJE:* ${pesan}`
-let text = `*━「* INVOCANDO ADMINS *」━*\n\n${oi}\n\n*ADMINS:*\n${listAdmin}\n\n*[ ⚠ ️] USAR ESTE COMANDO SOLO CUANDO SE TRATE DE UNA EMERGENCIA!!*\n\n${wm}`.trim()
-let txt = text;
-let count = 0;
-for (const c of text) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-    count++;
+const listAdmin = groupAdmins.map((v, i) => v.id.endsWith(lid) ? `${i + 1}. @${v.jid.split('@')[0]}` : `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
+if (/^(admins|@admins|dmins)$/i.test(command)) {
+const { randomString } = await import('../lib/functions.js');
+let { default: fetch } = await import('node-fetch');
+let { default: Jimp } = await import('jimp');
+let pp = await conn.profilePictureUrl(m.chat, 'image');
+const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
 
-    if (count % 10 === 0) {
-      
-await conn.sendPresenceUpdate('composing' , m.chat);
-    }
+const lettersImage = await Jimp.read(fs.readFileSync(path.join(media, 'pictures/invAdmins.png')));
+lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
+profilePicture.composite(lettersImage, 0, 0);
+const img = path.join(temp, `${randomString(5)}.jpg`);
+await profilePicture.writeAsync(img);
+
+
+let msg = args.join` `
+let oi = `*MENSAJE:* ${msg}`
+let text = `*━「*INVOCANDO ADMINS*」━*\n\n${oi}\n\n*ADMINS:*\n${listAdmin}\n\n*[ ⚠ ️] USAR ESTE COMANDO SOLO CUANDO SE TRATE DE UNA EMERGENCIA!!*\n\n${info.nanie}`.trim()
+return conn.sendImageWriting(m.chat, img, text, userdb, m );
 }
-await conn.sendMessage(m.chat, {image: {url: img}, caption: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+if (/^ownergroup$/i.test(command)) {
+const owner = groupMetadata?.owner
+let text = '', ownertag
+if (owner) {
+const isOwnerGroup = groupAdmins.find(p => owner.endsWith(lid) ? owner === p.jid : owner === p.id)
+if (isOwnerGroup) {
+ownertag = owner.split('@')[0]
+if (isOwnerGroup.admin === 'superadmin') {
+text = `*━「*INVOCANDO AL CREADOR DEL GRUPO*」━*\n\n${oi}\n\n*CREADORGP:*\n@${ownertag}\n\n*[ ⚠ ️] USAR ESTE COMANDO SOLO CUANDO SE TRATE DE UNA EMERGENCIA!!*\n\n${wmbc}`.trim()
+}
+if (isOwnerGroup.admin === 'admin') {
+text = `*EL CREADOR DEL GRUPO* @${ownertag} esta presente, pero da lo mismo que hablar con otro admin ya que no es inmutable`
+}
+} else {
+text = `EL CREADOR DEL GRUPO esta ausente, pero el admin que ha hecho cambios al grupo @${(groupMetadata.subjectOwner.endsWith(lid) ? conn.lidToJid(groupMetadata.subjectOwner, m.chat) : groupMetadata.subjectOwner).split('@')[0]} u otro admin pueden ayudarte`
+}
+} else {
+text = `EL CREADOR DEL GRUPO *no existe*\n\nPide ayuda a cualquiera de los siguientes admins:\n${listAdmin}`
+}
+return conn.sendWritingText(m.chat, text, userdb, m );
+}
 }
 handler.help = ['admins <texto>']
 handler.tags = ['group']
-handler.command = /^(admins|@admins|dmins)$/i
+handler.command = /^(admins|@admins|dmins|ownergroup)$/i
 handler.group = true
+handler.menu = [
+{title:"💎 INVOCAR A ADMINS", description: "invoca a los administradores del grupo usando #admins <mensaje>", id: `admins`},
+{title:"💎 INVOCAR AL OWNER DEL GRUPO", description: "invoca al owner del grupo usando #ownergroup <mensaje>", id: `ownergroup`}
+];
+handler.type = "gadmin";
+handler.disabled = false;
+
 export default handler

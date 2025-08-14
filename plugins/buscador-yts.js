@@ -1,90 +1,89 @@
-import { youtubeSearch } from '@bochilteam/scraper'
-import yts from 'yt-search';
-import fs from 'fs';
+import { youtubeSearch } from '../lib/ytscraper.js'
+import { info, newsletterID, sBroadCastID, media, groupID } from '../config.js'
 
-let handler = async (m, { conn, text, command, usedPrefix}) => {
+let handler = async (m, {conn, text, command, usedPrefix, db, userdb, senderJid}) => {
+let { default: yts } = await import('yt-search');
+let { default: fs } = await import('fs');
+let { default: path } = await import('path');
 let resp, imagen
-console.log('ytsearch: ', /^yts(earch)?$/ig.test(command))
-if (/^yts(earch)?$/ig.test(command)) {
-if (!text) {    
+if (!text) { 
 resp = `⚠️ *_Que quieres que busque en YouTube?_*\n\n*[❗INFO❗] INSERTE EL NOMBRE DE ALGUN VIDEO O CANAL DE YOUTUBE*\n\nDebes usar el comando ${usedPrefix + command} + la frase que deseas buscar\nEjemplo:\n${usedPrefix + command} Armin\n\nLos comandos disponibles son:\n\nyts, yts2, ytsearch y ytsearch2`
- }
+} else {
+if (/^yts(earch)?$/ig.test(command)) {
 try {
 const { video, channel } = await youtubeSearch(text)
-//let imagennnnn = (await youtubeSearch(text)).video[0].thumbnail
+let imagennnnn = (await youtubeSearch(text)).video[0].thumbnail
 resp = [...video, ...channel].map(v => {
-switch (v.type) {
-case 'video': return `
-📌 *${v.title}* (${v.url})
+console.log('ytsearch: ', v)
+//if (/videoId/.test(v))
+switch (Object.keys(v)[0]) {
+case 'videoId': return `
+🎥 Nombre: *${v.title}* 
+📎 link: ${v.url}
 ⌚ Duracion: ${v.durationH}
 ⏲️ Publicado ${v.publishedTime}
 👁️ ${v.view} vistas
+📌 Canal que lo publica:
+*${v.channelName}*
 `.trim()
-case 'channel': return `
-📌 *${v.channelName}* (${v.url})
-🧑‍🤝‍🧑 _${v.subscriberH} suscriptores_
-🎥 ${v.videoCount} videos
+case 'channelId': return `
+*CANAL ENCONTRADO*
+📌 Nombre: *${v.channelName}* 
+📎 Link: ${v.url}
+🧑‍🤝‍🧑 _${v.subscriberH.replace(' subscribers', '')} suscriptores_
+📝 ${v.description}
 `
 }
 }).filter(v => v).join('\n\n========================\n\n')
-imagen = imgYoutube
+imagen = imagennnnn ? imagennnnn : path.join(media, 'pictures/youtube.jpg')
 } catch (e) {
-    console.log(e)
+console.log(e)
 resp = `${e}\n\n`
-resp = `Si ocurrio un error usando el comando ${usedPrefix + command} ${text} y no tuvo resultado puede probar con ${usedPrefix + command}2 ${text}` 
+resp += `Si ocurrio un error usando el comando ${usedPrefix + command} ${text} y no tuvo resultado puede probar con ${usedPrefix + command}2 ${text}` 
 }
 }
 if (/^yts(earch)?2$/ig.test(command)) {
-    if (!text) {    
-resp = `⚠️ *_Que quieres que busque en YouTube?_*\n\n*[❗INFO❗] INSERTE EL NOMBRE DE ALGUN VIDEO O CANAL DE YOUTUBE*\n\nDebes usar el comando ${usedPrefix + command} + la frase que deseas buscar\nEjemplo:\n${usedPrefix + command} Armin`
-}
 try {
 const results = await yts(text);
 const tes = results.all;
 resp = results.all.map((v) => {
+console.log('ytsearch2: ', v)
 switch (v.type) {
 case 'video': return `
-  ° *_${v.title}_*
-  ↳ 🫐 *_Link :_* ${v.url}
-  ↳ 🕒 *_Duración :_* ${v.timestamp}
-  ↳ 📥 *_Subido :_* ${v.ago}
-  ↳ 👁 *_Vistas :_* ${v.views}`;
+° *_${v.title}_*
+↳ 🫐 *_Link :_* ${v.url}
+↳ 🕒 *_Duración :_* ${v.timestamp}
+↳ 📥 *_Subido :_* ${v.ago}
+↳ 👁 *_Vistas :_* ${v.views}`;
+case 'channel': return `
+*CANAL ENCONTRADO*
+📌 Nombre: *${v.name}* 
+📎 Link: ${v.url}
+🧑‍🤝‍🧑 _${v.subCountLabel} suscriptores_
+📝 ${v.about}
+`
 }
 }).filter((v) => v).join('\n\n◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦\n\n');
 
-imagen = imgYoutube||tes[0].thumbnail 
+imagen = tes[0].thumbnail ? tes[0].thumbnail : path.join(media, 'pictures/youtube.jpg')
 //conn.sendFile(m.chat, tes[0].thumbnail, 'yts.jpeg', teks, m);
 } catch (error) {
 console.log(error)
 resp = `${error}\n\n`
-resp = `Si ocurrio un error usando el comando *${usedPrefix + command} ${text}* y no tuvo resultado puede probar con el comando *${usedPrefix + command.replace(2, '')} ${text}*` 
+resp =+ `Si ocurrio un error usando el comando *${usedPrefix + command} ${text}* y no tuvo resultado puede probar con el comando *${usedPrefix + command.replace(2, '')} ${text}*` 
 }
 }
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 1));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
 }
-}
-if (imagen) {
-return conn.sendMessage(m.chat, { image: imagen, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
+if (imagen !== undefined) {
+return conn.sendImageWriting(m.chat, imagen, resp, userdb, m); 
 } else {
-return conn.sendMessage(m.chat, { text: txt, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendWritingText(m.chat, resp, userdb, m)}
 }
-}   
 handler.help = ['', 'earch'].map(v => 'yts' + v + ' <pencarian>')
 handler.tags = ['tools']
 handler.command = /^yts(earch)?2?$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
-async function fetchJson(url, options) {
-try {
-options ? options : {}
-const res = await axios({ method: 'GET', url: url, headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'}, ...options })
-return res.data
-} catch (err) {
-return err
-}}

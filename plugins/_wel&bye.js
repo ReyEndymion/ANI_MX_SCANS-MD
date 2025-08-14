@@ -1,13 +1,25 @@
-let handler = async (m, { conn, text, usedPrefix, command, customPrefix }) => {
-let stikerwelgc = "./src/welgc.webp"
-let stikerbyegc = "./src/byegc.webp"
+let handler = async (m, {conn, text, usedPrefix, command, customPrefix, db, userdb, senderJid}) => {
+const { media, info } = await import('../config.js');
+const { default: path } = await import('path');
+const { default: fs } = await import('fs')
+
+if (!m.isGroup) return
+let stikerwelgc = path.join(media, "stickers/welgc.webp")
+let stikerbyegc = path.join(media, "stickers/byegc.webp")
+const metadatos = {packname: info.packname, wm: info.nanie}
 if (command == 'welcomegc') {
-conn.sendFile(m.chat, stikerwelgc, 'welgc.webp', null, m, { asSticker: true })
+return conn.sendSticker(m.chat, stikerwelgc, metadatos, m)
 }
 if (command == 'byegc') {
-conn.sendFile(m.chat, stikerbyegc, 'byegc.webp', null, m, { asSticker: true })
-}}
+return conn.sendSticker(m.chat, stikerbyegc, metadatos, m)
+}
+
+}
 handler.command = ['welcomegc', 'byegc']
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
-function pickRandom(list) {
-return list[Math.floor(list.length * Math.random())]}

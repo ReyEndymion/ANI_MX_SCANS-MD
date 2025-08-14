@@ -1,8 +1,8 @@
-import { Low, JSONFile } from 'lowdb';
+const {  Low, JSONFile  } = await import('lowdb');
 const databaseFile = './countMessagesReg.json';
 const adapter = new JSONFile(databaseFile);
 const db = new Low(adapter);
-let handler = async (m, { conn, text, participants }) => {
+let handler = async (m, {conn, text, participants, db, userdb, senderJid}) => {
 await db.read();
 let chat = db.data.bot[conn.user.jid].chats.groups[m.chat]
 let resp = '', ghost = false
@@ -51,7 +51,7 @@ tags += `@${tag} con ${count} mensajes\n`;
 }
 
 if (usersToGhost.length > 0) {
-const date = new Date(users[m.sender].msgcount.time);
+const date = new Date(users[senderJid].msgcount.time);
 const day = date.getDate();
 const monthNames = [
 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -77,13 +77,19 @@ conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 if (ghost) {
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+await conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }
 handler.command = /^((ver)?fantasmas|sider|ghosts)$/i
 handler.group = true
 //handler.botAdmin = true
 //handler.admin = true
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

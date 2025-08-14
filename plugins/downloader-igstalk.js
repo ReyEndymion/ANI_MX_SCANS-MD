@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-if (!args[0]) throw `*[❗INFO❗] INGRESE EL NOMBRE DE USUARIO DE UN USUARIO DE INSTAGRAM, EJEMPLO: ${usedPrefix + command} luisitocomunica*`
+let handler = async (m, {conn, args, usedPrefix, command, db, userdb, senderJid}) => {
+if (!args[0]) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE EL NOMBRE DE USUARIO DE UN USUARIO DE INSTAGRAM, EJEMPLO: ${usedPrefix + command} luisitocomunica*`, m)
 let res = await igstalk(args[0].replace(/^@/, ''))
 let json = JSON.parse(JSON.stringify(res))
 let iggs = `
@@ -16,6 +16,10 @@ await conn.sendFile(m.chat, json.profilePicHD, 'error.jpg', iggs, m)}
 handler.help = ['igstalk <username>']
 handler.tags = ['internet']
 handler.command = /^(igstalk)$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 async function igstalk(username) {
 try {
@@ -29,23 +33,23 @@ const results = {
 username: ($('#user-page > div.user > div.row > div > div.user__title > h4').text() || '').replace(/@/gi, '').trim(),
 fullName: $('#user-page > div.user > div.row > div > div.user__title > a > h1').text(),
 profilePicHD: ($('#user-page > div.user > div.row > div > div.user__img').attr('style') || '').replace(/(background-image: url\(\'|\'\);)/gi, '').trim(),
-bio: $('#user-page > div.user > div.row > div > div.user__info-desc').text(),  
+bio: $('#user-page > div.user > div.row > div > div.user__info-desc').text(), 
 followers: ($('#user-page > div.user > div.row > div > ul > li').eq(1).text() || '').replace(/Followers/gi, '').trim(),
 followersM: ($('#user-page > div.container > div > div > div:nth-child(1) > div > a').eq(2).text() || '').replace(/Followers/gi, '').trim(),
-following: ($('#user-page > div.user > div > div.col-md-4.col-8.my-3 > ul > li').eq(2).text() || '').replace(/Following/gi, '').trim(),
+following: ($('#user-page > div.user > div > div.col-info.repoProyect-4.col-8.my-3 > ul > li').eq(2).text() || '').replace(/Following/gi, '').trim(),
 followingM: ($('#user-page > div.container > div > div > div:nth-child(1) > div > a').eq(3).text() || '').replace(/Following/gi, '').trim(),
-postsCount: ($('#user-page > div.user > div > div.col-md-4.col-8.my-3 > ul > li').eq(0).text() || '').replace(/Posts/gi, '').trim(),
+postsCount: ($('#user-page > div.user > div > div.col-info.repoProyect-4.col-8.my-3 > ul > li').eq(0).text() || '').replace(/Posts/gi, '').trim(),
 postsCountM: ($('#user-page > div.container > div > div > div:nth-child(1) > div > a').eq(0).text() || '').replace(/Posts/gi, '').trim()}
 return results
 } catch {
-throw '*[❗INFO❗] ERROR, POR FAVOR COMPRUEBA QUE HAYA ESCRITO BIEN EL NOMBRE DE USUARIO Y VUELVA A INTENTARLO*'
+return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR, POR FAVOR COMPRUEBA QUE HAYA ESCRITO BIEN EL NOMBRE DE USUARIO Y VUELVA A INTENTARLO*`, m)
 }}
 
 
 
 /*import { instagramStalk } from '@bochilteam/scraper'
-let handler= async (m, { args, usedPrefix, command }) => {
-if (!args[0]) throw `*[❗INFO❗] INGRESE EL NOMBRE DE USUARIO DE UN USUARIO DE INSTAGRAM, EJEMPLO: ${usedPrefix + command} luisitocomunica*`
+let handler= async (m, {args, usedPrefix, command, db, userdb, senderJid}) => {
+if (!args[0]) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE EL NOMBRE DE USUARIO DE UN USUARIO DE INSTAGRAM, EJEMPLO: ${usedPrefix + command} luisitocomunica*`, m)
 const { username, name, description, followersH, followingH, postsH } = await instagramStalk(args[0])
 m.reply(` ${name} *(${username})* https://instagram.com/${username.replace(/^@/, '')}
 *${followersH}* SEGUIDORES

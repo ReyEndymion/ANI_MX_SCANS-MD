@@ -1,13 +1,18 @@
-let handler = async(m, { conn }) => {
+let handler = async(m, {conn, db, userdb, senderJid}) => {
+let {prefix} = await import('../lib/functions.js')
 
-  global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
-    await m.reply(`[❗𝐈𝐍𝐅𝐎❗] 𝙿𝚁𝙴𝙵𝙸𝙹𝙾 𝚁𝙴𝚂𝚃𝙰𝙱𝙻𝙴𝙲𝙸𝙳𝙾 𝙲𝙾𝙽 𝙴𝚇𝙸𝚃𝙾`)
-    // conn.fakeReply(m.chat, '[❗𝐈𝐍𝐅𝐎❗] 𝙿𝚁𝙴𝙵𝙸𝙹𝙾 𝚁𝙴𝚂𝚃𝙰𝙱𝙻𝙴𝙲𝙸𝙳𝙾 𝙲𝙾𝙽 𝙴𝚇𝙸𝚃𝙾', '0@s.whatsapp.net', 'Reset Prefix')
+prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
+await conn.sendWritingText(m.chat, `[❗INFO❗] PRE𝙵IJO RESTABLECIDO CON EXITO`, userdb, m)
+// conn.fakeReply(m.chat, '[❗INFO❗] PRE𝙵IJO RESTABLECIDO CON EXITO', '0@s.whatsapp.net', 'Reset Prefix')
 }
 handler.help = ['resetprefix']
 handler.tags = ['owner']
 handler.command = /^(resetprefix)$/i
 handler.rowner = true
 
+
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
 export default handler

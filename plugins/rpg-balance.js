@@ -1,19 +1,12 @@
-let handler = async (m, {conn, usedPrefix}) => {
-const bot = global.db.data.bot[conn.user.jid]
-const chats = bot.chats
-const privs = chats.privs
-const groups = chats.groups
-const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
-const users = m.isGroup ? chat.users || {} : privs
-
+let handler = async (m, {conn, usedPrefix, usersdb, db, userdb, senderJid}) => {
 let who
-if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
-else who = m.sender
+if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : senderJid
+else who = senderJid
 let name = who.split`@`[0]//conn.getName(who) 
 let resp = `
 ┌───⊷ *BALANCE* ⊶
 ▢ *Nombre:* @${name}
-▢ *Diamantes:* ${users[who].limit}💎
+▢ *Diamantes:* ${usersdb[who].limit}💎
 └──────────────
 *NOTA:* 
 *Puedes comprar diamantes 💎 usando los comandos*
@@ -24,4 +17,8 @@ return conn.sendWritingText(m.chat, resp, m );
 handler.help = ['bal']
 handler.tags = ['xp']
 handler.command = ['bal', 'diamantes', 'diamond', 'balance'] 
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

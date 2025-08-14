@@ -1,4 +1,4 @@
-let handler = async (m, { conn, command, text }) => {
+let handler = async (m, {conn, command, text, db, userdb, senderJid}) => {
 const startComposing = async (conn, m) => {
 await conn.sendPresenceUpdate('composing', m.chat);
 };
@@ -88,18 +88,18 @@ let loveMessagesList = [];
 
 if (isHighLove && text) {
 loveMessagesList = loveMessages;
-loveDescription = `${text? text : '@' + m.sender.split('@')[0]} y @${m.sender.split('@')[0]} tienen una conexión profunda y un amor`;
+loveDescription = `${text? text : '@' + senderJid.split('@')[0]} y @${senderJid.split('@')[0]} tienen una conexión profunda y un amor`;
 } else if (!isHighLove && text) {
 loveMessagesList = notSoHighLoveMessages;
-loveDescription = `${text? text : '@' + m.sender.split('@')[0]} y @${m.sender.split('@')[0]} tienen una conexión especial, aunque en el amor su porcentaje es`;
+loveDescription = `${text? text : '@' + senderJid.split('@')[0]} y @${senderJid.split('@')[0]} tienen una conexión especial, aunque en el amor su porcentaje es`;
 } else if (lovePercentage === 0) {
-loveDescription = `No parece haber amor ni amistad en el aire entre ${text? text : '@' + m.sender.split('@')[0]} y @${m.sender.split('@')[0]}`;
+loveDescription = `No parece haber amor ni amistad en el aire entre ${text? text : '@' + senderJid.split('@')[0]} y @${senderJid.split('@')[0]}`;
 } else if (isHighLove && !text) {
 loveMessagesList = amorPropioMessages;
-loveDescription = `@${m.sender.split('@')[0]} te amas a ti mismo`;
+loveDescription = `@${senderJid.split('@')[0]} te amas a ti mismo`;
 } else if (!isHighLove && !text) {
 loveMessagesList = noAmorPropioMessages;
-loveDescription = `@${m.sender.split('@')[0]} mereces amarte a ti mismo`;
+loveDescription = `@${senderJid.split('@')[0]} mereces amarte a ti mismo`;
 }
 
 loveMessage = getRandomMessage(loveMessagesList);
@@ -113,17 +113,6 @@ love = `━━━━━━━⬣❤️❤️ *LOVE* ❤️❤️⬣━━━━�
 `*❥ En el universo del amor, ${loveDescription} del ${lovePercentage}% de un 100%*\n\n*❥ ${loveMessage}*\n` +
 `━━━━━━━⬣ *LOVE* ⬣━━━━━━━`.trim();
 } 
-let txt = '';
-let count = 0;
-for (const c of love) {
-await new Promise(resolve => setTimeout(resolve, 10));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
 async function loading() {
 var hawemod = [
 `《 █▒▒▒▒▒▒▒▒▒▒▒》${boost1}`,
@@ -132,20 +121,26 @@ var hawemod = [
 `《 ██████████▒▒》${boost4}`,
 `《 ████████████》${boost5}`
 ]
- let { key } = await conn.sendMessage(m.chat, {text: `*💞 ¡Calculando Porcentaje! 💞*`, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+let { key } = await conn.sendWritingText(m.chat, `*💞 ¡Calculando Porcentaje! 💞*`, userdb, m)
 for (let i = 0; i < hawemod.length; i++) {
 await new Promise(resolve => setTimeout(resolve, 1000)); 
 startComposing(conn, m);
-await conn.sendMessage(m.chat, {text: hawemod[i], edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}); 
+await conn.sendEditWritingText(m.chat, hawemod[i], key, userdb, m); 
 }
 stopComposing(conn, m);
- await conn.sendMessage(m.chat, {text: txt, edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+await conn.sendEditWritingText(m.chat, love, key, userdb, m);
 return 
- }
+}
 loading()}
 handler.help = ['love']
 handler.tags = ['fun']
 handler.command = /^(love)$/i
+handler.menu = [
+{title: "💞 LOVE", description: "MIDE EL AMOR ENTRE DOS PERSONAS O EL AMOR PROPIO", id: `love`}
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler
 
 function pickRandom(list) {

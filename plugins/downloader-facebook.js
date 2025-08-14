@@ -1,13 +1,14 @@
-import fg from 'api-dylux' 
+//import fg from 'api-dylux' 
 import fetch from 'node-fetch'
-import { savefrom, facebookdl } from '@bochilteam/scraper'
+import { facebookdl } from '../lib/facebookscraper.js'
 import fbDownloader from 'fb-downloader-scrapper'
-let handler = async (m, { conn, args, command, usedPrefix }) => {
+let handler = async (m, {conn, args, command, usedPrefix, db, userdb, senderJid}) => {
 let resp, video
 if (!args[0]) {resp = `*[❗INFO❗] INGRESE UN ENLACE DE FACEBOOK, EJEMPLO: ${usedPrefix + command}* https://fb.watch/fOTpgn6UFQ/`} 
 if (!args[0].match(/www.facebook.com|fb.watch/g)) {resp = `*[❗INFO❗] INGRESE UN ENLACE DE FACEBOOK, EJEMPLO: ${usedPrefix + command}* https://fb.watch/fOTpgn6UFQ/`}
 try {
 resp = `*[❗] DESCARGANDO SU VIDEO, AGUARDE UN MOMENTO POR FAVOR, ESTE PROCESO PUEDE DURAR ENTRE 2 Y 10 MINUTOS DEPENDIENDO DE LA DURACIÓN DEL VIDEO...*`
+let q = await conn.sendWritingText(m.chat, resp, userdb, m)
 switch (command) { 
 case "facebook": case "fb": case "facebookdl": case "fbdl":
 try {
@@ -40,14 +41,27 @@ resp = `${error}`
 }
 break 
 case "facebook4": case "fb4": case "facebookdl4": case "fbdl4": 
-try {
 console.log('dlfbs: ', await facebookdl(args[0]))
-const result  = await facebookdl(args[0])
-for (const { url, isVideo } of result.reverse()) {
-`facebook.${!isVideo ? 'bin' : 'mp4'}`
-video = url
-resp = '*AQUI ESTA SU VIDEO*'
+try {
+const result = await facebookdl(args[0])//.catch(async _ => await facebookdlv2(args[0]))
+//video.forEach(element => {});`facebook.${!isVideo ? 'bin' : 'mp4'}`
+const { thumbnail, duration, video } = await result
+let url = '', quality = ''
+for (const data of [...video]) {
+if (quality === '360p (SD)') {
+url = await data.download()
+quality = data.quality
+} else if (quality === '720p (HD)') {
+quality = data.quality
+url = await data.download()
+} else {
+quality = data.quality
+url = await data.download()
 }
+}
+
+resp = `*AQUI ESTA SU VIDEO*\n\n*TIEMPO: ${duration}*\n\n*Calidad:* ${quality}`
+return conn.sendVideoWriting(m.chat, url, resp, userdb, q)
 } catch (error) {
 resp = `${error.stack}` 
 }
@@ -68,7 +82,7 @@ resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO, SI EL ERROR SIGUE, P
 let url = res?.url?.[0]?.url || res?.url?.[1]?.url || res?.['720p'] || res?.['360p']
 conn.sendMessage(m.chat, { video: { url }, caption: res?.meta?.title || '*AQUI ESTA SU VIDEO*' }, { quoted: m })
 } catch (e) {
-m.reply('*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉* https://www.facebook.com/HolaSoySkull/videos/982580549178886/?app=fbl')*/
+return conn.sendWritingText(m.chat, *[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉* https://www.facebook.com/HolaSoySkull/videos/982580549178886/?app=fbl, m)*/
 }
 let txt = '';
 let count = 0;
@@ -84,8 +98,14 @@ await conn.sendPresenceUpdate('composing' , m.chat);
 if (video) {
 return conn.sendMessage(m.chat, { video: {url: video}, caption: txt.trim(), mentions: txt, mimetype: 'video/mp4', caption: txt }, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 2*60*1000 } )
 } else {
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }
 handler.command = /^(fb|facebookdl|fbdl|facebook2|fb2|facebookdl2|fbdl2|facebook3|fb3|facebookdl3|fbdl3|facebook4|fb4|facebookdl4|fbdl4|facebook5|fb5|facebookdl5|fbdl5)$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

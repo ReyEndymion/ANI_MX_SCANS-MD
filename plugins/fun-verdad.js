@@ -1,49 +1,45 @@
-let handler  = async (m, { conn }) => {
-let resp = `*┌────「 VERDAD 」─*\n*“${pickRandom(global.verdad)}”*\n*└────「 ${wm} 」─*`       
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 20));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+let handler= async (m, {conn, db, userdb, senderJid}) => {
+const {info} = await import('../config.js')
+let resp = `*┌────「 VERDAD 」─*\n*“${pickRandom(global.verdad)}”*\n*└「 ${info.nanie} 」─*` 
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 handler.help = ['verdad']
 handler.tags = ['fun']
 handler.command = /^verdad/i
+handler.menu = [
+{title: "🎖️ VERDAD", description: "juego de la Verdad, usa #verdad para jugar", id: `verdad`}
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler
 
 function pickRandom(list) {
-  return list[Math.floor(list.length * Math.random())]
+return list[Math.floor(list.length * Math.random())]
 }
 
 global.verdad = [
 "¿Alguna vez te ha gustado alguien? ¿Cuánto tiempo?",
-  "Si es posible o si quieres, en gc / fuera de gc, ¿con quién harás amistad? (Puede ser diferente / del mismo tipo)",
-  "¿cual es tu mas grande miedo?",
-  "¿Alguna vez te ha gustado alguien y has sentido a esa persona como tú también?",
-  "¿Cuál es el nombre del exnovio de tu amiga que una vez te gustó en secreto?",
-  "¿Alguna vez has robado el dinero de tu madre o de tu padre? ¿La razón?",
-  "lo que te hace feliz cuando estás triste",
-  "¿Alguna vez has sido amor no correspondido? ¿Si has estado con quién? ¿Cómo se siente brou?",
-  "¿Alguna vez has tenido una aventura con alguien?",
-  "lo más temido",
-  "quién es la persona más influyente en tu vida",
-  "qué orgullo tienes este año",
-  "quién es la persona que puede enfermarte",
-  "quien es la persona que alguna vez te puso cachondo",
-  "(para los musulmanes) ¿nunca has rezado en todo el día?",
-  "¿Quién es el más cercano a su tipo de pareja ideal aquí",
-  "¿Con quién te gusta jugar?",
-  "¿Alguna vez has rechazado a alguien? ¿Por qué?",
-  "Menciona el incidente que te hizo daño y que aún recuerdas",
-  "¿Qué logros has obtenido este año?",
-  "¿Cuál es tu peor hábito en la escuela?", "¿Qué programa de televisión odias más? ¡Da la razón!", "¿Cuál es el vestido más feo (en su opinión) que ha usado y cuándo lo usó?", "¿Qué es lo peor (chisme) que has dicho sobre tu amigo?","¿Qué es lo más vergonzoso de ti?"," ¿Qué es lo primero que ves cuando miras a otra persona (del sexo opuesto)?", 
+"Si es posible o si quieres, en gc / fuera de gc, ¿con quién harás amistad? (Puede ser diferente / del mismo tipo)",
+"¿cual es tu mas grande miedo?",
+"¿Alguna vez te ha gustado alguien y has sentido a esa persona como tú también?",
+"¿Cuál es el nombre del exnovio de tu amiga que una vez te gustó en secreto?",
+"¿Alguna vez has robado el dinero de tu madre o de tu padre? ¿La razón?",
+"lo que te hace feliz cuando estás triste",
+"¿Alguna vez has sido amor no correspondido? ¿Si has estado con quién? ¿Cómo se siente brou?",
+"¿Alguna vez has tenido una aventura con alguien?",
+"lo más temido",
+"quién es la persona más influyente en tu vida",
+"qué orgullo tienes este año",
+"quién es la persona que puede enfermarte",
+"quien es la persona que alguna vez te puso cachondo",
+"(para los musulmanes) ¿nunca has rezado en todo el día?",
+"¿Quién es el más cercano a su tipo de pareja ideal aquí",
+"¿Con quién te gusta jugar?",
+"¿Alguna vez has rechazado a alguien? ¿Por qué?",
+"Menciona el incidente que te hizo daño y que aún recuerdas",
+"¿Qué logros has obtenido este año?",
+"¿Cuál es tu peor hábito en la escuela?", "¿Qué programa de televisión odias más? ¡Da la razón!", "¿Cuál es el vestido más feo (en su opinión) que ha usado y cuándo lo usó?", "¿Qué es lo peor (chisme) que has dicho sobre tu amigo?","¿Qué es lo más vergonzoso de ti?"," ¿Qué es lo primero que ves cuando miras a otra persona (del sexo opuesto)?", 
 "¿Qué es lo primero que te viene a la mente cuando te miras al espejo?","¿Que es lo mas tonto que has hecho en tu vida?"," ¿Cuál es el peor sueño que has tenido?"," ¿Cuál es el sueño más loco que puedes recordar hasta ahora?",
 " ¿Cuál es tu peor rasgo en tu opinión?", 
 " ¿Qué rasgo te gustaría cambiar de ti mismo?", 

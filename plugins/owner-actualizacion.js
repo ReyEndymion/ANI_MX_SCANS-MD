@@ -1,7 +1,11 @@
-import axios from 'axios';
+const handler = async (m, {conn, text, usedPrefix, command, db, objs, userdb, senderJid}) => {
+let { default: axios } = await import('axios');
+const fs = await import('fs')
+const {info, temp, dirP} = await import('../config.js');
+const {cloneRepo, replaceFiles} = await import('../lib/functions.js')
 let previousCommitSHA = '';
 let previousUpdatedAt = '';
-const url = md;
+const url = info.repoProyect.replace('.git', '');
 const regex = /https:\/\/github\.com\/([^/]+)\/([^/]+)/;
 const match = url.match(regex);
 let owner = '';
@@ -10,63 +14,64 @@ if (match) {
 owner = match[1];
 repo = match[2];
 }
-const handler = async (m, {conn, text, usedPrefix, command}) => {
- // async function checkRepoUpdates() {
-    try {
-      const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`);
-      const {sha, commit: {message}, html_url} = response.data[0];
+const {imagen1} = objs
+// async function checkRepoUpdates() {
+console.log('actualizar/Check: ', temp, dirP)
+if (command === 'actualizaciones') {
+try {
+const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=1`);
+const {sha, commit: {message}, html_url} = response.data[0];
 
-      if (sha !== previousCommitSHA || message !== previousUpdatedAt) {
-        previousCommitSHA = sha;
-        previousUpdatedAt = message;
-        let resp = `*[❗] ¡El repositorio ha sido actualizado recientemente!*\n*- Repositorio:* ${html_url}\n*- Mensaje de commit:* ${message}`
-      let txt = '';
-      let count = 0;
-      for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 15));
-      txt += c;
-      count++;
-  
-      if (count % 10 === 0) {
-         await conn.sendPresenceUpdate('composing' , m.chat);
-      }
-      }
-      const documentMessage = {
-        mentionedJid: conn.parseMention(txt), 
-        forwardingScore: 200,
-        isForwarded: false,
-        externalAdReply: {
-          mediaUrl: html_url,
-          mediaType: 2,
-          previewType: 'pdf',
-          title: `Bot exclusivo de: ${author}`,
-          body: wm,
-          thumbnail: imagen1,
-          sourceUrl: `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`
-        },
-      }
-      return conn.sendMessage(m.chat, {document: { url: hp_otkstogthr }, caption: txt, mimetype: `application/zip`, fileName: namerepre, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});  
-    }
-    } catch (error) {
-      console.log('error: ', error)
-      let resp = `*[❗] Error al verificar el repositorio:* ${error.message}`;
-      let txt = '';
-      let count = 0;
-      for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 15));
-      txt += c;
-      count++;
-  
-      if (count % 10 === 0) {
-         await conn.sendPresenceUpdate('composing' , m.chat);
-      }
-      }
-      return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-    }
-//  }
-  //return checkRepoUpdates()
-  //setInterval(checkRepoUpdates, 60000);
+if (sha !== previousCommitSHA || message !== previousUpdatedAt) {
+previousCommitSHA = sha;
+previousUpdatedAt = message;
+let resp = `*[❗] ¡El repositorio ha sido actualizado recientemente!*\n*- Repositorio:* ${html_url}\n*- Mensaje de commit:* ${message}`
+
+const documentMessage = {
+mentionedJid: conn.parseMention(txt), 
+forwardingScore: 200,
+isForwarded: false,
+externalAdReply: {
+mediaUrl: html_url,
+mediaType: 2,
+previewType: 'pdf',
+title: `Bot exclusivo de: ${author}`,
+body: info.nanie,
+thumbnail: fs.readFileSync(imagen1),
+sourceUrl: `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`
+},
+}
+return conn.sendDocumentWriting(m.chat, info.hp_otkstogthr, {caption: txt, mimetype: `application/zip`, fileName: info.namerepre, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, userdb, m);
+}
+} catch (error) {
+let resp = `*[❗] Error al verificar el repositorio:* ${error.message}`;
+return conn.sendWritingText(m.chat, resp, userdb, m)
+}
+}
+if (command === 'actualizar') {
+try {
+await conn.sendWritingText(m.chat, '*🔄 Clonando repositorio...*', userdb, m)
+await cloneRepo(url, temp)
+
+await conn.sendWritingText(m.chat, '*📁 Reemplazando archivos...*', userdb, m)
+replaceFiles(temp, dirP)
+
+return conn.sendWritingText(m.chat, '*✅ Repositorio actualizado correctamente! Reinicia el bot si es necesario.*', userdb, m)
+} catch (e) {
+return conn.sendWritingText(m.chat, `❌ Error al actualizar: ${e}`, userdb, m)
+}
+
+}
+//}
+//return checkRepoUpdates()
+//setInterval(checkRepoUpdates, 60000);
 };
-handler.command = /^(actualizaciones)/i;
-//handler.rowner = true;
+handler.command = /^(actualiza(r|ciones))/i;
+handler.rowner = true;
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler;

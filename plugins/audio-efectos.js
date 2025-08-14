@@ -1,8 +1,9 @@
 import { unlinkSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { exec } from 'child_process'
-
-let handler = async (m, { conn, args, __dirname, usedPrefix, command }) => {
+import { getRandom } from '../lib/functions.js'
+let handler = async (m, {conn, args, pluginsPath, usedPrefix, command, db, userdb, senderJid}) => {
+const {temp} = await import('../config.js')
 try {
 let q = m.quoted ? m.quoted : m
 let mime = ((m.quoted ? m.quoted : m.msg).mimetype || '')
@@ -21,24 +22,47 @@ if (/smooth/.test(command)) set = '-filter:v "minterpolate=\'mi_mode=mci:mc_mode
 if (/tupai|squirrel|chipmunk/.test(command)) set = '-filter:a "atempo=0.5,asetrate=65100"'
 if (/audio/.test(mime)) {
 let ran = getRandom('.mp3')
-let filename = join(__dirname, '../tmp/' + ran)
+let filename = join(temp, `/${ran}`)
 let media = await q.download(true)
 exec(`ffmpeg -i ${media} ${set} ${filename}`, async (err, stderr, stdout) => {
-await unlinkSync(media)
-if (err) throw `_*Error!*_`
-let buff = await readFileSync(filename)
-conn.sendFile(m.chat, buff, ran, null, m, true, {
-type: 'audioMessage', 
-ptt: true 
-})})
-} else throw `*[❗INFO❗] RESPONDA AL AUDIO O NOTA DE VOZ EL CUAL SERA MODIFICADO, USADO EL COMANDO ${usedPrefix + command}*`
+try {
+if (err) return conn.sendWritingText(m.chat, `_*Error!*_: ${err}`, userdb, m)
+let buff = readFileSync(filename)
+//, ran, null, true, {type: 'audioMessage', ptt: true }
+await conn.sendAudioRecording(m.chat, buff, m)
+} catch (error) {
+return conn.sendWritingText(m.chat, `_*Error!*_: ${error.stack}`, userdb, m)
+} finally {
+try {
+unlinkSync(media)
+unlinkSync(filename)
+} catch (error) {
+console.warn('No se pudo borrar')
+}
+}
+})
+} else return conn.sendWritingText(m.chat, `*[❗INFO❗] RESPONDA AL AUDIO O NOTA DE VOZ EL CUAL SERA MODIFICADO, USADO EL COMANDO ${usedPrefix + command}*`, m)
 } catch (e) {
 throw e
 }}
 handler.help = ['bass', 'blown', 'deep', 'earrape', 'fast', 'fat', 'nightcore', 'reverse', 'robot', 'slow', 'smooth', 'tupai'].map(v => v + ' [vn]')
 handler.tags = ['audio']
 handler.command = /^(bass|blown|deep|earrape|fas?t|nightcore|reverse|robot|slow|smooth|tupai|squirrel|chipmunk)$/i
-export default handler
+handler.menu = [
+{title: "🎤 BASS", description: "responde a un audio o nota de voz con #bass", id: `bass`},
+{title: "🎤 BLOWN", description: "responde a un audio o nota de voz con #blown", id: `blown`},
+{title: "🎤 DEEP", description: "responde a un audio o nota de voz con #deep", id: `deep`},
+{title: "🎤 EARRAPE", description: "responde a un audio o nota de voz con #earrape", id: `earrape`}, 
+{title: "🎤 FAST", description: "responde a un audio o nota de voz con #fast", id: `fast`},
+{title: "🎤 FAT", description: "responde a un audio o nota de voz con #fat", id: `fat`},
+{title: "🎤 NIGHTCORE", description: "responde a un audio o nota de voz con #nightcore", id: `nightcore`},
+{title: "🎤 REVERSE", description: "responde a un audio o nota de voz con #reverse", id: `reverse`},
+{title: "🎤 ROBOT", description: "responde a un audio o nota de voz con #robot", id: `robot`}, 
+{title: "🎤 SLOW", description: "responde a un audio o nota de voz con #slow", id: `slow`},
+{title: "🎤 SMOOTH", description: "responde a un audio o nota de voz con #smooth", id: `smooth`}, 
+{title: "🎤 TUPAI", description: "responde a un audio o nota de voz con #tupai", id: `tupai`},
+];
+handler.type = "audioefect";
+handler.disabled = false;
 
-const getRandom = (ext) => {
-return `${Math.floor(Math.random() * 10000)}${ext}`}
+export default handler

@@ -1,6 +1,6 @@
 import path, {join} from 'path';
 
-let handler = async (m, { conn }) => {
+let handler = async (m, {conn, db, userdb, senderJid}) => {
 const dado = [
 join(media, '/stickers/dado1.webp'),
 join(media, '/stickers/dado2.webp'),
@@ -11,7 +11,13 @@ join(media, '/stickers/dado6.webp')
 ]
 const indiceAleatorio = Math.floor(Math.random() * dado.length);
 const dir = dado[indiceAleatorio];
-conn.sendMessage(m.chat, {sticker: {url: dir},mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 2*60*1000 });
+conn.sendSticker(m.chat, dir, null, m);
 }
 handler.command = ['dado', 'dados', 'dadu'] 
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

@@ -1,56 +1,68 @@
-let handler = async (m, { conn, usedPrefix}) => {
-  
-  const fkontak = {
-	"key": {
-    "participants":"0@s.whatsapp.net",
-		"remoteJid": "status@broadcast",
-		"fromMe": false,
-		"id": "Halo"
-	},
-	"message": {
-		"contactMessage": {
-			"vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
-		}
-	},
-	"participant": "0@s.whatsapp.net"
+import { rpg } from "../rpg.js"
+import { owner, temp, newsletterID, sBroadCastID, groupID, media} from '../config.js'
+let handler = async (m, {conn, start, info, usedPrefix, userdb, db, senderJid}) => {
+
+const fkontak = {
+"key": {
+"participants":"0@s.whatsapp.net",
+"remoteJid": "status@broadcast",
+"fromMe": false,
+"id": "Halo"
+},
+"message": {
+"contactMessage": {
+"vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
 }
-  
-	let banteng = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].banteng
-	let harimau = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].harimau
-	let gajah = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].gajah
-	let kambing = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kambing
-	let panda = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].panda
-	let cocodrilo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cocodrilo
-	let kerbau = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].kerbau
-	let sapi = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].sapi
-	let monyet = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].monyet
-	let babihutan = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].babihutan
-	let cerdo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].cerdo
-	let pollo = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender].pollo
+},
+"participant": "0@s.whatsapp.net"
+}
 
-	let ndy = `
-*${htki} 𝘼𝙉𝙄𝙈𝘼𝙇𝙀𝙎 ${htka}*
-    
- *${rpg.emoticon('toro')} ➡️ ${banteng}*
- *${rpg.emoticon('tiger')} ➡️ ${harimau}*
- *${rpg.emoticon('elefante')} ➡️ ${gajah}*
- *${rpg.emoticon('kambing')} ➡️ ${kambing}*
- *${rpg.emoticon('panda')} ➡️ ${panda}*
- *${rpg.emoticon('cocodrilo')} ➡️ ${cocodrilo}*
- *${rpg.emoticon('kerbau')} ➡️ ${kerbau}*
- *${rpg.emoticon('cow')} ➡️ ${sapi}*
- *${rpg.emoticon('monyet')} ➡️ ${monyet}*
- *${rpg.emoticon('Jabali')} ➡️ ${babihutan}*
- *${rpg.emoticon('cerdo')} ➡️ ${cerdo}*
- *${rpg.emoticon('pollo')} ➡️ ${pollo}*`.trim()
-await conn.sendButton(m.chat, ndy, `🔖 𝘼𝙣𝙞𝙢𝙖𝙡𝙚𝙨 𝙡𝙞𝙨𝙩𝙤𝙨 𝙥𝙖𝙧𝙖 𝘾𝙤𝙘𝙞𝙣𝙖𝙧\n𝘼𝙣𝙞𝙢𝙖𝙡𝙨 𝙧𝙚𝙖𝙙𝙮 𝙩𝙤 𝙘𝙤𝙤𝙠\n${wm}`, null, [['𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ | 𝘽𝙖𝙘𝙠 𝙩𝙤 𝙈𝙚𝙣𝙪 ☘️', '/menu'], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 | 𝙄𝙣𝙫𝙚𝙣𝙩𝙤𝙧𝙮`, `.inventario`]], fkontak, m)
+let banteng = userdb.banteng
+let harimau = userdb.harimau
+let gajah = userdb.gajah
+let kambing = userdb.kambing
+let panda = userdb.panda
+let cocodrilo = userdb.cocodrilo
+let kerbau = userdb.kerbau
+let sapi = userdb.sapi
+let monyet = userdb.monyet
+let babihutan = userdb.babihutan
+let cerdo = userdb.cerdo
+let pollo = userdb.pollo
 
+const anim = `
+*${htki} ANIMALES ${htka}*
+
+*${rpg.emoticon('toro')} ➡️ ${banteng}*
+*${rpg.emoticon('tiger')} ➡️ ${harimau}*
+*${rpg.emoticon('elefante')} ➡️ ${gajah}*
+*${rpg.emoticon('kambing')} ➡️ ${kambing}*
+*${rpg.emoticon('panda')} ➡️ ${panda}*
+*${rpg.emoticon('cocodrilo')} ➡️ ${cocodrilo}*
+*${rpg.emoticon('kerbau')} ➡️ ${kerbau}*
+*${rpg.emoticon('cow')} ➡️ ${sapi}*
+*${rpg.emoticon('monyet')} ➡️ ${monyet}*
+*${rpg.emoticon('Jabali')} ➡️ ${babihutan}*
+*${rpg.emoticon('cerdo')} ➡️ ${cerdo}*
+*${rpg.emoticon('pollo')} ➡️ ${pollo}*`.trim()
+
+const resp = `🔖 Animales listos para cocinar\n${anim}`
+//await conn.sendButton(m.chat, ndy, , null, , fkontak, m)
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buttons = [['Volver al menú ☘️', `${usedPrefix}menu'`], [`🎒 Inventario `, `${usedPrefix}inventario`]]
+if (start.buttons) {
+return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, fkontak );
+}
 }
 handler.help = ['kandang']
 handler.tags = ['rpg']
 handler.command = /^(kandang|animales|animals)$/i
 
-export default handler
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
+export default handler

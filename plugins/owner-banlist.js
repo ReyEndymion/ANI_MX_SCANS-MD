@@ -1,6 +1,6 @@
-let handler = async (m, { conn, isOwner }) => {
-let chats = Object.entries(global.db.data.bot[conn.user.jid].chats).filter(chat => chat[1].isBanned)
-let users = Object.entries(global.db.data.bot[conn.user.jid].users).filter(user => user[1].banned)
+let handler = async (m, {conn, isOwner, db, userdb, senderJid}) => {
+let chats = Object.entries(db.data.bot[conn.user.jid].chats).filter(chat => chat[1].isBanned)
+let users = Object.entries(db.data.bot[conn.user.jid].users).filter(user => user[1].banned)
 let caption = `
 ┌〔 *USUARIOS BANEADOS* 〕
 ├ Total : ${users.length} ${users ? '\n' + users.map(([jid], i) => `
@@ -15,4 +15,10 @@ let caption = `
 m.reply(caption, null, {mentions: conn.parseMention(caption)})}
 handler.command = /^banlist(ned)?|ban(ned)?list|daftarban(ned)?$/i
 handler.rowner = true
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

@@ -1,14 +1,24 @@
-let handler = async (m, { conn }) => {
+let handler = async (m, {conn, db, userdb, objs, senderJid, participantFind}) => {
+const {dbGroups} = objs
+await dbGroups.read()
 let txt = ''
-const groupsChats = Object.entries(conn.chats).filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isChats)
+const groupsChats = Object.entries(dbGroups.data)
 for (let [jid, chat] of groupsChats) {
-console.log('chats: ', chat.metadata.participants.find(jid => jid.id === conn.user.jid && jid.admin === 'admin'))
-//
-txt += `\n—◉ ${await conn.getName(jid)}\n➤ ${jid} [${chat?.metadata?.participants.find(jid => jid.id === conn.user.jid && jid.admin === 'admin') ? 'El Bot participa como: ADMINISTRADOR' : 'El Bot esta como: PARTICIPANTE'}]\n\n`
-return conn.sendWritingText(m.chat, `*LISTA DE GRUPOS EN LOS QUE ESTA EL BOT:*\n${txt}\n`.trim(), m)
+console.log('chats: ', jid, )
+txt += `\n—◉ ${chat.subject || await conn.getName(jid)}\n➤ @${jid}\n${chat?.participants.find(jid => jid.id === conn.user.jid && jid.admin === 'admin') ? 'El Bot es *ADMINISTRADOR*' : 'El Bot es *PARTICIPANTE*'} ${chat.isCommunity ? 'EN COMUNIDAD' : `parte de *${chat.participants.length} PARTICIPANTES*`}\n`
 }
+const contextInfo = {
+groupMentions: await conn.parseGroupMention(txt)
+}
+return conn.sendWritingTextCI(m.chat, `*LISTA DE GRUPOS EN LOS QUE ESTA EL BOT: ${groupsChats.length}*\n${txt}\n`.trim(), contextInfo, userdb, m)
 }
 handler.help = ['groups', 'grouplist']
 handler.tags = ['info']
 handler.command = /^(groups|grouplist|listadegrupo|gruposlista|listagrupos)$/i
+handler.menu = [
+{title:"💎 GRUPOS", description: "muestra la lista de grupos en los que está el bot usando #grouplist", id: `grouplist`}
+];
+handler.type = "info";
+handler.disabled = false;
+
 export default handler

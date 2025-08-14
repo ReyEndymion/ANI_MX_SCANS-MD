@@ -1,4 +1,4 @@
-global.rpg = {
+export const rpg = {
 emoticon(string) {
 string = string.toLowerCase()
 let emot = {
@@ -72,7 +72,7 @@ horse: '🐎 Caballo',
 kambing: '🐐 Cabra',
 kerbau: '🐃 Búfalo',
 lion: '🦁 León',
-money: '🪙 ANIMXCoins',
+money: '🪙 ANICoins',
 monyet: '🐒 Mono',
 panda: '🐼 Panda',
 snake: '🐍 Serpiente',
@@ -91,7 +91,7 @@ let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v
 if (!results.length) return ''
 else return emot[results[0][0]]
 }}
-global.rpgg = { //Solo emojis 
+export const rpgg = { //Solo emojis 
 emoticon(string) {
 string = string.toLowerCase()
 let emott = {
@@ -184,7 +184,7 @@ let results = Object.keys(emott).map(v => [v, new RegExp(v, 'gi')]).filter(v => 
 if (!results.length) return ''
 else return emott[results[0][0]]
 }}
-global.rpgshop = { //Tienda
+export const rpgshop = { //Tienda
 emoticon(string) {
 string = string.toLowerCase()
 let emottt = {
@@ -196,7 +196,7 @@ emerald: '💚 Esmeralda',
 berlian: '♦️ Joya',
 kyubi: '🌀 Magia',
 gold: '👑 Oro',
-money: '🪙 ANIMXCoins',
+money: '🪙 ANICoins',
 tiketcoin: '🎫 ANI Tickers',
 stamina: '✨ Energía',
 potion: '🥤 Poción',
@@ -261,7 +261,7 @@ let results = Object.keys(emottt).map(v => [v, new RegExp(v, 'gi')]).filter(v =>
 if (!results.length) return ''
 else return emottt[results[0][0]]
 }}
-global.rpgshopp = { //Tienda
+export const rpgshopp = { //Tienda
 emoticon(string) {
 string = string.toLowerCase()
 let emotttt = {

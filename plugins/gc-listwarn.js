@@ -1,10 +1,8 @@
 import path, { join } from 'path'
 import fs from 'fs'
-const __dirname = global.__dirname(import.meta.url)
-let handler = async (m, { conn, isOwner }) => {
-let adv = Object.entries(global.db.data.bot[conn.user.jid].users).filter(user => user[1].warn)
-let warns = global.db.data.bot[conn.user.jid].users.warn
-let user = global.db.data.bot[conn.user.jid].users
+import { media } from '../config.js'
+let handler = async (m, {conn, isOwner, usersdb, db, userdb, senderJid}) => {
+let adv = Object.entries(usersdb).filter(user => user[1].warn)
 let imagewarn = fs.readFileSync(join(media, 'pictures/warn.jpg'))
 let caption = `⚠️ USUARIOS ADVERTIDOS\n 
 *╔═══════════════════·•*
@@ -12,19 +10,15 @@ let caption = `⚠️ USUARIOS ADVERTIDOS\n
 ║
 ║ 1.- ${isOwner ? '@' + jid.split`@`[0] : jid} *(${user.warn}/3)*\n║\n║ - - - - - - - - -`.trim()).join('\n') : ''}
 *╚═══════════════════·•*`
-let txt = '';
-let count = 0;
-for (const c of caption) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-return conn.sendMessage(m.chat, {image: imagewarn, caption: caption, wm, mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendImageWriting(m.chat, imagewarn, caption, m )
 }
 handler.command = /^(listwarn)$/i 
 handler.group = true
 handler.admin = true
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

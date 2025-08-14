@@ -2,13 +2,13 @@ import { xpRange } from '../lib/levelling.js'
 import PhoneNumber from 'awesome-phonenumber'
 import { promises } from 'fs'
 import { join } from 'path'
-let handler = async (m, { conn, usedPrefix, command, args, usedPrefix: _p, __dirname, isOwner, text, isAdmin, isROwner }) => {
-  
-  
-const { levelling } = '../lib/levelling.js'
-//let handler = async (m, { conn, usedPrefix, usedPrefix: _p, __dirname, text }) => {
+let handler = async (m, {conn, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, text, isAdmin, isROwner, usersdb, userdb, db, senderJid}) => {
 
-let { exp, limit, level, role } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+
+const { levelling } = '../lib/levelling.js'
+//let handler = async (m, {conn, usedPrefix, usedPrefix: _p, pluginsPath, text, db, userdb, senderJid}) => {
+
+let { exp, limit, level, role } = userdb
 let { min, xp, max } = xpRange(level, global.multiplier)
 
 let d = new Date(new Date + 3600000)
@@ -39,12 +39,12 @@ process.once('message', resolve)
 setTimeout(resolve, 1000)
 }) * 1000
 }
-let { money, joincount } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
-//let { limit } = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let { money, joincount } = userdb
+//let { limit } = userdb
 let muptime = clockString(_muptime)
 let uptime = clockString(_uptime)
-let totalreg = Object.keys(global.db.data.bot[conn.user.jid].users).length
-let rtotalreg = Object.values(global.db.data.bot[conn.user.jid].users).filter(user => user.registered == true).length
+let totalreg = Object.keys(usersdb).length
+let rtotalreg = Object.values(usersdb).filter(user => user.registered == true).length
 let replace = {
 '%': '%',
 p: _p, uptime, muptime,
@@ -59,25 +59,24 @@ level, limit, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
 readmore: readMore
 }
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-  
-//let name = await conn.getName(m.sender)
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+
+//let name = await conn.getName(senderJid)
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let pp = dirP + 'src/avatar_contact.png';
 try {
 pp = await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png' );
-  } catch (e) {}
+} catch (e) {}
 let apii = await conn.getFile(pp)
-let mentionedJid = [who]
 let username = conn.getName(who)
 
 
-let menu = `╭━━〔 *${wm}* 〕━━⬣
+let menu = `
+╭━〔 *${info.nanie}* 〕━⬣
 ┃ ✪ *NOMBRE* 
 ┃ ${username}
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *EXPERIENCIA | EXP* 
-┃ ➥ *${user.exp - min}/${xp}*
+┃ ➥ *${userdb.exp - min}/${xp}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *NIVEL | LEVEL*
 ┃ ➥ *${level}*
@@ -85,7 +84,7 @@ let menu = `╭━━〔 *${wm}* 〕━━⬣
 ┃ ✪ *ROL*
 ┃ ➥ ${role}
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-┃ ✪ *${wm}coins*
+┃ ✪ *${info.nanie}coins*
 ┃ ➥ *${money}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *TOKENS*
@@ -98,28 +97,22 @@ let menu = `╭━━〔 *${wm}* 〕━━⬣
 ┃ ➥ *${week}, ${date}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *USUARIOS | USERS*
-┃ ➥ *${Object.keys(global.db.data.bot[conn.user.jid].users).length}* 
-╰━━━━━━〔 *${wm}* 〕━━━━━━⬣`.trim()
-let txt = '';
-let count = 0;
-for (const c of menu) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-       await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    await conn.sendMessage(m.chat, { image: {url: pp}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );  
-   //conn.sendHydrated(m.chat, menu, wm, pp, 'https://github.com/GataNina-Li/GataBot-MD', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙀𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙞𝙖 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 ⚡', '.buy'], ['𝙂𝙖𝙩𝙖𝘾𝙤𝙞𝙣𝙨 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 🐈', '/buy2'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', '#top']], m,)
+┃ ➥ *${Object.keys(usersdb).length}* 
+╰━━━〔 *${info.nanie}* 〕━━━⬣`.trim()
+return conn.sendImageWriting(m.chat, pp, menu, m );
+//conn.sendHydrated(m.chat, menu, info.nanie, pp, 'https://github.com/GataNina-Li/${info.nanie}', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙀𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙞𝙖 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 ⚡', '.buy'], ['𝙂𝙖𝙩𝙖𝘾𝙤𝙞𝙣𝙨 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 🐈', '/buy2'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', '#top']], m,)
 
 }
 
 handler.help = ['infomenu'].map(v => v + 'able <option>')
 handler.tags = ['group', 'owner']
 handler.command = /^(xp|experiencia|esperiencia|esperiensia|experiensia|exp|coinsgata|coins)$/i
+handler.group = true
 handler.exp = 10
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 const more = String.fromCharCode(8206)

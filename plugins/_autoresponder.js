@@ -1,58 +1,49 @@
-import { sticker } from '../lib/sticker.js'
+import { userID } from '../config.js';
 
-export async function before (m, {conn}) {
-let bot = global.db.data.bot[conn.user.jid] || {}
-const chats = bot.chats || {}
-const privs = chats.privs || {}
-const groups = chats.groups || {}
-let chat, users, user
-if (m.chat.endsWith(userID)) {
-chat = privs[m.chat] || {}
-user = privs[m.sender] || {}
-} else if (m.chat.endsWith(groupID)) {
-chat = groups[m.chat] || {}
-users = chat.users || {}
-user = users[m.sender] || {}
-} else return
-
-if (m.mentionedJid.includes(conn.user.jid) && m.isGroup && !chat.isBanned && !m.fromMe) {
-let stiker = await sticker(stickerAMX, false, global.gt, global.author)
-//conn.sendFile(m.chat, stiker, 'sticker.webp', null, m, false, {contextInfo: { externalAdReply: { title: wm, body: author, sourceUrl: md, thumbnail: imagen2am}}})
-return conn.sendMessage(m.chat, {sticker: stiker,mimetype: 'image/webp', asSticker: true, contextInfo: { externalAdReply: { title: wm, body: author, sourceUrl: md, thumbnail: stickerAMX}}}, {quoted: m, ephemeralExpiration: 2*60*1000 });
+export async function before (m, {conn, info, chatdb, db, objs, userdb, senderJid, isROwner}) {
+if (m.fromMe) return
+const fs = await import('fs')
+let { sticker } = await import('../lib/sticker.js')
+let { owner, temp, newsletterID, sBroadCastID, groupID, lid, media } = await import('../config.js')
+const {stickerAMX, imagen1} = objs
+const { pickRandom } = await import('../lib/functions.js');
+const stk = fs.readFileSync(stickerAMX)
+const normalizetext = await conn.textTagsLidToJid(m.text, m.chat)
+const isMentionBot = normalizetext.includes('@' + conn.user.jid.split('@')[0])
+if (isMentionBot && m.isGroup && !chatdb.isBanned && chatdb.autoreac && !m.fromMe) {
+return conn.sendSticker(m.chat, stk, {packname: info.kom, wm: info.gitAuthor, contextInfo: {externalAdReply: { title: info.nanie, body: info.repoProyect, sourceUrl: info.repoProyect, thumbnail: stk}}}, m)
 }
-if (!m.fromMem && m.text.match(/(Rey Endymion|@5215517489568|@5215533827255|ANIMXSCANS|ANI MX SCANS)/gi)) {
+const isMentionOwner = m.mentionedJid.some(ment => owner.some(([number, nameOw, boolean]) => {
+ment.endsWith(lid) ? ment = conn.lidToJid(ment, m.chat) : ment
+//console.log('autoresp: ', ment.endsWith(lid), ment === number+userID, ment, number)
+
+if (ment === number+userID) return true 
+else return false
+}))
+//console.log('autResp: ', isMentionBot, isMentionOwner)
+//, isMentionOwner
+console.log('autRespA: ', chatdb.autoreac)
+if (chatdb.autoreac && (/(Rey Endymion|ANIMXSCANS|ANI MX SCANS)/gi.test(normalizetext.toLowerCase()) || isMentionOwner)) {
 let emot = pickRandom(['🎃', '❤', '😘', '😍', '💕', '😎', '🙌', '⭐', '👻', '🔥']);
 conn.sendMessage(m.chat, { react: { text: emot, key: m.key }});
 }
-if ((m.mtype === 'groupInviteMessage' || m.text.startsWith('https://chat') || m.text.startsWith('Abre este enlace')) && !m.isBaileys && !m.isGroup) {
-let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${m.sender.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* ${ganicmd}\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo ${ganisubbots}`.trim() 
-let txt = '';
-let count = 0;
-for (const c of join) {
-await new Promise(resolve => setTimeout(resolve, 5));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
+if ((m.mtype === 'groupInviteMessage' || m.text.startsWith('https://chat') || m.text.startsWith('Abre este enlace')) && !m.isBaileys && !m.isGroup && !isROwner) {
+const botNumber = conn.user.jid.split('@')[0]
+let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${senderJid.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* ${ganicmd}\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo ${info.ganisubbots}`.trim() 
 let contextInfo = {
-mentionedJid: conn.parseMention(txt),
+mentionedJid: conn.parseMention(join),
 "externalAdReply": {
-"showAdAttribution": true,
+"title": info.nanie, 
+//"showAdAttribution": true,
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
-"title": wm, 
 "containsAutoReply": true,
-"mediaType": 1, 
-"thumbnail": imagen1,
-"mediaUrl": ganisubbots,
-"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.join&type=phone_number&app_absent=0`
+"mediaType": 2, 
+"thumbnail": fs.readFileSync(imagen1),
+"mediaUrl": info.ganisubbots,
+"sourceUrl": `https://api.whatsapp.com/send/?phone=${botNumber}&text=.join&type=phone_number&app_absent=0`
 }
 }
-return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+return conn.sendWritingTextCI(m.chat, join.trim(), contextInfo, userdb, m)
 }
-}
-function pickRandom(list) {
-return list[Math.floor(Math.random() * list.length)];
 }

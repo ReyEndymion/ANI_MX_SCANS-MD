@@ -1,16 +1,22 @@
 import fetch from 'node-fetch'
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) throw `*[❗INFO❗] INGRESE EL ENLACE DE TWITTER, EJEMPLO: ${usedPrefix + command}* https://twitter.com/auronplay/status/1586487664274206720?s=20&t=3snvkvwGUIez5iWYQAehpw` 
+let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE EL ENLACE DE TWITTER, EJEMPLO: ${usedPrefix + command}* https://twitter.com/auronplay/status/1586487664274206720?s=20&t=3snvkvwGUIez5iWYQAehpw`, m) 
 let res = await twitterDl(text)
 await m.reply(global.wait)
 for (let x = 0; x < res.media.length; x++) {
 let caption = x === 0 ? res.caption.replace(/https:\/\/t.co\/[a-zA-Z0-9]+/gi, '').trim() : '*AQUI ESTA SU VIDEO*'
 await conn.sendFile(m.chat, res.media[x].url, 'error.mp4', caption, m)}}
 handler.command = /^((twdl|tw|twt|twitter)(dl)?)$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 async function twitterDl(url) {
 let id = /twitter\.com\/[^/]+\/status\/(\d+)/.exec(url)?.[1]
-if (!id) throw '*[❗INFO❗] INGRESE UN ENLACE VALIDO DE TWITTER, EJEMPLO: #twitter* https://twitter.com/auronplay/status/1586487664274206720?s=20&t=3snvkvwGUIez5iWYQAehpw'
+if (!id) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE UN ENLACE VALIDO DE TWITTER, EJEMPLO: #twitter* https://twitter.com/auronplay/status/1586487664274206720?s=20&t=3snvkvwGUIez5iWYQAehpw`, m)
 let res = await fetch(`https://tweetpik.com/api/tweets/${id}`)
 if (res.status !== 200) throw res.statusText
 let json = await res.json()
@@ -25,4 +31,4 @@ media.push({ url: vid.url, type: i.type })
 media.push({ url: i.url, type: i.type })}}
 return {
 caption: json.text, media 
-}} else throw '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*' }
+}} else return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*`, m) }

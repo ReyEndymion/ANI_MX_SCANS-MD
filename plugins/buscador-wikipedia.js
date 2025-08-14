@@ -22,14 +22,19 @@ return data}
 } catch (err) {
 var notFond = {
 status: link.status,
-Pesan: eror}
+Pesan: err}
 return notFond}}
-let handler = async (m, { conn, text, usedPrefix, command }) => {
-if (!text) throw `*[❗️INFO❗️] ESTAS USANDO MAL EL COMANDO!!*\n*USO CORRECTO:*\n*${usedPrefix + command} palabra clave a buscar*\n\n*EJEMPLO:*\n*${usedPrefix + command} Estrellas*`
+let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
+if (!text) return conn.sendWritingText(m.chat, `*[❗️INFO❗️] ESTAS USANDO MAL EL COMANDO!!*\n*USO CORRECTO:*\n*${usedPrefix + command} palabra clave a buscar*\n\n*EJEMPLO:*\n*${usedPrefix + command} Estrellas*`, userdb, m)
 wikipedia(`${text}`).then(res => {
-m.reply(`*AQUI TIENES LA INFORMACION ENCONTRADA:*\n\n` + res.result.isi)
-}).catch(() => { m.reply('*[❗️INFO❗️] NO SE ENCONTRO NINGUNA INFORMACION, PRUEBA QUE HAYAS ESCRITO UNA SOLA PALABRA Y LO HAYAS ESCRITO CORRECTAMENTE*') })}
+conn.sendWritingText(m.chat, `*AQUI TIENES LA INFORMACION ENCONTRADA:*\n\n` + res.result.isi, userdb, m)
+}).catch(() => { conn.sendWritingText(m.chat, '*[❗️INFO❗️] NO SE ENCONTRO NINGUNA INFORMACION, PRUEBA QUE HAYAS ESCRITO UNA SOLA PALABRA Y LO HAYAS ESCRITO CORRECTAMENTE*', m)
+})}
 handler.help = ['wikipedia'].map(v => v + ' <apa>')
 handler.tags = [ 'internet']
 handler.command = /^(wiki|wikipedia)$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

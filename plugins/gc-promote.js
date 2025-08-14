@@ -1,4 +1,8 @@
-let handler = async (m, { conn, command, args, usedPrefix, text, isBotAdmin, isAdmin, groupMetadata, participants }) => {
+const {  formatNumberWA  } = await import('../lib/functions.js');
+let handler = async (m, {conn, command, args, usedPrefix, text, isBotAdmin, isAdmin, groupMetadata, participants, db, userdb, senderJid}) => {
+const {userID, lid, owner} = await import('../config.js');
+const _text = await conn.textTagsLidToJid(text, m.chat)
+text = _text
 let messageToSend = '';
 let usuariosNoRegistrados = [];
 let usuariosAPromover = [];
@@ -6,21 +10,22 @@ let yaAdmins = []
 if (isBotAdmin && isAdmin) {
 if((!text || isNaN(text)) && (m.quoted?.sender == undefined) && m.mentionedJid.length === 0 && !text.match(conn.user.jid.split('@')[0]).map(u => u)[0] + userID === conn.user.jid) {
 let resp = `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix + command} @tag*\n*┠≽ ${usedPrefix + command} -> responder a un mensaje*\n*┷┯*`
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } else if ((text && !isNaN(text)) || m.quoted?.sender !== undefined || m.mentionedJid.length > 0 || text.match(conn.user.jid.split('@')[0]).map(u => u)[0] + userID === conn.user.jid) {
 let _participants = participants.map(user => user.id)
 const creator = groupMetadata.owner || '';
-const owners = global.owner.map(([number]) => (conn.formatNumberWA(number) + '@s.whatsapp.net'))
-let numeros = args.length > 0 ? args.join((' ' || ',')).split(/[\s,]+/).map(v => v.replace(/@/g, '')).map(v => v.replace(/@[^0-9]/g, '')).filter(v => v.length > 4 && v.length < 20) : [m.quoted?.sender.split('@')[0]];
+const owners = owner.map(([number]) => (formatNumberWA(number) + userID))
+let numeros = args.length > 0 ? (await conn.textTagsLidToJid(args.join((' ' || ',')), m.chat)).split(/[\s,]+/).map(v => v.replace(/@/g, '')).map(v => v.replace(/@[^0-9]/g, '')).filter(v => v.length > 4 && v.length < 20) : [m.quoted?.sender.split('@')[0]];
+console.log('promoteANI: ', numeros)
 for (const numero of numeros) {
-let userJid = conn.formatNumberWA(numero) + userID
+let userJid = formatNumberWA(numero) + userID
 let [isRegistered] = await conn.onWhatsApp(userJid);
 if (!isRegistered?.exists) {
 usuariosNoRegistrados.push(numeros);
 continue;
 }
 
-let mentionedIsAdmin = groupMetadata.participants.find(u => u.id === (userJid || m.quoted?.sender)).admin
+let mentionedIsAdmin = groupMetadata.participants.find(u => u.id.endsWith(lid) ? u.jid === (userJid || m.quoted?.sender) : u.id === (userJid || m.quoted?.sender)).admin
 if (mentionedIsAdmin === 'admin') {
 yaAdmins.push(`@${numero}`)
 if (userJid.includes(conn.user.jid)) {
@@ -55,19 +60,23 @@ messageToSend += `Los siguientes números no están registrados en WhatsApp:\n${
 if (!messageToSend) {
 messageToSend = 'No se encontraron números válidos para eliminar.';
 }
-return conn.sendWritingText(m.chat, messageToSend, m);
+return conn.sendWritingText(m.chat, messageToSend, userdb, m);
 }
-} else if (!isBotAdmin && isAdmin)  {
+} else if (!isBotAdmin && isAdmin) {
 let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN HASTA QUE LOD HAGAS ADMIN*`;
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } else {
 let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 
 }
 handler.tags = ['group']
 handler.command = /^(promote|daradmin|darpoder)$/i
 handler.group = true
-export default handler
+handler.help = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
+export default handler

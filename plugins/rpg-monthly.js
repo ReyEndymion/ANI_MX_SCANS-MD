@@ -1,14 +1,13 @@
 import fetch from 'node-fetch'
-let handler = async function (m, {conn, usedPrefix, usedPrefix: _p, __dirname, text, command, args, isOwner, isAdmin, isROwne} ) {
-//let m = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
+let handler = async function (m, {conn, usedPrefix, usedPrefix: _p, pluginsPath, text, command, args, isOwner, isAdmin, isROwner, userdb, db}) {
+let q = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
 //let grupos = [nna, nn, nnn, nnnt]
 //let gata = [img5, img6, img7, img8, img9]
-//let enlace = { contextInfo: { externalAdReply: {title: wm + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(gata.getRandom())).buffer() }}}
-//let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: wm, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
-//let dos = [enlace, enlace2]    
+//let enlace = { contextInfo: { externalAdReply: {title: info.nanie + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(gata.getRandom())).buffer() }}}
+//let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: info.nanie, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
+//let dos = [enlace, enlace2]
 
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
-let premium = user.premium
+let premium = userdb.premium
 
 let limit = `${pickRandom([15, 23, 29, 36, 42, 50, 59, 65, 70, 83])}` * 1
 let limitpremium = `${pickRandom([45, 59, 70, 88, 100, 120, 135, 143, 149, 150])}` * 1
@@ -39,78 +38,62 @@ let gardenboxspremium = `${pickRandom([6, 6, 8, 8, 10, 10, 12, 12, 12, 15])}` * 
 
 let legendary = `${pickRandom([2, 2, 2, 2, 2, 3, 3, 4, 4, 4])}` * 1
 let legendarypremium = `${pickRandom([4, 4, 4, 6, 6, 6, 7, 7, 9, 10])}` * 1
- 
+
 const recompensas = {
-  limit: premium ? limitpremium : limit,
-  emas: premium ? emaspremium : emas,
-  joincount: premium ? joincountpremium : joincount,
-  eleksirb: premium ? eleksirbpremium : eleksirb,
-  gold: premium ? goldpremium : gold,
-  berlian: premium ? berlianpremium : berlian,
-  kardus: premium ? karduspremium : kardus,
-  pet: premium ? petpremium : pet,
-  gardenboxs: premium ? gardenboxspremium : gardenboxs,
-  mythic: premium ? legendarypremium : legendary,
+limit: premium ? limitpremium : limit,
+emas: premium ? emaspremium : emas,
+joincount: premium ? joincountpremium : joincount,
+eleksirb: premium ? eleksirbpremium : eleksirb,
+gold: premium ? goldpremium : gold,
+berlian: premium ? berlianpremium : berlian,
+kardus: premium ? karduspremium : kardus,
+pet: premium ? petpremium : pet,
+gardenboxs: premium ? gardenboxspremium : gardenboxs,
+mythic: premium ? legendarypremium : legendary,
 }
 
-let time = user.lastmonthly + 432000000 //432000000 5 dias
-if (new Date - user.lastmonthly < 432000000) {
-  let resp = `Ya recibiste tu recompensa mensual 🌅\n\n`
-  resp += `Vuelve en:\n${clockString(time - new Date() * 1)}\n\n`
-  resp += wm 
-  //return await conn.sendButton(m.chat, `𝙔𝘼 𝙍𝙀𝘾𝙄𝘽𝙄𝙎𝙏𝙀 𝙏𝙐 𝙍𝙀𝘾𝙊𝙈𝙋𝙀𝙉𝙎𝘼 𝙈𝙀𝙉𝙎𝙐𝘼𝙇 🌅\n\n𝙔𝙊𝙐 𝘼𝙇𝙍𝙀𝘼𝘿𝙔 𝙍𝙀𝘾𝙀𝙄𝙑𝙀𝘿 𝙔𝙊𝙐𝙍 𝙈𝙊𝙉𝙏𝙃𝙇𝙔 𝙍𝙀𝙒𝘼𝙍𝘿 🌅`, wm + `\n\n𝙑𝙐𝙀𝙇𝙑𝙀 𝙀𝙉 : 𝘾𝙊𝙈𝙀 𝘽𝘼𝘾𝙆 𝙄𝙉\n${clockString(time - new Date() * 1)}`, null, [['𝗠 𝗘 𝗡 𝗨 ☘️', '/menu']], m, m)
-  let txt = '';
-  let count = 0;
-  for (const c of resp) {
-      await new Promise(resolve => setTimeout(resolve, 5));
-      txt += c;
-      count++;
-  
-      if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-      }
-  }
-     return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-  }
+let time = userdb.lastmonthly + 432000000 //432000000 5 dias
+if (new Date - userdb.lastmonthly < 432000000) {
+let resp = `Ya recibiste tu recompensa mensual 🌅\n\n`
+resp += `Vuelve en:\n${clockString(time - new Date() * 1)}\n\n`
+resp += info.nanie 
+//return await conn.sendButton(m.chat, `𝙔𝘼 𝙍𝙀𝘾𝙄𝘽𝙄𝙎𝙏𝙀 𝙏𝙐 𝙍𝙀𝘾𝙊𝙈𝙋𝙀𝙉𝙎𝘼 𝙈𝙀𝙉𝙎𝙐𝘼𝙇 🌅\n\n𝙔𝙊𝙐 𝘼𝙇𝙍𝙀𝘼𝘿𝙔 𝙍𝙀𝘾𝙀𝙄𝙑𝙀𝘿 𝙔𝙊𝙐𝙍 𝙈𝙊𝙉𝙏𝙃𝙇𝙔 𝙍𝙀𝙒𝘼𝙍𝘿 🌅`, info.nanie + `\n\n𝙑𝙐𝙀𝙇𝙑𝙀 𝙀𝙉 : 𝘾𝙊𝙈𝙀 𝘽𝘼𝘾𝙆 𝙄𝙉\n${clockString(time - new Date() * 1)}`, null, [['𝗠 𝗘 𝗡 𝗨 ☘️', '/menu']], m, m)
+return conn.sendWritingText(m.chat, resp, userdb, q);
+}
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
-    if (!(reward in user)) continue
-    user[reward] += recompensas[reward]
-    texto += `*+${recompensas[reward]}* ${global.rpgshop.emoticon(reward)}\n`}
+if (!(reward in user)) continue
+user[reward] += recompensas[reward]
+texto += `*+${recompensas[reward]}* ${global.rpgshop.emoticon(reward)}\n`}
 let resp = `
 ╭━━🏄‍♂️━⛷️━🤾‍♀️━━⬣
 ┃ 🏅 𝙍𝙀𝘾𝙊𝙈𝙋𝙀𝙉𝙎𝘼 𝙈𝙀𝙉𝙎𝙐𝘼𝙇!!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
 ╰━━🧘‍♂️━🤺━🚴‍♀️━━⬣\n`
-  resp += text + texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${wm}`
-//await conn.sendButton(m.chat, text, texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${wm}`, gata.getRandom(), [['⚗️ 𝙍𝙀𝘾𝙇𝘼𝙈𝘼𝙍 𝘾𝙊𝙁𝙍𝙀 ⚗️', '/cofre'], ['𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ | 𝘽𝙖𝙘𝙠 𝙩𝙤 𝙈𝙚𝙣𝙪 ☘️', '/menu']], m, enlace)  
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-
-    if (count % 10 === 0) {
-    await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-user.lastmonthly = new Date * 1
-    return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+resp += text + texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
+//await conn.sendButton(m.chat, text, texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`, gata.getRandom(), [['⚗️ 𝙍𝙀𝘾𝙇𝘼𝙈𝘼𝙍 𝘾𝙊𝙁𝙍𝙀 ⚗️', '/cofre'], ['Volver al menú ☘️', '/menu']], m, enlace)
+userdb.lastmonthly = new Date * 1
+return conn.sendWritingText(m.chat, resp, userdb, q);
 }
 handler.command = ['monthly', 'cadames', 'mes', 'mensual', 'entregadelmes'] 
 handler.level = 10
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 
 function pickRandom(list) {
 return list[Math.floor(Math.random() * list.length)]}
 
 function clockString(ms) {
-  let ye = isNaN(ms) ? '--' : Math.floor(ms / 31104000000) % 10
-  let mo = isNaN(ms) ? '--' : Math.floor(ms / 2592000000) % 12
-  let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000) % 30
-  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
-  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-  return ['┃⇢ ', ye, ' *🗓️ Años : Year*\n', '┃⇢ ', mo, ' *⛅ Mes : Month*\n', '┃⇢ ', d, ' *☀️ Días : Days*\n', '┃⇢ ', h, ' *⏰ Horas : Hours*\n', '┃⇢ ', m, ' *🕐 Minutos : Minutes*\n', '┃⇢ ', s, ' *⏱️ Segundos : Seconds*'].map(v => v.toString().padStart(2, 0)).join('')
+let ye = isNaN(ms) ? '--' : Math.floor(ms / 31104000000) % 10
+let mo = isNaN(ms) ? '--' : Math.floor(ms / 2592000000) % 12
+let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000) % 30
+let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
+let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
+let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
+return ['┃⇢ ', ye, ' *🗓️ Años : Year*\n', '┃⇢ ', mo, ' *⛅ Mes : Month*\n', '┃⇢ ', d, ' *☀️ Días : Days*\n', '┃⇢ ', h, ' *⏰ Horas : Hours*\n', '┃⇢ ', m, ' *🕐 Minutos : Minutes*\n', '┃⇢ ', s, ' *⏱️ Segundos : Seconds*'].map(v => v.toString().padStart(2, 0)).join('')
 }

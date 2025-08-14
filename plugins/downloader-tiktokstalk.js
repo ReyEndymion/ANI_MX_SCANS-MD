@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
-let handler = async(m, { conn, text }) => {
-if (!text) return conn.reply(m.chat, '*[❗INFO❗] INSERTE EL COMANDO MAS EL NOMBRE DE USUARIO DE UN USUARIO DE TIKTOK*', m)
+let handler = async(m, {conn, text, db, userdb, senderJid}) => {
+if (!text) return conn.sendWritingText(m.chat, '*[❗INFO❗] INSERTE EL COMANDO MAS EL NOMBRE DE USUARIO DE UN USUARIO DE TIKTOK*', userdb, m)
 try {
 let res = await fetch(`https://api.lolhuman.xyz/api/stalktiktok/${text}?apikey=${lolkeysapi}`)
 let res2 = `https://api.lolhuman.xyz/api/pptiktok/${text}?apikey=${lolkeysapi}`
@@ -19,9 +19,13 @@ let Mystic = `
 `.trim()
 conn.sendFile(m.chat, res2, 'error.jpg', Mystic, m, false)
 } catch (e) {
-throw '*[❗INFO❗] ERROR, NO SE ECONTRO EL NOMBRE DE USUARIO INGRESADO*'
+return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR, NO SE ECONTRO EL NOMBRE DE USUARIO INGRESADO*`, m)
 }}
 handler.help = ['tiktokstalk'].map(v => v + ' <username>')
 handler.tags = ['stalk']
 handler.command = /^(tiktokstalk|ttstalk)$/i
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

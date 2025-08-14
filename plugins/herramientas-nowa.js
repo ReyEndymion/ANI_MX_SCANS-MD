@@ -1,11 +1,11 @@
 /*---------------------------------------------------------------------------------------
-  🍀 • By https://github.com/ALBERTO9883
-  🍀 • ⚘Alberto Y Ashly⚘
+🍀 • By https://github.com/ALBERTO9883
+🍀 • ⚘Alberto Y Ashly⚘
 -----------------------------------------------------------------------------------------*/
-let handler = async (m, { conn, text, usedPrefix, command }) => {
+let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
 let regex = /x/g
-if (!text) throw '⚠️ Falto el número.'
-if (!text.match(regex)) throw `*Ejemplo de uso: ${usedPrefix + command} 5215532867844x*`
+if (!text) return conn.sendWritingText(m.chat, `⚠️ Falto el número.`, userdb, m)
+if (!text.match(regex)) return conn.sendWritingText(m.chat, `*Ejemplo de uso: ${usedPrefix + command} 5215532867844x*`, userdb, m)
 let random = text.match(regex).length, total = Math.pow(10, random), array = []
 for (let i = 0; i < total; i++) {
 let list = [...i.toString().padStart(random, '0')]
@@ -20,6 +20,12 @@ let txt = 'Registrados\n\n' + array.filter(v => v.exists).map(v => `• Nro: wa.
 m.reply(txt)
 }
 handler.command = /^nowa$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 function formatDate(n, locale = 'id') {
 let d = new Date(n)

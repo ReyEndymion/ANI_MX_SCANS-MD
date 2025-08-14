@@ -1,11 +1,10 @@
-let handler = async (m, { conn, text }) => {
+let handler = async (m, {conn, text, db, userdb, senderJid}) => {
 let id = m.chat
 conn.math = conn.math ? conn.math : {}
 if (id in conn.math) {
 clearTimeout(conn.math[id][3])
 delete conn.math[id]
-m.reply('HEY!! ESTAS HACIENDO TRAMPA')
-}
+return conn.sendWritingText(m.chat, `HEY!! ESTAS HACIENDO TRAMPA`, userdb, m)}
 let val = text
 .replace(/[^0-9\-\/+*×÷πEe()piPI/]/g, '')
 .replace(/×/g, '*')
@@ -24,13 +23,17 @@ try {
 console.log(val)
 let result = (new Function('return ' + val))()
 if (!result) throw result
-m.reply(`*${format}* = _${result}_`)
+conn.sendWritingText(m.chat, `*format* = _${result}_`, userdb, m)
 } catch (e) {
-if (e == undefined) throw '*[❗INFO❗] INGRESE LA OPERACION MATEMATICA QUE DESEE CALCULAR*'
-throw '*[❗INFO❗] FORMATO NO ADMITIDO, SOLO SE ADMITEN NUMEROS Y LOS SIMBOLOS -, +, *, /, ×, ÷, π, e, (, )*'
+if (e == undefined) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE LA OPERACION MATEMATICA QUE DESEE CALCULAR*`, userdb, m)
+return conn.sendWritingText(m.chat, `*[❗INFO❗] FORMATO NO ADMITIDO, SOLO SE ADMITEN NUMEROS Y LOS SIMBOLOS -, +, *, /, ×, ÷, π, e, (, )*`, m)
 }}
 handler.help = ['calc <expression>']
 handler.tags = ['tools']
 handler.command = /^(calc(ulat(e|or))?|kalk(ulator)?)$/i
 handler.exp = 5
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

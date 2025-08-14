@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks'
-let handler = async (m, { conn, text }) => {
+let handler = async (m, {conn, text, db, userdb, senderJid}) => {
 let start = `*☠ ¡¡INICIANDO DOXXEO!! ☠*`
 let boost1 = `*${pickRandom(['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'])}%*`
 let boost2 = `*${pickRandom(['21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40'])}%*`
@@ -56,17 +56,6 @@ Sof02s32inf14.1e100.net
 *Tcp:* 192.168.629-->92.28.211.167:8615
 *EXTERNAL MAC:* 6U:77:89:ER:O4
 *MODEM JUMPS:* 64`
-let txt = '';
-let count = 0;
-for (const c of doxeo) {
-await new Promise(resolve => setTimeout(resolve, 5));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
 async function loading() {
 var hawemod = [
 `《 █▒▒▒▒▒▒▒▒▒▒▒》${boost1}`,
@@ -75,21 +64,27 @@ var hawemod = [
 `《 ██████████▒▒》${boost4}`,
 `《 ████████████》${boost5}`
 ]
- let { key } = await conn.sendMessage(m.chat, {text: start, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+let { key } = await conn.sendWritingText(m.chat, start, userdb, m)
 for (let i = 0; i < hawemod.length; i++) {
 await new Promise(resolve => setTimeout(resolve, 1000)); 
 startComposing(conn, m);
-await conn.sendMessage(m.chat, {text: hawemod[i], edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}); 
+await conn.sendMessage(m.chat, {text: hawemod[i], edit: key, mentions: conn.parseMention(doxeo)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}); 
 }
 stopComposing(conn, m);
- await conn.sendMessage(m.chat, {text: doxeo, edit: key, mentions: conn.parseMention(txt)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+await conn.sendMessage(m.chat, {text: doxeo, edit: key, mentions: conn.parseMention(doxeo)}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
 return 
- }
- loading() 
+}
+loading() 
 }
 handler.help = ['doxear <nombre> | <@tag>']
 handler.tags = ['fun']
 handler.command = /^Doxxeo|doxxeo|doxxear|Doxxear|doxeo|doxear|doxxeame|doxeame/i
+handler.menu = [
+{title: "🎖️ DOXEO", description: "usa #doxear <nombre / @tag>", id: `doxear`},
+];
+handler.type = "fun";
+handler.disabled = false;
+
 export default handler
 
 function pickRandom(list) {

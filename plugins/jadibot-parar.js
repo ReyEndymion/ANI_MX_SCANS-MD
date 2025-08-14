@@ -1,13 +1,13 @@
-let handler= async (m, { conn, command }) => {
+let handler= async (m, {conn, command, db, userdb, senderJid}) => {
 if (/stop/i.test(command)) {
 let parentw = conn
 let resp
 let i = global.conns.indexOf(conn)		
-if (global.conn.user.jid != conn.user.jid && m.sender != global.conn.user.jid){ 
+if (global.userBot != conn.user.jid && senderJid != global.userBot){ 
 resp = 'Me apagare :\')'
 global.conns.splice(i, 1)
 conn.isInit = false
- if (i < 0) return
+if (i < 0) return
 delete global.conns[i]
 conn.ev.removeAllListeners()
 conn.ws.close()
@@ -15,17 +15,13 @@ if (!conn.user) {
 try { conn.ws.close() } catch (e) { console.log(e)}
 conn.ev.removeAllListeners()
 }/****/
-return conn.sendWritingText(m.chat, resp, m)
-} else if (!conn.user.jid) {
-resp = `Este numero no es un Sub-Bot de ${wm}, por lo tanto no lo puedo detener`
-return conn.sendWritingText(m.chat, resp, m)
-} else if (global.conn.user.jid == (m.chat || m.sender)) {
+return conn.sendWritingText(m.chat, resp, userdb, m)} else if (!conn.user.jid) {
+resp = `Este numero no es un Sub-Bot de ${info.nanie}, por lo tanto no lo puedo detener`
+return conn.sendWritingText(m.chat, resp, userdb, m)} else if (global.userBot == (m.chat || senderJid)) {
 resp = `El bot principal no se apaga asi`
-return conn.sendWritingText(m.chat, resp, m)
-} else {
+return conn.sendWritingText(m.chat, resp, userdb, m)} else {
 resp = 'Por qué no vas directamente al chat privado del Sub-Bot?'
-return conn.sendWritingText(m.chat, resp, m)
-} 
+return conn.sendWritingText(m.chat, resp, userdb, m)} 
 }
 if (/recarga/i.test(command)) {
 global.conns.splice(i, 0)
@@ -35,7 +31,7 @@ global.conns.splice(i, 0)
 handler.help = ['berhenti','stop']
 handler.tags = ['General']
 handler.command = /^(berhenti|stop|recargar)$/i
-handler.owner = true
+handler.owner = false
 handler.mods = false
 handler.premium = false
 handler.group = false
@@ -45,6 +41,10 @@ handler.admin = false
 handler.botAdmin = false
 
 handler.fail = null
+
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
 export default handler
 /*
@@ -56,9 +56,9 @@ await db.read();
 db.data = db.data || { stop: {} };
 await db.write();
 
-let handler= async (m, { conn }) => {
+let handler= async (m, {conn, db, userdb, senderJid}) => {
 
-if (global.conn.user.jid == conn.user.jid) {
+if (global.userBot == conn.user.jid) {
 let resp = 'Por qué no vas directamente con el numero del Bot?'
 await conn.sendPresenceUpdate('composing' , m.chat);
 
@@ -68,18 +68,17 @@ for (const c of resp) {
 await new Promise(resolve => setTimeout(resolve, 50));
 int += c;
 count++;
-
 if (count % 10 === 0) {
- await conn.sendPresenceUpdate('composing' , m.chat);
+await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
 await db.read();
 if (!db.data.stop) {
 db.data.stop = {};
 }
-db.data.stop[m.sender] = true;
+db.data.stop[senderJid] = true;
 await db.write();
-await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+await conn.sendWritingText(m.chat, resp, userdb, m})
 } else {
 let resp = 'Me apagare :\')'
 let int = '';
@@ -93,7 +92,7 @@ db.data.stop = {};
 }
 db.data.stop[conn.user.jid] = true;
 await db.write();
-await conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m}, { disappearingMessagesInChat: 1 * 1000} )
+await conn.sendWritingText(m.chat, resp, userdb, m})
 conn.ws.close()
 db.set('used', true).write();
 }

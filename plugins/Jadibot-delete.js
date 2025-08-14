@@ -1,21 +1,23 @@
-import fs, { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, rmSync} from "fs"
-import path, { join } from 'path'
-let handler= async (m, { conn, args, usedPrefix, command, isROwner, text }) => {
+let handler= async (m, {conn, info, args, usedPrefix, command, isROwner, text, db, userdb, senderJid}) => {
+const {  owner  } = await import('../config.js');
 let uniqid //parentw.getName(who)
 console.log('deletebot: ', m.isROwner)
 if (m.isROwner && args[1]) {
 const number = m.text.split(`${usedPrefix+command} `)[1].replace(/ /g, '')
-uniqid = conn.formatNumberWA(number)
+const {  formatNumberWA  } = await import('../lib/functions.js');
+uniqid = formatNumberWA(number)
 } else {
-uniqid = `${m.sender.split`@`[0]}`
+uniqid = `${senderJid.split`@`[0]}`
 }
+const path = await import('path')
 let bot = path.join(jadibts, uniqid)
+const fs = await import('fs')
 if (fs.existsSync(bot)) {
 const valuesConns = Array.from(global.conns.values())
 if (global.conns.has(bot)) {
 const sock = global.conns.get(bot)
 /*
-if (global.conn.user.jid !== conn.user.jid) {
+if (global.userBot !== conn.user.jid) {
 let resp = `Por qué no vas directamente con el numero del Bot @${uniqid}?`
 */
 try {
@@ -28,21 +30,21 @@ let resp = "Adiós Bot\n\nTodos los archivos fueron eliminados"
 return conn.sendWritingText(m.chat, resp, m )
 
 
- /*fs.unlink("./jadibts/" + uniqid + "/creds.json")
+/*fs.unlink("./jadibts/" + uniqid + "/creds.json")
 console.log('File removed')
 await conn.sendMessage(m.chat, {text : "la session fue eliminada " } , { quoted: m })
-await fs.unlink("./jadibts/" + uniqid).md
+await fs.unlink("./jadibts/" + uniqid).info.repoProyect
 console.log('Folder removed')
 await conn.sendMessage(m.chat, {text : "la carpeta fue eliminada " } , { quoted: m })*/
 } catch(err) {
 console.error('La carpeta o archivo de sesion no existen ', err)
-let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${wm}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${info.nanie}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
 }
 }
 } else {
 if (m.fromMe) return
-let resp = `Es posible que la sesion no exista o este es el bot principal de (${wm}).\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+let resp = `Es posible que la sesion no exista o este es el bot principal de (${info.nanie}).\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
 
 }
@@ -53,4 +55,8 @@ handler.command = /^(deletebot)$/i
 handler.owner = false
 handler.group = false
 handler.private = true
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

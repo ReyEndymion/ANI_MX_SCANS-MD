@@ -1,7 +1,8 @@
-let handler = async (m, { command, usedPrefix, DevMode, args, conn }) => {
+import { rpg } from "../rpg.js"
+let handler = async (m, {command, usedPrefix, DevMode, args, conn, db, userdb, senderJid}) => {
 let type = (args[0] || '').toLowerCase()
 let msk = (args[0] || '').toLowerCase()
-let user = global.db.data.bot[conn.user.jid].chats.groups[m.chat].users[m.sender]
+let user = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid]
 
 const listaComida = ['◈ Pollo a la parrilla 🍖','◈ Pollo frito 🍗','◈ Fideos con crema de leche y pollo 🍜','◈ Filete de Vaca 🥩','◈ Paella 🥘','◈ Curry de pollo 🍲','Cerdo asado 🥠','◈ Pescado asado 🐟','']
 
@@ -72,155 +73,145 @@ ${user.ikan >= `${user.premium ? 2 : 4}` && user.coal >= `${user.premium ? 3 : 6
 `
 
 try {
-       if (/masak|cook|cocinar/i.test(command)) {
-            const count = args[1] && args[1].length > 0 ? Math.min(5, Math.max(parseInt(args[1]), 1)) : !args[1] || args.length < 3 ? 1 : Math.min(1, count)
-            switch (type) {
-            	case 'ayamhorneado':
-            if (user.pollo < count * 2 || user.coal < 1 * count) {
-                           user.pollo >= count * 1
-                            user.pollo -= count * 2
-                            user.coal -= count * 1
-                            user.ayamhorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} pollo horneado🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar pollo a la parrilla\nNecesitas 2 pollos y 1 carbón para cocinar`, m)
+if (/masak|cook|cocinar/i.test(command)) {
+const count = args[1] && args[1].length > 0 ? Math.min(5, Math.max(parseInt(args[1]), 1)) : !args[1] || args.length < 3 ? 1 : Math.min(1, count)
+switch (type) {
+	case 'ayamhorneado':
+if (user.pollo < count * 2 || user.coal < 1 * count) {
+user.pollo >= count * 1
+user.pollo -= count * 2
+user.coal -= count * 1
+user.ayamhorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} pollo horneado🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar pollo a la parrilla\nNecesitas 2 pollos y 1 carbón para cocinar`, userdb, m)
 					break
-				  case 'gulaiayam':
-            if (user.pollo < count * 2 || user.coal < 1 * count) {
-                            user.pollo >= count * 1
-                            user.pollo -= count * 2
-                            user.coal -= count * 1
-                            user.gulai += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } Curry de pollo🍜`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar pollo al curry\nNecesitas 2 pollos y 1 carbón para cocinar`, m)
+				 case 'gulaiayam':
+if (user.pollo < count * 2 || user.coal < 1 * count) {
+user.pollo >= count * 1
+user.pollo -= count * 2
+user.coal -= count * 1
+user.gulai += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } Curry de pollo🍜`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar pollo al curry\nNecesitas 2 pollos y 1 carbón para cocinar`, userdb, m)
 					break
-                  case 'rendang':
-            if (user.sapi < count * 2 || user.coal < 1 * count) {
-                            user.sapi >= count * 1
-                            user.sapi -= count * 2
-                            user.coal -= count * 1
-                            user.rendang += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } Rendang 🍜`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar rendang cocinado\nNecesita 2 vacas y 1 carbón para cocinar`, m)
+case 'rendang':
+if (user.sapi < count * 2 || user.coal < 1 * count) {
+user.sapi >= count * 1
+user.sapi -= count * 2
+user.coal -= count * 1
+user.rendang += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } Rendang 🍜`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar rendang cocinado\nNecesita 2 vacas y 1 carbón para cocinar`, userdb, m)
 					break
-                   case 'ayamgoreng':
-            if (user.pollo < count * 2 || user.coal < 1 * count) {
-                           user.pollo >= count * 1
-                            user.pollo -= count * 2
-                            user.coal -= count * 1
-                            user.ayamgoreng += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } Pollo frito🍗`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar pollo frito\nNecesitas 2 pollos y 1 carbón para cocinar`, m)
+case 'ayamgoreng':
+if (user.pollo < count * 2 || user.coal < 1 * count) {
+user.pollo >= count * 1
+user.pollo -= count * 2
+user.coal -= count * 1
+user.ayamgoreng += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } Pollo frito🍗`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar pollo frito\nNecesitas 2 pollos y 1 carbón para cocinar`, userdb, m)
 					break
-                        case 'oporayam':
-            if (user.lele < count * 2 || user.coal < 1 * count) {
-                          user.lele >= count * 1
-                            user.lele -= count * 2
-                            user.coal -= count * 1
-                            user.oporayam += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } opor pollo`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar el pollo opor\nNecesitas 2 pollos y 1 carbón para cocinar`, m)
+case 'oporayam':
+if (user.lele < count * 2 || user.coal < 1 * count) {
+user.lele >= count * 1
+user.lele -= count * 2
+user.coal -= count * 1
+user.oporayam += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } opor pollo`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar el pollo opor\nNecesitas 2 pollos y 1 carbón para cocinar`, userdb, m)
 					break
-                        case 'steak':
-            if (user.sapi < count * 2 || user.coal < 1 * count) {
-                            user.sapi >= count * 1
-                            user.sapi -= count * 2
-                            user.coal -= count * 1
-                            user.steak += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } Steak`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar filetes\nNecesita 2 vacas y 1 carbón para cocinar`, m)
+case 'steak':
+if (user.sapi < count * 2 || user.coal < 1 * count) {
+user.sapi >= count * 1
+user.sapi -= count * 2
+user.coal -= count * 1
+user.steak += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } Steak`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar filetes\nNecesita 2 vacas y 1 carbón para cocinar`, userdb, m)
 				break
-             case 'babipanggang':
-            if (user.cerdo < count * 2 || user.coal < 1 * count) {
-                            user.cerdo >= count * 1
-                            user.cerdo -= count * 2
-                            user.coal -= count * 1
-                            user.babipanggang += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${ count } cerdos a la parrilla`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar carne de cerdo a la parrilla\nNecesitas 2 cerdos y 1 carbón para cocinar`, m)
+case 'babipanggang':
+if (user.cerdo < count * 2 || user.coal < 1 * count) {
+user.cerdo >= count * 1
+user.cerdo -= count * 2
+user.coal -= count * 1
+user.babipanggang += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${ count } cerdos a la parrilla`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar carne de cerdo a la parrilla\nNecesitas 2 cerdos y 1 carbón para cocinar`, userdb, m)
 				break
 				case 'ikanhorneado':
-            if (user.ikan < count * 2 || user.coal < 1 * count) {
-                           user.ikan >= count * 1
-                            user.ikan -= count * 2
-                            user.coal -= count * 1
-                            user.ikanhorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} ikan horneado🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar pescado a la parrilla\nNecesitas 2 pescado y 1 carbón para cocinar`, m)
+if (user.ikan < count * 2 || user.coal < 1 * count) {
+user.ikan >= count * 1
+user.ikan -= count * 2
+user.coal -= count * 1
+user.ikanhorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} ikan horneado🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar pescado a la parrilla\nNecesitas 2 pescado y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'lelehorneado':
-            if (user.lele < count * 2 || user.coal < 1 * count) {
-                           user.lele >= count * 1
-                            user.lele -= count * 2
-                            user.coal -= count * 1
-                            user.lelehorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} bagre horneado🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar bagre a la parrilla\nNecesitas 2 bagre y 1 carbón para cocinar`, m)
+if (user.lele < count * 2 || user.coal < 1 * count) {
+user.lele >= count * 1
+user.lele -= count * 2
+user.coal -= count * 1
+user.lelehorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} bagre horneado🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar bagre a la parrilla\nNecesitas 2 bagre y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'tilapiahorneado':
-            if (user.nila < count * 2 || user.coal < 1 * count) {
-                           user.nila >= count * 1
-                            user.nila -= count * 2
-                            user.coal -= count * 1
-                            user.nilahorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} tilapia horneada🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar tilapia\nNecesita 2 tilapia y 1 carbón para cocinar`, m)
+if (user.nila < count * 2 || user.coal < 1 * count) {
+user.nila >= count * 1
+user.nila -= count * 2
+user.coal -= count * 1
+user.nilahorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} tilapia horneada🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar tilapia\nNecesita 2 tilapia y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'pomponeshorneados':
-            if (user.pescado < count * 2 || user.coal < 1 * count) {
-                           user.pescado >= count * 1
-                            user.pescado -= count * 2
-                            user.coal -= count * 1
-                            user.pescadohorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} pompones horneados🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar pompones\nNecesitas 2 pomfret y 1 carbón para cocinar`, m)
+if (user.pescado < count * 2 || user.coal < 1 * count) {
+user.pescado >= count * 1
+user.pescado -= count * 2
+user.coal -= count * 1
+user.pescadohorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} pompones horneados🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar pompones\nNecesitas 2 pomfret y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'camaronhorneado':
-            if (user.udang < count * 2 || user.coal < 1 * count) {
-                           user.udang >= count * 1
-                            user.udang -= count * 2
-                            user.coal -= count * 1
-                            user.udanghorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} Camarón a la parrilla🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar camarones a la parrilla\nNecesitas 2 camarones y 1 carbón para cocinar`, m)
+if (user.udang < count * 2 || user.coal < 1 * count) {
+user.udang >= count * 1
+user.udang -= count * 2
+user.coal -= count * 1
+user.udanghorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} Camarón a la parrilla🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar camarones a la parrilla\nNecesitas 2 camarones y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'ballenahorneado':
-            if (user.ballena < count * 2 || user.coal < 1 * count) {
-                           user.ballena >= count * 1
-                            user.ballena -= count * 2
-                            user.coal -= count * 1
-                            user.ballenahorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} ballena horneado🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar ballenas a la parrilla\nNecesitas 2 ballenas y 1 carbón para cocinar`, m)
+if (user.ballena < count * 2 || user.coal < 1 * count) {
+user.ballena >= count * 1
+user.ballena -= count * 2
+user.coal -= count * 1
+user.ballenahorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} ballena horneado🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar ballenas a la parrilla\nNecesitas 2 ballenas y 1 carbón para cocinar`, userdb, m)
 					break
 					case 'cangrejohorneado':
-            if (user.cangrejo < count * 2 || user.coal < 1 * count) {
-                           user.cangrejo >= count * 1
-                            user.cangrejo -= count * 2
-                            user.coal -= count * 1
-                            user.cangrejohorneado += count * 1
-                            conn.reply(m.chat, `Cocina exitosa ${count} Cangrejo quemado🍖`, m)
-                       } else conn.reply(m.chat, `No tienes ingredientes para cocinar cangrejos a la parrilla\nNecesitas 2 cangrejos y 1 carbón para cocinar`, m)
+if (user.cangrejo < count * 2 || user.coal < 1 * count) {
+user.cangrejo >= count * 1
+user.cangrejo -= count * 2
+user.coal -= count * 1
+user.cangrejohorneado += count * 1
+conn.sendWritingText(m.chat, `Cocina exitosa ${count} Cangrejo quemado🍖`, userdb, m)
+} else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar cangrejos a la parrilla\nNecesitas 2 cangrejos y 1 carbón para cocinar`, userdb, m)
 					break
 default:
-     let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}\n\n` + cocinar
-     let txt = '';
-     let count = 0;
-     for (const c of resp) {
-         await new Promise(resolve => setTimeout(resolve, 15));
-         txt += c;
-         count++;
-     
-         if (count % 10 === 0) {
-            await conn.sendPresenceUpdate('composing' , m.chat);
-         }
-     }
-     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );    
-await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${wm}`, cocinar, [
+let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${info.nanie}\n\n` + cocinar
+
+await conn.sendWritingText(m.chat, resp, userdb, m);
+await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${info.nanie}`, cocinar, [
 [`🤺 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘾𝙤𝙢𝙗𝙖𝙩𝙚`, `${usedPrefix}inventario 2`],
 [`🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`],
-['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', '.rpgmenu']], m, { mentions: conn.parseMention(cocinar) })	    
+['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', '.rpgmenu']], m, { mentions: conn.parseMention(cocinar) })	
 await conn.sendMessage(m.chat, {
-				text: wm,
+				text: info.nanie,
 				footer: cocinar,
 				title: '「 *C O O K I N G* 」',
 				buttonText: "C O O K I N G",
@@ -228,79 +219,83 @@ await conn.sendMessage(m.chat, {
 					title: "List Featured",
 					rows: [{
 				title: "pollo horneado 🍖",
-				rowId: ".cook ayamhorneado",
+				id: ".cook ayamhorneado",
 				description: "Cooking pollo horneado"
 			},{
 				title: "pollo Goreng 🍗",
-				rowId: ".cook ayamhorneado",
+				id: ".cook ayamhorneado",
 				description: "Cooking pollo Goreng"
 			},{
 				title: "Opor pollo 🍜",
-				rowId: ".cook oporayam",
+				id: ".cook oporayam",
 				description: "Cooking Opor pollo"
 			},{
 				title: "Steak 🥩",
-				rowId: ".cook steak",
+				id: ".cook steak",
 				description: "Cooking Steak"
 			},{
 				title: "Rendang 🥘",
-				rowId: ".cook rendang",
+				id: ".cook rendang",
 				description: "Cooking Rendang"
 			},{
 				title: "Gulai pollo 🍲",
-				rowId: ".cook gulaiayam",
+				id: ".cook gulaiayam",
 				description: "Cooking Gulai pollo"
 			},{
 				title: "cerdo Panggang 🥠",
-				rowId: ".cook babipanggang",
+				id: ".cook babipanggang",
 				description: "Cooking cerdo Panggang"
 			},{
 				title: "ikan horneado 🐟",
-				rowId: ".cook ikanhorneado",
+				id: ".cook ikanhorneado",
 				description: "Cooking ikan horneado"
 			},{
 				title: "lele horneado 🐟",
-				rowId: ".cook lelehorneado",
+				id: ".cook lelehorneado",
 				description: "Cooking lele horneado"
 			},{
 				title: "nila horneado 🐟",
-				rowId: ".cook nilahorneado",
+				id: ".cook nilahorneado",
 				description: "Cooking nila horneado"
 			},{
 				title: "pescado horneado 🐟",
-				rowId: ".cook pescadohorneado",
+				id: ".cook pescadohorneado",
 				description: "Cooking pescado horneado"
 			},{
 				title: "Camarón a la parrilla 🦐",
-				rowId: ".cook udanghorneado",
+				id: ".cook udanghorneado",
 				description: "Cooking Camarón a la parrilla"
 			},{
 				title: "ballena horneado 🐳",
-				rowId: ".cook ballenahorneado",
+				id: ".cook ballenahorneado",
 				description: "Cooking ballena horneado"
 			},{
 				title: "cangrejo horneado 🦀",
-				rowId: ".cook cangrejohorneado",
+				id: ".cook cangrejohorneado",
 				description: "Cooking cangrejo horneado"
 			}
 					]
 				}]
 			})
-            }
-        }
-    } catch (e) {
-        conn.reply(m.chat, `Parece que hay un error, intente informar al propietario`, m)
-        console.log(e)
-        if (DevMode) {
-            for (let jid of global.owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
-                conn.sendMessage(jid, 'shop.js error\nNo: *' + m.sender.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
-            }
-        }
-    }
+}
+}
+} catch (e) {
+conn.sendWritingText(m.chat, `Parece que hay un error, intente informar al propietario`, m)
+console.log(e)
+if (DevMode) {
+for (let jid of owner.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)) {
+conn.sendMessage(jid, 'shop.js error\nNo: *' + senderJid.split`@`[0] + '*\nCommand: *' + m.text + '*\n\n*' + e + '*', MessageType.text)
+}
+}
+}
 }
 
 handler.help = ['masak <masakan> <args>', 'cook <masakan> <args>']
 handler.tags = ['rpg']
 handler.command = /^(masak|cook|cocinar)$/i
+
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
 export default handler

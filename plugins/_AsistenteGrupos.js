@@ -1,80 +1,70 @@
-export async function before (m, { conn, text, participants }) {
+export async function before (m, { conn, text, participants, chatdb , db, userdb, senderJid}) {
+const { info, newsletterID, sBroadCastID, owner, anidir } = await import('../config.js')
+if (!m.isGroup) return
 if (m.chat.endsWith(newsletterID) || m.chat.endsWith(sBroadCastID)) return
-m.chat === 'status@broadcast'
-let bot = global.db.data.bot[conn.user.jid] || {}
-let chats = bot.chats || {}
-const privs = chats.privs || {}
-const groups = chats.groups || {}
-const chat = m.isGroup ? groups[m.chat] || {} : privs[m.chat] || {}
-const users = m.isGroup ? chat.users || {} : privs || {}
-const user = m.isGroup ? users[m.sender] || {} : privs[m.sender] || {}
-const groupID = m.chat
-const userID = m.sender
-//console.log(`chats: `, chat)
-//.asistente = true || {}
 const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
 //let int = new RegExp(m.text)
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 //let espadm = espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
-let ow = global.owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
+let ow = owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
-let resp
-if(chat.asistente && !chat.isBanned && !m.fromMe) {
-if (m.text.match(/buen día|buen dia|hola|Buenos días|qué tal|𝐇𝐨𝐥𝐚$/gi && !m.fromMe)) {
+let resp = ''
+if(chatdb.asistente && !chatdb.isBanned && !m.fromMe) {
+if (/buen(os)? d(i|í)a(s)?|hola|qu(e|é) tal|𝐇𝐨𝐥𝐚$/gi.test(m.text.toLowerCase())) {
 resp = 	`Hola @${who.split("@s.whatsapp.net")[0]} en un momento te respondemos...
 por el momento te dejaré las preguntas básicas....
 ¿Todo bien todo correcto?`
 }
-if (m.text.match(/^Quién eres?$/gi)) {
-resp = `K.I.R.R. la inteligencia artificial programada por ${ow}`
+if (/^Qui(e|é)n eres?$/gi.test(m.text.toLowerCase())) {
+resp = `${anidir.replace(/_/g, ' ')} bot, programado por ${ow}`
 } 
 
-if (m.text.match(/eres un bot$/i)) {
+if (/eres un bot$/i.test(m.text.toLowerCase())) {
 resp = `@${who.split("@s.whatsapp.net")[0]}, yo soy el asistente virtual de este grupo`
 } 
-if (m.text.match(/Lenin|creador$/gi)) {
-resp = `${ow}...\nGracias por comunicarte con ${igfg}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
+if (/Lenin|creador$/gi.test(m.text.toLowerCase())) {
+resp = `${ow}...\nGracias por comunicarte con ${info.npe}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
 } 
-if (m.text.match(/Quién es Rey Endymion$/gi)) {
-resp = `${yos.slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `} el admin superior de este grupo\n☝️😌\n\n@${who.split("@s.whatsapp.net")[0]} te recomiendo que lo invoques para más dudas que tengas`
+if (/Qui(e|é)n es Rey Endymion$/gi.test(m.text.toLowerCase())) {
+resp = `${ow} Es el creador de este bot\n☝️😌\n\n@${who.split("@s.whatsapp.net")[0]} te recomiendo que lo invoques para más dudas que tengas`
 } 
-if (m.text.match(/^cómo te llamas?$/gi)) {
+if (/^c(o|ó)mo te llamas?$/gi.test(m.text.toLowerCase())) {
 resp = `K.I.R.R. (Knight Intelligence Revolutionary for Respond)`
 } 
 
-if (m.text.match(/K.I.R.R.|kirr|^kirr$/g)) {
+if (/K.I.R.R.|kirr|^kirr$/g.test(m.text.toLowerCase())) {
 resp = `Mandé @${who.split("@s.whatsapp.net")[0]}?`
 } 
-if (m.text.match(/^cómo estás|^cómo estás?|^como estas$/gi)) {
+if (/^c(o|ó)mo est(a|á)(s)?$/gi.test(m.text.toLowerCase())) {
 resp = `Todo bien, y tú @${who.split("@s.whatsapp.net")[0]}?... 
 Por cierto soy un asistente virtual en este grupo, para más detalles invoca a un administrador diferente`
 } 
 
-if (m.text.match(/admin$/gi)) {
+if (/admin$/gi.test(m.text.toLowerCase())) {
 resp = `@${who.split("@s.whatsapp.net")[0]} habla con otro admin, yo solo soy un bot\n Aqui algunos\n\n${listAdmin}`
 }
 
-if (m.text.match(/Otakus Together$/gi)) {
+if (/Otakus Together$/gi.test(m.text.toLowerCase())) {
 resp = `ㄖㄒ卂Ҡ凵丂 ㄒㄖᎶ乇ㄒ卄乇尺`
 } 
 
-if (m.text.match(/Otakus TogetherS$/gi)) {
+if (/Otakus TogetherS$/gi.test(m.text.toLowerCase())) {
 resp = `🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂ㄒㄖᎶ乇ㄒ卄乇尺🍜⃢⃟ᭀᬽ`
 } 
 
-if (m.text.match(/^otakus forever$/gi)) {
+if (/^otakus forever$/gi.test(m.text.toLowerCase())) {
 resp = `🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂千ㄖ尺乇ᐯ乇尺🍜⃢⃟ᭀᬽ`
 } 
 
-if (m.text.match(/^otakus always$/gi)) {
+if (/^otakus always$/gi.test(m.text.toLowerCase())) {
 resp = `🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂 卂ㄥ山卂ㄚ丂🍜⃢⃟ᭀᬽ`
 }
-if (m.text.match(/nombre del grupo de sailor moon$/gi)) {
+if (/nombre del grupo de sailor moon$/gi.test(m.text.toLowerCase())) {
 resp = `❤️𝓕𝓪𝓷 𝓭𝓮 𝓢𝓪𝓲𝓵𝓸𝓻 𝓜𝓸𝓸𝓷🌙💖`
 } 
 
-if (m.text.match(/muestra el grupo de aportes$/gi)) {
+if (/muestra el grupo de aportes$/gi.test(m.text.toLowerCase())) {
 resp = `Se les invita al grupo de aportes de
 🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂
 ㄒㄖᎶ乇ㄒ卄乇尺🍜⃢⃟ᭀᬽ 
@@ -82,7 +72,7 @@ resp = `Se les invita al grupo de aportes de
 
 Quien quiera pertenecer a ese grupo y tenga aportes me dice para prestarle admin porque no se puede chatear en aquel grupo por respeto a los aportadores oficiales
 
-${gaportes}
+${info.gaportes}
 
 Se puede aportar hasta el momento cualquier tipo de contenido incluyendo películas que no tengan relación con anime...
 
@@ -93,11 +83,11 @@ Cómo requisito para permanecer en ese grupo tienen que estar en este grupo...
 *Quién se salga de este grupo por automático será expulsado del grupo de aportes*`
 } 
 
-if (m.text.match(/grupo de aportes forever$/gi)) {
+if (/grupo de aportes forever$/gi.test(m.text.toLowerCase())) {
 resp = `Este es el grupo de aportes de
 🍓⃢⃤ᬽㄖㄒ卂Ҡ凵丂千ㄖ尺乇ᐯ乇尺🍜⃢⃟ᭀᬽ
 
-${gaportes}
+${info.gaportes}
 
 ⚡Este grupo es *No Chat*⚡
 
@@ -109,11 +99,11 @@ ${gaportes}
 ✅ANIME
 ✅ PELÍCULAS
 ✅ IMÁGENES O EDITS
- ⚜️Hay Grupo solo para Hentai⚜️
+⚜️Hay Grupo solo para Hentai⚜️
 
 ⚠️Si te sales del grupo principal, te eliminaremos de aquí⚠️`
 }
-if (m.text.match(/^haz la presentación de este calabozo de muertos|^calabozo de los muertos$/gi)) {
+if (/^(haz la presentación (del|de este))? calabozo de (los)? muertos$/gi.test(m.text.toLowerCase())) {
 resp = `En este grupo para los que se han agregado deberán de hacer *30 MENSAJES* los cuáles pueden ser spam de stickers o spam de texto
 
 Se prohíbe completamente los link de invitación de otros grupos ya que serán eliminados automáticamente sin derecho a regresar o a ser ingresados al grupo principal
@@ -122,11 +112,11 @@ Para el resto es necesario que completen la cuota antes del jueves de cada seman
 
 No serán eliminados sí por lo menos tienen un solo mensaje en toda la semana ya que eso da señales de vida en sus respectivos números`
 }
-if (m.text.match(/contador 0$/gi)) {
+if (/contador (0|cero)$/gi.test(m.text.toLowerCase())) {
 resp = `se mandan por inactivos al grupo muertos para reciclar 👺👎🏼`
 } 
 
-if (m.text.match(/Reglas de otakus forever anti$/gi)) {
+if (/Reglas de otakus forever anti$/gi.test(m.text.toLowerCase())) {
 resp = `Bienvenidos a 
 *ㄖㄒ卂Ҡ凵丂千ㄖ尺乇ᐯ乇尺*
 *(Antibinarios)*
@@ -137,7 +127,7 @@ resp = `Bienvenidos a
 *[2]Queda estrictamente prohibido el Porno y el Ecchi, Hentai, para este último tenemos grupos dedicados*
 
 *[3]Está prohibido agregar administradores sin previo aviso, info para misiones* 
- 
+
 *[4]Tienen prohibido faltar al respeto a menos de que se estén llevando*
 
 *[5]El spam de stickers y de texto esta permitido*
@@ -147,44 +137,44 @@ resp = `Bienvenidos a
 https://facebook.com/groups/849679409107132`
 } 
 
-if (m.text.match(/^(enlace de invitación|link|enlace del grupo)$/gi)) {
+if (/(enlace d(e invitaci(o|ó)n|el grupo)|link)$/gi.test(m.text.toLowerCase())) {
 resp = `Solo tienes dos opciones para llegar al grupo principal @${who.split("@s.whatsapp.net")[0]}
 
 Unirte a la comunidad:
-${community}
+${info.community}
 
 o entrar al grupo de entrevistas:
-${lobby}
+${info.lobby}
 
 Ahí se les realizará una entrevista dónde tendrán que responder las siguientes preguntas
 
 *ɴᴏᴍʙʀᴇ*:
 
 
- *ᴇᴅᴀᴅ*:
+*ᴇᴅᴀᴅ*:
 
 
- *ᴘᴀÍꜱ* :
+*ᴘᴀÍꜱ* :
 
 
- *ᴡᴀɪꜰᴜ ᴏ ʜᴜsʙᴀɴᴅᴏ*:
+*ᴡᴀɪꜰᴜ ᴏ ʜᴜsʙᴀɴᴅᴏ*:
 
 
- *ᴀɴɪᴍᴇ ꜰᴀᴠᴏʀɪᴛᴏ*: 
+*ᴀɴɪᴍᴇ ꜰᴀᴠᴏʀɪᴛᴏ*: 
 
 
 *ᴍᴀɴɢᴀ ꜰᴀᴠᴏʀɪᴛᴏ* :
 
 
- *ᴅᴇꜱᴅᴇ ʜᴀᴄᴇ ᴄᴜÁɴᴛᴏ ᴇʀᴇꜱ ᴏᴛᴀᴋᴜ*:
+*ᴅᴇꜱᴅᴇ ʜᴀᴄᴇ ᴄᴜÁɴᴛᴏ ᴇʀᴇꜱ ᴏᴛᴀᴋᴜ*:
 
 
- *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*:
+*ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*:
 
 
 **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
 }
-if (m.text.match(/porno|xxx|Hentai$/i)) {
+if (/porno|xxx|Hentai$/i.test(m.text.toLowerCase())) {
 resp = `@${who.split("@s.whatsapp.net")[0]} en este chat no pasamos ese contenido...
 
 Busca otro tipo de chats o habla con otros administradores a ver qué te sugiere`
@@ -192,22 +182,11 @@ Busca otro tipo de chats o habla con otros administradores a ver qué te sugiere
 
 
 }
-let int = '';
-let count = 0;
-if ( resp === undefined) return
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 50));
-int += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+if (resp.length === 0) return
+return conn.sendWritingText(m.chat, resp, userdb, m )
 }
 } 
-/*if (m.text.match(/^.jadibot|^*jadibot|^#jadibot|^/jadibot|^serbot$/gi)) {
+/*if (/^.jadibot|^*jadibot|^#jadibot|^/jadibot|^serbot$/gi.test(m.text.toLowerCase())) {
 let resp = `👺 @${who.split("@s.whatsapp.net")[0]}
 el bot de otakus Together es esclusivo del grupo homónimo
 
@@ -218,18 +197,17 @@ for (const c of resp) {
 await new Promise(resolve => setTimeout(resolve, 50));
 int += c;
 count++;
-
 if (count % 10 === 0) {
 
 await conn.sendPresenceUpdate('composing' , m.chat);
 }
 }
-return conn.sendMessage(m.chat, { text: resp.trim(), mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+return conn.sendWritingText(m.chat, resp.trim, userdb, m)
 
 
 
 }
-if (m.text.match(/^s|^sticker$/gi)) {
+if (/^s|^sticker$/gi.test(m.text.toLowerCase())) {
 let resp = `👺
 te saco Este pero tienes que configurar el chat con los mensajes temporales para que se borren cada 24 horas`
 conn.sendMessage(m.chat, { text: resp}, { quoted: m })

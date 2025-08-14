@@ -1,10 +1,10 @@
 
-let handler = async (m, { conn, args, text, isBotAdmin, isAdmin }) => {
+let handler = async (m, {conn, args, text, isBotAdmin, isAdmin, db, userdb, senderJid}) => {
 if (isBotAdmin && isAdmin) {
 if (!text && !m.quoted) {
 let resp = `*[❗INFO❗] INGRESE EL NOMBRE QUE DESEA QUE SEA EL NUEVO NOMBRE DEL GRUPO O CONTESTE A UN MENSAJE QUE TENGA UN TAG Y SEA COMPATIBLE CON LA CANTIDAD DE 25 CARÁCTERES*`;
 
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 
 try {
@@ -20,7 +20,7 @@ text2 = text2.replace(new RegExp(mention[0], 'g'), name);
 }
 }
 
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender;
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid;
 let name = await conn.getName(who);
 let txto = text2.includes('@') ? text2 : text2.replace(new RegExp(who.replace(/\s+/g, '').split`@`[0], 'g'), name);
 
@@ -29,14 +29,14 @@ conn.groupUpdateSubject(m.chat, txto);
 
 } catch (e) {
 let resp = `*[❗INFO❗] LO SIENTO HUBO UN ERROR ${e.stack}, EL NOMBRE NO PUEDE SER MAS DE 25 CARACTERES*`;
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
-} else if (!isBotAdmin && isAdmin)  {
+} else if (!isBotAdmin && isAdmin) {
 let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN*`;
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } else {
 let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
-return conn.sendWritingText(m.chat, resp, m);
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 };
 handler.help = ['setname <text>'];
@@ -44,6 +44,10 @@ handler.tags = ['group'];
 handler.command = /^(setname)$/i;
 handler.group = true;
 handler.admin = true;
+
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
 
 export default handler;
 //adaptación https://github.com/SinNombre999

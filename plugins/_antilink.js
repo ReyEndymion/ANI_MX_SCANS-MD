@@ -1,94 +1,45 @@
+export async function before(m, {conn, isAdmin, isBotAdmin, chatdb, botdb , db, userdb, senderJid}) {
 let linkRegex = /chat.whatsapp.com\/([0-9A-Za-z]{20,24})/i
-export async function before(m, {conn, isAdmin, isBotAdmin }) {
 if (m.isBaileys && m.fromMe)
 return !0
 if (!m.isGroup) return !1
-let bot = global.db.data.bot[conn.user.jid]
-let chats = global.db.data.bot[conn.user.jid].chats || {}
-let chat = chats.groups[m.chat] || {}
-let settings = bot.settings || {}
+let settings = botdb.settings || {}
 
 let delet = m.key.participant
 let bang = m.key.id
 const isGroupLink = linkRegex.exec(m.text)
 const grupo = `https://chat.whatsapp.com`
-if (isAdmin && chat.antiLink && m.text.includes(grupo)) { 
-let resp = '*HEY!! EL ANTILINK ESTA ACTIVO, PERO ERES UN ADMIN 😎, SALVADO/A!*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
+if (isAdmin && chatdb.antiLink && m.text.includes(grupo)) { 
+let resp = `*😎 Salvado, usted @${senderJid.split('@')[0]} es administrador!*`
+return conn.sendWritingText(m.chat, resp, userdb, m)
 }
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
-if (chat.antiLink && isGroupLink && !isAdmin) {
+if (chatdb.antiLink && isGroupLink && !isAdmin) {
 if (isBotAdmin && settings.restrict) {
 const linkThisGroup = `https://chat.whatsapp.com/${await conn.groupInviteCode(m.chat)}`
 if (m.text.includes(linkThisGroup)) {
 let resp = '*Lol.. enviaste el enlace de este grupo :v*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
+return conn.sendWritingText(m.chat, resp, m );
 }
-}
-return conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-return !0
-}
-let resp = `*「 ANTI LINKS 」*\n*HASTA LA VISTA BABY 👋, ${await conn.getName(m.sender)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 await conn.sendMessage(m.chat, {delete: {remoteJid: m.chat, fromMe: false, id: bang, participant: delet}});
-return await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove') 
+let resp = `*「 ANTI LINKS WHATSAPP 」*\n*HASTA LA VISTA BABY 👋, ${await conn.getName(senderJid)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
+await conn.sendWritingText(m.chat, resp, m );
+return await conn.groupParticipantsUpdate(m.chat, [senderJid], 'remove') 
 } else if (isBotAdmin && !bot.restrict) {
 let resp = `*[❗INFO❗] EL PROPIETARIO DEL BOT NO TIENE HABILITADO LAS RESTRICCIONES *(#_enable restrict_)* CONTACTE CON EL PARA QUE LO HABILITE*`
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+return conn.sendWritingText(m.chat, resp, m );
 } else if (!isBotAdmin) {
 let resp = '*[❗INFO❗] EL BOT NO ES ADMIN, NO PUEDE EXTERMINAR A LAS PERSONAS*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 15));
-txt += c;
-count++;
-
-if (count % 10 === 0) {
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-}
+return conn.sendWritingText(m.chat, resp, userdb, m )}
 } 
 return !0
+}
+export const menuInfo = {
+help: `Elimina numeros que realizan spam de enlaces de otros grupos o que simplemente no se permiten en el grupo\nUsar asi para habilitar: *usedPrefixenable antilink*\nUsar asi para deshabilitar: *usedPrefixdisable antilink*`,
+info: `━━━━━━━━━━━━━━━━━━━━
+┣ *👑 ENABLE ANTILINK*: usedPrefixenable antilink
+━━━━━━━━━━━━━━━━━━━━
+┣ *👑 DISABLE ANTILINK*: usedPrefixdisable antilink
+`,
+type: 'enable',
+chat: `grupos`
 }

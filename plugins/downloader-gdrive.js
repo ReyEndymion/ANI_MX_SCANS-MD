@@ -2,62 +2,41 @@ import fetch from 'node-fetch'
 import { sizeFormatter } from 'human-readable'
 let formatSize = sizeFormatter({
 std: 'JEDEC', decimalPlaces: 2, keepTrailingZeroes: false, render: (literal, symbol) => `${literal} ${symbol}B` })
-let handler = async (m, { conn, args }) => {
+let handler = async (m, {conn, args, db, userdb, senderJid}) => {
 if (!args[0]){ 
 let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*' 
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-    return await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+return await conn.sendWritingText(m.chat, resp, userdb, m);
 } try {
 GDriveDl(args[0]).then(async (res) => {
-    let resp = '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado'
-    let txt = '';
-    let count = 0;
-    for (const c of resp) {
-        await new Promise(resolve => setTimeout(resolve, 15));
-        txt += c;
-        count++;
-        if (count % 10 === 0) {
-          await conn.sendPresenceUpdate('composing' , m.chat);
-        }
-    }
-        await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
-    //conn.reply(m.chat, , m)
+let resp = '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado'
+
+await conn.sendWritingText(m.chat, resp, userdb, m);
+//conn.sendWritingText(m.chat,  , userdb, m)
 if (!res) throw res
 await conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })
 
 })
 } catch(e) {
 let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*'
-let txt = '';
-let count = 0;
-for (const c of resp) {
-    await new Promise(resolve => setTimeout(resolve, 5));
-    txt += c;
-    count++;
-    if (count % 10 === 0) {
-      await conn.sendPresenceUpdate('composing' , m.chat);
-    }
-}
-     await conn.sendMessage(m.chat, { text: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+
+await conn.sendWritingText(m.chat, resp, userdb, m);
 console.log(e)
 }
 }
 handler.command = /^(gdrive)$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler
 async function GDriveDl(url) {
 let id
-if (!(url && url.match(/drive\.google/i))) throw 'Invalid URL'
+if (!(url && url.match(/drive\.google/i))) return conn.sendWritingText(m.chat, `Invalid URL`, userdb, m)
 id = (url.match(/\/?id=(.+)/i) || url.match(/\/d\/(.*?)\//))[1]
-if (!id) throw 'ID Not Found'
+if (!id) return conn.sendWritingText(m.chat, `ID Not Found`, userdb, m)
 let res = await fetch(`https://drive.google.com/uc?id=${id}&authuser=0&export=download`, {
 method: 'post',
 headers: {
@@ -68,9 +47,9 @@ headers: {
 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
 'x-client-data': 'CKG1yQEIkbbJAQiitskBCMS2yQEIqZ3KAQioo8oBGLeYygE=',
 'x-drive-first-party': 'DriveWebUi',
-'x-json-requested': 'true'  }})
-let { fileName, sizeBytes, downloadUrl } =  JSON.parse((await res.text()).slice(4))
-if (!downloadUrl) throw 'Link Download Limit!'
+'x-json-requested': 'true' }})
+let { fileName, sizeBytes, downloadUrl } = JSON.parse((await res.text()).slice(4))
+if (!downloadUrl) return conn.sendWritingText(m.chat, `Link Download Limit!`, userdb, m)
 let data = await fetch(downloadUrl)
 if (data.status !== 200) throw data.statusText
 return { downloadUrl, fileName, fileSize: formatSize(sizeBytes), mimetype: data.headers.get('content-type')}}

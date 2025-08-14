@@ -16,13 +16,15 @@
  * @param {string} participant - participante
  */
 const isNumber = (x) => typeof x === 'number' && !isNaN(x);
-export async function dataPrivsChats(sock, chatID, senderID) {
+export async function dataPrivsChats(sock, db, chatID, senderID) {
 const botID = sock.user.jid
-const chat = global.db.data.bot[botID].chats.privs[chatID]
-if (typeof chat !== 'object') global.db.data.bot[botID].chats.privs[chatID] = {};
+const chat = db.data.bot[botID].chats.privs[chatID]
+if (typeof chat !== 'object') db.data.bot[botID].chats.privs[chatID] = {};
 if (chat) {
 if (!('sender' in chat)) chat.sender = senderID;
+if (!('user' in chat)) chat.user = chatID;
 if (!('isBanned' in chat)) chat.isBanned = false;
+if (!('muteconsole' in chat)) chat.muteconsole = false;
 if (!('delete' in chat)) chat.delete = true;
 if (!('autosticker' in chat)) chat.autosticker = false;
 if (!('audios' in chat)) chat.audios = false;
@@ -33,10 +35,12 @@ if (!('stickers' in chat)) chat.stickers = false;
 if (!('asistente' in chat)) chat.asistente = false;
 if (!('gruposRol' in chat)) chat.gruposRol = false;
 if (!isNumber(chat.expired)) chat.expired = 1;
+if (!('lang' in chat)) chat.lang = 'es';
 } else {
-global.db.data.bot[botID].chats.privs[chatID] = {
+db.data.bot[botID].chats.privs[chatID] = {
 sender: senderID,
 isBanned: false,
+muteconsole: false,
 delete: true,
 modohorny: true,
 autosticker: false,
@@ -47,49 +51,20 @@ stickers: true,
 asistente: false,
 gruposRol: false,
 expired: 0,
+lang: 'es'
 }
 }
 }
-/*
-chat = global.db.data.bot[this.user.jid].chats.privs[m.chat]
-if (typeof chat !== 'object') global.db.data.bot[this.user.jid].chats.privs[m.chat] = {};
-if (chat) {
-if (!('isBanned' in chat)) chat.isBanned = false;
-if (!('delete' in chat)) chat.delete = true;
-if (!('autosticker' in chat)) chat.autosticker = false;
-if (!('audios' in chat)) chat.audios = false;
-if (!('antiviewonce' in chat)) chat.antiviewonce = false;
-if (!('antiToxic' in chat)) chat.antiToxic = false;
-if (!('simi' in chat)) chat.simi = false;
-if (!('stickers' in chat)) chat.stickers = false;
-if (!('asistente' in chat)) chat.asistente = false;
-if (!('gruposRol' in chat)) chat.gruposRol = false;
-if (!isNumber(chat.expired)) chat.expired = 1;
-} else {
-global.db.data.bot[this.user.jid].chats.privs[m.chat] = {
-isBanned: false,
-delete: true,
-modohorny: true,
-autosticker: false,
-audios: true,
-antiviewonce: false,
-simi: false,
-stickers: true,
-asistente: false,
-gruposRol: false,
-expired: 0,
-}
-}
-*/
 
-export async function dataGroupsChats(sock, group) {
+export async function dataGroupsChats(sock, db, group) {
 const botID = sock.user.jid
-const chat = global.db.data.bot[botID].chats.groups[group];
-if (typeof chat !== 'object') global.db.data.bot[botID].chats.groups[group] = {};
+const chat = db.data.bot[botID].chats.groups[group];
+if (typeof chat !== 'object') db.data.bot[botID].chats.groups[group] = {};
 const nameChat = await sock.getName(group)
 if (chat) {
 if (!('nameChat' in chat)) chat.nameChat = nameChat;
 if (!('isBanned' in chat)) chat.isBanned = false;
+if (!('muteconsole' in chat)) chat.muteconsole = false;
 if (!('welcome' in chat)) chat.welcome = true;
 if (!('detect' in chat)) chat.detect = true;
 if (!('sWelcome' in chat)) chat.sWelcome = '';
@@ -115,8 +90,9 @@ if (!('users' in chat)) chat.users = {};
 if (!('gRol' in chat)) chat.gruposRol = false;
 if (!isNumber(chat.expired)) chat.expired = 0;
 } else
-global.db.data.bot[botID].chats.groups[group] = {
+db.data.bot[botID].chats.groups[group] = {
 nameChat: nameChat,
+muteconsole: false,
 isBanned: false,
 welcome: true,
 detect: true,
@@ -144,74 +120,19 @@ users: {},
 gruposRol: false,
 expired: 0,
 };
-    
+
 }
-/*
-chat = global.db.data.bot[this.user.jid].chats.groups[m.chat];
-if (typeof chat !== 'object') global.db.data.bot[this.user.jid].chats.groups[m.chat] = {};
-if (chat) {
-if (!('isBanned' in chat)) chat.isBanned = false;
-if (!('welcome' in chat)) chat.welcome = true;
-if (!('detect' in chat)) chat.detect = true;
-if (!('sWelcome' in chat)) chat.sWelcome = '';
-if (!('sBye' in chat)) chat.sBye = '';
-if (!('sPromote' in chat)) chat.sPromote = '';
-if (!('sDemote' in chat)) chat.sDemote = '';
-if (!('delete' in chat)) chat.delete = true;
-if (!('modohorny' in chat)) chat.modohorny = false;
-if (!('autosticker' in chat)) chat.autosticker = false;
-if (!('audios' in chat)) chat.audios = false;
-if (!('antiLink' in chat)) chat.antiLink = false;
-if (!('antiLink2' in chat)) chat.antiLink2 = false;
-if (!('antiviewonce' in chat)) chat.antiviewonce = false;
-if (!('antiToxic' in chat)) chat.antiToxic = false;
-if (!('antiTraba' in chat)) chat.antiTraba = false;
-if (!('antiArab' in chat)) chat.antiArab = false;
-if (!('modoadmin' in chat)) chat.modoadmin = false;
-if (!('simi' in chat)) chat.simi = false;
-if (!('stickers' in chat)) chat.stickers = false;
-if (!('asistente' in chat)) chat.asistente = false;
-if (!('gruposRol' in chat)) chat.gruposRol = false;
-if (!isNumber(chat.expired)) chat.expired = 1;
-if (!('users' in chat)) chat.users = {};
-} else {
-global.db.data.bot[this.user.jid].chats.groups[m.chat] = {
-isBanned: false,
-welcome: true,
-detect: true,
-sWelcome: '',
-sBye: '',
-sPromote: '',
-sDemote: '',
-delete: true,
-modohorny: true,
-autosticker: false,
-audios: true,
-antiLink: false,
-antiLink2: false,
-antiviewonce: false,
-antiToxic: false,
-antiTraba: false,
-antiArab: false,
-modoadmin: false,
-simi: false,
-stickers: true,
-asistente: false,
-gruposRol: false,
-expired: 0,
-users: {}
-}
-};
-*/
-export async function dataGroupUsers(sock, group, participant) {
+
+export async function dataGroupUsers(sock, db, group, participant) {
 const botID = sock.user.jid
-const user = global.db.data.bot[botID].chats.groups[group].users[participant];
+const user = db.data.bot[botID].chats.groups[group].users[participant];
 if (typeof user !== 'object') {
-global.db.data.bot[botID].chats.groups[group].users[participant] = {};
+db.data.bot[botID].chats.groups[group].users[participant] = {};
 }
 const nameW = await sock.getName(participant)
 if (user) {
 //datos usuario
+if (!('lang' in user)) user.lang = 'es';
 if (!('registered' in user)) user.registered = false;
 if (!user.registered) {
 if (!('name' in user)) user.name = nameW;
@@ -648,7 +569,8 @@ if (!user.job) user.job = 'Desempleo';
 if (!user.wait) user.wait = 0;
 if (!user.rtrofi) user.rtrofi = 'Bronce';
 } else {
-global.db.data.bot[botID].chats.groups[group].users[participant] = {
+db.data.bot[botID].chats.groups[group].users[participant] = {
+lang: 'es',
 msgcount: {count: 0, time: 0},
 exp: 0,
 limit: 10,
@@ -1054,56 +976,3 @@ wortel: 0,
 }
 }
 }
-/*
-let user = global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender];
-if (typeof user !== 'object') {
-global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] = {};
-}
-if (user) {
-// Nuevo contador de mensajes 
-if (!('msgcount' in user)) user.msgcount = {};
-if (!isNumber(user.msgcount.count)) {user.msgcount.count = 0;}
-if (!isNumber(user.msgcount.time)) {user.msgcount.time = 0;}
-if (!isNumber(user.exp)) user.exp = 0;
-if (!isNumber(user.limit)) user.limit = 10;
-if (!isNumber(user.lastclaim)) user.lastclaim = 0;
-if (!('registered' in user)) user.registered = false;
-if (!user.registered) {
-if (!('name' in user)) user.name = m.name;
-if (!isNumber(user.age)) user.age = -1;
-if (!isNumber(user.regTime)) user.regTime = -1;
-}
-if (!isNumber(user.afk)) user.afk = -1;
-if (!('role' in user)) user.role = 'Novato';
-if (!('afkReason' in user)) user.afkReason = '';
-if (!('banned' in user)) user.banned = false;
-if (!isNumber(user.warn)) user.warn = 0;
-if (!isNumber(user.level)) user.level = 0;
-if (!('autolevelup' in user)) user.autolevelup = true;
-if (!isNumber(user.money)) user.money = 0;
-if (!isNumber(user.limit)) user.limit = 10;
-if (!isNumber(user.lastclaim)) user.lastclaim = 0;
-} else
-global.db.data.bot[this.user.jid].chats.groups[m.chat].users[m.sender] = {
-msgcount: {count: 0, time: 0},
-exp: 0,
-limit: 10,
-lastclaim: 0,
-registered: false,
-name: m.name,
-age: -1,
-regTime: -1,
-afk: -1,
-afkReason: '',
-banned: false,
-warn: 0,
-level: 0,
-role: 'Novato',
-autolevelup: true,
-money: 0,
-limit: 10,
-lastclaim: 0,
-lastweekly: 0,
-lastmonthly: 0,
-};
-*/
