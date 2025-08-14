@@ -1,6 +1,6 @@
 let confirmacion = {}
 let handler = async (m, {conn, start, info, usedPrefix, command, args, isOwner, isAdmin, isROwner, text, botdb, chatdb, userdb, db, objs, senderJid}) => {
-const {func, imagen1, imagen2} = objs
+const {func, imagen1, imagen4} = objs
 const { fail } = func;
 const {opts} = await import('../lib/functions.js');
 const { newsletterID, sBroadCastID, media} = await import('../config.js');
