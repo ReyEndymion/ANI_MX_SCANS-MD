@@ -3,7 +3,7 @@ async function handler(m, { conn, args, text, command, usedPrefix, userdb, sende
 const path = await import('path')
 const fs = await import('fs')
 let {__filename, plugins, opts, prefix } = await import('../lib/functions.js');
-const {pluginsPath} = objs//path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins');
+const {pluginsPath} = objs
 
 if (/^listinfoplugin$/i.test(command)) {
 const isHandler = []

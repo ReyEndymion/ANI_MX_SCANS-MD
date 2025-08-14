@@ -5,9 +5,8 @@ let handler = async (m, {conn, usedPrefix, db, userdb, senderJid, objs}) => {
 let timeout = 60000
 let poin = 500
 const path = await import('path')
-const {pathBotDBs} = objs
+const {raizPath} = await import('../config.js')
 
-//conn.tekateki = conn.tekateki ? conn.tekateki : {}
 let id = m.chat
 if (id in data) {
 let resp = `Todavía hay acertijos sin responder en este chat`
@@ -15,7 +14,7 @@ data.before = false
 return conn.sendWritingText(m.chat, resp, userdb, data[id][0]);
 throw false
 }
-const jsonAcertijo = path.join(pathBotDBs, `game-acertijo.json`)
+const jsonAcertijo = path.join(raizPath, `src/JSON/ANI-game-acertijo.json`)
 let tekateki = JSON.parse(fs.readFileSync(jsonAcertijo))
 let json = tekateki[Math.floor(Math.random() * tekateki.length)]
 let _clue = json.response

@@ -7,13 +7,13 @@ let handler = async (m, {conn, usedPrefix, command, db, userdb, senderJid, objs}
 let timeout = 60000
 let poin = 1000
 const path = await import('path')
-const {dataBases} = await import('../config.js')
+const {raizPath} = await import('../config.js')
 let id = m.chat
 if (id in data) {
 let resp = 'Todavía hay canciones sin respuesta en este chat.'//, 
 return conn.sendWritingText(m.chat, resp, userdb, data[id][0] );
 }
-const jsonCancion = path.join(dataBases, `game-cancion.json`)
+const jsonCancion = path.join(raizPath, `src/JSON/game-cancion.json`)
 let res = JSON.parse(fs.readFileSync(jsonCancion))
 let json = res[Math.floor(Math.random() * res.length)]
 let caption = `

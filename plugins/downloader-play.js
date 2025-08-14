@@ -50,7 +50,7 @@ let texto1 = `*◉—⌈🔊 YOUTUBE PLAY🔊⌋—◉*\n
 🪬 *TIPO:* ${type}
 🔗 *LINK:* ${urlP}\n\n🎵 AUDIO 🎵\n\nPara descargar mencione la palabra 'audio' o pruebe con el comando \n\n${usedPrefix}ytmp3 ${urlP}\n\n🎥 VIDEO 🎥\n\nPara descargar mencione la palabra 'video' o pruebe con el comando${usedPrefix}ytmp4 ${urlP} \n\n📋 MAS RESULTADOS 📋\n\nPara ver mas resultados mencione la palabra 'mas' o pruebe con el comando \n${usedPrefix}playlist ${text}`.trim()
 
-q = await conn.sendMessage(m.chat, {image: {url: thumbnailP}, caption: txt.trim()}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
+q = await conn.sendMessage(m.chat, {image: {url: thumbnailP}, caption: texto1.trim()}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
 }
 } catch (TypeError) {
 let resp = `*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*POSIBLEMENTE FALTE EL NOMBRE DE AUTOR O LA CANCION PARA MEJOR PRECISION*\n\nError: ${TypeError}`
