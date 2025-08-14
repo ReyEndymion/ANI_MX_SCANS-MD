@@ -3,8 +3,9 @@ import chalk from 'chalk';
 import {loadDatabase, configDinamics} from './lib/database.js'
 import { __filename, opts } from './lib/functions.js';
 import { userID, groupID, lid, owner, prems, mods, newsletterID, sBroadCastID } from './config.js';
-import { error } from 'console';
-/*** @type {import('@whiskeysockets/baileys')}*/
+/**
+ * @type {import('@whiskeysockets/baileys')}
+ */
 const { proto } = (await import('@whiskeysockets/baileys')).default;
 const isNumber = (x) => typeof x === 'number' && !isNaN(x);
 const delay = (ms) =>
@@ -17,7 +18,10 @@ resolve();
 );
 let timeNow = new Date(Date.now()).toString()
 let time = timeNow
-/*** Handle messages upsert* @param {import('@whiskeysockets/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate*/
+/**
+ * Handle messages upsert
+ * @param {import('@whiskeysockets/baileys').BaileysEventMap<unknown>['messages.upsert']} groupsUpdate
+ */
 export async function handler(chatUpdate, objs) {
 const {db, inMstore, storeFile} = objs
 if (db.data === null) await loadDatabase(db);
@@ -34,6 +38,7 @@ let m = chatUpdate.messages[chatUpdate.messages.length - 1];
 if (!m) {
 return;
 }
+const data = {}
 try {
 m = smsg(this, m) || m;
 if (!m) {
@@ -45,13 +50,13 @@ m.money = false;
 m.limit = false;
 const groupMetadata = (m.isGroup ? (inMstore.chats[m.chat] || this.chats[m.chat] || {}).metadata || (await this.groupMetadata(m.chat).catch((_) => null)) : {}) || {};
 const participants = (m.isGroup ? groupMetadata.participants : []) || [];
-const participantFind = participants.find((u) => this.decodeJid(u.id) === m.sender) || {}
+const addressingMode = groupMetadata?.addressingMode 
+const isLidGroup = addressingMode === 'lid'
+const participantFind = participants.find((u) => isLidGroup ? this.decodeJid(u.jid) === m.sender : this.decodeJid(u.id) === m.sender)|| {}
 const isCommunityAnnounce = groupMetadata?.isCommunityAnnounce
 const isAnnounce = groupMetadata?.announce 
 //if (isAnnounce) return 
-const addressingMode = groupMetadata?.addressingMode 
 
-const isLidGroup = participants.find((u) => this.decodeJid(u.id))?.id.endsWith(lid)
 
 const userB = m.isGroup ? participantFind || {} : {}; // User Data()
 const botGroup = (m.isGroup ? isLidGroup ? participants.find((u) => this.decodeJid(u.id).split('@')[0] == this.user.lid.split(':')[0]) : participants.find(p => this.decodeJid(p.id) === this.user.jid) : {}) || {}; // Your Data
@@ -63,7 +68,6 @@ const isROwner = m.isGroup ? isLidGroup ? [ this.decodeJid(this.user.jid), ...ow
 const isOwner = isROwner || m.fromMe;
 const isMods = isOwner || mods.map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid);
 const isPrems = isROwner || prems.map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid);
-console.log('handler1: ', senderJid, m.sender, userB, participantFind, addressingMode)
 if (senderJid === undefined) return
 try {
 // TODO: use loop to insert data instead of this
@@ -192,13 +196,13 @@ const users = m.isGroup ? chat.users || {} : privs || {}
 const user = m.isGroup ? users[senderJid] || {} : privs[senderJid] || {}
 
 let {plugins, opts, prefix } = await import('./lib/functions.js');
-try {
 const properPrint = {
 chat,
 senderJid,
 isCommunityAnnounce,
 isAnnounce
 }
+try {
 if (!opts['noprint']) await (await import(`./lib/print.js`)).default(m, this, properPrint);
 } catch (e) {
 console.log('ErrorPrint:', e.stack);
@@ -381,7 +385,7 @@ if (plugin.register == true && user.registered == false) { // Butuh daftar?
 func.fail('unreg', m, this, user);
 continue;
 }
-m.isCommand = true;
+properPrint.isCommand = true;
 let properHandler = Object.assign(properBefore, {
 usedPrefix,
 noPrefix,
@@ -496,6 +500,7 @@ const settingsREAD = db.data.bot[this.user.jid].settings || {};
 if (opts['autoread']) await this.readMessages([m.key]);
 if (settingsREAD.autoread2) await this.readMessages([m.key]);
 
+data.properPrint = properPrint
 } catch (e) {
 console.error(e);
 } finally {
