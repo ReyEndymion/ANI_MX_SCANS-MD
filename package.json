@@ -1,5 +1,5 @@
 {
-"name": "ani_mx_scans-md",
+"name": "@reyendymion/ani_mx_scans-md",
 "version": "2.2.0",
 "description": "Bot promocional del proyecto 🌎ANI MX SCANS🌎",
 "nameProyect": "🌎ANI MX SCANS🌎",
@@ -9,6 +9,9 @@
 "lib": "lib",
 "src": "src",
 "plugins": "plugins"
+},
+"publishConfig": {
+"registry": "https://npm.pkg.github.com/"
 },
 "scripts": {
 "start": "node --max-old-space-size=4096 index.js",
