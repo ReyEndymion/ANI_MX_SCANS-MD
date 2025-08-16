@@ -4,9 +4,11 @@ Moviles/
 ANI_MX_SCANS/
 ANIMXSCANS/
 sesionRespaldo/
+dataBases/
 /.git/
 /.vscode/
 #| Files |#
+.npmrc
 creds.json
 database.json
 BotComedia.data.json
