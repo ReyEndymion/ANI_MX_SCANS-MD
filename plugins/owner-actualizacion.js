@@ -28,7 +28,7 @@ previousUpdatedAt = message;
 let resp = `*[❗] ¡El repositorio ha sido actualizado recientemente!*\n*- Repositorio:* ${html_url}\n*- Mensaje de commit:* ${message}`
 
 const documentMessage = {
-mentionedJid: conn.parseMention(txt), 
+mentionedJid: conn.parseMention(resp), 
 forwardingScore: 200,
 isForwarded: false,
 externalAdReply: {
@@ -41,7 +41,7 @@ thumbnail: fs.readFileSync(imagen1),
 sourceUrl: `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`
 },
 }
-return conn.sendDocumentWriting(m.chat, info.hp_otkstogthr, {caption: txt, mimetype: `application/zip`, fileName: info.namerepre, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, userdb, m);
+return conn.sendDocumentWriting(m.chat, info.hp_otkstogthr, {caption: resp, mimetype: `application/zip`, fileName: info.namerepre, fileLength: 99999999999999, pageCount: 200, contextInfo: documentMessage}, userdb, m);
 }
 } catch (error) {
 let resp = `*[❗] Error al verificar el repositorio:* ${error.message}`;
