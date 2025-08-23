@@ -10,7 +10,7 @@ var number = text
 	
 if(!text && !m.quoted) {
 return conn.sendWritingText(m.chat, `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix}quitaradmin @tag*\n*┠≽ ${usedPrefix}quitaradmin -> responder a un mensaje*\n*┷┯*`, userdb, m)}
-if(number.length > 13 || (number.length < 11 && number.length > 0)) return conn.sendWritingText(m.chat, `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`, m)
+if(number.length > 13 || (number.length < 11 && number.length > 0)) return conn.sendWritingText(m.chat, `*[ ⚠️ ] El número ingresado es incorrecto, por favor ingrese el número correcto*`, userdb, m)
 
 try {
 if(text) {

@@ -41,15 +41,4 @@ console.log('No se encontró un mensaje personalizado para el evento.');
 console.log('ocurrio un error', error);
 }
 }
-/*
-for (const pluginName in plugins) {
-}
-//quoted: conn.callLogMesssage, 
-if (plugins) {
-// Iterar sobre los plugins cargados
-// Verificar si el plugin es _anticall.js y tiene la configuración correcta
-if (config.callmsg) {
-// Obtener el mensaje del plugin && isAnticall && !isOwner && !isROwner
-}
-}
-*/
+

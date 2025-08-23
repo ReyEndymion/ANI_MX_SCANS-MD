@@ -13,8 +13,6 @@ const groups = chats.groups
 const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
 if (!chat.modohorny && m.isGroup) {return conn.sendWritingText(m.chat, `*[❗INFO❗] LOS COMANDOS +18 ESTAN DESACTIVADOS EN ESTE GRUPO, SI ES ADMIN Y DESEA ACTIVARLOS USE EL COMANDO #enable modohorny*`, m)} else {
 let fgif = { key: {participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "5215532867844-1600616542@g.us" } : {})},message: {"videoMessage": { "title":`*ALBERTO Y ASHLY♥️*`, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': `🧿 🌎ANI MX SCANS🌏 🔮`, 'jpegThumbnail': false }}}
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
-let name = await conn.getName[who]
 let json = await fetch(`https://es.pornhub.com/video/search?search=tiktok+xxx`)
 let jsons = await json.json()
 let res = jsons.result

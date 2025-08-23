@@ -1,6 +1,6 @@
 
 let isApproval = {};
-export async function before(m, { conn, info, start, groupMetadata, participantFind, db, chatdb, userdb, senderJid, isAdmin, isBotAdmin, objs }) {
+export async function before(m, { conn, info, start, groupMetadata, participantFind, db, chatdb, usersdb, userdb, senderJid, isAdmin, isBotAdmin, objs }) {
 const { default: path } = await import('path');
 const { userID, lid, groupID, media } = await import('../config.js');
 const {inMstore, dbGroups} = objs

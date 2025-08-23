@@ -10,4 +10,10 @@ fs.writeFileSync(path.join(pathBotDBs, 'chats.json'), JSON.stringify(conn.chats,
 handler.command = /^connchats/
 handler.rowner = true
 //handler.private = true
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

@@ -6,7 +6,8 @@ let normalizados = 0;
 let omitidos = 0;
 let escritos = [];
 
-for (const [filepath, plugin] of plugins.entries()) {
+for (const [pathModule, plugin] of plugins.entries()) {
+const filepath = __filename(pathModule, true)
 if (plugin.name !== 'handler') {
 omitidos++;
 continue;

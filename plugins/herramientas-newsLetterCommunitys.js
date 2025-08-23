@@ -25,7 +25,6 @@ const isCommand11 = /^(nuevadescchannel)\b$/i.test(command)
 const channelUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:channel\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
 let txtBotAdminCh = '\n\n> *Verifique que el Bot sea admin en el canal, de lo contrario no funcionará el comando*'
 const isChannelUrl = /(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:channel\/|joinchat\/)?([0-9A-Za-z]{22,24})/i.test(text)
-console.log('newsletterCmds: ', channelUrl, )
 
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
 async function reportError(e) {
@@ -127,7 +126,7 @@ m.reply('🌵 Grupo no encontrado')
 return
 }}}
 if (info) {
-await conn.sendMessage(m.chat, { text: info, contextInfo: {
+const contextInfo = {
 mentionedJid: conn.parseMention(info),
 externalAdReply: {
 title: "🐢 Inspector de Grupos",
@@ -137,7 +136,9 @@ sourceUrl: args[0] ? args[0] : inviteCode ? `https://chat.whatsapp.com/${inviteC
 mediaType: 1,
 showAdAttribution: false,
 renderLargerThumbnail: false
-}}}, { quoted: fkontak })
+}}
+
+await conn.sendWritingTextCI(m.chat, info, contextInfo, userdb, fkontak)
 } else {
 // Manejo de enlaces de canales
 let newsletterInfo
@@ -145,7 +146,7 @@ if (!isChannelUrl) return conn.sendWritingText(m.chat, "🚩 Verifique que sea u
 if (isChannelUrl) {
 try {
 newsletterInfo = await conn.newsletterMetadata("invite", channelUrl).catch(e => { return null })
-console.log('newslettreCommands: ', conn.newsletterMetadata)
+console.log('newslettreCommands: ', newsletterInfo)
 if (!newsletterInfo) return conn.sendWritingText(m.chat, "🚩 No se encontró información del canal. Verifique que el enlace sea correcto.", userdb, m)       
 let caption = "*Inspector de enlaces de Canales*\n\n" + processObject(newsletterInfo, "", newsletterInfo?.preview)
 if (newsletterInfo?.preview) {
@@ -154,7 +155,7 @@ pp = getUrlFromDirectPath(newsletterInfo.preview)
 pp = thumb
 }
 if (channelUrl && newsletterInfo) {
-await conn.sendMessage(m.chat, { text: caption, contextInfo: {
+const contextInfo = {
 mentionedJid: conn.parseMention(caption),
 externalAdReply: {
 title: "🐢 Inspector de Canales",
@@ -164,7 +165,9 @@ sourceUrl: args[0],
 mediaType: 1,
 showAdAttribution: false,
 renderLargerThumbnail: false
-}}}, { quoted: fkontak })}
+}}
+//await conn.sendWritingTextCI(m.chat, caption, contextInfo, userdb, fkontak)
+}
 newsletterInfo.id ? conn.sendMessage(m.chat, { text: newsletterInfo.id }, { quoted: null }) : ''
 } catch (e) {
 reportError(e)
@@ -181,6 +184,7 @@ ch = text
 } else {
 ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).catch(e => null)
 }       
+console.log('newsletterCmds: ', channelUrl, ch)
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterFollow(ch)
@@ -503,6 +507,10 @@ break
 handler.tags = ['tools']
 handler.help = ['nuevafotochannel', 'nosilenciarcanal', 'silenciarcanal', 'noseguircanal', 'seguircanal', 'avisoschannel', 'resiviravisos', 'inspect', 'inspeccionar', 'eliminarfotochannel', 'reactioneschannel', 'reaccioneschannel', 'nuevonombrecanal', 'nuevadescchannel']
 handler.command = ['nuevafotochannel', 'nosilenciarcanal', 'silenciarcanal', 'noseguircanal', 'seguircanal', 'avisoschannel', 'resiviravisos', 'inspect', 'inspeccionar', 'eliminarfotochannel', 'reactioneschannel', 'reaccioneschannel', 'nuevonombrecanal', 'nuevadescchannel']
+handler.menu = [];
+handler.type = "owners";
+handler.disabled = false;
+
 export default handler 
 
 function formatDate(n, locale = "es", includeTime = true) {

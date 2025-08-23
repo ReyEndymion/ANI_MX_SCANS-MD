@@ -1,4 +1,4 @@
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 import fetch from 'node-fetch'
 import axios from 'axios'
 let handler = async(m, {conn, args, usedPrefix, command, db, userdb, senderJid}) => {

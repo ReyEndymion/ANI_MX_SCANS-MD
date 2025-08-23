@@ -2,7 +2,7 @@ import { API } from '../api.js'
 import fetch from 'node-fetch'
 import { lyrics, lyricsv2 } from '../lib/lyricsscraper.js'
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
 let { configDinamics } = await import('../lib/database.js')
 const {start} = await configDinamics()

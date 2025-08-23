@@ -25,5 +25,8 @@ handler.menu = [];
 handler.type = "";
 handler.disabled = false;
 
+handler.help = [];
+handler.tags = [];
+
 export default handler
 

@@ -3,9 +3,6 @@
 * Creado por Rey Endymion
 */
 
-//import { Low, JSONFile } from 'lowdb';
-//import { join } from 'path';
-//import fs, { existsSync, mkdirSync } from 'fs';
 /**
 const contMensajes = '../CountMessages';
 const databaseFile = './countMessagesReg.json';
@@ -106,4 +103,10 @@ if (resp === undefined) return
 return conn.sendWritingText(m.chat, resp, m)}
 //handler.admin = true
 handler.command = /^revcount$/i
+handler.help = [];
+handler.tags = [];
+handler.menu = [];
+handler.type = "";
+handler.disabled = false;
+
 export default handler

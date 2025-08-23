@@ -1,5 +1,5 @@
 import axios from "axios"
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 let handler = async (m, {command, conn, text, db, userdb, senderJid}) => {
 let imagen, resp 
 try {

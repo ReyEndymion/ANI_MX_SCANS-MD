@@ -1,4 +1,4 @@
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
 let handler = async (m, {conn, start, text, usedPrefix, command, db, userdb, senderJid}) => {
 const forbiddenWords = [

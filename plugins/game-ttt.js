@@ -1,6 +1,6 @@
 import TicTacToe from '../lib/tictactoe.js'
 import { owner, info, temp, newsletterID, sBroadCastID, userID, groupID, media } from '../config.js'
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 import { format } from 'util'
 let game = {}
 let handler = async (m, {conn, start, usedPrefix, command, text, db, userdb, senderJid}) => {

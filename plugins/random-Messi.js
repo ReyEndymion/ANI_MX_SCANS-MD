@@ -1,4 +1,4 @@
-import { googleImage } from '../lib/googleImagen.js'
+import { googleImage } from '../lib/googlePictures.js'
 import axios from 'axios'
 let handler = async(m, {conn, start, info, usedPrefix, command, text, db, userdb, senderJid}) => {
 const res = await googleImage(command)

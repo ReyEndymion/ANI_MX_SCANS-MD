@@ -24,12 +24,7 @@ return plugin && typeof plugin.all === 'function';
 if (f === 'anonymous') {
 return plugin && typeof plugin === 'function' && plugin.name === '' || typeof plugin.handler === 'function' && plugin.handler.name === ''
 }
-//return typeof plugin[filter] === 'function';
-//if (f === 'handler') return isHandler;
-//if (f === 'before') return isBefore;
-//if (f === 'all') return isAll;
-//if (f === 'anonymous') return isAnonymous;
-return false; // filtro desconocido
+return false;
 })
 }).map(([filepath], idx) => `${idx + 1}. ${path.basename(filepath)}`);
 

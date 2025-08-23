@@ -53,7 +53,7 @@ mentionedJid: conn.parseMention(resp),
 externalAdReply: {
 body: false,
 containsAutoReply: true,
-mediaType: 1,
+mediaType: 2,
 mediaUrl: link,
 renderLargerThumbnail: true,
 showAdAttribution: false,
