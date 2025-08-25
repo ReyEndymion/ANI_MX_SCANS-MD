@@ -2,6 +2,7 @@ import path, { join } from 'path'
 import fs from 'fs'
 let user = a => '@' + a.split('@')[0]
 async function handler(m, { groupMetadata, command, conn, participants, db, userdb, senderJid }) {
+const {media} = await import('../config.js')
 let ps = groupMetadata.participants.map(v => v.id)
 let a = ps.getRandom()
 let b = ps.getRandom()
