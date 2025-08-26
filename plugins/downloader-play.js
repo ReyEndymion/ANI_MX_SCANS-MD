@@ -21,7 +21,6 @@ const privs = chats.privs
 const groups = chats.groups
 const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
 let resp, q
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let {titleP, publishedTimeP, durationHP, viewHP, descriptionP, authorP, videoIdP, thumbnailP, urlP, vidP} = {}
 if (/^play$/ig.test(command)) {
 try {
@@ -102,7 +101,6 @@ const type = (args[0] || '').toLowerCase()
 const countP = Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, (isNumber(args[1]) ? parseInt(args[1]) : 1))) * 1
 confirmations[senderJid] = {
 sender: senderJid,
-to: who, 
 titleP, publishedTimeP, durationHP, viewHP, descriptionP, authorP, videoIdP, thumbnailP, vidP, urlP,
 type,
 message: m,

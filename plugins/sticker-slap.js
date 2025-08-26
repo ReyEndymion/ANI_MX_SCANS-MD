@@ -9,7 +9,7 @@ let packname
 let wm
 if(!m.mentionedJid.length && !m.quoted?.sender) {
 packname = `le da una cachetada\n`
-wm = `Si quiere abofetear a alguien m·s debe contestar a un mensaje O Mencionarlo con @ en el Grupo`
+wm = `Si quiere abofetear a alguien m√°s debe contestar a un mensaje O Mencionarlo con @ en el Grupo`
 } else if (m.quoted?.sender) {
 m.mentionedJid.push(m.quoted.sender)
 packname = `${await conn.getName(senderJid)}\nle dio una bofetada a\n`
@@ -20,7 +20,7 @@ const isMentionBot = normalizetext.includes('@' + conn.user.jid.split('@')[0])
 m.mentionedJid.push(senderJid)
 packname = `${await conn.getName(senderJid)}\nle dio una bofetada a\n`
 wm = `${await m.mentionedJid.map((user) => `${conn.getName(user)}`).join('\n')}`
-if (isMentionBot) {packname = `le da una cachetada\n`;wm = 'Si quiere abofetear a alguien m·s debe contestar a un mensaje O Mencionarlo con @ en el Grupo'}
+if (isMentionBot) {packname = `le da una cachetada\n`;wm = 'Si quiere abofetear a alguien m√°s debe contestar a un mensaje O Mencionarlo con @ en el Grupo'}
 }
 
 await conn.sendSticker(m.chat, bofGif.getRandom(), {packname, wm}, m)

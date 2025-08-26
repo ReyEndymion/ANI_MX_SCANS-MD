@@ -1,7 +1,7 @@
 
-async function handler(m, { conn, groupMetadata, db, chatdb, usedPrefix, command, args, isAdmin, isBotAdmin, isOwner, isROwner, objs, userdb, senderJid }) {
+async function handler(m, { conn, groupMetadata, botdb, chatdb, usedPrefix, command, args, isAdmin, isBotAdmin, isOwner, isROwner, objs, userdb, senderJid }) {
 const {dataBases} = await import('../config.js') 
-if (!db.data.bot[conn.user.jid].settings.restrict) {return conn.sendWritingText(m.chat, `'*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'`, userdb, m)
+if (!botdb.settings.restrict) {return conn.sendWritingText(m.chat, `'*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'`, userdb, m)
 } else {
 if (isBotAdmin) {
 const participants = groupMetadata.participants.map((p) => p.id);

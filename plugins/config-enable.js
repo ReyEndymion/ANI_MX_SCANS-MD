@@ -1,19 +1,15 @@
 let confirmacion = {}
 let handler = async (m, {conn, start, info, usedPrefix, command, args, isOwner, isAdmin, isROwner, text, botdb, chatdb, userdb, db, objs, senderJid}) => {
-const {func, imagen1, imagen4} = objs
+const {func, imagen1, imagen2} = objs
 const { fail } = func;
 const {opts} = await import('../lib/functions.js');
 const { newsletterID, sBroadCastID, media} = await import('../config.js');
 let resp = '', lineaFinal = '', context, q
 let name = await conn.getName(senderJid)
 const fs = await import('fs')
-let img = fs.readFileSync(imagen4)
+let img = fs.readFileSync(imagen2)
 let pp = fs.readFileSync(imagen1)
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid 
-let mentionedJid = [who]
-let userm =`@${who.split(`@s.whatsapp.net`)[0]}` && `@${who.replace(/@.+/, '')}`
-let userg =await conn.getName(m.chat)
-
+let userm = `@${senderJid.split('@')[0]}`
 
 let isEnable = /true|enable|(turn)?on|1/i.test(command)
 const settings = botdb.settings || {}
@@ -416,7 +412,7 @@ mentionedJid: conn.parseMention(resp),
 "title": info.nanie, 
 "containsAutoReply": true,
 "mediaType": 1, 
-"thumbnail": fs.readFileSync(imagen4),
+"thumbnail": fs.readFileSync(imagen2),
 "mediaUrl": info.paypal,
 "sourceUrl": info.paypal
 }

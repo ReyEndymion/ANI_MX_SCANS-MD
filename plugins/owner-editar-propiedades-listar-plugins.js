@@ -5,6 +5,7 @@ const fs = await import('fs')
 let {__filename, plugins, opts, prefix } = await import('../lib/functions.js');
 const {pluginsPath} = objs
 
+console.log('testELPlugins: ', plugins)
 if (/^listinfoplugin$/i.test(command)) {
 const isHandler = []
 const filter = args[0]?.toLowerCase(); 
@@ -24,7 +25,12 @@ return plugin && typeof plugin.all === 'function';
 if (f === 'anonymous') {
 return plugin && typeof plugin === 'function' && plugin.name === '' || typeof plugin.handler === 'function' && plugin.handler.name === ''
 }
-return false;
+//return typeof plugin[filter] === 'function';
+//if (f === 'handler') return isHandler;
+//if (f === 'before') return isBefore;
+//if (f === 'all') return isAll;
+//if (f === 'anonymous') return isAnonymous;
+return false; // filtro desconocido
 })
 }).map(([filepath], idx) => `${idx + 1}. ${path.basename(filepath)}`);
 
@@ -75,10 +81,12 @@ if (!m.quoted?.text) return conn.sendWritingText(m.chat, 'No ha contestado a un 
 const lines = m.quoted?.text.trim().split('\n').filter(line => /^\d+\./.test(line));
 const idx = parseInt(args[0]) - 1;
 if (isNaN(idx) || !lines[idx]) return conn.sendWritingText(m.chat, 'Número inválido o fuera de rango.', userdb, m);
-const filename = lines[idx].split('. ').slice(1).join('. ').trim(); 
+const filename = lines[idx].split('. ').slice(1).join('. ').trim(); // e.g., "autoadmin.js"
+
 const entries = plugins.entries();
 const [filepath, plugin] = [...entries].find(([fp]) => path.basename(fp) === filename) || [];
 const [rawPluginIdx, propYvalor] = text.split('|').map(s => s.trim());
+//const idx = parseInt(rawPluginIdx) - 1;Object
 const [prop, rawValue] = propYvalor.split('=').map(s => s.trim());
 
 if (isNaN(idx) || !prop || rawValue === undefined)
@@ -88,6 +96,7 @@ return conn.sendWritingText(m.chat, 'Formato incorrecto. Asegúrate de usar: nú
 if (!plugin) return conn.sendWritingText(m.chat, 'No se encontró el plugin con ese número.', userdb, m);
 
 if (plugin.name === 'handler') {
+//plugin.name = {};
 const oldValue = plugin[prop];
 
 try {
@@ -101,6 +110,7 @@ return conn.sendWritingText(m.chat, `Propiedad '${prop}' eliminada del plugin.`,
 return conn.sendWritingText(m.chat, `La propiedad '${prop}' no existe, nada que eliminar.`, m);
 }
 }
+// Intenta interpretar como objeto si empieza con "[" o "{"
 if (rawValue.startsWith('{') || rawValue.startsWith('[')) {
 newValue = eval(`(${rawValue})`);
 
@@ -116,18 +126,18 @@ return conn.sendWritingText(m.chat, `Propiedad '${prop}' actualizada como objeto
 return conn.sendWritingText(m.chat, `Este plugin ya tiene un valor tipo *${typeof oldValue}* en '${prop}', incompatible con objeto.\n\nUsa el modo correspondiente.`, m);
 }
 } else if (rawValue === 'true' || rawValue === 'false') {
-newValue = rawValue === 'true'; 
+newValue = rawValue === 'true'; // Booleano
 plugin[prop] = rawValue;
 return conn.sendWritingText(m.chat, `Propiedad '${prop}' actualizada como booleano: *${newValue}*`, userdb, m);
 } else if (!isNaN(rawValue)) {
-newValue = Number(rawValue); 
+newValue = Number(rawValue); // Número
 plugin[prop] = rawValue;
 return conn.sendWritingText(m.chat, `Propiedad '${prop}' actualizada como número: *${newValue}*`, userdb, m);
 } else {
 if (typeof oldValue === 'object' && !Array.isArray(oldValue)) {
 await conn.sendWritingText(m.chat, `Este plugin ya tiene un valor tipo *objeto* en '${prop}':\n${JSON.stringify(oldValue, null, 2)}\n\nSi quieres cambiarlo por un texto, usa:\n${usedPrefix+command} <número> | ${prop} = "nuevo texto"\n\n*⚠️ Esto reemplazará completamente el valor actual.*`, m);
 }
-newValue = rawValue; 
+newValue = rawValue; // Texto literal
 plugin[prop] = rawValue;
 await conn.sendWritingText(m.chat, `Propiedad '${prop}' del archivo ${path.basename(filepath)} actualizada con el texto: "${rawValue}"`, userdb, m);
 }
@@ -142,9 +152,11 @@ const modificacion = `handler.${prop} = ${typeof newValue === 'string' ? JSON.st
 
 let nuevoContenido;
 if (fileContent.includes(`handler.${prop}`)) {
+// Reemplaza línea anterior de esa propiedad
 const propRegex = new RegExp(`handler\\.${prop}\\s*=.*?;`, 's');
 nuevoContenido = fileContent.replace(propRegex, modificacion);
 } else {
+// Inserta antes del export
 nuevoContenido = fileContent.replace(exportRegex, `${modificacion}\n\n${exportRegex}`);
 }
 
@@ -173,10 +185,11 @@ const filepath = path.join(pluginsPath, filename);
 try {
 const code = buffer.toString('utf8');
 
+// Validación de sintaxis JSfile
 parse(code, {
 ecmaVersion: 'latest',
-sourceType: 'module', 
-});
+sourceType: 'module', // <-- ¡clave para ESM!
+}); // lanza error si la sintaxis es inválida
 
 if (!code.includes('export default handler')) {
 return conn.sendWritingText(m.chat, `⚠️ El archivo no contiene \`export default handler\`. Asegúrate de exportar correctamente el plugin.`, userdb, m );
@@ -186,6 +199,7 @@ await fs.promises.writeFile(filepath, code, 'utf8');
 
 conn.sendWritingText(m.chat, `✅ Plugin \`${filename}\` cargado correctamente en la carpeta de plugins.`, userdb, m );
 
+// Opcional: podrías recargar aquí el plugin dinámicamente si tu sistema lo permite.
 
 } catch (e) {
 conn.sendWritingText(m.chat, `❌ Error al cargar el plugin:\n${e.message}` , userdb, m);

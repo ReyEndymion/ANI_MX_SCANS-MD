@@ -3,21 +3,17 @@ let pptUsage = {}
 let handler = async (m, {conn, info, start, text, command, usedPrefix, args, db, userdb, senderJid}) => {
 const buff = info.nanie
 
-// Check if user is banned
 if (pptUsage[senderJid] && pptUsage[senderJid].bannedUntil > Date.now()) {
 let timeLeft = Math.ceil((pptUsage[senderJid].bannedUntil - Date.now()) / 1000 / 60)
 return conn.sendWritingText(m.chat, `Lo siento, estás baneado del uso de este comando durante ${timeLeft} minutos.`, m)
 }
 
-// Increment usage count for user
 if (!pptUsage[senderJid]) {
 pptUsage[senderJid] = { count: 0 }
 }
 pptUsage[senderJid].count++
 
-// Check if user has exceeded usage limit
 if (pptUsage[senderJid].count > 10) {
-// Ban user for 20 minutes
 pptUsage[senderJid].bannedUntil = Date.now() + 20 * 60 * 1000
 let resp = `Has sido baneado del uso de este comando durante 20 minutos.`
 return conn.sendWritingText(m.chat, resp, userdb, m);
@@ -25,7 +21,6 @@ return conn.sendWritingText(m.chat, resp, userdb, m);
 let pp = 'https://www.bighero6challenge.com/images/thumbs/Piedra,-papel-o-tijera-0003318_1584.jpeg'
 if (!args[0]) {
 let resp = `*_PIEDRA, PAPEL O TIJERA vs BOT_*\n\n`
-//['PIEDRA 🗿', 'Piedra'], ['PAPEL 📄', 'Papel'], ['TIJERA ✂️', 'Tijera']
 const buttons = [['*_Piedra_* 🪨', `${usedPrefix + command} piedra`],
 ['*_Papel_* 📄', `${usedPrefix + command} papel`],
 ['*_Tijera_* ✂️', `${usedPrefix + command} tijera`]]
@@ -39,9 +34,7 @@ return conn.sendButton(m.chat, messageObj, {url: pp}, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 resp += `puedes usar estos comandos_:\n${cmds}\n`
-//await conn.sendImageWriting(room.p, imgplay, resp.trim(), userdb, m)
 return conn.sendImageWriting(m.chat, pp, resp+'\n'+cmds+'\n'+''+buff, userdb, m)
-//return conn.sendWritingText(m.chat, , m );
 }
 }
 var astro = Math.random()

@@ -2,17 +2,14 @@ export async function before (m, { conn, text, participants, chatdb , db, userdb
 const { info, newsletterID, sBroadCastID, owner, anidir } = await import('../config.js')
 if (!m.isGroup) return
 if (m.chat.endsWith(newsletterID) || m.chat.endsWith(sBroadCastID)) return
-const match = text//Object.entries(text).find(([text]) => regex.test(m.text))
-//let int = new RegExp(m.text)
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
-//let espadm = espadmins.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] }));
+const match = text
 let ow = owner.filter(entry => typeof entry[0] === 'string' && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : '@'}${jid.split`@`[0]}`).join` y `
 const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
 let resp = ''
 if(chatdb.asistente && !chatdb.isBanned && !m.fromMe) {
 if (/buen(os)? d(i|í)a(s)?|hola|qu(e|é) tal|𝐇𝐨𝐥𝐚$/gi.test(m.text.toLowerCase())) {
-resp = 	`Hola @${who.split("@s.whatsapp.net")[0]} en un momento te respondemos...
+resp = 	`Hola @${senderJid.split('@')[0]} en un momento te respondemos...
 por el momento te dejaré las preguntas básicas....
 ¿Todo bien todo correcto?`
 }
@@ -21,28 +18,28 @@ resp = `${anidir.replace(/_/g, ' ')} bot, programado por ${ow}`
 } 
 
 if (/eres un bot$/i.test(m.text.toLowerCase())) {
-resp = `@${who.split("@s.whatsapp.net")[0]}, yo soy el asistente virtual de este grupo`
+resp = `@${senderJid.split('@')[0]}, yo soy el asistente virtual de este grupo`
 } 
 if (/Lenin|creador$/gi.test(m.text.toLowerCase())) {
 resp = `${ow}...\nGracias por comunicarte con ${info.npe}. ¿Cómo podemos ayudarte?\n\nPresenté.... (Pero sólo en espíritu) lo siento no puedo responder en este momento`
 } 
 if (/Qui(e|é)n es Rey Endymion$/gi.test(m.text.toLowerCase())) {
-resp = `${ow} Es el creador de este bot\n☝️😌\n\n@${who.split("@s.whatsapp.net")[0]} te recomiendo que lo invoques para más dudas que tengas`
+resp = `${ow} Es el creador de este bot\n☝️😌\n\n@${senderJid.split('@')[0]} te recomiendo que lo invoques para más dudas que tengas`
 } 
 if (/^c(o|ó)mo te llamas?$/gi.test(m.text.toLowerCase())) {
 resp = `K.I.R.R. (Knight Intelligence Revolutionary for Respond)`
 } 
 
 if (/K.I.R.R.|kirr|^kirr$/g.test(m.text.toLowerCase())) {
-resp = `Mandé @${who.split("@s.whatsapp.net")[0]}?`
+resp = `Mandé @${senderJid.split('@')[0]}?`
 } 
 if (/^c(o|ó)mo est(a|á)(s)?$/gi.test(m.text.toLowerCase())) {
-resp = `Todo bien, y tú @${who.split("@s.whatsapp.net")[0]}?... 
+resp = `Todo bien, y tú @${senderJid.split('@')[0]}?... 
 Por cierto soy un asistente virtual en este grupo, para más detalles invoca a un administrador diferente`
 } 
 
 if (/admin$/gi.test(m.text.toLowerCase())) {
-resp = `@${who.split("@s.whatsapp.net")[0]} habla con otro admin, yo solo soy un bot\n Aqui algunos\n\n${listAdmin}`
+resp = `@${senderJid.split('@')[0]} habla con otro admin, yo solo soy un bot\n Aqui algunos\n\n${listAdmin}`
 }
 
 if (/Otakus Together$/gi.test(m.text.toLowerCase())) {
@@ -138,7 +135,7 @@ https://facebook.com/groups/849679409107132`
 } 
 
 if (/(enlace d(e invitaci(o|ó)n|el grupo)|link)$/gi.test(m.text.toLowerCase())) {
-resp = `Solo tienes dos opciones para llegar al grupo principal @${who.split("@s.whatsapp.net")[0]}
+resp = `Solo tienes dos opciones para llegar al grupo principal @${senderJid.split('@')[0]}
 
 Unirte a la comunidad:
 ${info.community}
@@ -175,7 +172,7 @@ Ahí se les realizará una entrevista dónde tendrán que responder las siguient
 **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
 }
 if (/porno|xxx|Hentai$/i.test(m.text.toLowerCase())) {
-resp = `@${who.split("@s.whatsapp.net")[0]} en este chat no pasamos ese contenido...
+resp = `@${senderJid.split('@')[0]} en este chat no pasamos ese contenido...
 
 Busca otro tipo de chats o habla con otros administradores a ver qué te sugiere`
 
@@ -186,32 +183,3 @@ if (resp.length === 0) return
 return conn.sendWritingText(m.chat, resp, userdb, m )
 }
 } 
-/*if (/^.jadibot|^*jadibot|^#jadibot|^/jadibot|^serbot$/gi.test(m.text.toLowerCase())) {
-let resp = `👺 @${who.split("@s.whatsapp.net")[0]}
-el bot de otakus Together es esclusivo del grupo homónimo
-
-No sé puede volver a iniciar sesión con QR`
-let int = '';
-let count = 0;
-for (const c of resp) {
-await new Promise(resolve => setTimeout(resolve, 50));
-int += c;
-count++;
-if (count % 10 === 0) {
-
-await conn.sendPresenceUpdate('composing' , m.chat);
-}
-}
-return conn.sendWritingText(m.chat, resp.trim, userdb, m)
-
-
-
-}
-if (/^s|^sticker$/gi.test(m.text.toLowerCase())) {
-let resp = `👺
-te saco Este pero tienes que configurar el chat con los mensajes temporales para que se borren cada 24 horas`
-conn.sendMessage(m.chat, { text: resp}, { quoted: m })
-} */ 
-//}
-//handler.customPrefix = / /
-//handler.command = new RegExp

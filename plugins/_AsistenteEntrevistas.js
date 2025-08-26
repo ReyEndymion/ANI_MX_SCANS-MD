@@ -1,6 +1,5 @@
 export async function before(m, {conn, chatdb, db, userdb, senderJid}) {
 if (chatdb.asistente && !chatdb.isBanned) {
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let resp = ''
 if (/aclaración$/i.test(m.text) && !m.fromMe) {
 resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
@@ -93,7 +92,7 @@ resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏʏ ʙᴜ�
 } 
 
 if (/^No gracias$/i.test(m.text) && !m.fromMe) {
-resp = `a Bueno @${who.split("@s.whatsapp.net")[0]} te me cuidas`
+resp = `a Bueno @${senderJid.split('@')[0]} te me cuidas`
 
 } 
 if (resp.length === 0) return

@@ -5,6 +5,7 @@ const { default: path } = await import('path');
 const { userID, lid, groupID, media } = await import('../config.js');
 const {inMstore, dbGroups} = objs
 const {findJidInAllGroups} = await import('../lib/functions.js')
+//const allGroups = Object.values(inMstore.chats); // o conn.chats
 if (Object.entries(isApproval).length !== 0) {
 const text = (m.message?.templateButtonReplyMessage?.selectedDisplayText || m.message?.listResponseMessage?.title || m.message?.interactiveResponseMessage?.body?.text || m.text || '').toLowerCase();
 if (/^si$/.test(text) && isAdmin) {
@@ -24,8 +25,10 @@ let sender = user ? user.split`@`[0] : who
 let usertag = `@${sender}`
 let whotag = `@${who}`
 let contact, parti
+//, msgSPMap, m.messageStubParameters, mspawait conn.lidToJid(m.messageStubParameters[0], m.chat)if () who = , resp
 
 if (chatdb.detect) {
+console.log('chatUpdateCheck: ', user, usertag, contact, m.sender.endsWith(groupID), await findJidInAllGroups(conn, inMstore, dbGroups, m.messageStubParameters[0]))
 let fkontak = { key: { participants: senderJid, remoteJid: m.chat, fromMe: false, id: '' }, message: { contactMessage: { vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${sender}:${sender}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, participant: senderJid}
 if (m.messageStubType === 21) {
 const resp = `${usertag} Ha cambiado el nombre del grupo a:\n*${m.messageStubParameters[0]}*`
@@ -93,6 +96,7 @@ delete isApproval[m.chat]
 }
 
 let fkontak = { key: { participants: user, remoteJid: m.chat, fromMe: false, id: '' }, message: { contactMessage: { vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${sender}:${sender}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, participant: user}
+//console.log('chatUpdateC: ', user, who, m.sender, fkontak)
 if (chatdb.welcome) {
 let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => null) || path.join(media, 'pictures/sinFoto.png');
 if (m.messageStubType == 27) {
@@ -104,11 +108,12 @@ welcomeUsers += `@${param.split('@')[0]}, `;
 chatdb.users[param]
 db.write()
 }
-welcomeUsers = welcomeUsers.slice(0, -2);
+welcomeUsers = welcomeUsers.slice(0, -2); // Eliminar la coma extra al final
 
 let sWelcome = chatdb.sWelcome.replace('@user', `${welcomeUsers}`).replace('@group', `${await conn.getName(m.chat)}`).replace('@desc', `${groupMetadata.desc?.toString() || '*SIN DESCRIPCION*'}`)
 let welcome = `${inv} AÑADIO A ${welcomeUsers}\n\n*╔══════════════*\n*╟❧ ${await conn.getName(m.chat)}*\n*╠══════════════*\n*╟❧ ${welcomeUsers}*\n*╟❧ BIENVENIDO/A* \n*║*\n*╟❧ DESCRIPCIÓN DEL GRUPO:*\n*╟❧* ${groupMetadata.desc?.toString() || '*SIN DESCRIPCION*'} \n*║*\n*╟❧ DISFRUTA TU ESTANCIA!!*\n*╚══════════════*`
 const resp = sWelcome !== '' ? sWelcome : welcome
+//return conn.sendImageWriting(m.chat, pp, resp, userdb, fkontak);
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 }
@@ -117,12 +122,14 @@ if (m.messageStubType == 28) {
 const resp = `╔══════════════*\n*║〘 *EXPULSADO* 〙*\n*╠══════════════*\n║*_☠ ${whotag} ELIMINO A ${usertag}, si lo Sacaron tendran sus motivos_*\n║*_Si no regresa..._*\n║ *_Nadie l@ va a extrañar 😇👍🏼_*\n*╚══════════════*`
 delete chatdb.users[who]
 db.write()
+//return conn.sendImageWriting(m.chat, pp, resp, userdb, fkontak);
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 if (m.messageStubType == 32) {
 const resp = `╔══════════════*\n*║〘 *ADIÓS*〙*\n*╠══════════════*\n║*_Se fue ${usertag} del Grupo_*\n║*_Tal vez alguien si lo extrañe o nada mas vino a mirar..._*\n║ *_Esperamos que le vaya bien 😇👍🏼_*\n*╚══════════════*`
 delete chatdb.users[who]
 db.write()
+//return conn.sendImageWriting(m.chat, pp, resp, userdb, fkontak);
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 }

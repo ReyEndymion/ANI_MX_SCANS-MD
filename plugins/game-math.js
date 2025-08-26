@@ -1,11 +1,11 @@
-const {  modes  } = await import('../lib/constants.js');
-import { genMath } from '../lib/functions.js'
 let math = {};
 let handler = async (m, {conn, info, start, args, usedPrefix, command, db, userdb, senderJid}) => {
+const { genMath } = await import('../lib/functions.js')
+const {  modesMath  } = await import('../lib/constants.js');
 const {userID} = await import('../config.js')
 const buff = info.nanie
-let resp =  `*[❗INFO❗] INGRESE LA DIFICULTAD CON LA QUE DESEA JUGAR*\n\n*DIFICULTADES DISPONIBLES: ${Object.keys(modes).join(' | ')}*\n\n*EJEMPLO DE USO: ${usedPrefix}mates medium*\n\nMates disponibles:\n- Mates Easy: ${usedPrefix + command} easy\n- Mates Medium: ${usedPrefix + command} medium\n- Mates Hard: ${usedPrefix + command} hard`.trim();
-if (args.length < 1 || !(args[0].toLowerCase() in modes)) {
+let resp =  `*[❗INFO❗] INGRESE LA DIFICULTAD CON LA QUE DESEA JUGAR*\n\n*DIFICULTADES DISPONIBLES: ${Object.keys(modesMath).join(' | ')}*\n\n*EJEMPLO DE USO: ${usedPrefix}mates medium*\n\nMates disponibles:\n- Mates Easy: ${usedPrefix + command} easy\n- Mates Medium: ${usedPrefix + command} medium\n- Mates Hard: ${usedPrefix + command} hard`.trim();
+if (args.length < 1 || !(args[0].toLowerCase() in modesMath)) {
 const buttons = [
 ['MATES NOOB', `${usedPrefix + command} noob`], 
 ['MATES EASY', `${usedPrefix + command} easy`], 

@@ -17,7 +17,7 @@ let uptime = clockString(_uptime)
 const objKeysDBUsG = Object.keys(groupsdb)
 const objKeysDBUsP = Object.keys(privsdb)
 let totalChatRegDB = objKeysDBUsP.length + objKeysDBUsG.length
-const connchats = Object.entries(conn.chats)
+const connchats = Object.entries(conn.chats)//.filter(([id, data]) => id && data.isChats)
 const conngroups = connchats.filter(([id]) => id.endsWith(groupID))
 const connprivs = connchats.filter(([id]) => id.endsWith(userID))
 let totalChatRegConn = connchats.length
@@ -35,8 +35,10 @@ if (values.registered === true) {
 registered.push(usersdb)
 }
 }
+console.log('infobot: ', connchats)
 const usersInChat = m.isGroup ? participants.length : (conn.user.jid === m.sender ? 1 : 2)
 const userReg = {}
+//usersdbconnchats,Object.entries(datajsonstore.chats).filter(([id]) => id.endsWith(userID)) .filter(([id]) => id.endsWith(groupID)).chats.chats, storefilejson.length, storefilejsondataStorePrivs, dataStore.length
 let old = performance.now()
 let neww = performance.now()
 let speed = neww - old

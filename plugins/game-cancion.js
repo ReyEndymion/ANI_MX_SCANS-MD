@@ -9,6 +9,7 @@ let poin = 1000
 const path = await import('path')
 const {raizPath} = await import('../config.js')
 let id = m.chat
+if (/^cancion|canción$/i.test(command)) {
 if (id in data) {
 let resp = 'Todavía hay canciones sin respuesta en este chat.'//, 
 return conn.sendWritingText(m.chat, resp, userdb, data[id][0] );
@@ -34,7 +35,7 @@ await conn.sendWritingText(m.chat, resp, userdb, data[id][0]);
 delete data[id]
 }}, timeout)
 ]
-
+}
 if (/^insinuar|^hint|pista$/i.test(command)) {
 if (!(id in data)) throw false
 let json = data[id][2]

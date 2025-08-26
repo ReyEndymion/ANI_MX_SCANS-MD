@@ -13,10 +13,8 @@ const botDirRespald = path.join(authFolderRespald, sessionNameAni)
 const nameReg = 'ani'
 export const jadibts = path.join(dirP, 'jadibts')
 const anipp = path.join(media,`pictures/ANI.jpg`)
-const imagen1 = path.join(media,`pictures/Menu2.jpg`)
-const imagen2 = path.join(media,`pictures/nuevobot.jpg`)
-const imagen3 = path.join(media,`pictures/Pre Bot Publi.png`)
-const imagen4 = path.join(media,`pictures/Menu.png`)
+const imagen1 = path.join(media,`pictures/Menu2am.jpg`)
+const imagen2 = path.join(media,`pictures/Menuam.png`)
 const stickerAMX = path.join(media,`stickers/ANIMXSCANS.webp`)
 export async function onBot(folderPath) {
 let { loadDatabase, registrerBot, configDinamics, groupFetchAllParticipatingJson } = await import('./lib/database.js')
@@ -221,13 +219,16 @@ console.error(e);
 }
 if (restatConn) {
 const oldChats = (inMstore.chats || conn.chats);
-try {
 conn.ws.close();
-} catch { }
 conn.ev.removeAllListeners();
+try {
 conn = makeWASocket(connectionOptions, {storeFile, inMstore, libstore,  chats: oldChats });
 isInit = true;
+} catch { 
+onBot(folderPath).catch(console.error)
 }
+}
+
 if (!isInit) {
 conn.ev.off('messages.upsert', conn.handler);
 conn.ev.off('group-participants.update', conn.participantsUpdate);
@@ -244,7 +245,7 @@ try {const {call} = await import('./plugins/_anticall.js')
 const {fail} = await import('./plugins/_dFailMessages.js')
 func = {call, fail}
 } catch (e) {console.log('Objs: ', e.stack)}
-const botObj = {sessionNameAni, nameReg, authFolder, botDirRespald, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
+const botObj = {sessionNameAni, nameReg, authFolder, botDirRespald, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
 
 conn.handler = function(chatUpdate) { return handler.handler.call(conn, chatUpdate, botObj);}
 conn.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(conn, participantUpdate, botObj)}//bind(conn);
@@ -281,7 +282,6 @@ await verifyBot(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: nul
 }
 }
 await global.reloadHandler()
-/*
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
 console.log(chalk.whiteBright(`\n▣────────[ BACKUP_CREDS ]───────────···\n│\n▣─❧ RESPALDO EXITOSO ✅\n│\n▣────────────────────────────────────···\n`))
@@ -291,14 +291,10 @@ purgeOldFiles(authFolder)
 console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
 
-setInterval(async () => {
-clearTmp()
-console.log(chalk.cyanBright(`\n▣────────[ AUTOCLEARTMP ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
-}, 1000 * 60 * 3)
-*/
 _quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
 return watchPluginsDirs(pluginFolder, conn)
 }
+
 async function enterCode(conn, registration) {
 try {
 const code = await question('Please enter the one time code:\n');

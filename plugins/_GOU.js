@@ -22,7 +22,7 @@ var pp = await conn.profilePictureUrl(jid, 'image');
 img = await (await fetch(pp)).buffer();
 } catch {
 link = '';
-img = fs.readFileSync(path.join(media, 'pictures/avatar_contact.png'));
+img = fs.readFileSync(path.join(media, 'pictures/sinFoto.png'));
 }
 if (name === groupName) {
 group = chat.subject
