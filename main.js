@@ -245,7 +245,7 @@ try {const {call} = await import('./plugins/_anticall.js')
 const {fail} = await import('./plugins/_dFailMessages.js')
 func = {call, fail}
 } catch (e) {console.log('Objs: ', e.stack)}
-const botObj = {sessionNameAni, nameReg, authFolder, botDirRespald, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
+const botObj = {sessionNameAni, nameReg, authFolder, botDirRespald, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
 
 conn.handler = function(chatUpdate) { return handler.handler.call(conn, chatUpdate, botObj);}
 conn.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(conn, participantUpdate, botObj)}//bind(conn);
