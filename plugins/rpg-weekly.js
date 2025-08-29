@@ -3,7 +3,7 @@ let handler = async (m, {isPrems, conn, db, userdb, senderJid}) => {
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
 //let grupos = [nna, nn, nnn, nnnt]
-let img = [fs.readFileSync(imagen1), fs.readFileSync(fs.readFileSync(imagen2)), fs.readFileSync(imagen3), fs.readFileSync(imagen4)]
+let img = [fs.readFileSync(imagen1), fs.readFileSync(fs.readFileSync(imagen2)), fs.readFileSync(imagen3), fs.readFileSync(imagen2)]
 //let enlace = { contextInfo: { externalAdReply: {title: info.nanie + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}
 //let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: info.nanie, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
 //let dos = [enlace, enlace2]

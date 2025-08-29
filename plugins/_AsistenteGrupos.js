@@ -183,3 +183,32 @@ if (resp.length === 0) return
 return conn.sendWritingText(m.chat, resp, userdb, m )
 }
 } 
+/*if (/^.jadibot|^*jadibot|^#jadibot|^/jadibot|^serbot$/gi.test(m.text.toLowerCase())) {
+let resp = `👺 @${senderJid.split('@')[0]}
+el bot de otakus Together es esclusivo del grupo homónimo
+
+No sé puede volver a iniciar sesión con QR`
+let int = '';
+let count = 0;
+for (const c of resp) {
+await new Promise(resolve => setTimeout(resolve, 50));
+int += c;
+count++;
+if (count % 10 === 0) {
+
+await conn.sendPresenceUpdate('composing' , m.chat);
+}
+}
+return conn.sendWritingText(m.chat, resp.trim, userdb, m)
+
+
+
+}
+if (/^s|^sticker$/gi.test(m.text.toLowerCase())) {
+let resp = `👺
+te saco Este pero tienes que configurar el chat con los mensajes temporales para que se borren cada 24 horas`
+conn.sendMessage(m.chat, { text: resp}, { quoted: m })
+} */ 
+//}
+//handler.customPrefix = / /
+//handler.command = new RegExp

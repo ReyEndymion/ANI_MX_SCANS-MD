@@ -21,6 +21,7 @@ const privs = chats.privs
 const groups = chats.groups
 const chat = m.isGroup ? groups[m.chat] : privs[m.chat]
 let resp, q
+//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let {titleP, publishedTimeP, durationHP, viewHP, descriptionP, authorP, videoIdP, thumbnailP, urlP, vidP} = {}
 if (/^play$/ig.test(command)) {
 try {

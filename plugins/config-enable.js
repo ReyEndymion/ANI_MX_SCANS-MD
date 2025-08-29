@@ -9,6 +9,7 @@ let name = await conn.getName(senderJid)
 const fs = await import('fs')
 let img = fs.readFileSync(imagen2)
 let pp = fs.readFileSync(imagen1)
+//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid 
 let userm = `@${senderJid.split('@')[0]}`
 
 let isEnable = /true|enable|(turn)?on|1/i.test(command)

@@ -62,7 +62,7 @@ text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length
 
 //let name = await conn.getName(senderJid)
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
-let pp = dirP + 'src/avatar_contact.png';
+let pp = dirP + 'src/sinFoto.png';
 try {
 pp = await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png' );
 } catch (e) {}

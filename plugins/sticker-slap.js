@@ -32,7 +32,7 @@ handler.help = ['slap']
 handler.tags = ['General']
 handler.command = /^slap$/i
 handler.menu = [
-{ title: "?? Bofetada", description: "Bofetea a alguien", id: `slap` }
+{ title: "💥 Bofetada", description: "Bofetea a alguien", id: `slap` }
 ];
 handler.type = "stickermenu";
 

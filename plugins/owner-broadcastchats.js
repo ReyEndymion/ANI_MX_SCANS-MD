@@ -6,7 +6,7 @@ let chats = Object.entries(conn.chats).filter(([jid, chat]) => !jid.endsWith('@g
 let cc = text ? m : m.quoted ? await m.getQuotedObj() : false || m
 let teks = text ? text : cc.text
 for (let id of chats) { 
-conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSync(join(media, 'pictures/avatar_contact.png')), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { 
+conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSync(join(media, 'pictures/sinFoto.png')), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { 
 contextInfo: { externalAdReply: {
 title: '*COMUNICADO OFICIAL A LOS CHATS PRIVADOS*',
 body: info.npe, 

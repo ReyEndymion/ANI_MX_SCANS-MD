@@ -22,7 +22,7 @@ try {
 var pp = await conn.profilePictureUrl(m.chat, 'image')
 var img = await (await fetch(pp)).buffer()
 } catch {
-var img = fs.readFileSync(path.join(media, 'pictures/avatar_contact.png'))
+var img = fs.readFileSync(path.join(media, 'pictures/sinFoto.png'))
 }
 const inviteMessage = `🌎 Que tal @${jid.split('@')[0]}, soy el Bot ${info.nanie} que esta en este grupo, me han pedido que te envié está invitación porque no te pude añadir, esperemos que aceptes... Bienvenido al grupo 🌏🤝🏼`
 

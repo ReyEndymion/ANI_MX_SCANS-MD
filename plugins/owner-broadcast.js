@@ -38,4 +38,4 @@ handler.disabled = false;
 
 export default handler
 
-//, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSyncjoin(media, 'pictures/avatar_contact.png'), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: 'COMUNICADO OFICIAL A TODOS LOS CHATS',body: info.npe, sourceUrl: info.hp_animxscans, thumbnail: fs.readFileSync('./Menu2.jpg') }}})
+//, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSyncjoin(media, 'pictures/sinFoto.png'), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: 'COMUNICADO OFICIAL A TODOS LOS CHATS',body: info.npe, sourceUrl: info.hp_animxscans, thumbnail: fs.readFileSync('./Menu2.jpg') }}})

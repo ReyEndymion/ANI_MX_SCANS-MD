@@ -33,7 +33,7 @@ let lastConnectionMessageTime = 0;
 const data = {}
 
 let handler = async (m, {conn, info, args, usedPrefix, command, isOwner, botdb, db, userdb, senderJid, objs}) => {
-const {sessionNameAni, authFolder, botDirRespald, pathBotDBs, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts} = objs
+const {sessionNameAni, authFolder, botDirRespald, pathBotDBs, func, pluginsPath, anipp, imagen1, imagen2, imagen3, stickerAMX, inMstore, storeFile, dbGroups, jadibts} = objs
 if (m.isGroup) return
 data.usedPrefix = usedPrefix
 data.args = args
@@ -160,7 +160,7 @@ export default handler
 async function jddt(folderPath, data) {
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, Browsers } = await import('@whiskeysockets/baileys')
 const { conn, args, usedPrefix, command, userdb, m, senderJid, info, objs } = data
-const {sessionNameAni, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, jadibts} = objs
+const {sessionNameAni, pluginsPath, anipp, imagen1, imagen2, stickerAMX, jadibts} = objs
 conn.messageJdb = false
 const nameFolderBot = path.basename(folderPath)
 const folderDB = path.join(dataBases, sessionNameAni)
@@ -471,7 +471,7 @@ try {const {call} = await import('../plugins/_anticall.js')
 const {fail} = await import('../plugins/_dFailMessages.js')
 func = {call, fail}
 } catch (e) {console.log('Objs: ', e.stack)}
-const botObj = {sessionNameAni, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen4, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
+const botObj = {sessionNameAni, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
 
 sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);}//.bind(sock)
 sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)}//bind(sock);

@@ -37,4 +37,4 @@ handler.disabled = false;
 
 export default handler
 
-//conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSync(join(media, 'pictures/avatar_contact.png')), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: '*COMUNICADO OFICIAL A GRUPOS*', body: ' BY 🌎ANI MX SCANS🌏', sourceUrl: info.repoProyect, thumbnail: fs.readFileSync('./Menu2.jpg') }}})
+//conn.sendButton(id, `*╔══❰ COMUNICADO ❱══╗*\n*║*\n*╠❧* ${text}\n*║*\n*╚══════════════╝*`, '*_ESTE ES UN COMUNICADO OFICIAL_*\n' + info.nanie, fs.readFileSync(join(media, 'pictures/sinFoto.png')), [['🤖 OWNER 🤖', '.owner'],['💎 DONAR 💎', '.donasi']], false, { contextInfo: { externalAdReply: {title: '*COMUNICADO OFICIAL A GRUPOS*', body: ' BY 🌎ANI MX SCANS🌏', sourceUrl: info.repoProyect, thumbnail: fs.readFileSync('./Menu2.jpg') }}})

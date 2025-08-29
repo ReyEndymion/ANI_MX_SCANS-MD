@@ -5,7 +5,6 @@ const { default: path } = await import('path');
 const { userID, lid, groupID, media } = await import('../config.js');
 const {inMstore, dbGroups} = objs
 const {findJidInAllGroups} = await import('../lib/functions.js')
-//const allGroups = Object.values(inMstore.chats); // o conn.chats
 if (Object.entries(isApproval).length !== 0) {
 const text = (m.message?.templateButtonReplyMessage?.selectedDisplayText || m.message?.listResponseMessage?.title || m.message?.interactiveResponseMessage?.body?.text || m.text || '').toLowerCase();
 if (/^si$/.test(text) && isAdmin) {
@@ -17,15 +16,16 @@ delete isApproval[m.chat];
 }
 }
 
-if (!m.messageStubType || !m.isGroup || chatdb.isBanned) return
-const user = m.messageStubParameters[0].endsWith(lid) ? await findJidInAllGroups(conn, inMstore, dbGroups, m.messageStubParameters[0]) || await conn.lidToJidPromises(m.messageStubParameters[0], m.chat) : null
+const isLidGroup = groupMetadata.addressingMode === 'lid'
+if (!m.messageStubType || m.messageStubType === 2 || !m.isGroup || chatdb.isBanned) return
+const user = isLidGroup ? await findJidInAllGroups(conn, inMstore, dbGroups, m.messageStubParameters[0]) || await conn.lidToJidPromises(m.messageStubParameters[0], m.chat) : m.messageStubParameters[0]
 const messsageParams = !m.messageStubParameters[0].endsWith(lid) || m.messageStubParameters[0].endsWith(userID) ? m.messageStubParameters[0] : null
 let who = senderJid.split`@`[0]
 let sender = user ? user.split`@`[0] : who
 let usertag = `@${sender}`
 let whotag = `@${who}`
 let contact, parti
-//, msgSPMap, m.messageStubParameters, mspawait conn.lidToJid(m.messageStubParameters[0], m.chat)if () who = , resp
+
 
 if (chatdb.detect) {
 console.log('chatUpdateCheck: ', user, usertag, contact, m.sender.endsWith(groupID), await findJidInAllGroups(conn, inMstore, dbGroups, m.messageStubParameters[0]))
@@ -55,11 +55,11 @@ const resp = `🔓 ${usertag} EL GRUPO *${m.messageStubParameters[0] === 'on' ? 
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 if (m.messageStubType === 29) {
-const resp = `AHORA ES ADMIN EN ESTE GRUPO @${who.split`@`[0]}\n\n🌎🫵ACCIÓN REALIZADA POR: ${usertag}*`
+const resp = `AHORA ES ADMIN EN ESTE GRUPO ${usertag}\n\n🌎🫵ACCIÓN REALIZADA POR: ${whotag}*`
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 if (m.messageStubType === 30) {
-const resp = `DEJA DE SER ADMIN EN ESTE GRUPO @${who.split`@`[0]}\n\n🌎🫵ACCION REALIZADA POR: ${usertag}`
+const resp = `DEJA DE SER ADMIN EN ESTE GRUPO ${usertag}\n\n🌎🫵ACCION REALIZADA POR: ${whotag}`
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 if (m.messageStubType === 72) {
@@ -69,7 +69,6 @@ return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 if (m.messageStubType === 123) {
 const resp = `${usertag} *DESACTIVÓ* LOS MENSAJE TEMPORALES..`
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
-}
 }
 if (m.messageStubType === 172 && isBotAdmin) {
 if (m.messageStubParameters[1] === 'created' && (m.messageStubParameters[2] === 'linked_group_join' || m.messageStubParameters[2] === 'invite_link')) {
@@ -94,7 +93,7 @@ user
 delete isApproval[m.chat]
 }
 }
-
+}
 let fkontak = { key: { participants: user, remoteJid: m.chat, fromMe: false, id: '' }, message: { contactMessage: { vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${sender}:${sender}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, participant: user}
 //console.log('chatUpdateC: ', user, who, m.sender, fkontak)
 if (chatdb.welcome) {

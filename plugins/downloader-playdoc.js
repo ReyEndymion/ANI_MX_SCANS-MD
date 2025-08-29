@@ -21,6 +21,7 @@ let texto1 = `*◉—⌈🔊 PLAY DOCUMENT 🔊⌋—◉*\n
 ❏ 👀 *VISTAS:* ${viewH}
 ❏ 📇 *DESCRIPCION:* ${description}
 ❏ 🔗 *LINK:* ${urll}`.trim()
+//let buttonMessage = `{ "document": { url: ${info.repoProyect}}, "fileName": '❏ 🌿 REPRODUCTOR DE YOUTUBE', "mimetype": 'application/vnd.ms-excel', "caption": texto1, "fileLength": '99999999999999', "mentions": [senderJid], "footer": info.nanie, "buttons": buttons, "headerType": 4, contextInfo: { "mentionedJid": [senderJid], "externalAdReply": { "showAdAttribution": true, "title": ${title}, "mediaType": 2, "previewType": "VIDEO", "thumbnail": await (await fetch(thumbnail)).buffer(), "mediaUrl": ${urll}, "sourceUrl": ${urlgofc} }}} `
 
 await conn.sendWritingText(m.chat, texto1, userdb, m)
 } catch {
