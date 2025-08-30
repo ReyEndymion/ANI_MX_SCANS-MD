@@ -13,8 +13,8 @@ const botDirRespald = path.join(authFolderRespald, sessionNameAni)
 const nameReg = 'ani'
 export const jadibts = path.join(dirP, 'jadibts')
 const anipp = path.join(media,`pictures/ANI.jpg`)
-const imagen1 = path.join(media,`pictures/Menu2am.jpg`)
-const imagen2 = path.join(media,`pictures/Menuam.png`)
+const imagen1 = path.join(media,`pictures/Menu2.jpg`)
+const imagen2 = path.join(media,`pictures/Menu.png`)
 const stickerAMX = path.join(media,`stickers/ANIMXSCANS.webp`)
 export async function onBot(folderPath) {
 let { loadDatabase, registrerBot, configDinamics, groupFetchAllParticipatingJson } = await import('./lib/database.js')
