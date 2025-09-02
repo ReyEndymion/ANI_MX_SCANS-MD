@@ -42,15 +42,16 @@ ${listAdmin}
 —◉ ASISTENTE: ${asistente ? '✅' : '❌'} 
 —◉ GRUPOSROL: ${gruposrol ? '✅' : '❌'} 
 `.trim()
-//, false, { mentions: [...groupAdmins.map(v => v.id), owner] }
-return conn.sendImageWriting(m.chat, pp, text, userdb, m)
+return conn.sendImageWriting(m.chat, pp, text, userdb, m);
 }
 handler.help = ['infogrup']
 handler.tags = ['group']
-handler.command = /^(infog(rupo|roup)?|ginfo)$/i
+handler.command = /^(info(gr(oup|upo)|gc)|gro?upinfo)$/i
 handler.group = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 INFORMACION DEL GRUPO", description: "envia la informacion del grupo en un mensaje usando #infogroup", id: `infogroup`},
+];
+handler.type = "gadmin";
 handler.disabled = false;
 
 export default handler

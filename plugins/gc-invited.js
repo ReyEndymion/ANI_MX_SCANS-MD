@@ -1,8 +1,8 @@
+import path, {join} from 'path'
 const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/baileys')).default
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 import fetch from 'node-fetch'
 import fs from 'fs'
-import path, {join} from 'path';
 
 let handler = async (m, {conn, args, participants, text, jid, db, userdb, senderJid}) => {
 let resp = `procesando solicitud.`;
@@ -59,8 +59,10 @@ handler.help = ['invite', 'invitar'].map(v => v + ' número')
 handler.tags = ['group']
 handler.command = /^(invite|invitar)$/i
 handler.admin = handler.group = handler.botAdmin = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 INVITAR A USUARIOS", description: "invita a los usuarios al grupo usando #invite <número>, <número> ...etc | mensaje", id: `invite`}
+];
+handler.type = "gadmin";
 handler.disabled = false;
 
 export default handler

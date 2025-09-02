@@ -1,8 +1,7 @@
 import { generateWAMessageFromContent } from '@whiskeysockets/baileys'
 import * as fs from 'fs'
-let handler = async (m, {conn, text, participants, isOwner, isAdmin, db, userdb, senderJid, objs}) => {
+let handler = async (m, {conn, info, text, participants, isOwner, isAdmin, db, userdb, senderJid, objs}) => {
 const {imagen1} = objs
-const {info} = await import('../config.js')
 if (m.isBaileys) return
 try {
 let users = participants.map(u => conn.decodeJid(u.id))
@@ -59,7 +58,7 @@ handler.admin = true
 handler.help = [];
 handler.tags = [];
 handler.menu = [
-{title:"?? NOTIFICAR A TODOS", description: "notifica a todos los miembros del grupo usando #hidetag <mensaje>", id: `hidetag`}
+{title: "?? NOTIFICAR A TODOS", description: "notifica a todos los miembros del grupo usando #hidetag <mensaje>", id: `hidetag`}
 ];
 handler.type = "gadmin";
 

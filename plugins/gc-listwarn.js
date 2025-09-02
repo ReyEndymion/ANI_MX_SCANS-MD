@@ -17,8 +17,10 @@ handler.group = true
 handler.admin = true
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 LISTA DE ADVERTENCIAS", description: "muestra la lista de advertencias de los usuarios usando #listwarn", id: `listwarn`}
+];
+handler.type = "gadmin";
 handler.disabled = false;
 
 export default handler
