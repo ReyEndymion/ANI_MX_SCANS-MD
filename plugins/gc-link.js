@@ -41,10 +41,10 @@ return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }
 } else if (!isBotAdmin && isAdmin) {
-let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCI�N HASTA QUE LOD HAGAS ADMIN*`;
+let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN HASTA QUE LOD HAGAS ADMIN*`;
 return conn.sendWritingText(m.chat, resp, userdb, m);
 } else {
-let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCI?N*`;
+let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCI�N*`;
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 }
@@ -55,8 +55,8 @@ handler.admin = true
 handler.group = true
 handler.botAdmin = true
 handler.menu = [
-{title:" ?? SOLICITA EL LINK", description: "solicita el link del grupo actual usando #link", id: `link`},
-{title:" ?? NUEVO LINK", description: "resetea el link de invitacion del grupo actual usando #resetlink", id: `resetlink`},
+{title:" 💎 SOLICITA EL LINK", description: "solicita el link del grupo actual usando #link", id: `link`},
+{title:" 💎 NUEVO LINK", description: "resetea el link de invitacion del grupo actual usando #resetlink", id: `resetlink`},
 ];
 handler.type = "gadmin";
 handler.disabled = false;

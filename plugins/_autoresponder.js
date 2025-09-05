@@ -29,7 +29,7 @@ conn.sendMessage(m.chat, { react: { text: emot, key: m.key }});
 }
 if ((m.mtype === 'groupInviteMessage' || m.text.startsWith('https://chat') || m.text.startsWith('Abre este enlace')) && !m.isBaileys && !m.isGroup && !isROwner) {
 const botNumber = conn.user.jid.split('@')[0]
-let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${senderJid.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* ${ganicmd}\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo ${info.ganisubbots}`.trim() 
+let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${senderJid.split`@`[0]}*\n\nPARA SOLICITAR UN BOT A TU GRUPO USA EL COMANDO *#join* MAS EL ENLACE DE INVITACION DE TU GRUPO\n\n*—◉ EJEMPLO:*\n*◉ #join* ${info.ganicmd}\n\nAqui hay otro grupo donde puedes contactar al bot para usarlo ${info.ganisubbots}`.trim() 
 let contextInfo = {
 mentionedJid: conn.parseMention(join),
 "externalAdReply": {

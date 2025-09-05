@@ -1,8 +1,7 @@
 export async function before(m, {conn, plugins, match, botdb, chatdb, userdb, isROwner, objs}) {
 if (m.fromMe) return
 const {owner} = await import('../config.js')
-const {dataBot} = await import('../lib/functions.js')
-const {nameReg} = objs
+const {nameReg, dataBot} = objs
 const data = await dataBot(nameReg)
 const timestamp = data.timestamp
 

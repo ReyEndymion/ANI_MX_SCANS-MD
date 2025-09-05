@@ -22,7 +22,7 @@ import { makeWASocket } from '../lib/simple.js';
 import libstore from '../lib/store.js'
 import { dirname, limpCarpetas, purgeOldFiles, wait, backupCreds, backupCredsStatus, validateJSON, credsStatus, respaldCreds, formatNumberWA, opts, dataSubBot } from '../lib/functions.js';
 import { creds, timestamp } from '../lib/constants.js';
-import { loadDatabase, registrerSubBot, configDinamics, groupFetchAllParticipatingJson } from '../lib/database.js';
+import { loadDatabase, registrerSubBot, configDinamics, groupFetchAllParticipatingJson, dbRegisterSubBot } from '../lib/database.js';
 import { authFolderRespald, raizPath, dataBases } from '../config.js';
 import { Low, JSONFile } from 'lowdb';
 
@@ -44,18 +44,11 @@ data.userdb = userdb
 data.senderJid = senderJid
 data.info = info
 data.objs = objs
-//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
-let uniqid = `${senderJid.split`@`[0]}`//conn.getName(who)
-const bot = path.join(jadibts, uniqid)//path.join(authFolderAniMX, uniqid)
+let uniqid = `${senderJid.split`@`[0]}`
+const bot = path.join(jadibts, uniqid)
 if (!botdb.settings.modejadibot) {
 let resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / PROPIETARIO DEL BOT*`
 return conn.sendWritingText(m.chat, resp, userdb, m)}
-/***
-if (conn.user.jid !== global.userBot) {
-resp = `*[❗] Este comando solo puede ser usado en un Bot principal!!*\n\n*—◉ Da click aquí o en la imagen para ir:*\n*◉* https://api.whatsapp.com/send/?phone=${global.userBot.split`@`[0]}&text=${usedPrefix + command}&type=phone_number&app_absent=0`;
-contextInfo = true
-}
-*/
 verifyBot(bot, data)
 }
 handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
@@ -74,9 +67,7 @@ const args = m.text.split(/^fullbots/i)
 const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
 const dirSessionsAni = []
 
-const readJadibtsSession = fs.readdirSync(jadibts) //fs.existsSync(jadibts) ?: []; 
-
-// Función para iniciar bots válidos
+const readJadibtsSession = fs.readdirSync(jadibts)
 
 for (const session of readJadibtsSession) {
 const bot = path.join(jadibts, session)
@@ -106,7 +97,6 @@ files.forEach(file => {
 const oldPath = path.join(botPath, file);
 const newPath = path.join(newBotPath, file);
 fs.copyFileSync(oldPath, newPath);
-//fs.renameSync(oldPath, newPath);
 fs.unlinkSync(oldPath);
 });
 
@@ -116,7 +106,7 @@ console.log(`Archivos movidos a ${newBotPath} y carpeta original eliminada.`);
 
 if (credsStatus(botPath) && validateJSON(filePathCreds)) {
 backupCreds(botPath, botDirRespald)
-jddt(newBotPath, datas); // Lanzar bot como proceso separado
+jddt(newBotPath, datas);
 } else {
 const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
@@ -149,7 +139,6 @@ limpCarpetas()
 
 }
 }
-//handler.private = true 
 handler.menu = [];
 handler.type = "";
 handler.disabled = false;
@@ -174,9 +163,6 @@ const db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opt
 const dbGFAPFile = path.join(pathBotDBs, 'groupFetchAllParticipatingJson.json')
 const createJson = new JSONFile(dbGFAPFile)
 const dbGroups = new Low(createJson)
-const dbSubBotsFile = path.join(folderDB, 'Subbots_registred.json')
-const createSBJson = new JSONFile(dbSubBotsFile)
-const dbRegisterSubBot = new Low(createSBJson)
 
 const mcode = args[0] && args[0].includes("--code") ? true : args[1] && args[1].includes("--code") ? true : false 
 if (mcode) {
@@ -210,25 +196,23 @@ if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInf
 return message;
 }
 function getRandomProperty(obj) {
-const keys = Object.keys(obj); // Obtiene un array con las claves
-const randomKey = keys[Math.floor(Math.random() * keys.length)]; // Selecciona una clave aleatoria
-return obj[randomKey]; // Devuelve la función correspondiente
+const keys = Object.keys(obj);
+const randomKey = keys[Math.floor(Math.random() * keys.length)];
+return obj[randomKey];
 }
 const browserInfo = Object.entries(Browsers).reduce((acc, [browser, getInfo]) => {
 acc[browser] = getInfo(browser);
 return acc;
 }, {});
 
-//BrowsersbrowserInfo, []
-console.log('serbot: ', getRandomProperty(browserInfo))
-const browser = mcode ? getRandomProperty(browserInfo) : ''
+const browser = mcode ? getRandomProperty(browserInfo) : ["Ubuntu", "Chrome (ANIMXSCANS)", "20.0.04"]
 
 const connectionOptions = {
 version,
 printQRInTerminal: mcode ? false : true,
 logger: logger,
 auth: state,
-browser: ["Ubuntu", "Chrome", "20.0.04"],
+browser: browser,
 msgRetry,
 syncFullHistory: false,
 markOnlineOnConnect: false,
@@ -248,11 +232,10 @@ sock.isInit = false
 sock.uptime = Date.now();
 let isInit = true
 let now = Date.now();
-const oneDay = 24 * 60 * 60 * 1000; // 1 día en milisegundos
-
+const oneDay = 24 * 60 * 60 * 1000;
 const MAX_CLOSE_COUNT = 10;
-const CLOSE_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
-const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
+const CLOSE_CHECK_INTERVAL = 5 * 60 * 1000;
+const RESET_INTERVAL = 2 * 60 * 1000;
 let lastQr, shouldSendLogin, errorCount = 0;
 
 async function connectionUpdate(update) {
@@ -276,7 +259,7 @@ const resp = `*${info.nanie}*
 *—◉ ${info.nanie} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
 
-if (m === null) return
+if (!m && m.fromMe) return
 let q = await conn.sendImageWriting(m.chat, imagen, resp, userdb, m)
 if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
@@ -308,36 +291,36 @@ return conn.sendWritingText(m.chat, code8, userdb, q)
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
 if (db.data == null) loadDatabase(db)
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
-console.log('jadibotReason: ', reason, conn.messageJdb)
 if (connection === 'close') { 
 if (code === DisconnectReason.badSession) {
 sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Sesión incorrecta, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 } else if (code === DisconnectReason.connectionClosed) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión cerrada, reconectando...`);
+if (!m) return
 return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.connectionLost) {
-// && now - lastConnectionMessageTime >= oneDay
+
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión perdida con el servidor, reconectando...`);
 const resp = "La conexión se perdio, se intentara reconectar automáticamente..."
-if (m !== null) {
-await conn.sendWritingText(m.chat, resp, userdb, m)}
-return creloadHandler(true).catch(console.error)
+
+await creloadHandler(true).catch(console.error)
+if (!m) return
+await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.connectionReplaced) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión remplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
 sock.ws.close()
-//delete global.conns[i]
 global.conns.splice(i, 1)
 const resp = code + " remplazando conexión actual..."
-if (m !== null) {
-await conn.sendWritingText(m.chat, resp, userdb, m)}
+if (!m) return
+await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.loggedOut) {
 sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
-if (m !== null) {
-await conn.sendWritingText(m.chat, resp, userdb, m)}
 sock.ev.removeAllListeners()
 delete global.conns[i]
 deleteSesionSB(folderPath, botRespPath)
+if (!m) return
+await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.restartRequired) {
 sock.logger.info(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
 global.conns.splice(i, 1)
@@ -345,12 +328,12 @@ return creloadHandler(true).catch(console.error)
 } else if (code === DisconnectReason.timedOut) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Tiempo de conexión agotado, reconectando...`);
 const resp = "La conexión se cerró, Tendras que conectarte manualmente..."
-if (m === null) return
-await conn.sendWritingText(m.chat, resp, userdb, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
 await creloadHandler(true).catch(console.error)
 global.conns.splice(i, 1)
+if (!m) return
+await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === 403) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
 sock.ev.removeAllListeners()
@@ -362,7 +345,6 @@ return creloadHandler(true).catch(console.error)
 } else if (code === 405 || code == 404 ) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Method Not Allowed solicitud no comatible con el servidor. ${connection || ''}`);
 deleteSesionSB(folderPath, botRespPath)
-//return jddt()
 } else {
 sock.logger.warn(`[ ⚠ ] ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
 errorCount++
@@ -386,7 +368,7 @@ fs.mkdirSync(botRespPath, { recursive: true });
 dataconst[sock.user.id.split('@')] = 1;
 sock.isInit = true
 let resp = '', q = ''
-if (m === null) return
+if (!m && m.fromMe) return
 if (conn.messageJdb) {
 resp = `*[❗] reconectado con exito, se paciente los mensajes se estan cargando...*`
 q = await conn.sendWritingText(m.chat, resp, userdb, m)
@@ -397,12 +379,11 @@ q = await conn.sendWritingText(m.chat, resp, userdb, m)
 if (now - lastConnectionMessageTime >= oneDay) {
 } else {
 resp = `listo`
-if (m === null) return
+if (!m) return
 q = await conn.sendWritingText(m.chat, resp, userdb, m)}
 let chatjid = state.creds.me.jid
 resp = `*${info.ganisubbots}*\n\n @${chatjid.split`@`[0]} este es el grupo donde daremos avisos para los bots nuevos y sub-bots\n\n`
 let qq = await conn.sendWritingText(m.chat, resp, userdb, q)
-//chatjid.split`@`[0]
 resp = `hello ${await conn.getName(chatjid)}\n\n` + mensajeidioma.trim()
 await sock.sendWritingText(chatjid, resp, qq)
 try {
@@ -413,11 +394,11 @@ console.log('Error al enviar invitación del grupo:', error.stack);
 }
 }
 const now = Date.now(); 
-const data = await dataSubBot(nameFolderBot, dbRegisterSubBot).catch(await registrerSubBot(nameFolderBot, sock.user, {dbRegisterSubBot}))
+const data = await dataSubBot(nameFolderBot).catch(await registrerSubBot(nameFolderBot, sock.user))
 const lastGroupFetchAll = data.lastGroupFetchAll
 const diff = now - lastGroupFetchAll
 if (!lastGroupFetchAll || diff >= 3 * 24 * 60 * 60 * 1000 ) {
-await groupFetchAllParticipatingJson(sock, dbGroups, data, nameFolderBot, registrerSubBot)//.catch(await dataBot(nameReg))
+await groupFetchAllParticipatingJson(sock, dbGroups, data, nameFolderBot, registrerSubBot)
 }
 await registrerSubBot(nameFolderBot, sock.user, {dbRegisterSubBot})
 }
@@ -471,13 +452,13 @@ try {const {call} = await import('../plugins/_anticall.js')
 const {fail} = await import('../plugins/_dFailMessages.js')
 func = {call, fail}
 } catch (e) {console.log('Objs: ', e.stack)}
-const botObj = {sessionNameAni, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, imagen3, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts}
+const botObj = {sessionNameAni, nameReg: nameFolderBot, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts, dataBot: dataSubBot, registrerBot: registrerSubBot}
 
-sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);}//.bind(sock)
-sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)}//bind(sock);
-sock.groupsUpdate = function(groupsUpdate) { return handler.groupsUpdate.call(sock, groupsUpdate, botObj)};//bind(sock)
-sock.onDelete = function(message) { return handler.deleteUpdate.call(sock, message, botObj)}//bind(sock);
-sock.onCall = function(callUpdate) { return handler.callUpdate.call(sock, callUpdate, botObj);}//.bind(sock);
+sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);}
+sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)}
+sock.groupsUpdate = function(groupsUpdate) { return handler.groupsUpdate.call(sock, groupsUpdate, botObj)};
+sock.onDelete = function(message) { return handler.deleteUpdate.call(sock, message, botObj)}
+sock.onCall = function(callUpdate) { return handler.callUpdate.call(sock, callUpdate, botObj);}
 sock.connectionUpdate = connectionUpdate.bind(sock);
 sock.credsUpdate = saveCreds.bind(sock, true);
 
@@ -490,7 +471,6 @@ sock.ev.on('connection.update', sock.connectionUpdate)
 sock.ev.on('creds.update', sock.credsUpdate)
 isInit = false
 wait(3000)
-//process.send('reset');
 return true
 }
 inMstore.bind(conn.ev, {
@@ -531,7 +511,6 @@ files.forEach(file => {
 const oldPath = path.join(filePath, file);
 const newPath = path.join(newBotPath, file);
 fs.copyFileSync(oldPath, newPath);
-//fs.renameSync(oldPath, newPath);
 fs.unlinkSync(oldPath);
 });
 
@@ -541,7 +520,7 @@ console.log(`Archivos movidos a ${newBotPath} y carpeta original eliminada.`);
 
 if (credsStatus(filePath) && validateJSON(filePathCreds)) {
 backupCreds(filePath, botDirRespald)
-jddt(newBotPath, datas); // Lanzar bot como proceso separado
+jddt(newBotPath, datas);
 } else {
 const readBotDirBackup = fs.readdirSync(botDirRespald)
 if (readBotDirBackup.includes(creds)) {
@@ -589,22 +568,3 @@ return fs.rmSync(filePath, { recursive: true, force: true })
 jddt(filePath, datas)
 }
 }
-/**
-*/
-/*
-if (lastDisconnect?.error && lastDisconnect?.error.output && lastDisconnect?.error.output.statusCode === 428 && lastDisconnect?.error.output.error === 'Precondition Required') {
-return creloadHandler(true).catch(console.error)
-}
-if (errorCount >= MAX_CLOSE_COUNT) {
-console.log(chalk.red(`La conexión cerrada ocurrió ${errorCount} veces. Reiniciando el servidor...`));
-errorCount = 0;
-await wait(RESET_INTERVAL);
-} else {
-await wait(CLOSE_CHECK_INTERVAL);
-}
-conn.ev.removeAllListeners()
-delete global.conns[i]
-global.conns.splice(i, 1)
-errorCount++
-&& code !== 401
-*/
