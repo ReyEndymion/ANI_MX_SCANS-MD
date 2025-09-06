@@ -199,6 +199,7 @@ handler.menu = [
 {title: "💎 ELIMINAR", description: "Eliminar a uno o a varios usuarios del grupo con su tag, numero o desde su mensaje usando #kick", id: `kick`},
 {title: "💎 ELIMINAR DESDE EL TAG DEL MENSAJE", description: "Elimina a alguien contestando un mensaje que tenga uno o varios mencionados usando #kick2", id: `kick2`},
 {title: "💎 ELIMINA NUMEROS POR PREFIJO", description: "elimina una lista de numeros del grupo por su prefijo usando #kicknum", id: `kicknum`}, 
+{title:"💎 ELIMINAR TODOS LOS USUARIOS", description: "elimina a todos los usuarios no admin del grupo usando #kickallusers <mensaje>", id: `kickallusers`}
 ];
 handler.type = "gadmin";
 handler.disabled = false;

@@ -54,17 +54,16 @@ verifyBot(bot, data)
 handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
 handler.tags = ['jadibot']
 handler.command = /^(jadibot|serbot|rentbot)/i
-handler.before = async function before(m, {conn, isOwner, userdb, db, objs}) {
+handler.before = async function before(m, {conn, info, isOwner, userdb, senderJid, db, objs}) {
 const {jadibts} = objs
 if (m.text.match(/^initbot/i) && isOwner) {
 const args = m.text.split(/initbot/i)
-console.log('serbotInitBot: ', args)
-const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
-const bot = path.join(jadibts, formatNumberWA(args[1]))
+const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot', userdb, senderJid, info, objs}
+const bot = path.join(jadibts, formatNumberWA(args[1].replace(/\s/g, '')))
 jddt(bot, datas)
 } else if (m.text.match(/^fullbots/i) && isOwner) {
 const args = m.text.split(/^fullbots/i)
-const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot'}
+const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot', userdb, senderJid, info, objs}
 const dirSessionsAni = []
 
 const readJadibtsSession = fs.readdirSync(jadibts)
@@ -454,10 +453,10 @@ func = {call, fail}
 } catch (e) {console.log('Objs: ', e.stack)}
 const botObj = {sessionNameAni, nameReg: nameFolderBot, authFolder: folderPath, botDirRespald: botRespPath, pathBotDBs, db, func, pluginsPath, anipp, imagen1, imagen2, stickerAMX, inMstore, storeFile, dbGroups, jadibts, dataBot: dataSubBot, registrerBot: registrerSubBot}
 
-sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);}
-sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)}
+sock.handler = function(chatUpdate) { return handler.handler.call(sock, chatUpdate, botObj);};
+sock.participantsUpdate = function(participantUpdate) { return handler.participantsUpdate.call(sock, participantUpdate, botObj)};
 sock.groupsUpdate = function(groupsUpdate) { return handler.groupsUpdate.call(sock, groupsUpdate, botObj)};
-sock.onDelete = function(message) { return handler.deleteUpdate.call(sock, message, botObj)}
+sock.onDelete = function(message) { return handler.deleteUpdate.call(sock, message, botObj)};
 sock.onCall = function(callUpdate) { return handler.callUpdate.call(sock, callUpdate, botObj);}
 sock.connectionUpdate = connectionUpdate.bind(sock);
 sock.credsUpdate = saveCreds.bind(sock, true);
