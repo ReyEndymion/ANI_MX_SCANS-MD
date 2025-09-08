@@ -113,6 +113,7 @@ let users = chat.users
 if (typeof users !== 'object')
 db.data.bot[this.user.jid].chats.groups[m.chat].users = {};
 if (users) {
+if (groupMetadata.isCommunity || groupMetadata.isCommunityAnnounce) return
 dataGroupUsers(this, db, m.chat, senderJid)
 let user = users[senderJid]
 if (typeof user !== 'object')

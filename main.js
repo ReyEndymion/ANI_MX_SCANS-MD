@@ -79,7 +79,8 @@ defaultQueryTimeoutMs: undefined,
 const options = {
 storeFile,
 inMstore,
-libstore
+libstore,
+dbGroups
 }
 
 let conn = makeWASocket(connectionOptions, options)
