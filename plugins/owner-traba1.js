@@ -19,7 +19,7 @@ handler.rowner = true
 handler.help = [];
 handler.tags = [];
 handler.menu = [
-{ title: "?? TRABA1", description: "Enviar mensajes largos (binarios)", id: `traba1` }
+{ title: "💎 TRABA1", description: "Enviar mensajes largos (binarios)", id: `traba1` }
 ];
 handler.type = "owners";
 handler.disabled = false;

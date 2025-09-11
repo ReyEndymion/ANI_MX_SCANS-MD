@@ -52,16 +52,6 @@ const response = (m.message.templateButtonReplyMessage?.selectedId ? m.message.t
 if (response === 'siguiente') {
 clearTimeout(confirmation.timeout);
 return handler(m, {conn, info, start, text: confirmation.query, usedPrefix: confirmation.usedPrefix, command: confirmation.command, userdb, senderJid})
-const res = await googleImage(confirmation.query);
-let image = await res.getRandom();
-let link = image;
-let captionn = `🔎 *RESULTADO DE:* ${confirmation.query}\n🔗 *LINK ${link}\n🌎 *BUSCADOR:* Google\n\nPara 🔄 SIGUIENTE 🔄 usa: *siguiente*`;
-
-await conn.sendMessage(m.chat, { image: { url: image }, caption: captionn }, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 });
-
-confirmation.timeout = setTimeout(() => {
-delete confirmations[m.sender];
-}, 60 * 1000);
 }
 }
 handler.help = ['gimage <query>', 'imagen <query>']

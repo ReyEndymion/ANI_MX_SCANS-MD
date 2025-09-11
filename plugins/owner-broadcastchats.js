@@ -6,7 +6,7 @@ const {delay, parseDuration} = await import('../lib/functions.js')
 const path = await import('path')
 const {media, groupID, userID, lid} = await import('../config.js')
 if (!text && !m.quoted?.text) return conn.sendWritingText(m.chat, ` Ingres Un texto el cual será el comunicado o conteste A un mensaje con un texto que desee Comunicar A los chats`, userdb, m)
-let q = { key: {participant: `0@s.whatsapp.net`, remoteJid: m.chat},message: {"videoMessage": { "title": info.nanie, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': info.namerepre, 'jpegThumbnail': false }}}
+let q = { key: {participant: `0@s.whatsapp.net`, remoteJid: `0@s.whatsapp.net`},message: {"videoMessage": { "title": info.nanie, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': info.namerepre, 'jpegThumbnail': false }}}
 if (/^(b(road)?c(ast)?p(rivs)?)$/i.test(command)) {
 let chats = Object.entries(privsdb).filter(([jid, data]) => !jid.includes(conn.user.jid) && !jid.endsWith('@g.us') && data.user).map(v => v[0])
 let _text = m.quoted?.text ? m.quoted.text : text

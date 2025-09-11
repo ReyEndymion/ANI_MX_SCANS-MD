@@ -11,7 +11,7 @@ handler.help = ['itssostupid', 'iss', 'stupid']
 handler.tags = ['maker']
 handler.command = /^(itssostupid|iss|stupid)$/i
 handler.menu = [
-{title: "?? IT'S SO STUPID", description: "crea una imagen con el texto 'im+stupid' usando #itssostupid", id: `itssostupid`}
+{title: "💎 IT'S SO STUPID", description: "crea una imagen con el texto 'im+stupid' usando #itssostupid", id: `itssostupid`}
 ];
 handler.type = "logosefectos";
 handler.disabled = false;
