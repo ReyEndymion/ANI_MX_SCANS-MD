@@ -1,6 +1,6 @@
 import path, { join } from 'path'
 import fs from 'fs'
-let handler = async (m, {conn, text, command, usedPrefix, botdb, usersdb, userdb, senderJid}) => {
+let handler = async (m, {conn, text, command, isOwner, usedPrefix, botdb, usersdb, userdb, senderJid}) => {
 let { default: fetch } = await import('node-fetch');
 let { default: Jimp } = await import('jimp');
 if (!m.isGroup) return !1
@@ -11,7 +11,7 @@ else who = m.chat
 let user = usersdb[who]
 let settings = botdb.settings || {}
 let pp = fs.readFileSync(join(media, 'pictures/warn.jpg'))
-if (/^advert(ir|encia)|warn(ing)?$/i.test(command)) {
+if (/^(advert(ir|encia)|warn(ing)?)$/i.test(command)) {
 if (!who) {
 let warntext = `*[❗] ETIQUETE A UNA PERSONA O RESPONDA A UN MENSAJE DEL GRUPO PARA ADVERTIR AL USUARIO*\n\n*—◉ EJEMPLO:*\n*${usedPrefix + command} @${conn.user.jid.split('@')[0]}*`
 return conn.sendWritingText(m.chat, warntext, userdb, m)
@@ -37,16 +37,16 @@ await conn.sendWritingText(m.chat, kill, userdb, m)
 await conn.groupParticipantsUpdate(m.chat, [who], 'remove') 
 }
 }
-if (/(un|del)(advert(ir|encia)|warn(ing)?)/i.test(command)) {
+if (/^((un|del)(advert(ir|encia)|warn(ing)?))$/i.test(command)) {
 let warntext = `*[❗] Etiquete a una persona o responda a un mensaje del grupo*\n\n*—◉ Ejemplo:*\n*${usedPrefix + command} @${m.sender.split('@')[0]}*`
 if (!who) {
 return conn.sendWritingText(m.chat, warntext, userdb, m)
 }
 user.warn -= 1
-let resp = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `♻️ *@${who.split`@`[0]}*`} SE TE QUITO UNA ADVERTENCIA\n\n*ADVERTENCIAS:*\n⚠️ *Antes: ${user.warn + 1}/3*\n⚠️ *Ahora: ${user.warn}/3*\n\n${wmbc}\n\n📋 LISTWARN 📋\n => *${usedPrefix}listwarn*`
+let resp = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `♻️ *@${who.split`@`[0]}*`} SE TE QUITO UNA ADVERTENCIA\n\n*ADVERTENCIAS:*\n⚠️ *Antes: ${user.warn + 1}/3*\n⚠️ *Ahora: ${user.warn}/3*\n\n${info.nani}\n\n📋 LISTWARN 📋\n => *${usedPrefix}listwarn*`
 return conn.sendImageWriting(m.chat, pp, resp, userdb, m);
 }
-if (/^listwarn(ing)?$/i.test(command)) {
+if (/^(listwarn(ing)?)$/i.test(command)) {
 let adv = Object.entries(usersdb).filter(user => user[1].warn)
 let caption = `⚠️ USUARIOS ADVERTIDOS\n 
 *╔═══════════════════·•*

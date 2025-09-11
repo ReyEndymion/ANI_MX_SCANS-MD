@@ -17,15 +17,16 @@ o = e
 } finally {
 let { stdout, stderr } = o
 if (stdout.trim()) m.reply(stdout)
-//if (stderr.trim()) m.reply(stderr)
 }
 }
 handler.help = ['rot <text>']
 handler.tags = ['tools','php']
 handler.command = /^(rot)$/i
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{ title: "🔄 ROT", description: "Codificar texto en ROT13", id: `rot <texto>` }
+];
+handler.type = "herramientas";
 handler.disabled = false;
 
 export default handler

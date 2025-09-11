@@ -14,8 +14,10 @@ handler.tags = ['owner']
 handler.command = /^(remove|-|del)prem$/i
 handler.group = true
 handler.rowner = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "👑 DELPREM", description: "Quitar premium con #delprem <@tag> ", id: `delprem`}
+];
+handler.type = "owners";
 handler.disabled = false;
 
 export default handler

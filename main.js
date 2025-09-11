@@ -13,8 +13,8 @@ const botDirRespald = path.join(authFolderRespald, sessionNameAni)
 const nameReg = 'ani'
 export const jadibts = path.join(dirP, 'jadibts')
 const anipp = path.join(media,`pictures/ANI.jpg`)
-const imagen1 = path.join(media,`pictures/Menu2.jpg`)
-const imagen2 = path.join(media,`pictures/Menu.png`)
+const imagen1 = path.join(media,`pictures/Menu.png`)
+const imagen2 = path.join(media,`pictures/Menu2.jpg`)
 const stickerAMX = path.join(media,`stickers/ANIMXSCANS.webp`)
 export async function onBot(folderPath) {
 let { loadDatabase, registrerBot, configDinamics, groupFetchAllParticipatingJson } = await import('./lib/database.js')
@@ -223,7 +223,7 @@ const oldChats = (inMstore.chats || conn.chats);
 conn.ws.close();
 conn.ev.removeAllListeners();
 try {
-conn = makeWASocket(connectionOptions, {storeFile, inMstore, libstore,  chats: oldChats });
+conn = makeWASocket(connectionOptions, Object.assign(options, {chats: oldChats }));
 isInit = true;
 } catch { 
 onBot(folderPath).catch(console.error)

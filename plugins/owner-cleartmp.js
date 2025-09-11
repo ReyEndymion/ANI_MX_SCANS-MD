@@ -7,8 +7,10 @@ handler.help = ['cleartmp']
 handler.tags = ['owner']
 handler.command = /^(cleartmp|cleartemp)$/i
 handler.rowner = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🗑️ CLEARTMP", description: "Elimina todos los archivos temporales del bot", id: `cleartmp`}
+];
+handler.type = "owners";
 handler.disabled = false;
 
 export default handler

@@ -5,7 +5,7 @@ let resp = '*🚔🚨 LOLICONES COMO TU SOLO PERTENECEN A LA CARCEL 🚨🚔*'
 await conn.writing(m.chat, resp)
 
 return conn.sendMessage(m.chat, {image:{ url: API('https://some-random-api.com', '/canvas/misc/lolice', { 
-avatar: await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png')})}, caption: txt.trim(), mentions: conn.parseMention(txt) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
+avatar: await conn.profilePictureUrl(who, 'image').catch(_ => 'https://telegra.ph/file/24fa902ead26340f3df2c.png')})}, caption: resp, mentions: conn.parseMention(resp) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 }
 
 handler.help = ['lolice']

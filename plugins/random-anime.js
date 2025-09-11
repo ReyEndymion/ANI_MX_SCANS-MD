@@ -187,8 +187,46 @@ return conn.sendImageWriting(m.chat, imagen, resp+'\n'+cmds+'\n'+'\n'+buff, m );
 }
 handler.command = handler.help = ['akira', 'akiyama', 'anna', 'asuna', 'ayuzawa', 'boruto', 'chiho', 'chitoge', 'deidara', 'erza', 'elaina', 'eba', 'emilia', 'hestia', 'hinata', 'inori', 'isuzu', 'itachi', 'itori', 'kaga', 'kagura', 'kaori', 'keneki', 'kotori', 'kurumi', 'madara', 'mikasa', 'miku', 'minato', 'naruto', 'nezuko', 'sagiri', 'sasuke', 'sakura', 'cosplay']
 handler.tags = ['anime']
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "👾 WAIFU", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo waifu", id: `waifu`},
+{title: "👾 AKIRA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo akira", id: `akira`},
+{title: "👾 AKIYAMA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo akiyama", id: `akiyama`},
+{title: "👾 ANNA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo anna", id: `anna`},
+{title: "👾 ASUNA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo asuna", id: `asuna`},
+{title: "👾 AYUZAWA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo ayuzawa", id: `ayuzawa_`},
+{title: "👾 BORUTO", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo boruto", id: `boruto`},
+{title: "👾 CHIHO", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo chiho", id: `chiho`},
+{title: "👾 CHITOGE", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo chitoge", id: `chitoge`},
+{title: "👾 DEIDARA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo deidara", id: `deidara`},
+{title: "👾 ERZA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo erza", id: `erza`},
+{title: "👾 ELAINA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo elaina", id: `elaina`},
+{title: "👾 EBA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo eba", id: `eba`},
+{title: "👾 EMILIA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo emilia", id: `emilia_`},
+{title: "👾 HESTIA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo hestia", id: `hestia`},
+{title: "👾 HINATA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo hinata", id: `hinata`}, 
+{title: "👾 INORI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo inori", id: `inori`}, 
+{title: "👾 ISUZU", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo isuzu", id: `isuzu`},
+{title: "👾 ITACHI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo itachi", id: `itachi`},
+{title: "👾 ITORI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo itori", id: `itori`}, 
+{title: "👾 KAGA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo kaga", id: `kaga`}, 
+{title: "👾 KAGURA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo kagura", id: `kagura`}, 
+{title: "👾 KAORI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo kaori", id: `kaori`}, 
+{title: "👾 KENEKI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo keneki", id: `keneki`}, 
+{title: "👾 KOTORI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo kotori", id: `kotori`}, 
+{title: "👾 KURUMI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo kurumi", id: `kurumi`}, 
+{title: "👾 MADARA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo madara", id: `madara`}, 
+{title: "👾 MIKASA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo mikasa", id: `mikasa`},
+{title: "👾 MIKU", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo miku", id: `miku`},
+{title: "👾 MINATO", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo minato", id: `minato`}, 
+{title: "👾 NARUTO", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo naruto", id: `naruto`}, 
+{title: "👾 NEZUKO", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo nezuko", id: `nezuko`}, 
+{title: "👾 SAGIRI", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo sagiri", id: `sagiri`}, 
+{title: "👾 SASUKE", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo sasuke", id: `sasuke`}, 
+{title: "👾 SAKURA", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo sakura", id: `sakura`},
+{title: "👾 COSPLAY", description: "Utiliza el siguiente comando para obtener wallpapers de anime tipo cosplay", id: `cosplay`},
+];
+handler.type = "random";
+
 handler.disabled = false;
 
 export default handler

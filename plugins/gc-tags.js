@@ -15,7 +15,7 @@ const listAdmin = groupAdmins.map((v, i) => v.id.endsWith(lid) ? `${i + 1}. @${v
 let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync(join(media, 'pictures/sinFotoG.png')));
 const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
 
-if (/^(@)?adm(ins)?$/i.test(command)) {
+if (/^((@)?adm(ins)?)$/i.test(command)) {
 const lettersImage = await Jimp.read(fs.readFileSync(path.join(media, 'pictures/invAdmins.png')));
 // Redimensionar la imagen de las letras para que coincida con el tamaño de la imagen del perfil
 lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
@@ -36,8 +36,6 @@ const owner = groupMetadata?.owner
 let text = '', ownertag
 if (owner) {
 const isOwnerGroup = groupAdmins.find(p => owner.endsWith(lid) ? owner === p.jid : owner === p.id)
-// || m.chat.split`-`[0]?.id p.admin === 'superadmin' &&  + userID
-console.log('gc-admins: ', isOwnerGroup, groupMetadata, owner)
 if (isOwnerGroup) {
 ownertag = owner.split('@')[0]
 if (isOwnerGroup.admin === 'superadmin') {
@@ -69,7 +67,7 @@ let oi = `*MENSAJE:* ${pesan}`
 let text = `━「 *INVOCANDO USUARIOS* 」━\n\n${oi}\n\n*USUARIOS:*\n${listUsers}\n\n${info.nbcde}`.trim()
 return conn.sendImageWriting(m.chat, img, text, userdb, m);
 }
-if (/^list(a)?num$/i.test(command)) {
+if (/^(list(a)?num)$/i.test(command)) {
 if (!args[0] || isNaN(args[0])) return conn.sendWritingText(m.chat, `*[❗] INGRESA EL PREFIJO DE ALGUN PAIS PARA BUSCAR NUMEROS EN ESTE GRUPO DE ESE PAIS, EJEMPLO: ${usedPrefix + command} 52*`, userdb, m) 
 let lol = args[0].replace(/[+]/g, '')
 let ps = participants.map(u => groupLid ? u.jid : u.id).filter(v => v !== conn.user.jid && v.startsWith(lol)) 
@@ -77,16 +75,13 @@ if (ps == '') return conn.sendWritingText(m.chat, `*[❗] EN ESTE GRUPO NO HAY N
 let numeros = ps.map(v=> '⭔ @' + v.replace(/@.+/, ''))
 return conn.sendWritingText(m.chat, `*LISTA DE NUMEROS CON EL PREFIJO +${lol} QUE ESTAN EN ESTE GRUPO:*\n\n` + numeros.join`\n`, userdb, m)
 }
-if (/^tagall|invoca(r|ci(o|ó)n)|todos$/i.test(command)) {
+if (/^(tagall|invoca(r|ci(o|ó)n)|todos)$/i.test(command)) {
 const lettersImage = await Jimp.read(fs.readFileSync(join(media, 'pictures/invAll.png')));
-  
-  // Redimensionar la imagen de las letras para que coincida con el tamaño de la imagen del perfil
+
 lettersImage.resize(profilePicture.getWidth(), profilePicture.getHeight());
-  
-  // Superponer las imágenes
+
 profilePicture.composite(lettersImage, 0, 0);
-  
-  // Guardar la imagen combinada en un archivo local
+
 const img = path.join(temp, `${randomString(5)}.jpg`);
 await profilePicture.writeAsync(img);
 
@@ -109,18 +104,18 @@ try {
 if (msg.message.extendedTextMessage && msg.message.extendedTextMessage.text !== undefined) {
 await conn.writing(m.chat, msg.message.extendedTextMessage.text) 
 }
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000})    
+await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000})
 } catch (error) {
-await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000, disappearingMessagesInChat: 24*60*100})    
+await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id }, {quoted: m, ephemeralExpiration: 2*60*1000, disappearingMessagesInChat: 24*60*100})
 console.log('texto: ', msg.message + error)
 }
-} catch (e) {  
-  console.log('texto error: ', e)
+} catch (e) {
+console.log('texto error: ', e)
 
 /**
 [ By @NeKosmic || https://github.com/NeKosmic/ ]
-**/  
-  
+**/
+
 let users = participants.map(u => conn.decodeJid(u.id))
 let quoted = m.quoted ? m.quoted : m
 let mime = (quoted.msg || quoted).mimetype || ''
@@ -152,7 +147,7 @@ await conn.relayMessage(m.chat, messageFinal, {quoted: m, ephemeralExpiration: 2
 }
 handler.help = ['admins <texto>']
 handler.tags = ['group']
-handler.command = /^(@)?adm(ins)?|ownergroup|us(ers|uarios)|list(a)?num|tagall|invoca(r|ci(o|ó)n)|todos$/i
+handler.command = /^(@)?adm(ins)?|^ownergroup|^us(ers|uarios)|^list(a)?num|^tagall|^invoca(r|ci(o|ó)n)|^todos$/i
 handler.group = true
 handler.menu = [
 {title:"💎 INVOCAR AL OWNER DEL GRUPO", description: "invoca al owner del grupo usando #ownergroup <mensaje>", id: `ownergroup`},

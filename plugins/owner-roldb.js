@@ -1,5 +1,5 @@
 import { prems } from "../config.js"
-let handler = async (m, {conn, text, usedPrefix, command, usersdb, userdb, senderJid, objs}) => {
+let handler = async (m, {conn, text, usedPrefix, command, groupsdb, usersdb, userdb, senderJid, objs}) => {
 let who
 if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : senderJid
 else who = m.chat
@@ -9,7 +9,6 @@ if (!who) {
 let resp = `*[❗INFO❗] INGRESA EL @tag DE LA PERSONA QUE DESEA AGREGAR A LOS USUARIOS PREMIUM*`
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
-//prems.includes(who.split`@`[0])
 if (usersdb[who]?.premium) {
 let resp = '*[❗INFO❗] EL USUARIO REGISTRADO YA ES USUARIO PREMIUM*'
 return conn.sendWritingText(m.chat, resp, userdb, m);
@@ -75,16 +74,23 @@ resp = `≡ *XP AÑADIDO*
 }
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
+if ( /^(listprem|premlist)$/i.test(command)) {
+let prem = prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != conn.user.jid)
+let textprem = `*「 USUARIOS PREMIUM 」*
+` + prem.map(v => '- @' + v.replace(/@.+/, '')).join`\n`
+m.reply(textprem, null, {mentions: conn.parseMention(textprem)})
+}
 }
 handler.help = ['addprem <@user>']
 handler.tags = ['owner']
-handler.command = /^((añadir|add|dar|\+)(d|diamantes|prem|xp))$/i
+handler.command = /^((añadir|add|dar|\+|list)(d|diamantes|prem|xp))$/i
 handler.group = true
 handler.rowner = true
 handler.menu = [
 {title: "👑 AÑADIR PREMIUM", description: "Has a un usuario premium usando #addprem <@tag> ", id: `addprem`},
 {title: "💎 AÑADIR DIAMANTES", description: "Añade diamantes a un usuario\nEjemplo: #añadirdiamantes @tag <cantidad>", id: `añadirdiamantes`},
-{title: "💎 AÑADIR XP", description: "Añade experiencia (XP) a un usuario\nEjemplo: #añadirxp @tag <cantidad>", id: `añadirxp`}
+{title: "💎 AÑADIR XP", description: "Añade experiencia (XP) a un usuario\nEjemplo: #añadirxp @tag <cantidad>", id: `añadirxp`},
+{title: "👑 LISTAPREM", description: "Lista de usuarios premium", id: `listprem`}
 ];
 handler.type = "owners";
 handler.disabled = false;

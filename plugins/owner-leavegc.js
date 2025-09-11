@@ -7,8 +7,10 @@ handler.group = true
 handler.rowner = true
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "👋 SALIR DEL GRUPO", description: "Salir de un grupo usando el comando", id: `out`}
+];
+handler.type = "owners";
 handler.disabled = false;
 
 export default handler

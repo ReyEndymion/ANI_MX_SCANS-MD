@@ -1,14 +1,14 @@
-let handler = async (m, {conn, args, usedPrefrix, command, db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs}) => {
-const {waitTwoMinutes} = await import('../lib/functions.js')
+let handler = async (m, {conn, args, text, isOwner, usedPrefix, command, db, botdb, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs}) => {
+const {waitTwoMinutes, parseDuration, wait} = await import('../lib/functions.js')
 const {userID} = await import('../config.js')
-if (/^(un)?banuser$/i.test(command)) {
+//USER
+if (/^((un)?banuser)$/i.test(command)) {
 let who
-if (m.isGroup) {who = m.mentionedJid[0]} else {who = m.chat}
-if (!text || !who) {
-return conn.sendWritingText(m.chat, '*[❗INFO❗] INGRESA EL @tag DE ALGUN USUARIO*', userdb, m)
+if (m.isGroup) {who = m.mentionedJid.length > 0 ? m.mentionedJid[0] : m.quoted?.sender ? m.quoted.sender : undefined} else {who = m.chat}
+if (!who) {
+return conn.sendWritingText(m.chat, '*[❗INFO❗] INGRESA EL @tag DE ALGUN USUARIO O CONTESTA A UN MENSAJE*', userdb, m)
 } else {
 try {
-console.log('(ban/unban)user: ', /^banuser$/i.test(command))
 if (/^banuser$/i.test(command)) {
 usersdb[who].banned = true
 return conn.sendWritingText(m.chat, `*[❗INFO❗] EL USUARIO FUE BANEADO CON ÉXITO*\n*—◉ EL USUARIO YA NO PODRÁ USAR EL BOT HASTA QUE SEA DESBANEADO*`, userdb, m)
@@ -21,11 +21,9 @@ return conn.sendWritingText(m.chat, `${error.stack}`, userdb, m)
 }
 }
 }
-if (/^(un)?banchat$/i.test(command)) {
-console.log('(ban/unban)chat: ', m.mentionedJid)
+//CHAT
+if (/^((un)?banchat)$/i.test(command)) {
 let resp = ''
-//let me = args !== null ? : m.quoted.fromMe.includes(conn.user.jid)
-//if (m.isGroup && !m.mentionedJid.includes(conn.user.jid)) return
 try {
 if (/^banchat$/i.test(command)) {
 if (!args[0] || (m && m.quoted && m.quoted.fromMe)) {
@@ -61,35 +59,31 @@ resp = `${error}`
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 }
-if (/^banchatsprivs$/i.test(command)) {}
-if (/^banchatsgroups$/i.test(command)) {}
-if (/^banchatsall$/i.test(command)) {
+//MASIVE USERS
+if (/^(un)?banusersall$/i.test(command)) {
+if (!args[0]) {
+if (/^banusersall$/i.test(command)) {
 try {
-// Leer la base de datos
-//await db.read();
 
-// Buscar y actualizar todos los isBanned: false
-const chats = db.data.bot[conn.user.jid].chats;
 let successfulBans = 0;
 
-for (const [key, value] of Object.entries(chats)) {
-
-if (value.isBanned === false) {
-value.isBanned = true;
-//console.log('Baneando chat:', key);
+for (const [jid, data] of Object.entries(usersdb)) {
+if (data.banned === true) continue
+if (data.banned === false) {
+data.banned = true;
 successfulBans++;
 }
 }
-
-// Escribir los cambios en la base de datos
+for (const [key, value] of Object.entries(usersdb)) {
+}
 await db.write();
 
 if (successfulBans === 0) {
 try {
 
-} catch (error) {
 let resp = `${error} No se pudo banear ningún chat`.trim()
 await conn.sendWritingText(m.chat, resp, userdb, m) 
+} catch (error) {
 throw new Error('No se pudo banear ningún chat', error);
 }
 } else {
@@ -101,32 +95,29 @@ await conn.sendWritingText(m.chat, resp, userdb, m)
 let resp = `Error: ${e.message}`.trim()
 await conn.sendWritingText(m.chat, resp, userdb, m)
 } 
-await waitTwoMinutes() 
+}
+if (/^(unbanusersall)$/i.test(command)) {
 try {
-// Leer la base de datos
 await db.read();
 
-// Buscar y actualizar todos los isBanned: false
-const chats = db.data.bot[conn.user.jid].chats;
 let successfulUnbans = 0;
 
-for (const [key, value] of Object.entries(chats)) {
-if (value.isBanned === true) {
-value.isBanned = false;
-//console.log('Desbaneando chat:', key);
+for (const [jid, data] of Object.entries(usersdb)) {
+if (data.banned === false) continue
+if (data.banned === true) {
+data.banned = false;
 successfulUnbans++;
 }
 }
 
-// Escribir los cambios en la base de datos
 await db.write();
 
 if (successfulUnbans === 0) {
 try {
-
-} catch (error) {
 let resp = `No se pudo desbanear ningún chat`.trim()
 await conn.sendWritingText(m.chat, resp, userdb, m)
+
+} catch (error) {
 throw new Error('No se pudo desbanear ningún chat', error);
 
 }
@@ -139,16 +130,405 @@ await conn.sendWritingText(m.chat, resp, userdb, m)
 let resp = `Error: ${e.message}`.trim()
 await conn.sendWritingText(m.chat, resp, userdb, m)}
 }
+} else {
+const ms = parseDuration(args[0])
+if (ms) {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banusersall$/i.test(command) ? 'banusersall' : 'unbanusersall', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+setTimeout(async () => {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banusersall$/i.test(command) ? 'unbanusersall' : 'banusersall', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+}, ms)
+}
+}
+}
+//MASIVE PRIVS
+if (/^(un)?banchatsprivs$/i.test(command)) {
+if (!args[0]) {
+if (/^banchatsprivs$/i.test(command)) {
+try {
+let successfulBans = 0;
 
+for (const [jid, data] of Object.entries(privsdb)) {
+if (data.isBanned === true) continue
+if (data.isBanned === false) {
+data.isBanned = true;
+successfulBans++;
+}
+}
+
+await db.write();
+
+if (successfulBans === 0) {
+try {
+
+let resp = `${error} No se pudo banear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m) 
+} catch (error) {
+throw new Error('No se pudo banear ningún chat', error);
+}
+} else {
+let resp = `Se banearon ${successfulBans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} 
+}
+if (/^(unbanchatsprivs)$/i.test(command)) {
+try {
+await db.read();
+
+let successfulUnbans = 0;
+
+for (const [jid, data] of Object.entries(privsdb)) {
+if (data.isBanned === false) continue
+if (data.isBanned === true) {
+data.isBanned = false;
+successfulUnbans++;
+}
+}
+
+await db.write();
+
+if (successfulUnbans === 0) {
+try {
+
+let resp = `No se pudo desbanear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} catch (error) {
+throw new Error('No se pudo desbanear ningún chat', error);
+
+}
+} else {
+let resp = `Se desbanearon ${successfulUnbans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)}
+}
+} else {
+const ms = parseDuration(args[0])
+if (ms) {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsprivs$/i.test(command) ? 'banchatsprivs' : 'unbanchatsprivs', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+setTimeout(async () => {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsprivs$/i.test(command) ? 'unbanchatsprivs' : 'banchatsprivs', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+}, ms)
+}
+}
+}
+//MASIVE GROUPS
+if (/^((un)?banchatsgroups)$/i.test(command)) {
+if (!args[0]) {
+if (/^banchatsgroups$/i.test(command)) {
+try {
+let successfulBans = 0;
+
+for (const [jid, data] of Object.entries(groupsdb)) {
+if (data.isBanned === true) continue
+if (data.isBanned === false) {
+data.isBanned = true;
+successfulBans++;
+}
+}
+
+await db.write();
+
+if (successfulBans === 0) {
+try {
+
+let resp = `${error} No se pudo banear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m) 
+} catch (error) {
+throw new Error('No se pudo banear ningún chat', error);
+}
+} else {
+let resp = `Se banearon ${successfulBans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} 
+}
+if (/^(unbanchatsgroups)$/i.test(command)) {
+try {
+await db.read();
+
+let successfulUnbans = 0;
+
+for (const [jid, data] of Object.entries(groupsdb)) {
+if (data.isBanned === false) continue
+if (data.isBanned === true) {
+data.isBanned = false;
+successfulUnbans++;
+}
+}
+
+await db.write();
+
+if (successfulUnbans === 0) {
+try {
+
+let resp = `No se pudo desbanear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} catch (error) {
+throw new Error('No se pudo desbanear ningún chat', error);
+
+}
+} else {
+let resp = `Se desbanearon ${successfulUnbans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)}
+}
+} else {
+const ms = parseDuration(args[0])
+if (ms) {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsgroups$/i.test(command) ? 'banchatsgroups' : 'unbanchatsgroups', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+setTimeout(async () => {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsgroups$/i.test(command) ? 'unbanchatsgroups' : 'banchatsgroups', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+}, ms)
+}
+}
+
+}
+//MASIVE ALL CHATS
+if (/^(un)?banchatsall$/i.test(command)) {
+if (!args[0]) {
+if (/^banchatsall$/i.test(command)) {
+try {
+let successfulBans = 0;
+
+for (const [key, value] of Object.entries(chatsdb)) {
+for (const [jid, data] of Object.entries(value)) {
+if (data.isBanned === true) continue
+if (data.isBanned === false) {
+data.isBanned = true;
+successfulBans++;
+}
+}
+}
+await db.write();
+
+if (successfulBans === 0) {
+try {
+
+let resp = `${error} No se pudo banear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m) 
+} catch (error) {
+throw new Error('No se pudo banear ningún chat', error);
+}
+} else {
+let resp = `Se banearon ${successfulBans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} 
+}
+if (/^(unbanchatsall)$/i.test(command)) {
+try {
+await db.read();
+
+let successfulUnbans = 0;
+
+for (const [key, value] of Object.entries(chatsdb)) {
+for (const [jid, data] of Object.entries(value)) {
+if (data.isBanned === false) continue
+if (data.isBanned === true) {
+data.isBanned = false;
+successfulUnbans++;
+}
+}
+}
+await db.write();
+
+if (successfulUnbans === 0) {
+try {
+
+let resp = `No se pudo desbanear ningún chat`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+} catch (error) {
+throw new Error('No se pudo desbanear ningún chat', error);
+
+}
+} else {
+let resp = `Se desbanearon ${successfulUnbans} chats correctamente`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)
+}
+
+} catch (e) {
+let resp = `Error: ${e.message}`.trim()
+await conn.sendWritingText(m.chat, resp, userdb, m)}
+}
+} else {
+const ms = parseDuration(args[0])
+if (ms) {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsall$/i.test(command) ? 'banchatsall' : 'unbanchatsall', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+setTimeout(async () => {
+await handler(m, {conn, args: [], usedPrefrix, command: /^banchatsall$/i.test(command) ? 'unbanchatsall' : 'banchatsall', db, privsdb, groupsdb, chatdb, chatsdb, usersdb, userdb, senderJid, objs})
+}, ms)
+}
+}
+}
+//INFO LIST BANCHATS & USERS
+if (/^(banlist(users|privs|groups)?)/i.test(command)) {
+let chatsPrivs = Object.entries(privsdb).filter(([jid, data]) => data.isBanned)
+let chatsGroups = Object.entries(groupsdb).filter(([jid, data]) => data.isBanned)
+let users = Object.entries(usersdb).filter(([jid, data]) => data.banned)
+const bannedChats = chatsPrivs;
+if (/^banlistusers$/i.test(command)) {
+let caption = `
+┌〔 *USUARIOS BANEADOS* 〕
+├ Total : ${users.length} ${users ? '\n' + users.map(([jid], i) => `
+├ ${isOwner ? `@${jid.split`@`[0]}` : jid}`.trim()).join('\n') : '├'}
+└────
+`.trim()
+return conn.sendWritingTextCI(m.chat, caption, {mentionedJid: conn.parseMention(caption), groupMentions: await conn.parseGroupMention(caption)}, userdb, m)
+} else if (/^banlistprivs$/i.test(command)) {
+let caption = `
+┌〔 *CHATS PRIVADOS BANEADOS*〕
+├ Total : ${chatsPrivs.length} ${chatsPrivs ? '\n' + chatsPrivs.map(([jid], i) => `
+├ ${isOwner ? `@${jid.split`@`[0]}` : jid}`.trim()).join('\n') : '├'}
+└────
+`.trim()
+return conn.sendWritingTextCI(m.chat, caption, {mentionedJid: conn.parseMention(caption), groupMentions: await conn.parseGroupMention(caption)}, userdb, m)
+} else if (/^banlistgroups$/i.test(command)) {
+let caption = `
+┌〔 *CHATS GRUPALES BANEADOS*〕
+├ Total : ${chatsGroups.length} ${chatsGroups ? '\n' + chatsGroups.map(([jid], i) => `
+├ ${isOwner ? `@${jid}` : jid}`.trim()).join('\n') : '├'}
+└────
+`.trim()
+return conn.sendWritingTextCI(m.chat, caption, {mentionedJid: conn.parseMention(caption), groupMentions: await conn.parseGroupMention(caption)}, userdb, m)
+} else {
+}
+let caption = `
+┌〔 *USUARIOS BANEADOS* 〕
+├ Total : ${users.length} ${users ? '\n' + users.map(([jid], i) => `
+├ ${isOwner ? `@${jid.split`@`[0]}` : jid}`.trim()).join('\n') : '├'}
+└────
+
+┌〔 *CHATS PRIVADOS BANEADOS*〕
+├ Total : ${chatsPrivs.length} ${chatsPrivs ? '\n' + chatsPrivs.map(([jid], i) => `
+├ ${isOwner ? `@${jid.split`@`[0]}` : jid}`.trim()).join('\n') : '├'}
+└────
+┌〔 *CHATS GRUPALES BANEADOS*〕
+├ Total : ${chatsGroups.length} ${chatsGroups ? '\n' + chatsGroups.map(([jid], i) => `
+├ ${isOwner ? `@${jid}` : jid}`.trim()).join('\n') : '├'}
+└────
+`.trim()
+return conn.sendWritingTextCI(m.chat, caption, {mentionedJid: conn.parseMention(caption), groupMentions: await conn.parseGroupMention(caption)}, userdb, m)
+}
+if (/^(agregar(vn|msg|video|audio|img|sticker))$/i.test(command)) {
+let M = m.constructor
+let which = command.replace(/agregar/i, '')
+if (!m.quoted) return conn.sendWritingText(m.chat, `*[❗INFO❗] RESPONDE A UN TEXTO MENSAJE, IMAGEN, ETC. Y AÑADE UN TEXTO COMO PALABRA CLAVE*`, userdb, m)
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] UTILIZAR *${usedPrefix}list${which}* PARA VER LA LISTA DE MENSAJES`, userdb, m)
+let msgs = botdb.msgs
+if (text in msgs) return conn.sendWritingText(m.chat, `*[❗INFO❗] '${text}' SE HA REGISTRADO EN LA LISTA DE MENSAJES`, userdb, m)
+msgs[text] = M.toObject(await m.getQuotedObj())
+return conn.sendWritingText(m.chat, `*[❗INFO❗] MENSAJE AGREGADO EXITOSAMENTE A LA LISTA DE MENSAJES COMO '${text}'*\n*ACCEDE CON ${usedPrefix}ver${which} ${text}*`, userdb, m)
+}
+if (/^(eliminar(vn|msg|video|audio|img|sticker))$/i.test(command)) {
+let which = command.replace(/eliminar/i, '')
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] USAR ${usedPrefix}list${which} PARA VER LA LISTA*`, userdb, m)
+let msgs = botdb.msgs
+if (!text in msgs) return conn.sendWritingText(m.chat, `*[❗INFO❗] '${text}' NO REGISTRADO EN LA LISTA DE MENSAJES*`, userdb, m)
+delete msgs[text]
+return conn.sendWritingText(m.chat, `*[❗INFO❗] ELIMINO CON EXITO DE LA LISTA DE MENSAJES EL MENSAJE CON EL NOMBRE '${text}'*`, userdb, m)
+}
+if (/^(ver(vn|msg|video|audio|img|sticker))$/i.test(command)) {
+let which = command.replace(/ver/i, '')
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] USAR *${usedPrefix}list${which}* PARA VER LA LISTA*`, userdb, m)
+let msgs = botdb.msgs
+if (!text in msgs) return conn.sendWritingText(m.chat, `*[❗INFO❗] '${text}' NO REGISTRADO EN LA LISTA DE MENSAJES*`, userdb, m)
+let _m = await conn.serializeM(msgs[text])
+await _m.copyNForward(m.chat, true)
+}
+if (/^(lista(vn|msg|video|audio|img|sticker))$/i.test(command)) {
+let msgs = botdb.msgs
+return conn.sendWritingText(m.chat, `
+*🔰 LISTA DE TEXTOS/MENSAJES/PALABRAS CLAVE 🔰*
+
+*✳️ MENSAJES ✳️*
+${Object.keys(msgs).map(v => '*👉🏻 ' + v).join('*\n*')}*
+`.trim(), userdb, m)
+}
 };
 handler.help = ['banchatAll']
 
 handler.tags = ['owner']
 
-handler.command = /^((un)?ban(chat(s(privs|groups|all))?))$/i
+handler.command = /^((un)?ban((chat|user)(s(privs|groups|all))?))|^(banlist(users|privs|groups)?)|^((agregar|eliminar|ver|lista)(vn|msg|video|audio|img|sticker))$/i
 handler.owner = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "👑 BANCHAT", description: "#banchat ", id: `banchat`}, 
+{title: "👑 UNBANCHAT", description: "#unbanchat ", id: `unbanchat`}, 
+{title: "👑 BANUSER", description: "#banuser <@tag> ", id: `banuser`}, 
+{title: "👑 UNBANUSER", description: "#unbanuser <@tag> ", id: `unbanuser`}, 
+{title: "👑 BANCHATS", description: "#banchatsall <time>\n*Nota:* El tiempo es opcional y el formato puede ser desde 1s(un segundo) hasta dias(1d) siempre y cuando el bot no sea reinicado los chats estaran baneados durante el tiempo elejido y volveran a su estado anterior", id: `banchatsall`}, 
+{title: "👑 UNBANCHATS", description: "#unbanchatsall <time>\n*Nota:* El tiempo es opcional y el formato puede ser desde 1s(un segundo) hasta dias(1d) siempre y cuando el bot no sea reinicado los chats estaran desbaneados durante el tiempo elejido y volveran a su estado anterior", id: `unbanchatsall`}, 
+{title: "👑 BANUSERS", description: "#banuser <time>\n*Nota:* El tiempo es opcional y el formato puede ser desde 1s(un segundo) hasta dias(1d) siempre y cuando el bot no sea reinicado los usuarios estaran baneados durante el tiempo elejido y volveran a su estado anterior", id: `banusersall`}, 
+{title: "👑 UNBANUSERS", description: "#unbanuser <time>\n*Nota:* El tiempo es opcional y el formato puede ser desde 1s(un segundo) hasta dias(1d) siempre y cuando el bot no sea reinicado los usuarios estaran desbaneados durante el tiempo elejido y volveran a su estado anterior", id: `unbanusersall`}, 
+{title: "👑 BANCHATSPRIVS", description: "#banchatsprivs <time>*\n*(Usa #help banchatsprivs Para más información)", id: `banchatsprivs`}, 
+{title: "👑 UNBANCHATSPRIVS", description: "#unbanchatsprivs <time>*\n*(Usa #help unbanchatsprivs Para más información)", id: `unbanchatsprivs`}, 
+{title: "👑 BANCHATSGROUPS", description: "#banchatsgroups <time>*\n*(Usa #help banchatsgroups Para más información)", id: `banchatsgroups`}, 
+{title: "👑 UNBANCHATSGROUPS", description: "#unbanchatsgroups <time>*\n*(Usa #help unbanchatsgroups Para más información)", id: `unbanchatsgroups`}, 
+{title: "BANLIST", description: "Muestra la lista de usuarios y grupos baneados usando #banlist", id: `banlist`},
+{title: "👑 BANLISTUSERS", description: "Muestra solamente los usuarios baneados Usando #banuser", id: `banuser`}, 
+{title: "👑 BANLISTPRIVS", description: "Muestra solamente los Chats privados baneados usando #banlistprivs", id: `banlistprivs`}, 
+{title: "👑 BANLISTGROUPS", description: "Muestra sólo los grupos Baneados usando #banlistgroups", id: `banlistgroups`}, 
+{title: `AGREGAR A LA LISTA`,
+rows: [
+{title: "🗳️ AGREGAR MENSAJE", description: "#agregarmsg *<texto/comando/palabra clave>* (responde a un texto) ", id: `agregarmsg`},
+{title: "🗳️ AGREGAR VN", description: "#agregarvn *<texto/comando/palabra clave>* (responde a una nota de voz) ", id: `agregarvn`},
+{title: "🗳️ AGREGAR VIDEO", description: "#agregarvideo *<texto/comando/palabra clave>* (responde a un video) ", id: `agregarvideo`},
+{title: "🗳️ AGREGAR AUDIO", description: "#agregaraudio *<texto/comando/palabra clave>* (responde a un audio) ", id: `agregaraudio`},
+{title: "🗳️ AGREGAR IMAGEN", description: "#agregarimg *<texto/comando/palabra clave>* (responde a una imagen) ", id: `agregarimg`},
+{title: "🗳️ AGREGAR STICKER", description: "#agregarsticker *<texto/comando/palabra clave>* (responde a un sticker) ", id: `agregarsticker`}
+]
+},
+{title: `ELIMINAR DE LA LISTA`,
+rows: [
+{title: "🗳️ ELIMINAR MENSAJE", description: "#eliminarmsg *<texto/comando/palabra clave>* ", id: `eliminarmsg`},
+{title: "🗳️ ELIMINAR VN", description: "#eliminarvn *<texto/comando/palabra clave>* ", id: `eliminarvn`},
+{title: "🗳️ ELIMINAR VIDEO", description: "#eliminarvideo *<texto/comando/palabra clave>* ", id: `eliminarvideo`},
+{title: "🗳️ ELIMINAR AUDIO", description: "#eliminaraudio *<texto/comando/palabra clave>* ", id: `eliminaraudio`},
+{title: "🗳️ ELIMINAR IMAGEN", description: "#eliminarimg *<texto/comando/palabra clave>* ", id: `eliminarimg`},
+{title: "🗳️ ELIMINAR STICKER", description: "#eliminarsticker *<texto/comando/palabra clave>* ", id: `eliminarsticker`}
+]
+},
+{title: `VER TEXTOS O ARCHIVOS`,
+rows: [
+{title: "🗳️ VER MENSAJE", description: "#vermsg *<texto/comando/palabra clave>* ", id: `vermsg`},
+{title: "🗳️ VER VN", description: "#vervn *<texto/comando/palabra clave>* ", id: `vervn`},
+{title: "🗳️ VER VIDEO", description: "#vervideo *<texto/comando/palabra clave>* ", id: `vervideo`},
+{title: "🗳️ VER AUDIO", description: "#veraudio *<texto/comando/palabra clave>* ", id: `veraudio`},
+{title: "🗳️ VER IMAGEN", description: "#verimg *<texto/comando/palabra clave>* ", id: `verimg`},
+{title: "🗳️ VER STICKER", description: "#versticker *<texto/comando/palabra clave>* ", id: `versticker`}
+]},
+{title: 'LISTAR MENSAJES',
+rows: [
+{title: "🗳️ LISTA MENSAJE", description: "#listamsg ", id: `listamsg`},
+{title: "🗳️ LISTA VN", description: "#listavn ", id: `listavn`},
+{title: "🗳️ LISTA VIDEO", description: "#listavideo ", id: `listavideo`},
+{title: "🗳️ LISTA AUDIO", description: "#listaaudio ", id: `listaaudio`},
+{title: "🗳️ LISTA IMAGEN", description: "#listaimg ", id: `listaimg`},
+{title: "🗳️ LISTA STICKER", description: "#listasticker ", id: `listasticker`}
+]
+}
+];
+handler.type = "owners";
 
 handler.disabled = false;
 

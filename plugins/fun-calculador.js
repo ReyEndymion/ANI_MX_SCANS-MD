@@ -47,7 +47,7 @@ _*${text.toUpperCase()}* *ES* *${(500).getRandom()}%* *${command.replace('how', 
 }
 handler.help = ['gay2', 'lesbiana', 'pajero', 'pajera', 'puto', 'puta', 'manco', 'manca', 'rata', 'prostituta', 'prostituto'].map(v => v + ' @tag | nombre')
 handler.tags = ['calculator']
-handler.command = /^gay2|lesbiana|pajero|pajera|puto|puta|manco|manca|rata|prostituta|prostituto/i
+handler.command = /^(gay2|lesbiana|pajero|pajera|puto|puta|manco|manca|rata|prostituta|prostituto)$/i
 handler.menu = [
 {title: "🎖️️ JODA PROSTITUTO", description: "usa #prostituto <nombre / @tag>", id: `prostituto`},
 {title: "🎖️️ JODA PROSTITUTA", description: "usa #prostituta <nombre / @tag>", id: `prostituta`},

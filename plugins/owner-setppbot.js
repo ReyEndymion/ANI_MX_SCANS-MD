@@ -12,8 +12,10 @@ handler.command = /^setppbot$/i
 handler.rowner = true
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "📷 SETPPBOT", description: "Cambiar la foto de perfil del bot", id: `setppbot`}
+];
+handler.type = "owners";
 handler.disabled = false;
 
 export default handler 
