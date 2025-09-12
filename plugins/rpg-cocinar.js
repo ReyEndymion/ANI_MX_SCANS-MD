@@ -203,13 +203,13 @@ conn.sendWritingText(m.chat, `Cocina exitosa ${count} Cangrejo quemado🍖`, use
 } else conn.sendWritingText(m.chat, `No tienes ingredientes para cocinar cangrejos a la parrilla\nNecesitas 2 cangrejos y 1 carbón para cocinar`, userdb, m)
 					break
 default:
-let resp = `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${info.nanie}\n\n` + cocinar
+let resp = `*PREMIUM ${user.premium ? "✅": "❌"}*\n${info.nanie}\n\n` + cocinar
 
 await conn.sendWritingText(m.chat, resp, userdb, m);
-await conn.sendButton(m.chat, `*𝗣𝗥𝗘𝗠𝗜𝗨𝗠 ${user.premium ? "✅": "❌"}*\n${info.nanie}`, cocinar, [
-[`🤺 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙙𝙚 𝘾𝙤𝙢𝙗𝙖𝙩𝙚`, `${usedPrefix}inventario 2`],
-[`🏕️ 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖𝙧 | 𝙑𝙚𝙣𝙩𝙪𝙧𝙚`, `${usedPrefix}adventure`],
-['💗 𝙈𝙚𝙣𝙪 𝘼𝙫𝙚𝙣𝙩𝙪𝙧𝙖 | 𝙍𝙋𝙂', '.rpgmenu']], m, { mentions: conn.parseMention(cocinar) })	
+await conn.sendButton(m.chat, `*PREMIUM ${user.premium ? "✅": "❌"}*\n${info.nanie}`, cocinar, [
+[`🤺 Inventario de Combate`, `${usedPrefix}inventario 2`],
+[`🏕️ Aventurar | 𝙑enture`, `${usedPrefix}adventure`],
+['💗 Menu Aventura | RPG', '.rpgmenu']], m, { mentions: conn.parseMention(cocinar) })	
 await conn.sendMessage(m.chat, {
 				text: info.nanie,
 				footer: cocinar,

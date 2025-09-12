@@ -6,7 +6,6 @@ let handler = async (m, {conn, usedPrefix, command, args, usedPrefix: _p, plugin
 
 
 const { levelling } = '../lib/levelling.js'
-//let handler = async (m, {conn, usedPrefix, usedPrefix: _p, pluginsPath, text, db, userdb, senderJid}) => {
 
 let { exp, limit, level, role } = userdb
 let { min, xp, max } = xpRange(level, global.multiplier)
@@ -100,7 +99,6 @@ let menu = `
 ┃ ➥ *${Object.keys(usersdb).length}* 
 ╰━━━〔 *${info.nanie}* 〕━━━⬣`.trim()
 return conn.sendImageWriting(m.chat, pp, menu, m );
-//conn.sendHydrated(m.chat, menu, info.nanie, pp, 'https://github.com/GataNina-Li/${info.nanie}', '𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿', null, null, [['𝙀𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙞𝙖 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 ⚡', '.buy'], ['𝙂𝙖𝙩𝙖𝘾𝙤𝙞𝙣𝙨 𝙥𝙤𝙧 𝘿𝙞𝙖𝙢𝙖𝙣𝙩𝙚 🐈', '/buy2'],['𝙏𝙤𝙥𝙨 | 𝙍𝙖𝙣𝙠𝙞𝙣𝙜 🏆', '#top']], m,)
 
 }
 

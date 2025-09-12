@@ -2,11 +2,7 @@ import fetch from 'node-fetch'
 let handler = async (m, {isPrems, conn, db, userdb, senderJid}) => {
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
-//let grupos = [nna, nn, nnn, nnnt]
 let img = [fs.readFileSync(imagen1), fs.readFileSync(fs.readFileSync(imagen2)), fs.readFileSync(imagen3), fs.readFileSync(imagen2)]
-//let enlace = { contextInfo: { externalAdReply: {title: info.nanie + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}
-//let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: info.nanie, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
-//let dos = [enlace, enlace2]
 
 let user = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid]
 let premium = user.premium
@@ -58,8 +54,7 @@ let text = `
 ┃ ☀️ Recompensa semanal!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
 ╰━━💫━🌈━🌛━━⬣`
-let resp = text + texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
-//await conn.sendButton(m.chat, text, texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`, img.getRandom(), [['🌅 𝙀𝙉𝙏𝙍𝙀𝙂𝘼 𝘿𝙀𝙇 𝙈𝙀𝙎 | 𝙈𝙊𝙉𝙏𝙃 🌠', '/monthly'], ['Volver al menú ☘️', '/menu']], m, enlace) 
+let resp = text + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
 await conn.writing(m.chat, resp)
 await conn.sendMessage(m.chat, { image: img.getRandom(), caption: resp, mentions: conn.parseMention(resp) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ); 
 

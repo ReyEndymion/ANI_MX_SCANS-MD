@@ -5,9 +5,9 @@ if (!text) return conn.sendWritingText(m.chat, `*[❗] INGRESA LA CONTRASEÑA Q
 let textfilter = text.toLowerCase()
 let res = await fetch(API('https://anonyzoom.herokuapp.com', '/index.php', { pass: textfilter }))
 let json = await res.json()
-if (json.Join_URL == '') { return conn.sendWritingText(m.chat, `*[❗] HUBO UN ERROR AL GENERAR LA SALA VIRTUAL, POR 𝙵AVOR INTENTELO DE NUEVO*`, m)
+if (json.Join_URL == '') { return conn.sendWritingText(m.chat, `*[❗] HUBO UN ERROR AL GENERAR LA SALA VIRTUAL, POR FAVOR INTENTELO DE NUEVO*`, m)
 } else {
-let zoomA = `*[ 𝐆𝐄𝐍𝐄𝐑𝐀𝐃𝐎𝐑 𝐃𝐄 𝐒𝐀𝐋𝐀𝐒 𝐃𝐄 𝐙𝐎𝐎𝐌 ]*\n
+let zoomA = `*[ GENERADOR DE SALAS DE ZOOM ]*\n
 *LINK 𝚉OOM:* ${json.Join_URL}
 *CONTRASEÑA:* ${json.Password}
 *DURACION DE LA LLAMADA:* ${json.Duration} minutos`

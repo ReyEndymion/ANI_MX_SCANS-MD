@@ -20,9 +20,6 @@ ment.endsWith(lid) ? ment = conn.lidToJid(ment, m.chat) : ment
 if (ment === number+userID) return true 
 else return false
 }))
-//console.log('autResp: ', isMentionBot, isMentionOwner)
-//, isMentionOwner
-console.log('autRespA: ', chatdb.autoreac)
 if (chatdb.autoreac && (/(Rey Endymion|ANIMXSCANS|ANI MX SCANS)/gi.test(normalizetext.toLowerCase()) || isMentionOwner)) {
 let emot = pickRandom(['🎃', '❤', '😘', '😍', '💕', '😎', '🙌', '⭐', '👻', '🔥']);
 conn.sendMessage(m.chat, { react: { text: emot, key: m.key }});

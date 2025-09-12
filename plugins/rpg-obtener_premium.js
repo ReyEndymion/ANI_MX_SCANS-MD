@@ -327,16 +327,16 @@ case 'pase':
 const sections = [{
 title: comienzo + ' 🎟️ PREMIUM 🎟️ ' + fin,
 rows: [
-{title: "💎 PREMIUM - CLASE ⓵", id: `prem1 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗕𝗮𝘀𝗶𝗰𝗼\n✪ 15 ${rpgshop.emoticon('limit')} ➟ 5 min Premium\n`},
-{title: "🌀 PREMIUM - CLASE ⓶", id: `prem2 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗧𝗼𝗿𝗿𝗲 𝗱𝗲 𝗘𝗻𝗰𝗮𝗻𝘁𝗼\n✪ 35 ${rpgshop.emoticon('kyubi')} ➟ 15 min Premium\n`},
-{title: "💚 PREMIUM - CLASE ⓷", id: `prem3 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗩𝗲𝗿𝗱𝘂𝘇𝗰𝗼\n✪ 25 ${rpgshop.emoticon('emerald')} ➟ 30 min Premium\n`},
-{title: "🗑 PREMIUM - CLASE ⓸", id: `prem4 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗥𝗲𝘀𝗶𝗱𝘂𝗼𝘀 𝗘𝗖𝗢\n✪ 50 ${rpgshop.emoticon('trash')} ➟ 1 h Premium\n`},
-{title: "♦️ PREMIUM - CLASE ⓹", id: `prem5 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗖𝗮𝘇𝗮 𝗕𝗿𝗶𝗹𝗹𝗮𝗻𝘁𝗲\n✪ 40 ${rpgshop.emoticon('berlian')} ➟ 3 h Premium\n`},
-{title: "🪙 PREMIUM - CLASE ⓺", id: `prem6 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗔𝗺𝗼 𝗱𝗲𝗹 𝗖𝗿𝗶𝗽𝘁𝗼\n✪ 70 ${rpgshop.emoticon('joincount')} ➟ 7 h Premium\n`},
-{title: "💎+ PREMIUM - CLASE ⓻", id: `prem7 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗚𝗲𝗺𝗮 𝗣𝗹𝘂𝘀\n✪ 65 ${rpgshop.emoticon('diamond')} ➟ 24 h Premium\n`},
-{title: "👑 PREMIUM - CLASE ⓼ : PASS ⓼", id: `prem8 1`, description: `✪ 𝗣𝗮𝘀𝗲 𝗧𝗶𝗲𝗺𝗽𝗼 𝗱𝗲 𝗢𝗿𝗼\n✪ 80 ${rpgshop.emoticon('gold')} ➟ 3 d Premium\n`}
+{title: "💎 PREMIUM - CLASE ⓵", id: `prem1 1`, description: `✪ Pase Basico\n✪ 15 ${rpgshop.emoticon('limit')} ➟ 5 min Premium\n`},
+{title: "🌀 PREMIUM - CLASE ⓶", id: `prem2 1`, description: `✪ Pase Torre de Encanto\n✪ 35 ${rpgshop.emoticon('kyubi')} ➟ 15 min Premium\n`},
+{title: "💚 PREMIUM - CLASE ⓷", id: `prem3 1`, description: `✪ Pase Verduzco\n✪ 25 ${rpgshop.emoticon('emerald')} ➟ 30 min Premium\n`},
+{title: "🗑 PREMIUM - CLASE ⓸", id: `prem4 1`, description: `✪ Pase Residuos ECO\n✪ 50 ${rpgshop.emoticon('trash')} ➟ 1 h Premium\n`},
+{title: "♦️ PREMIUM - CLASE ⓹", id: `prem5 1`, description: `✪ Pase Caza Brillante\n✪ 40 ${rpgshop.emoticon('berlian')} ➟ 3 h Premium\n`},
+{title: "🪙 PREMIUM - CLASE ⓺", id: `prem6 1`, description: `✪ Pase Amo del Cripto\n✪ 70 ${rpgshop.emoticon('joincount')} ➟ 7 h Premium\n`},
+{title: "💎+ PREMIUM - CLASE ⓻", id: `prem7 1`, description: `✪ Pase Gema Plus\n✪ 65 ${rpgshop.emoticon('diamond')} ➟ 24 h Premium\n`},
+{title: "👑 PREMIUM - CLASE ⓼ : PASS ⓼", id: `prem8 1`, description: `✪ Pase Tiempo de Oro\n✪ 80 ${rpgshop.emoticon('gold')} ➟ 3 d Premium\n`}
 ]},{
-title: comienzo + ' 🌟 𝙄𝙉𝙁𝙊 𝙋𝙍𝙀𝙈𝙄𝙐𝙈 🌟 ' + fin,
+title: comienzo + ' 🌟 INFO PREMIUM 🌟 ' + fin,
 rows: [
 {title: "🎟️ USUARIOS PREMIUM", id: usedPrefix + 'listprem'},
 {title: "🏆 TOP MUNDIAL", id: usedPrefix + 'top'},

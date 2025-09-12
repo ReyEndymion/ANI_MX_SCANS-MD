@@ -211,7 +211,7 @@ let premium = userdb.premium
 
 if (!listItems[item]) {
 const buff = footer
-//const buttons = [['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓50', `${usedPrefix}buy3 50`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓100', `${usedPrefix}buy3 100`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖 𝘼𝙗𝙨𝙤𝙡𝙪𝙩𝙖', `${usedPrefix}buyall3`]]
+//const buttons = [['💎 Comprar 𝙓50', `${usedPrefix}buy3 50`], ['💎 Comprar 𝙓100', `${usedPrefix}buy3 100`], ['💎 Compra AbSoluta', `${usedPrefix}buyall3`]]
 if (start.buttons) {
 //conn.sendButton(m.chat, text, footer, image, buttons, m)
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
@@ -232,7 +232,7 @@ const buff = `--–*\n\n*Necesitas ${(listItems[item][paymentMethod] * total) - 
 *🏅 Mensual : ${new Date - userdb.lastmonthly < 432000000 ? '❌' : `✅ _${usedPrefix}cadames_`}*\n\nRECURSOS BAJOS\n\nComprar : ${(listItems[item][paymentMethod] * total) - user[paymentMethod]} ${global.rpgshopp.emoticon(paymentMethod)} usa ${usedPrefix}buy ${paymentMethod} ${(listItems[item][paymentMethod] * total) - user[paymentMethod]}\n\nPedir ayuda☘️ usa ${usedPrefix}pedirayuda\n\n*Por Favor alguien ayudeme con *${(listItems[item][paymentMethod] * total) - user[paymentMethod]} ${global.rpg.emoticon(paymentMethod)}.*\n\n*» AYUDA TRANSFIRIENDO:*
 *${usedPrefix}transfer ${paymentMethod} ${(listItems[item][paymentMethod] * total) - user[paymentMethod]} @${conn.getName(senderJid)}*`.trim()
 const buttons = [
-[`Comprar : 𝗕𝘂𝘆 ${(listItems[item][paymentMethod] * total) - user[paymentMethod]} ${rpgshopp.emoticon(paymentMethod)}`, `${usedPrefix}buy ${paymentMethod} ${(listItems[item][paymentMethod] * total) - user[paymentMethod]}`],
+[`Comprar : Buy ${(listItems[item][paymentMethod] * total) - user[paymentMethod]} ${rpgshopp.emoticon(paymentMethod)}`, `${usedPrefix}buy ${paymentMethod} ${(listItems[item][paymentMethod] * total) - user[paymentMethod]}`],
 [`Pedir ayuda ☘️`, `${usedPrefix}pedirayuda *Por Favor alguien ayudeme con *${(listItems[item][paymentMethod] * total) - user[paymentMethod]} ${rpg.emoticon(paymentMethod)}.*
 *» AYUDA TRANSFIRIENDO:*
 *${usedPrefix}transfer ${paymentMethod} ${(listItems[item][paymentMethod] * total) - user[paymentMethod]} @${conn.getName(senderJid)}*`]]
@@ -257,7 +257,7 @@ let resp = `*––『 COMPRADO 』––*\n\n${conn.getName(senderJid)}
 return conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
 if (user[item] < total) {
-let resp = `🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}\n\n*No tienes suficiente ${rpgshop.emoticon(item)} para vender solo tienes ${user[item]} ${rpgshopp.emoticon(item)}*\n\n*You don't have enough ${rpgshop.emoticon(item)} to sell, you only have ${user[item]} ${rpgshopp.emoticon(item)}*\n\n🎒 *INVENTARIO* usa ${usedPrefix}inventory\n\n𝙑𝙤𝙡𝙫𝙚𝙧 𝙖𝙡 𝙈𝙚𝙣𝙪́ ☘️usa ${usedPrefix}menu`
+let resp = `🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}\n\n*No tienes suficiente ${rpgshop.emoticon(item)} para vender solo tienes ${user[item]} ${rpgshopp.emoticon(item)}*\n\n*You don't have enough ${rpgshop.emoticon(item)} to sell, you only have ${user[item]} ${rpgshopp.emoticon(item)}*\n\n🎒 *INVENTARIO* usa ${usedPrefix}inventory\n\nVolver al Menú ☘️usa ${usedPrefix}menu`
 
 return conn.sendWritingText(m.chat, resp, userdb, m)
 } 
@@ -268,7 +268,7 @@ user[paymentMethod] += listItems[item][paymentMethod] * total
 let resp = `*––『 VENDIDO 』––*\n\n${conn.getName(senderJid)} 
 *Has vendido ${item} » ${total} ${rpgshop.emoticon(item)}*.
 *--------------------------------------------*
-*𝙂𝙖𝙣𝙖𝙣𝙘𝙞𝙖𝙨: ${(listItems[item][paymentMethod] * total)} ${rpgshop.emoticon(paymentMethod)}*
+*Ganancias: ${(listItems[item][paymentMethod] * total)} ${rpgshop.emoticon(paymentMethod)}*
 *Ahora tiene: ${user[paymentMethod]} ${rpgshopp.emoticon(paymentMethod)}*\n\nVENTA EXITOSA\n\n👝 *CARTERA* usa ${usedPrefix}cartera\n\n🎒 *INVENTARIO* usa ${usedPrefix}inventory`.trim()
 
 

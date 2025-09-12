@@ -2,25 +2,13 @@
 // Código compatible con canales y comunidades de WhatsApp 
 // También encontrarás código para comandos enfocados para canales de WhatsApp
 
-import { getUrlFromDirectPath } from "@whiskeysockets/baileys"
-import _ from "lodash"
-import axios from 'axios' 
+import axios from 'axios'
+import {processObject, formatDate} from '../lib/newsletter.js'
 
 let handler = async (m, { conn, command, usedPrefix, args, text, groupMetadata, isOwner, isROwner, objs, userdb, senderJid }) => {
 const fs = await import('fs')
 const {imagen1} = objs
 const icons = fs.readFileSync(imagen1)
-const isCommand1 = /^(inspect|inspeccionar)\b$/i.test(command)
-const isCommand2 = /^(seguircanal)\b$/i.test(command)
-const isCommand3 = /^(noseguircanal)\b$/i.test(command)
-const isCommand4 = /^(silenciarcanal)\b$/i.test(command)
-const isCommand5 = /^(nosilenciarcanal)\b$/i.test(command)
-const isCommand6 = /^(nuevafotochannel)\b$/i.test(command)
-const isCommand7 = /^(eliminarfotochannel)\b$/i.test(command)
-const isCommand8 = /^(avisoschannel|resiviravisos)\b$/i.test(command)
-const isCommand9 = /^(reactioneschannel|reaccioneschannel)\b$/i.test(command)
-const isCommand10 = /^(nuevonombrecanal)\b$/i.test(command)
-const isCommand11 = /^(nuevadescchannel)\b$/i.test(command)
 
 const channelUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:channel\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
 let txtBotAdminCh = '\n\n> *Verifique que el Bot sea admin en el canal, de lo contrario no funcionará el comando*'
@@ -113,7 +101,6 @@ info = await MetadataGroupInfo(res) // Si el bot esta en el grupo
 console.log('Método de metadatos')
 } catch {
 const inviteUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:invite\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
-//if (!inviteUrl &&) return await conn.reply(m.chat, "*Verifique que sea un enlace de grupo o comunidad de WhatsApp.*", m)
 let inviteInfo
 if (inviteUrl) {
 try {
@@ -138,7 +125,6 @@ showAdAttribution: false,
 renderLargerThumbnail: false
 }}}, { quoted: fkontak })
 } else {
-// Manejo de enlaces de canales
 let newsletterInfo
 if (!isChannelUrl) return conn.sendWritingText(m.chat, "🚩 Verifique que sea un enlace de canal de WhatsApp.", userdb, m)
 if (isChannelUrl) {
@@ -297,8 +283,8 @@ await conn.newsletterUpdatePicture(ch, media)
 // await conn.reply(m.chat, `🚩 El bot ha cambiando la imagen del canal *${chtitle}* con éxito.`, m) 
 await conn.sendMessage(ch, { text: `🚩He cambiando la imagen del canal *${chtitle}* con éxito.`, contextInfo: {
 externalAdReply: {
-title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-body: '✨️ N𝚞𝚎𝚟a 𝚒𝚖ag𝚎𝚗 𝚍𝚎 p𝚎𝚛𝚍𝚒l 𝚍𝚎l 𝚌a𝚗al.',
+title: "【 🔔 NOTIFICACIÓN 🔔 】",
+body: '✨️ Nueva imagen de perfil del canal.',
 thumbnailUrl: pp,
 sourceUrl: redes,
 mediaType: 1,
@@ -326,8 +312,8 @@ await conn.newsletterRemovePicture(ch)
 //await conn.reply(m.chat, `🚩 El bot ha eliminado la imagen del canal *${chtitle}* con éxito.`, m) 
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha eliminado la imagen del canal *${chtitle}* con éxito.`, contextInfo: {
 externalAdReply: {
-title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-body: '✨️ I𝚖ag𝚎𝚗 𝚍𝚎 p𝚎𝚛𝚏𝚒l 𝚍𝚎l 𝚌a𝚗al 𝚑a 𝚜𝚒𝚍o 𝚎l𝚒𝚖𝚒𝚗a𝚍a',
+title: "【 🔔 NOTIFICACIÓN 🔔 】",
+body: '✨️ Imagen de perfil del canal ha sido eliminada',
 thumbnailUrl: pp,
 sourceUrl: redes,
 mediaType: 1,
@@ -419,8 +405,8 @@ await conn.newsletterReactionMode(ch, mode)
 //await conn.reply(m.chat, `🚩 El bot ha establecido el modo de reacciones como \`"${mode}"\` para el canal *${chtitle}*`, m,rcanal)
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha establecido el modo de reacciones como \`"${mode}"\` para el canal *${chtitle}*`, contextInfo: {
 externalAdReply: {
-title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-body: '✨️ Aj𝚞𝚜t𝚎𝚜 𝚎𝚗 𝚛𝚎a𝚌𝚌𝚒o𝚗𝚎𝚜.',
+title: "【 🔔 NOTIFICACIÓN 🔔 】",
+body: '✨️ ajustes en reacciones.',
 thumbnailUrl: pp,
 sourceUrl: redes,
 mediaType: 1,
@@ -455,8 +441,8 @@ await conn.newsletterUpdateName(ch, name)
 //await conn.reply(m.chat, `🚩 El bot ha cambiado el nombre del canal *${name}*\n\n*Anterior nombre:* ${chtitle}\n*Nuevo nombre:* ${name}`, m) 
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha cambiado el nombre del canal *${name}*\n\n*Anterior nombre:* ${chtitle}\n*Nuevo nombre:* ${name}`, contextInfo: {
 externalAdReply: {
-title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-body: '✨️ U𝚗 𝚗𝚞𝚎𝚟o 𝚗o𝚖𝚋𝚛𝚎 pa𝚛a 𝚎l 𝚌a𝚗al.',
+title: "【 🔔 NOTIFICACIÓN 🔔 】",
+body: '✨️ Un nuevo nombre para el canal.',
 thumbnailUrl: pp,
 sourceUrl: redes,
 mediaType: 1,
@@ -487,11 +473,10 @@ ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).c
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterUpdateDescription(ch, description)
-// await conn.reply(m.chat, `🚩 El bot ha modificado la descripción del canal *${chtitle}*`, m) 
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha modificado la descripción del canal *${chtitle}*`, contextInfo: {
 externalAdReply: {
-title: "【 🔔 𝐍𝐎𝐓𝐈𝐅𝐈𝐂𝐀𝐂𝐈𝐎́𝐍 🔔 】",
-body: '✨️ 𝚞𝚗a 𝚗𝚞𝚎𝚟a 𝚍𝚎𝚜𝚌𝚛𝚒p𝚌𝚒ó𝚗 al 𝚌a𝚗al.',
+title: "【 🔔 NOTIFICACIÓN 🔔 】",
+body: '✨️ una nueva descripción al canal.',
 thumbnailUrl: pp,
 sourceUrl: redes,
 mediaType: 1,
@@ -503,7 +488,6 @@ reportError(e)
 }
 
 }
-//const channels = _.values(conn.chats).filter(c => c.id && c.id.endsWith("@newsletter"))
 switch (true) { 
 
 }
@@ -535,117 +519,3 @@ handler.disabled = false;
 
 export default handler 
 
-function formatDate(n, locale = "es", includeTime = true) {
-if (n > 1e12) {
-n = Math.floor(n / 1000)// Convertir de milisegundos a segundos
-} else if (n < 1e10) {
-n = Math.floor(n * 1000)// Convertir de segundos a milisegundos
-}
-const date = new Date(n)
-if (isNaN(date)) return "Fecha no válida"
-// Formato de fecha: día/mes/año
-const optionsDate = { day: '2-digit', month: '2-digit', year: 'numeric' }
-const formattedDate = date.toLocaleDateString(locale, optionsDate)
-if (!includeTime) return formattedDate
-// horas, minutos y segundos
-const hours = String(date.getHours()).padStart(2, '0')
-const minutes = String(date.getMinutes()).padStart(2, '0')
-const seconds = String(date.getSeconds()).padStart(2, '0')
-const period = hours < 12 ? 'AM' : 'PM'
-const formattedTime = `${hours}:${minutes}:${seconds} ${period}`
-return `${formattedDate}, ${formattedTime}`
-}
-
-function formatValue(key, value, preview) {
-switch (key) {
-case "subscribers":
-return value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "No hay suscriptores"
-case "creation_time":
-case "nameTime":
-case "descriptionTime":
-return formatDate(value)
-case "description": 
-case "name":
-return value || "No hay información disponible"
-case "state":
-switch (value) {
-case "ACTIVE": return "Activo"
-case "GEOSUSPENDED": return "Suspendido por región"
-case "SUSPENDED": return "Suspendido"
-default: return "Desconocido"
-}
-case "reaction_codes":
-switch (value) {
-case "ALL": return "Todas las reacciones permitidas"
-case "BASIC": return "Reacciones básicas permitidas"
-case "NONE": return "No se permiten reacciones"
-default: return "Desconocido"
-}
-case "verification":
-switch (value) {
-case "VERIFIED": return "Verificado"
-case "UNVERIFIED": return "No verificado"
-default: return "Desconocido"
-}
-case "mute":
-switch (value) {
-case "ON": return "Silenciado"
-case "OFF": return "No silenciado"
-case "UNDEFINED": return "Sin definir"
-default: return "Desconocido"
-}
-case "view_role":
-switch (value) {
-case "ADMIN": return "Administrador"
-case "OWNER": return "Propietario"
-case "SUBSCRIBER": return "Suscriptor"
-case "GUEST": return "Invitado"
-default: return "Desconocido"
-}
-case "picture":
-if (preview) {
-return getUrlFromDirectPath(preview)
-} else {
-return "No hay imagen disponible"
-}
-default:
-return value !== null && value !== undefined ? value.toString() : "No hay información disponible"
-}}
-
-function newsletterKey(key) {
-return _.startCase(key.replace(/_/g, " "))
-.replace("Id", "🆔 Identificador")
-.replace("State", "📌 Estado")
-.replace("Creation Time", "📅 Fecha de creación")
-.replace("Name Time", "✏️ Fecha de modificación del nombre")
-.replace("Name", "🏷️ Nombre")
-.replace("Description Time", "📝 Fecha de modificación de la descripción")
-.replace("Description", "📜 Descripción")
-.replace("Invite", "📩 Invitación")
-.replace("Handle", "👤 Alias")
-.replace("Picture", "🖼️ Imagen")
-.replace("Preview", "👀 Vista previa")
-.replace("Reaction Codes", "😃 Reacciones")
-.replace("Subscribers", "👥 Suscriptores")
-.replace("Verification", "✅ Verificación")
-.replace("Viewer Metadata", "🔍 Datos avanzados")
-}
-
-function processObject(obj, prefix = "", preview) {
-let caption = ""
-Object.keys(obj).forEach(key => {
-const value = obj[key]
-if (typeof value === "object" && value !== null) {
-if (Object.keys(value).length > 0) {
-const sectionName = newsletterKey(prefix + key)
-caption += `\n*\`${sectionName}\`*\n`
-caption += processObject(value, `${prefix}${key}_`)
-}
-} else {
-const shortKey = prefix ? prefix.split("_").pop() + "_" + key : key
-const displayValue = formatValue(shortKey, value, preview)
-const translatedKey = newsletterKey(shortKey)
-caption += `- *${translatedKey}:*\n${displayValue}\n\n`
-}})
-return caption.trim()
-}

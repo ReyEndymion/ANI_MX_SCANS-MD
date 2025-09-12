@@ -1,8 +1,8 @@
 let response = {}
 let handler= async (m, {conn, start, info, command, args, usedPrefix, userdb, db, senderJid}) => {
 const {getRandom} = await import('../lib/functions.js')
-const {  rpg, rpgg, rpgshop, rpgshopp  } = await import('../rpg.js');
-const {  owner, temp, newsletterID, sBroadCastID, groupID, media } = await import('../config.js');
+const { rpg, rpgg, rpgshop, rpgshopp } = await import('../rpg.js');
+const { owner, temp, newsletterID, sBroadCastID, groupID, media } = await import('../config.js');
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" }
 
 let pescarUsuario = await conn.getName(senderJid)
@@ -22,7 +22,7 @@ var img4 = ['https://pinake.files.wordpress.com/2020/09/mar-caspio.jpg','https:/
 var img5 = ['https://www.caracteristicas.co/wp-content/uploads/2018/11/oceano-pacifico-2-e1583028795824.jpg','https://www.caracteristicas.co/wp-content/uploads/2018/10/oceano-pacifico-arrefice-e1540842615839.jpg','https://ecologismos.com/wp-content/2017/12/reservas-marinas.jpg','https://www.nationalgeographic.com.es/medio/2021/06/07/atun-rojo_d35c81ef_1280x853.jpg'].getRandom()
 
 var mensajePesca = [`PREPARANDO LA ${rpgg.emoticon('fishingrod')} CAÑA DE PESCAR...`, `🪣 ALISTANDO IMPLEMENTOS DE PESCA...`, `📡 BUSCANDO LUGAR DE PESCA...`, `EN HORA BUENA!! HOY SERA UNA GRAN PESCA 🌤️`, `PREPARANDO ${rpgshopp.emoticon('pancingan')} gancho DE PESCA`, `🌊 EN BREVE EMPEZARÁ LAPESCA!!`].getRandom()
-var mensajePesca2 = [`PREPARANDO LA CARNADA ${rpgshopp.emoticon('umpan')}`, `💥 PARECE QUÉ OBTENDRÁS MUCHOS PECES`, `TIENES MUCHA ENERGIA ✨ PARA 𝙐𝙉𝘼 𝙂𝙍𝘼𝙉 PESCA`, `𝙏𝙐 NIVEL DE ${rpgg.emoticon('fishingrod')} 𝙔 ${rpgshopp.emoticon('pancingan')} ESTÁN LISTOS PARA ESTÁ GRAN PESCA!!`, `🍀 LA Suerte te brindará una excelente PESCA`, `🌊 𝙀𝙇 NIVEL gol del agua es estable PARA COMENZAR A PESCAR`].getRandom()
+var mensajePesca2 = [`PREPARANDO LA CARNADA ${rpgshopp.emoticon('umpan')}`, `💥 PARECE QUÉ OBTENDRÁS MUCHOS PECES`, `TIENES MUCHA ENERGIA ✨ PARA UNA GRAN PESCA`, `TU NIVEL DE ${rpgg.emoticon('fishingrod')} Y ${rpgshopp.emoticon('pancingan')} ESTÁN LISTOS PARA ESTÁ GRAN PESCA!!`, `🍀 LA Suerte te brindará una excelente PESCA`, `🌊 EL NIVEL gol del agua es estable PARA COMENZAR A PESCAR`].getRandom()
 var mensajePesca3 = [`TAL VEZ ATRAPO!! 🦀🦞🦐`, `TAL VEZ ATRAPO!! 🦑🐙🐡`, `TAL VEZ ATRAPO!! 🐠🐟🐬`, `TAL VEZ ATRAPO!! 🐳🦈🐋`].getRandom()
 var mensajeLugar = [
 // Asia

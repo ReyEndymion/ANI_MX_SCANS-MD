@@ -270,7 +270,7 @@ rows: [
 {title: "დ INVENTARIO - COMPLETO", id: usedPrefix + command + ' 4'}
 ]
 },{
-title: ' ❖ 𝗔𝗟𝗜𝗠𝗘𝗡𝗧𝗢𝗦 𝗬 𝗔𝗡𝗜𝗠𝗔𝗟𝗘𝗦 ❖ ',
+title: ' ❖ ALIMENTOS 𝗬 ANIMALES ❖ ',
 rows: [
 {title: "ღ INVENTARIO - 𝘈𝘓𝘐𝘔𝘌𝘕𝘛𝘖𝘚 𝘠 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚", id: usedPrefix + 'alimentos'},
 {title: "ღ INVENTARIO - 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚 𝘈𝘛𝘙𝘈𝘗𝘈𝘋𝘖𝘚", id: usedPrefix + 'animales'}
@@ -307,13 +307,11 @@ const buff = info.nanie
 const buttons = [['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓50', `${usedPrefix}buy3 50`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓100', `${usedPrefix}buy3 100`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖 𝘼𝙗𝙨𝙤𝙡𝙪𝙩𝙖', `${usedPrefix}buyall3`]]
 if (start.buttons) {
 await conn.sendMessage(m.chat, listMessage, {quoted: fkontak})
-//await conn.sendMessage(m.chat, listMessage, {quoted: fkontak})
 return conn.sendButton(m.chat, resp, buff, img, [
 [`🌟 USUARIOS PREMIUM 🌟`, `${usedPrefix}listprem`],
 [`🎟️ MÁS TIEMPO PREMIUM 🎟️`, `${usedPrefix + command} 1`],
 [`😽 DISFRUTAR PREMIUM 😽`, `${usedPrefix}allmenu`]], fkontak, null)
 } else {
-//comando.map(v => v + ' <pencarian>')
 let totalComandos = 0
 if (typeof sections === 'string' && sections.trim().length > 0) {
 resp += sections + '\n\n'
@@ -480,8 +478,6 @@ return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
 } else if (args[0] == '2') { // Inventario 2
 const pets = Object.keys(inventory.pets).map(v => userdb[v] && `*${rpg.emoticon(v)} » ${userdb[v] >= inventory.pets[v] ? '*Nivel Máximo*' : `Nivel* \n*» ${userdb[v]}*\n`}`).filter(v => v).join('\n').trim()
 const cooldowns = Object.entries(inventory.cooldowns).map(([cd, { name, time }]) => cd in userdb && `*✧ ${name}*: ${new Date() - userdb[cd] >= time ? '✅' : '❌'}`).filter(v => v).join('\n').trim()
-// ${Object.keys(inventory.others).map(v => user[v] && `⮕ ${rpg.emoticon(v)} ${v}: ${user[v]}`).filter(v => v).join('\n')}${tools ? `
-console.log('inventario: ', daily.cooldown)
 
 const caption = `
 👤» *@${who.split("@")[0]}* 
@@ -1146,7 +1142,7 @@ _18.Top Clock_ *${usersarlok.indexOf(senderJid) + 1}* _de_ *${usersarlok.length}
 //await conn.sendButton(m.chat, `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}`, str, imgr + 'Inventario', , m, {quoted: fkontak})
 let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}` + '\n' + str 
 const buff = info.nanie
-const buttons = [[`${healt < 40 ? '❤️ _CURARME_' : 'Aventurar 🏕️'}`, `${healt < 40 ? `${usedPrefix}heal` : `${usedPrefix}adventure`}`], ['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 | 𝘽𝙪𝙮', `${usedPrefix}buy`], ['🏪 𝙏𝙞𝙚𝙣𝙙𝙖 𝙥𝙖𝙧𝙖 𝙑𝙚𝙣𝙙𝙚𝙧', `${usedPrefix}sell`]]
+const buttons = [[`${healt < 40 ? '❤️ _CURARME_' : 'Aventurar 🏕️'}`, `${healt < 40 ? `${usedPrefix}heal` : `${usedPrefix}adventure`}`], ['🏪 Tienda para Comprar | Buy', `${usedPrefix}buy`], ['🏪 Tienda para 𝙑ender', `${usedPrefix}sell`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(caption) })
 } else {
@@ -1155,7 +1151,6 @@ return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
 }
 } else if (args[0] == '4') { // Inventario 4
 
-// let name = m.fromMe ? conn.user : conn.contacts[senderJid]
 let name = senderJid
 let usuario = await conn.getName(name)
 
@@ -1322,7 +1317,7 @@ Serigala: *${serigala == 0 ? 'No tengo' : '' || serigala == 1 ? 'Nivel 1' : '' |
 
 let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}\n`+ str 
 const buff = info.nanie
-const buttons = [[`🍱 Inventario de alimentos `, `${usedPrefix}alimentos`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpgmenu`]]
+const buttons = [[`🍱 Inventario de alimentos `, `${usedPrefix}alimentos`], [`🎒 Inventario total`, `${usedPrefix}inventario 4`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpgmenu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(str) })
 } else {
@@ -1431,7 +1426,7 @@ let aineh = `
 
 let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}` + aineh.trim()
 const buff = info.nanie
-const buttons = [[`🐈 Inventario de animales`, `${usedPrefix}animales`], [`🎒 𝙄𝙣𝙫𝙚𝙣𝙩𝙖𝙧𝙞𝙤 𝙩𝙤𝙩𝙖𝙡`, `${usedPrefix}inventario 4`], ['_Menu Aventura | RPG_ 💗', `${usedPrefix}rpgmenu`]]
+const buttons = [[`🐈 Inventario de animales`, `${usedPrefix}animales`], [`🎒 Inventario total`, `${usedPrefix}inventario 4`], ['_Menu Aventura | RPG_ 💗', `${usedPrefix}rpgmenu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(resp) })
 } else {

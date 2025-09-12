@@ -6,11 +6,6 @@ let handler = async (m, {conn, start, info, isPrems, usedPrefix, userdb, db, sen
 let resp, imagen
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
-//let grupos = [nna, nn, nnn, nnnt]
-//let gata = [img5, img6, img7, img8, img9]
-//let enlace = { contextInfo: { externalAdReply: {title: info.nanie + ' 🐈', body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(gata.getRandom())).buffer() }}}
-//let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: info.nanie, body: '😻 𝗦𝘂𝗽𝗲𝗿 𝗚𝗮𝘁𝗮𝗕𝗼𝘁-𝗠𝗗 - 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 ', thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
-//let dos = [enlace, enlace2]
 
 let premium = userdb.premium
 
@@ -54,7 +49,7 @@ const resp = `
 ╭━━🕐━🕑━🕒━━⬣
 ┃ ♻️ Entrega a cada hora!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
-╰━━🕕━🕔━🕓━━⬣\n\n` + texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n`
+╰━━🕕━🕔━🕓━━⬣\n\n` + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n`
 
 userdb.lasthourly = new Date * 1
 const buff = info.nanie

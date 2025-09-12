@@ -163,7 +163,7 @@ ${arr.slice(0, 3).join('')}
 ${arr.slice(3, 6).join('')}
 ${arr.slice(6).join('')}
 
-${isWin ? `@${(isSurrender ? room.game.currentTurn : room.game.winner).split('@')[0]} GANASTE 🥳, TE LLEVAS +4999 𝚎𝚡p` : isTie ? 'EL JUEGO TERMINÓ EN EMPATE 😐' : `TURNO DE @${room.game.currentTurn.split('@')[0]}`}
+${isWin ? `@${(isSurrender ? room.game.currentTurn : room.game.winner).split('@')[0]} GANASTE 🥳, TE LLEVAS +4999 exp` : isTie ? 'EL JUEGO TERMINÓ EN EMPATE 😐' : `TURNO DE @${room.game.currentTurn.split('@')[0]}`}
 `.trim()
 if ((room.game._currentTurn ^ isSurrender ? room.x : room.o) !== m.chat)
 room[room.game._currentTurn ^ isSurrender ? 'x' : 'o'] = m.chat

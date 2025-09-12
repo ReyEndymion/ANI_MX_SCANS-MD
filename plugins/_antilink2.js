@@ -24,7 +24,7 @@ if (m.text.includes(linkThisGroup3)) return !0
 if (m.fromMe) return
 if (isAdmin) return conn.sendWritingText(m.chat, `*😎 Salvado, usted @${senderJid.split('@')[0]} es administrador!*`, null)
 
-await conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: delet }})
+await conn.deleteMessage(m.chat, { remoteJid: m.chat, fromMe: false, id: bang, participant: delet })
 const resp = `*「 ANTI LINKS GENERAL 」*\n*HASTA LA VISTA BABY 👋, ${await this.getName(senderJid)} ROMPISTES LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*${isBotAdmin ? '' : '\n\n'}`
 const buff = info.nanie
 const buttons = [['DESACTIVAR ANTILINKS', `/disable antilink2`]]

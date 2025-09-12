@@ -10,12 +10,12 @@ userdb.joincount += count
 //conn.sendWritingText(m.chat, `
 const resp = `
 ╭━〔 *DATOS DE COMPRA* 〕━⬣
-┃ *Compra Efectuada* : +${count} 𝙏𝙊𝙆𝙀𝙉(𝙎) 🪙 
-┃ *Ha Gastado* :-${diamantetk * count} 𝘿𝙄𝘼𝙈𝘼𝙉𝙏𝙀𝙎 💎
+┃ *Compra Efectuada* : +${count} TOKEN(S) 🪙 
+┃ *Ha Gastado* :-${diamantetk * count} DIAMANTES 💎
 ╰━〔 *𓃠 ${info.nanie}* 〕━⬣`.trim()
 
 const buff = info.nanie
-const buttons = [['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓50', `${usedPrefix}buy3 50`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓100', `${usedPrefix}buy3 100`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖 𝘼𝙗𝙨𝙤𝙡𝙪𝙩𝙖', `${usedPrefix}buyall3`]]
+const buttons = [['💎 Comprar 𝙓50', `${usedPrefix}buy3 50`], ['💎 Comprar 𝙓100', `${usedPrefix}buy3 100`], ['💎 Compra Absoluta', `${usedPrefix}buyall3`]]
 if (start.buttons) {
 await conn.sendHydrated(m.chat, resp, buff, null, info.repoProyect, info.nanie, null, null, buttons, m,)
 return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
@@ -25,13 +25,13 @@ return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
 }
 
 } else {
-const resp = `❎ *Lo siento, no tienes sufucientes 𝘿𝙄𝘼𝙈𝘼𝙉𝙏𝙀𝙎 💎 para comprar ${count} 𝙏𝙊𝙆𝙀𝙉(𝙎)* 🪙\n\n*Le recomiendo que interactúe con ${info.nanie} para Obtener Tokens, puede ver sus tokens con el comando ${usedPrefix}cartera o ${usedPrefix}wallet*`
+const resp = `❎ *Lo siento, no tienes sufucientes DIAMANTES 💎 para comprar ${count} TOKEN(S)* 🪙\n\n*Le recomiendo que interactúe con ${info.nanie} para Obtener Tokens, puede ver sus tokens con el comando ${usedPrefix}cartera o ${usedPrefix}wallet*`
 const buff = info.nanie
 const buttons = [
 ['Volver al menú ☘️', `${usedPrefix}menu`],
 ]
 if (start.buttons) {
-await conn.sendHydrated(m.chat, resp, info.nanie, null, ig, '𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢', null, null, buttons, m,)
+await conn.sendHydrated(m.chat, resp, info.nanie, null, ig, 'Instagram', null, null, buttons, m,)
 return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')

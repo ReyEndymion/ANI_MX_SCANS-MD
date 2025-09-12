@@ -20,7 +20,7 @@ if (m.text.includes(linkThisGroup)) {
 let resp = '*Lol.. enviaste el enlace de este grupo :v*'
 return conn.sendWritingText(m.chat, resp, m );
 }
-await conn.sendMessage(m.chat, {delete: {remoteJid: m.chat, fromMe: false, id: bang, participant: delet}});
+await conn.deleteMessage(m.chat, {remoteJid: m.chat, fromMe: false, id: bang, participant: delet});
 let resp = `*「 ANTI LINKS WHATSAPP 」*\n*HASTA LA VISTA BABY 👋, ${await conn.getName(senderJid)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
 await conn.sendWritingText(m.chat, resp, m );
 return await conn.groupParticipantsUpdate(m.chat, [senderJid], 'remove') 

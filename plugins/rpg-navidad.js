@@ -52,7 +52,7 @@ resp = `
 img = 'https://img.freepik.com/vector-gratis/gente-diminuta-enormes-cajas-regalo-ilustracion-vectorial-plana-personas-que-celebran-cumpleanos-envian-o-reciben-regalos-lealtad-o-ideas-brillantes-recompensa-bonificacion-concepto-fiesta_74855-25016.jpg?w=2000'
 }
 userdb.lastclaim = new Date * 1
-const buff = texto.length !== 0 ? texto + `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}` : info.nanie
+const buff = texto.length !== 0 ? texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}` : info.nanie
 const buttons = img.length !== 0 ? [['⛰️ _*ABRIR COFRE*_ ⛰️', `${usedPrefix}cofre'`], ['_*Volver al menu*_ ☘️', `${usedPrefix}menu`]] : [['_Volver al menu_ ☘️', `${usedPrefix}menu`]]
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 if (img) {

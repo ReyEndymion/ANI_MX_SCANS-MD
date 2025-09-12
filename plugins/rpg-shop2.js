@@ -15,7 +15,7 @@ const resp = `
 ╰━〔 *${info.nanie}* 〕━⬣`.trim()
 
 const buff = info.nanie
-const buttons = [['💵 Comprar X10', `${usedPrefix}buy2 10`], ['💸 Comprar X20', `${usedPrefix}buy2 20`], ['⚡ Comprar 𝙘𝙤𝙣 Experiencia', `${usedPrefix}buy`]]
+const buttons = [['💵 Comprar X10', `${usedPrefix}buy2 10`], ['💸 Comprar X20', `${usedPrefix}buy2 20`], ['⚡ Comprar con Experiencia', `${usedPrefix}buy`]]
 if (start.buttons) {
 await conn.sendHydrated(m.chat, resp, buff, null, info.repoProyect, info.nanie, null, null, buttons, m,)
 return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
@@ -27,11 +27,11 @@ return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
 const resp = `❎ *Lo siento, no tienes sufucientes ${info.nanie}COINS para comprar ${count} Diamantes* 💎\n\n*Le recomiendo que interactúe con ${info.nanie} para Obtener aniCoins, puede ver sus aniCoins con el comando:\n${usedPrefix}anicoins o ${usedPrefix}experiencia.\n También puede comprar con su Experiencia con el Comando:\n${usedPrefix}buy*`
 const buff = info.nanie
 const buttons = [
-[`${ansicon} Comprar 𝙘𝙤𝙣 Experiencia'`, `${usedPrefix}buy`],
+[`${ansicon} Comprar con Experiencia'`, `${usedPrefix}buy`],
 ['Volver al menú ☘️', `${usedPrefix}menu`]
 ]
 if (start.buttons) {
-await conn.sendHydrated(m.chat, resp, info.nanie, null, ig, '𝙄𝙣𝙨𝙩𝙖𝙜𝙧𝙖𝙢', null, null, buttons, m,)
+await conn.sendHydrated(m.chat, resp, info.nanie, null, ig, 'Instagram', null, null, buttons, m,)
 return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')

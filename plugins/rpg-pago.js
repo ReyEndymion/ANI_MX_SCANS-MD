@@ -50,7 +50,7 @@ mythic: premium ? legendarypremium : legendary,
 }
 
 let time = userdb.lastpago + 432000000 //432000000 5 dias
-if (new Date - userdb.lastpago < 432000000) return await conn.sendButton(m.chat, `💰 𝙎𝙐 𝙎𝙄𝙂𝙐𝙄𝙀𝙉𝙏𝙀 𝙋𝘼𝙂𝙊 𝙀𝙎 𝙀𝙉 ...`, info.nanie + `\n\n𝙑𝙐𝙀𝙇𝙑𝙀 𝙀𝙉 : 𝘾𝙊𝙈𝙀 𝘽𝘼𝘾𝙆 𝙄𝙉\n${clockString(time - new Date() * 1)}`, null, [['𝗠 𝗘 𝗡 𝗨 ☘️', '/menu']], fkontak, m)
+if (new Date - userdb.lastpago < 432000000) return await conn.sendButton(m.chat, `💰 SU SIGUIENTE PAGO ES EN ...`, info.nanie + `\n\nVUELVE EN : COME BAC𝙆 IN\n${clockString(time - new Date() * 1)}`, null, [['M E N U ☘️', '/menu']], fkontak, m)
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
 if (!(reward in user)) continue
@@ -59,10 +59,10 @@ texto += `*+${recompensas[reward]}* ${global.rpgshop.emoticon(reward)}\n`
 }
 let text = `
 ╭━━💰━💰━💰━━⬣
-┃ ✅ 𝗣𝗔𝗚𝗢 𝗔𝗨𝗧𝗢𝗥𝗜𝗭𝗔𝗗𝗢
-┃ ✅ 𝗣𝗔𝗚𝗢 𝗥𝗘𝗔𝗟𝗜𝗭𝗔𝗗𝗢
+┃ ✅ PAGO AUTORIZADO
+┃ ✅ PAGO REALIZADO
 ╰━━💰━💰━💰━━⬣`
-const buff = `\n\n🎟️ 𝗣 𝗥 𝗘 𝗠 𝗜 𝗨 𝗠 ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
+const buff = `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
 userdb.lastpago = new Date * 1
 if (start.buttons) {
 return conn.sendButton(m.chat, text, buff, null, [['Volver al menú ☘️', `${usedPrefix}menu`]

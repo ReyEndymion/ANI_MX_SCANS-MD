@@ -4,8 +4,7 @@ let usuario = userdb.premiumTime
 let user = Object.entries(usersdb).filter(user => user[1].premiumTime).map(([key, value]) => {
 return { ...value, jid: key }
 })
-let name = '🎟️ 𝗣𝗥𝗘𝗠𝗜𝗨𝗠'
-//let fkon = { key: { fromMe: false, participant: `${senderJid.split`@`[0]}@s.whatsapp.net`, ...(m.chat ? { remoteJid: '16504228206@s.whatsapp.net' } : {}) }, message: { contactMessage: { displayName: `${name}`, vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:${name}\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`}}}
+let name = '🎟️ PREMIUM'
 let premTime = userdb.premiumTime
 let prem = userdb.premium
 let waktu = clockString(`${premTime - new Date() * 1} `)

@@ -21,7 +21,7 @@ if (!settings.restrict) {return conn.sendWritingText(m.chat, '[ ! ] Para realiza
 if (isBotAdmin) {
 if (isAdmin) return conn.sendWritingText(m.chat, `El administrador @${senderJid.split("@")[0]} acaba de enviar un texto que contiene muchos caracteres -.-!`, userdb, fakemek)
 eliminado = true
-conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: bang, participant: delet }})
+conn.deleteMessage(m.chat, { remoteJid: m.chat, fromMe: false, id: bang, participant: delet })
 resp = `*[ ! ] Se detecto un mensaje que contiene muchos caracteres [ ! ]*\n`
 await conn.sendWritingText(m.chat, resp, userdb, m );
 setTimeout(() => { 
@@ -35,7 +35,6 @@ conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
 if (!isBotAdmin && settings.restrict) {
 resp = `*[ ! ] Se detecto un mensaje que contiene muchos caracteres [ ! ]... Pero, no soy administrador, no puedo hacer nada 😕*\n${isBotAdmin ? '' : ''}`
 return conn.sendWritingText(m.chat, resp, userdb, m );
-//await conn.sendMessage(m.chat, { text: `*[ ! ] Se detecto un mensaje que contiene muchos caracteres [ ! ]*\n${isBotAdmin ? '' : 'No soy administrador, no puedo hacer nada 😕'}`, wmbc}, ['[ DESACTIVAR ANTI TRABAS ]', usedPrefix+'apagar antitraba'], fakemek )
 }
 resp = 'No soy administrador, no puedo hacer nada 😕'
 return conn.sendWritingText(m.chat, resp, userdb, m );

@@ -11,9 +11,9 @@ const urll = 'https://www.youtube.com/watch?v=' + videoId
 var doc = ['pdf','zip','vnd.openxmlformats-officedocument.presentationml.presentation','vnd.openxmlformats-officedocument.spreadsheetml.sheet','vnd.openxmlformats-officedocument.wordprocessingml.document']
 var document = doc[Math.floor(Math.random() * doc.length)]
 const buttons = `
-*🎵 𝐀𝐔𝐃𝐈𝐎𝐃𝐎𝐂 🎵* => ${usedPrefix}ytmp3doc ${urll}
-*🎥 𝐕𝐈𝐃𝐄𝐎𝐃𝐎𝐂 🎥* => ${usedPrefix}ytmp4doc ${urll}
-*📋 𝐌𝐀𝐒 𝐑𝐄𝐒𝐔𝐋𝐓𝐀𝐃𝐎𝐒 📋* => ${usedPrefix}playlist ${text}`
+*🎵 AUDIODOC 🎵* => ${usedPrefix}ytmp3doc ${urll}
+*🎥 VIDEODOC 🎥* => ${usedPrefix}ytmp4doc ${urll}
+*📋 MAS RESULTADOS 📋* => ${usedPrefix}playlist ${text}`
 let texto1 = `*◉—⌈🔊 PLAY DOCUMENT 🔊⌋—◉*\n
 ❏ 📌 *TITULO:* ${title}
 ❏ 📆 *PUBLICADO:* ${publishedTime}
@@ -21,7 +21,6 @@ let texto1 = `*◉—⌈🔊 PLAY DOCUMENT 🔊⌋—◉*\n
 ❏ 👀 *VISTAS:* ${viewH}
 ❏ 📇 *DESCRIPCION:* ${description}
 ❏ 🔗 *LINK:* ${urll}`.trim()
-//let buttonMessage = `{ "document": { url: ${info.repoProyect}}, "fileName": '❏ 🌿 REPRODUCTOR DE YOUTUBE', "mimetype": 'application/vnd.ms-excel', "caption": texto1, "fileLength": '99999999999999', "mentions": [senderJid], "footer": info.nanie, "buttons": buttons, "headerType": 4, contextInfo: { "mentionedJid": [senderJid], "externalAdReply": { "showAdAttribution": true, "title": ${title}, "mediaType": 2, "previewType": "VIDEO", "thumbnail": await (await fetch(thumbnail)).buffer(), "mediaUrl": ${urll}, "sourceUrl": ${urlgofc} }}} `
 
 await conn.sendWritingText(m.chat, texto1, userdb, m)
 } catch {

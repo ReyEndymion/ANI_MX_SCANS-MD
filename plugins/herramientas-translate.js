@@ -1,5 +1,5 @@
 let handler = async (m, {conn, args, usedPrefix, command, db, userdb, senderJid}) => {
-const {default: translate} = await import('@vitalets/google-translate-api');
+const {translate} = await import('@vitalets/google-translate-api')
 const {default: fetch} = await import('node-fetch');
 let resp = ''
 if (!args || !args[0]) {
@@ -17,7 +17,8 @@ try {
 let result = await translate(`${text}`, { to: lang, autoCorrect: true })
 resp = '*Traducción:* ' + result.text
 return conn.sendWritingText(m.chat, resp, m )
-} catch {
+} catch (e) {
+console.error(e)
 try {
 let lol = await fetch(`https://api.lolhuman.xyz/api/translate/auto/${lang}?apikey=85faf717d0545d14074659ad&text=${text}`)
 let loll = await lol.json()
@@ -31,8 +32,10 @@ return conn.sendWritingText(m.chat, resp, m )
 handler.command = /^(translate|traducir|trad)$/i
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 TRANSLATE", description: "traduce un texto a otro idioma usando #translate <idioma> <texto>", id: `translate`}
+];
+handler.type = "herramientas";
 handler.disabled = false;
 
 export default handler

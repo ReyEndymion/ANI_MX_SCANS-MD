@@ -34,7 +34,7 @@ return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m 
 imagen = flaaa.getRandom()
 userdb.potion -= count * 1 //1 potion = count (1) 
 userdb.health += heal * count 
-const resp = `*━┈━《 ✅ Salud completa 》━┈━*\n\nUso exitoso de poción 🥤\n\n Quedan *${count}* para recuperar su salud\n\𝚗Salud » ${userdb.health} ❤️\n\nSalud completada`
+const resp = `*━┈━《 ✅ Salud completa 》━┈━*\n\nUso exitoso de poción 🥤\n\n Quedan *${count}* para recuperar su salud\n\nSalud » ${userdb.health} ❤️\n\nSalud completada`
 const buff = info.nanie
 const buttons = [
 [`🏕️ AVENTURAR`, `${usedPrefix}adventure`], [`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]

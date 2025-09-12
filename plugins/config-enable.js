@@ -9,7 +9,6 @@ let name = await conn.getName(senderJid)
 const fs = await import('fs')
 let img = fs.readFileSync(imagen2)
 let pp = fs.readFileSync(imagen1)
-//let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid 
 let userm = `@${senderJid.split('@')[0]}`
 
 let isEnable = /true|enable|(turn)?on|1/i.test(command)
@@ -352,12 +351,10 @@ totalComandos++
 }
 if (rows.length > 0) {
 sections.push({
-//title: aliasToType[command].toUpperCase(),
 rows
 })
 }
 
-//resp += resp.trimEnd()
 lineaFinal = `╰══╡✯✯✯✯✯✯✯✯✯✯╞══╯`
 
 }
@@ -373,7 +370,6 @@ return conn.sendButton(m.chat, messageObject, {}, buttons, userdb, m)
 } else {
 context = false
 }
-// if (args[0])
 } else if (!args[0]) {
 context = true
 } else {
@@ -407,7 +403,6 @@ if (context) {
 let contextInfo = {
 mentionedJid: conn.parseMention(resp),
 "externalAdReply": {
-//"showAdAttribution": true,
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
 "title": info.nanie, 
@@ -434,19 +429,10 @@ quoted: q,
 timeout: setTimeout(async () => {
 delete confirmacion[senderJid]}, 60 * 1000)
 }
-}//throw false
-/**
-*/ 
+}
 context = ''
 }
 }
-handler.help = ['en', 'dis'].map(v => v + 'able <option>')
-handler.tags = ['group', 'owner']
-handler.command = /^((en|dis)able|(tru|fals)e|(turn)?[01])$/i
-handler.menu = [
-{title: "👑 ENABLE/DISABLE", description: "#enable <opcion> o #disable <opcion>", id: `enable`},
-]
-handler.type = "owners";
 handler.before = async function before (m, {conn, text, isOwner, isAdmin, command, args, db}) {
 const confirmation = Object.values(confirmacion).find(c => c.sender === senderJid);
 if (!confirmation) return;
@@ -472,6 +458,13 @@ resp = `${isEnable ? `✖️ *DESACTIVADO* ✖️\nFunción ${type}` : `'✔️ 
 return conn.sendMessage(m.chat, { text: resp.trim()}, {quoted: quoted, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
 }
 }
+handler.help = ['en', 'dis'].map(v => v + 'able <option>')
+handler.tags = ['group', 'owner']
+handler.command = /^((en|dis)able|(tru|fals)e|(turn)?[01])$/i
+handler.menu = [
+{title: "👑 ENABLE/DISABLE", description: "#enable <opcion> o #disable <opcion>", id: `enable`},
+]
+handler.type = "owners";
 handler.disabled = false;
 
 export default handler
