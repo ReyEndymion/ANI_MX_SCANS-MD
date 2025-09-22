@@ -55,7 +55,6 @@ const isLidGroup = addressingMode === 'lid'
 const participantFind = participants.find((u) => isLidGroup ? this.decodeJid(u.jid) === m.sender : this.decodeJid(u.id) === m.sender)|| {}
 const isCommunityAnnounce = groupMetadata?.isCommunityAnnounce
 const isAnnounce = groupMetadata?.announce 
-//if (isAnnounce) return 
 
 
 const userB = m.isGroup ? participantFind || {} : {}; // User Data()
@@ -64,10 +63,10 @@ const senderJid = m.isGroup ? isLidGroup ? m.sender === userB.id ? userB.jid : b
 const isRAdmin = m.isGroup ? userB?.admin === 'superadmin' || false : false
 const isAdmin = m.isGroup ? isRAdmin || userB?.admin === 'admin' || false : false // Is User Admin?
 const isBotAdmin = m.isGroup ? botGroup?.admin === 'admin' || botGroup?.admin === 'superadmin' || false : false; // Are you Admin or SuperAdmin?
-const isROwner = m.isGroup ? isLidGroup ? [ this.decodeJid(this.user.jid), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid);
+const isROwner = m.isGroup ? isLidGroup ? [ this.decodeJid(this.user.jid), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(m.sender) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid);
 const isOwner = isROwner || m.fromMe;
-const isMods = isOwner || mods.map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid);
-const isPrems = isROwner || prems.map((v) => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(senderJid);
+const isMods = isOwner || mods.map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid);
+const isPrems = isROwner || prems.map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid);
 if (senderJid === undefined) return
 try {
 // TODO: use loop to insert data instead of this
@@ -114,12 +113,21 @@ if (typeof users !== 'object')
 db.data.bot[this.user.jid].chats.groups[m.chat].users = {};
 if (users) {
 if (groupMetadata.isCommunity || groupMetadata.isCommunityAnnounce) return
-dataGroupUsers(this, db, m.chat, senderJid)
+for (let p of participants) {
+let jid = isLidGroup ? this.decodeJid(p.jid) : this.decodeJid(p.id)
+if (!jid) continue
+const user = users[jid]
+if (typeof user !== 'object') 
+db.data.bot[this.user.jid].chats.groups[m.chat].users[jid] = {}
+if (!user) dataGroupUsers(this, db, m.chat, jid) 
+else continue
+
+}
 let user = users[senderJid]
 if (typeof user !== 'object')
 db.data.bot[this.user.jid].chats.groups[m.chat].users[senderJid] = {};
 if (user) {
-
+dataGroupUsers(this, db, m.chat, senderJid)
 } else {
 db.data.bot[this.user.jid].chats.groups[m.chat].users[senderJid] = {}
 }
@@ -238,7 +246,7 @@ const textAjustedTags = await this.textTagsLidToJid(m.text, m.chat)
 for (let [name, plugin] of plugins.entries()) {
 if (!plugin) continue;
 if (plugin.disabled) continue;
-const __filename = path.join(pluginsPath, name);
+const __filename = path.join(pluginsPath, path.basename(name));
 const proper = {
 chatUpdate,
 pluginsPath,
@@ -268,7 +276,7 @@ for (let [jid] of owner.filter(
 )) {
 let data = (await this.onWhatsApp(jid))[0] || {};
 if (data.exists) {
-let resp = `*[REPORTE DE COMANDO CON FALLOS]*\n\n*PLUGIN:* ${name}\n*USUARIO:* ${senderJid}\n*COMANDO:* ${m.text}\n\n*ERROR:*\n\`\`\`${format(e)}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCIÓN, PUEDE USAR EL COMANDO #reporte*`.trim()
+let resp = `*[REPORTE DE COMANDO CON FALLOS]*\n\n*PLUGIN:* ${__filename}\n*USUARIO:* ${senderJid}\n*COMANDO:* ${m.text}\n\n*ERROR:*\n\`\`\`${format(e)}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCIÓN, PUEDE USAR EL COMANDO #reporte*`.trim()
 await this.sendWritingText(data.jid, resp, user, m )
 }
 }
@@ -348,6 +356,16 @@ let hl = _prefix;
 let animxscans = `${plugin.botAdmin || plugin.admin || plugin.group || plugin || noPrefix || hl || m.text.slice(0, 1) == hl || plugin.command}`;
 if (adminMode && !isOwner && !isROwner && m.isGroup && !isAdmin && animxscans) return;
 /***/
+if (!isPrems && plugin.limit && user.limit < plugin.limit * 1) {
+let resp = `*[! INFO!] SUS DIAMANTES SE HAN AGOTADO, PUEDE COMPRAR MÁS USANDO EL COMANDO ${usedPrefix}buy <cantidad>*`;
+await this.sendWritingText(m.chat, resp, user, m )
+continue; // Limit habis
+}
+if (plugin.level > user.level) {
+let resp = `*[❗INFO ❗] SE REQUIERE EL NIVEL ${plugin.level} PARA USAR ESTE COMANDO. TU NIVEL ES ${user.level}*`;
+this.sendWritingText(m.chat, resp, user, m )
+continue; // If the level has not been reached
+}
 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
 func.fail('owner', m, this, user);
 continue;
@@ -416,7 +434,7 @@ for (let [jid] of owner.filter(
 )) {
 let data = (await this.onWhatsApp(jid))[0] || {};
 if (data.exists) {
-let resp = `*[¡REPORTE DE COMANDO CON FALLOS!]*\n\n*PLUGIN:* ${m.plugin}\n*USUARIO:* ${senderJid}\n*COMANDO:* ${usedPrefix}${command} ${args.join( ' ')}\n\n\`\`\`${text}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCION, PUEDE USAR EL COMANDO #reporte*`.trim()
+let resp = `*[¡REPORTE DE COMANDO CON FALLOS!]*\n\n*PLUGIN:* ${__filename}\n*USUARIO:* ${senderJid}\n*COMANDO:* ${usedPrefix}${command} ${args.join( ' ')}\n\n\`\`\`${text}\`\`\`\n\n*[!] REPORTELO AL CREADOR, EL TRATARA DE DARLE SOLUCION, PUEDE USAR EL COMANDO #reporte*`.trim()
 await this.sendWritingText(data.jid, resp, user, m )
 }
 }
@@ -442,16 +460,6 @@ let resp = 'Ngecit -_-';
 } // Hehehe
 else {
 m.exp += xp;
-}
-if (!isPrems && plugin.limit && user.limit < plugin.limit * 1) {
-let resp = `*[! INFO!] SUS DIAMANTES SE HAN AGOTADO, PUEDE COMPRAR MÁS USANDO EL COMANDO ${usedPrefix}buy <cantidad>*`;
-await this.sendWritingText(m.chat, resp, user, m )
-continue; // Limit habis
-}
-if (plugin.level > user.level) {
-let resp = `*[❗INFO ❗] SE REQUIERE EL NIVEL ${plugin.level} PARA USAR ESTE COMANDO. TU NIVEL ES ${user.level}*`;
-this.sendWritingText(m.chat, resp, user, m )
-continue; // If the level has not been reached
 }
 }
 break;

@@ -2,10 +2,12 @@ let handler = async (m, {conn, db, userdb, objs, senderJid, participantFind}) =>
 const {dbGroups} = objs
 await dbGroups.read()
 let txt = ''
+let i = 0
 const groupsChats = Object.entries(dbGroups.data)
 for (let [jid, chat] of groupsChats) {
 const groupLid = chat.addressingMode === 'lid'
-txt += `\n—◉ ${chat.subject || await conn.getName(jid)}\n➤ @${jid}\n${chat?.participants.find(p => groupLid ? p.jid === conn.user.jid && p.admin === 'admin' : p.id === conn.user.jid && p.admin === 'admin') ? 'El Bot es *ADMINISTRADOR*' : 'El Bot es *PARTICIPANTE*'} ${chat.isCommunity ? 'EN COMUNIDAD' : `parte de *${chat.participants.length} PARTICIPANTES*`}\n`
+i++
+txt += `\n${i}. —◉ ${chat.subject || await conn.getName(jid)}\n➤ @${jid}\n${chat?.participants.find(p => groupLid ? p.jid === conn.user.jid && p.admin === 'admin' : p.id === conn.user.jid && p.admin === 'admin') ? 'El Bot es *ADMINISTRADOR*' : 'El Bot es *PARTICIPANTE*'} ${chat.isCommunity ? 'EN COMUNIDAD' : `parte de *${chat.participants.length} PARTICIPANTES*`}\n`
 }
 const contextInfo = {
 groupMentions: await conn.parseGroupMention(txt)

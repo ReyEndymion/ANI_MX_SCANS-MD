@@ -1,5 +1,5 @@
 export async function all(m, chatUpdate, senderJid) {
-const { proto, generateWAMessage, areJidsSameUser, decryptPollVote, } = (await import('@whiskeysockets/baileys')).default;
+const { proto, generateWAMessage, areJidsSameUser, decryptPollVote, } = (await import('@whiskeysockets/baileys'))
 const { prefix, opts, plugins } = await import('../lib/functions.js');
 if (m.isBaileys) {
 return
