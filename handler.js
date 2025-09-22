@@ -508,7 +508,6 @@ db.write()
 const settingsREAD = db.data.bot[this.user.jid].settings || {};
 if (opts['autoread']) await this.readMessages([m.key]);
 if (settingsREAD.autoread2) await this.readMessages([m.key]);
-
 data.properPrint = properPrint
 } catch (e) {
 console.error(e);
@@ -530,7 +529,6 @@ inMstore.writeToFile(storeFile)
 inMstore.writeToFile(storeFile)
 }
 } catch (error) {
-console.log ('dataHAndler: ', error)
 inMstore.writeToFile(storeFile)
 }
 }
@@ -540,7 +538,6 @@ export async function groupsUpdate(groupsUpdate, objs) {
 const {db, dbGroups} = objs
 const {syncGroupsFrom} = await import('./lib/functions.js')
 const {dataGroupsChats} = await import('./DataBaseINIFunc.js')
-//console.log('groupsUpdate: ', this.chats)
 await syncGroupsFrom(this.chats, dbGroups)
 for (const groupUpdate of await groupsUpdate) {
 const {id, subject, author} = groupUpdate;
@@ -564,7 +561,6 @@ if (typeof chat[grupo] !== 'object') chat[grupo] = {}
 let users = chat[grupo].users
 if (typeof users != 'object') db.data.bot[this.user.jid].chats.groups[grupo].users = {}
 if (users) {
-console.log('participantsUpdate: ', participants)
 for (let participant of participants) {
 if (participant.endsWith(lid)) participant = this.lidToJid(participant, id)
 if (!participant.endsWith(userID)) continue
@@ -578,7 +574,6 @@ await dataGroupUsers(this, db, grupo, participant)
 delete users[participant]
 if (!participant.endsWith(userID)) delete users[participant]
 await db.write();
-console.log(`Usuario ${participant} eliminado de la base de datos.`);
 }
 }
 } else {
@@ -655,7 +650,7 @@ return this.sendMessage(this.user.jid, { text: msg.message.conversation.trim(), 
 let q = await this.copyNForward(this.user.jid, msg).catch((e) => console.log(e, m));
 setTimeout(async () => {
 await this.sendMessage(this.user.jid, { delete: { remoteJid: this.user.jid, fromMe: true, id: q.key.id } });
-}, 24*60*1000); 
+}, 24*60*1000);
 
 } catch (e) {
 console.error(e);
@@ -664,6 +659,6 @@ console.error(e);
 let file = __filename(import.meta.url, true);
 fs.watchFile(file, async () => {
 fs.unwatchFile(file);
+if (global.reloadHandler) await global.reloadHandler(true);
 console.log(chalk.redBright(`Se actualizo "handler.js"`));
-if (global.reloadHandler) console.log(await global.reloadHandler(true));
 });
