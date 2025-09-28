@@ -1,5 +1,5 @@
-export async function all(m, chatUpdate, senderJid) {
-const { proto, generateWAMessage, areJidsSameUser, decryptPollVote, } = (await import('@whiskeysockets/baileys'))
+export async function all(m, {chatUpdate, senderJid}) {
+const { proto, generateWAMessage, areJidsSameUser, decryptPollVote, } = (await import('@whiskeysockets/baileys'));
 const { prefix, opts, plugins } = await import('../lib/functions.js');
 if (m.isBaileys) {
 return
@@ -82,7 +82,7 @@ messages.key.participant = messages.participant = m.sender
 }
 const msg = {
 ...chatUpdate,
-messages: [proto.WebMessageInfo.fromObject(messages)].map((v) => (v.conn = this, v)),
+messages: [proto.WebMessageInfo.fromObject(messages)],
 type: 'append',
 }
 this.ev.emit('messages.upsert', msg)
