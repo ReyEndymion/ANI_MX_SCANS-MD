@@ -209,6 +209,7 @@ sock.ws.close()
 }
 
 
+const oldChats = (Object.assign(conn.chats, inMstore.chats));
 const pluginFolder = dirname(path.join(raizPath, './plugins/index'));
 let handler = await import('./handler.js');
 global.reloadHandler = async function(restatConn) {
@@ -219,17 +220,12 @@ if (Object.keys(Handler || {}).length) handler = Handler;
 console.error(e);
 }
 if (restatConn) {
-const oldChats = (inMstore.chats || conn.chats);
-conn.ws.close();
 conn.ev.removeAllListeners();
+conn.ws.close();
 try {
 conn = makeWASocket(connectionOptions, Object.assign(options, {chats: oldChats }));
 isInit = true;
 } catch { 
-onBot(folderPath).catch(console.error)
-}
-}
-
 if (!isInit) {
 conn.ev.off('messages.upsert', conn.handler);
 conn.ev.off('group-participants.update', conn.participantsUpdate);
@@ -240,6 +236,10 @@ conn.ev.off('connection.update', conn.connectionUpdate);
 conn.ev.off('creds.update', conn.credsUpdate);
 
 }
+onBot(folderPath).catch(console.error)
+}
+}
+
 const pluginsPath = pluginFolder.replace('/index', '')
 let func = {}
 try {const {call} = await import('./plugins/_anticall.js') 
