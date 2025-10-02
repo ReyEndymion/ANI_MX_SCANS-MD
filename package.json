@@ -21,7 +21,7 @@
 "eslintfix": "eslint --fix .",
 "prune": "npm prune"
 },
-"homepage": "https://www.facebook.com/ANIMxSCANS",
+"homepage": "https://www.facebook.com/ANIMXSCANS",
 "author": {
 "name": "Rey Endymion",
 "git": "https://github.com/ReyEndymion",
@@ -40,7 +40,7 @@
 "@adiwajshing/keyed-db": "^0.2.4",
 "@sasmeee/igdl": "npm:@sasmeee/igdl",
 "@vitalets/google-translate-api": "^9.2.1",
-"@whiskeysockets/baileys": "github:WhiskeySockets/Baileys#add-lid-to-message-key",
+"@whiskeysockets/baileys": "^7.0.0-rc.3",
 "acrcloud": "^1.4.0",
 "aptoide-scraper": "^1.0.1",
 "awesome-phonenumber": "^2.68.0",
@@ -57,6 +57,7 @@
 "fb-downloader-scrapper": "^1.0.1",
 "file-type": "^21.0.0",
 "filesize": "github:avoidwork/filesize.js",
+"file_size_url": "^1.0.6",
 "fluent-ffmpeg": "^2.1.3",
 "formdata-node": "^4.3.2",
 "google-it": "^1.6.4",

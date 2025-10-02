@@ -130,7 +130,7 @@ const { Boom } = await import('@hapi/boom');
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
-conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
+conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 return global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.preconditionRequired){
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
@@ -146,7 +146,7 @@ return global.reloadHandler(true).catch(console.error)// process.send('reset');
 conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
 stopConn(conn)
 } else if (reason === DisconnectReason.loggedOut) {
-conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${global.authFolder} y escanea nuevamente.`);
+conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 cleanupOnConnectionError(folderPath, botDirRespald)
 } else if (reason === DisconnectReason.restartRequired) {
 conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
@@ -168,7 +168,7 @@ global.reloadHandler(true).catch(console.error)
 } else {
 conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
 consecutiveCloseCount++;
-console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${global.authFolder} y reescanee el codigo QR`));
+console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${folderPath} y reescanee el codigo QR`));
 }
 if (consecutiveCloseCount >= MAX_CLOSE_COUNT) {
 console.log(chalk.red(`La conexión cerrada ocurrió ${consecutiveCloseCount} veces. Reiniciando el servidor...`));
@@ -268,7 +268,7 @@ groupMetadata: conn.groupMetadata
 })
 
 isInit = false;
-return true;
+return conn;
 };
 let readJadibtsSession = []
 if (fs.existsSync(jadibts)) {

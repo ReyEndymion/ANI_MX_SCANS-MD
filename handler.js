@@ -52,7 +52,7 @@ const groupMetadata = (m.isGroup ? (inMstore.chats[m.chat] || this.chats[m.chat]
 const participants = (m.isGroup ? groupMetadata.participants : []) || [];
 const addressingMode = groupMetadata?.addressingMode 
 const isLidGroup = addressingMode === 'lid'
-const participantFind = participants.find((u) => isLidGroup ? this.decodeJid(u.jid) === m.sender : this.decodeJid(u.id) === m.sender)|| {}
+const participantFind = participants.find((u) => isLidGroup ? (this.decodeJid(u.jid) === m.sender || this.decodeJid(u.phoneNumber) === m.sender) : this.decodeJid(u.id) === m.sender)|| {}
 const isCommunityAnnounce = groupMetadata?.isCommunityAnnounce
 const isAnnounce = groupMetadata?.announce 
 
@@ -114,7 +114,7 @@ db.data.bot[this.user.jid].chats.groups[m.chat].users = {};
 if (users) {
 if (groupMetadata.isCommunity || groupMetadata.isCommunityAnnounce) return
 for (let p of participants) {
-let jid = isLidGroup ? this.decodeJid(p.jid) : this.decodeJid(p.id)
+let jid = isLidGroup ? this.decodeJid(p.phoneNumber) : this.decodeJid(p.id)
 if (!jid) continue
 const user = users[jid]
 if (typeof user !== 'object') 
@@ -608,6 +608,10 @@ let resp = `
 *—◉ #enable delete*
 ━━━━⬣*ANTI DELETE*⬣━━━━
 `.trim();
+let isMedia = /imageMessage|videoMessage|stickerMessage|audioMessage|document(WithCaption)?Message/.test(msg.mtype)
+if (isMedia) {
+
+
 await this.writing(this.user.jid, resp)
 await this.sendMessage(this.user.jid, { text: resp.trim(), mentions: this.parseMention(resp) }, {quoted: msg, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} )
 let url
@@ -640,11 +644,14 @@ if (msg.mtype === 'documentWithCaptionMessage') {
 var mediax = await quoted.download?.()
 return this.sendMessage(this.user.jid, {document: mediax, caption: msg.message.documentWithCaptionMessage.message.documentMessage.caption, mimetype: msg.message.documentWithCaptionMessage.message.documentMessage.mimetype, fileName: msg.message.documentWithCaptionMessage.message.documentMessage.filename, fileLength:msg.message.documentWithCaptionMessage.message.documentMessage.fileLength}, { quoted: msg, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100});
 }
+} else {
 if (msg.mtype === 'extendedTextMessage') {
 return this.sendMessage(this.user.jid, { text: msg.message.extendedTextMessage.text.trim(), mentions: this.parseMention(msg.message.extendedTextMessage.text) }, {quoted: msg, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
 }
 if (msg.mtype === 'conversation') {
 return this.sendMessage(this.user.jid, { text: msg.message.conversation.trim(), mentions: this.parseMention( msg.message.conversation) }, {quoted: msg, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
+}
+await this.sendWritingTest(this.user.jid, resp, msg);
 }
 
 let q = await this.copyNForward(this.user.jid, msg).catch((e) => console.log(e, m));

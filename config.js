@@ -7,7 +7,7 @@ import moment from 'moment-timezone'
 import { platform } from 'process'
 import { createRequire } from "module";
 import lodash from 'lodash';
-import { dirname } from './lib/functions.js'
+import { dirname, __filename } from './lib/functions.js'
 const raizPath = dirname(import.meta.url)
 const require = createRequire(raizPath)
 export const { name, nameProyect, author, description, repository } = require(path.join(raizPath, './package.json'))
@@ -25,10 +25,12 @@ export const owner = [
 /**********GLOBAL INFO*****************/
 export const info = {
 packname: '(☞ﾟ∀ﾟ)☞',
-gt: '(☞ﾟ∀ﾟ)☞',
-nani: '🌎ANI MX SCANS🌏',
-nanie: '★🌎ANI MX SCANS🌏★',
-amsicon: `🌎`,
+descr: description,
+kom: '(☞ﾟ∀ﾟ)☞',
+amsicon: ['🌎', '🌍', '🌏'],
+nani: 'ANI MX SCANS',
+nanip: '🌎ANI MX SCANS🌏',
+nanipe: '★🌎ANI MX SCANS🌏★',
 np: nameProyect,
 npe: `★${nameProyect}★`,
 paypal: author.donate,
@@ -39,7 +41,7 @@ author: author.name,
 repoProyect: repository.link,
 md: repository.url,
 urlgofc: 'https://www.facebook.com/groups/otakustogether',
-hp_animxscans: 'https://www.facebook.com/ANIMxSCANS' ,
+hp_animxscans: 'https://www.facebook.com/animxscans' ,
 hp_otkstogthr: 'https://www.facebook.com/OtakusTogether' ,
 }
 /************ Config Terminal **************/
@@ -70,9 +72,6 @@ img13: 'https://i.imgur.com/pCfFOgw.jpeg',
 img14: 'https://i.imgur.com/knBDWRA.jpeg',
 img15: 'https://i.imgur.com/QrkkKx7.jpeg',
 }
-export const stickerAMX = fs.readFileSync(path.join(media,`stickers/ANIMXSCANS.webp`))
-export const mods = [] 
-
 
 /***Configuración de logotipos******* */	
 export const botdate = `⫹⫺ Date :${moment.tz('America/Los_Angeles').format('DD/MM/YY')}` //Asia/Jakarta
@@ -87,6 +86,7 @@ export const newsletterID = `@newsletter`
 export const lid = '@lid'
 export const espadmins = []
 export const prems = [] 
+export const mods = []
 /********QUOTEDS*************** */
 export const fgif = {key: { participant : '0@s.whatsapp.net'}, message: { "videoMessage": { "title": info.wm, "h": `Hmm`, 'seconds': '999999999','gifPlayback': 'true','caption': bottime, 'jpegThumbnail': imagen4}}}
 export const estado = {key: {participant: '0@s.whatsapp.net', remoteJid: '0@s.whatsapp.net'}, message: {groupInviteMessage: {groupJid: "1234567890-9876543210@g.us", inviteCode: `\n`, groupName: groupID, caption: `${userID}\n${info.igfg}`, jpegThumbnail: imagen2}}}
@@ -96,7 +96,7 @@ export const q = { key: { fromMe: false, participant: userID, ...(false ? { remo
 let file = fileURLToPath(import.meta.url)
 watchFile(file, () => {
 unwatchFile(file)
-import(`${file}?update=${Date.now()}`)
+import(`${__filename(file)}?update=${Date.now()}`)
 console.log(chalk.redBright(`"Actualizado ${file.replace(raizPath, '').replace (/[\/\\]/g, '')}"\nUpdate ${new Date(Date.now()).toString()}`))
 })
 //

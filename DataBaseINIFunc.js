@@ -27,13 +27,14 @@ if (!('isBanned' in chat)) chat.isBanned = false;
 if (!('muteconsole' in chat)) chat.muteconsole = false;
 if (!('delete' in chat)) chat.delete = true;
 if (!('autosticker' in chat)) chat.autosticker = false;
+if (!('autoreac' in chat)) chat.autoreac = false;
 if (!('audios' in chat)) chat.audios = false;
 if (!('antiviewonce' in chat)) chat.antiviewonce = false;
 if (!('antiToxic' in chat)) chat.antiToxic = false;
 if (!('simi' in chat)) chat.simi = false;
 if (!('stickers' in chat)) chat.stickers = false;
 if (!('asistente' in chat)) chat.asistente = false;
-if (!('gruposRol' in chat)) chat.gruposRol = false;
+if (!('ia' in chat)) chat.ia = false;
 if (!isNumber(chat.expired)) chat.expired = 1;
 if (!('lang' in chat)) chat.lang = 'es';
 } else {
@@ -44,12 +45,13 @@ muteconsole: false,
 delete: true,
 modohorny: true,
 autosticker: false,
+autoreac: false,
 audios: true,
 antiviewonce: false,
 simi: false,
 stickers: true,
 asistente: false,
-gruposRol: false,
+ia: false,
 expired: 0,
 lang: 'es'
 }
@@ -66,6 +68,8 @@ if (!('nameChat' in chat)) chat.nameChat = nameChat;
 if (!('isBanned' in chat)) chat.isBanned = false;
 if (!('muteconsole' in chat)) chat.muteconsole = false;
 if (!('welcome' in chat)) chat.welcome = true;
+if (!('bye' in chat)) chat.bye = true;
+if (!('isCountMsgs' in chat)) chat.isCountMsgs = false;
 if (!('detect' in chat)) chat.detect = true;
 if (!('sWelcome' in chat)) chat.sWelcome = '';
 if (!('sBye' in chat)) chat.sBye = '';
@@ -74,9 +78,11 @@ if (!('sDemote' in chat)) chat.sDemote = '';
 if (!('delete' in chat)) chat.delete = false;
 if (!('modohorny' in chat)) chat.modohorny = false;
 if (!('autosticker' in chat)) chat.autosticker = false;
+if (!('autoreac' in chat)) chat.autoreac = true;
 if (!('audios' in chat)) chat.audios = false;
 if (!('antiLink' in chat)) chat.antiLink = false;
 if (!('antiLink2' in chat)) chat.antiLink2 = false;
+if (!('antispam' in chat)) chat.antispam = false;
 if (!('antiviewonce' in chat)) chat.antiviewonce = false;
 if (!('antiToxic' in chat)) chat.antiToxic = false;
 if (!('antiTraba' in chat)) chat.antiTraba = false;
@@ -86,6 +92,7 @@ if (!('modoadmin' in chat)) chat.modoadmin = false;
 if (!('simi' in chat)) chat.simi = false;
 if (!('stickers' in chat)) chat.stickers = false;
 if (!('asistente' in chat)) chat.asistente = false;
+if (!('ia' in chat)) chat.ia = false;
 if (!('users' in chat)) chat.users = {};
 if (!('gRol' in chat)) chat.gruposRol = false;
 if (!isNumber(chat.expired)) chat.expired = 0;
@@ -95,6 +102,8 @@ nameChat: nameChat,
 muteconsole: false,
 isBanned: false,
 welcome: true,
+bye: true,
+isCountMsgs: false,
 detect: true,
 sWelcome: '',
 sBye: '',
@@ -103,9 +112,11 @@ sDemote: '',
 delete: true,
 modohorny: true,
 autosticker: false,
+autoreac: true,
 audios: true,
 antiLink: false,
 antiLink2: false,
+antispam: false,
 antiviewonce: false,
 antiToxic: false,
 antiTraba: false,
@@ -116,6 +127,7 @@ modoadmin: false,
 simi: false,
 stickers: true,
 asistente: false,
+ia: false,
 users: {},
 gruposRol: false,
 expired: 0,
@@ -137,27 +149,19 @@ if (!('registered' in user)) user.registered = false;
 if (!user.registered) {
 if (!('name' in user)) user.name = nameW;
 if (!isNumber(user.age)) user.age = -1;
-if (!isNumber(user.anggur)) user.anggur = 0;
-if (!isNumber(user.apel)) user.apel = 0;
-if (!isNumber(user.bibitanggur)) user.bibitanggur = 0;
-if (!isNumber(user.bibitapel)) user.bibitapel = 0;
-if (!isNumber(user.bibitjeruk)) user.bibitjeruk = 0;
-if (!isNumber(user.bibitmangga)) user.bibitmangga = 0;
-if (!isNumber(user.bibitpisang)) user.bibitpisang = 0;
-if (!isNumber(user.emas)) user.emas = 0;
-if (!isNumber(user.jeruk)) user.jeruk = 0;
-if (!isNumber(user.kayu)) user.kayu = 0;
-if (!isNumber(user.makanan)) user.makanan = 0;
-if (!isNumber(user.mangga)) user.mangga = 0;
-if (!isNumber(user.pisang)) user.pisang = 0;
-if (!isNumber(user.premiumDate)) user.premiumDate = -1;
 if (!isNumber(user.regTime)) user.regTime = -1;
-if (!isNumber(user.semangka)) user.semangka = 0;
-if (!isNumber(user.stroberi)) user.stroberi = 0;
+if (!isNumber(user.premiumDate)) user.premiumDate = -1;
 }
 //control usuario
 if (!isNumber(user.afk)) user.afk = -1;
 if (!('premium' in user)) user.premium = false;
+if (!('banned' in user)) user.banned = false;
+if (!('lastCommandTime' in user)) user.lastCommandTime = 0;
+if (!('lastCommandUsed' in user)) user.lastCommandUsed = '';
+if (!('commandCount' in user)) user.commandCount = 0;
+if (!('bannedMessageCount' in user)) user.bannedMessageCount = 0;
+if (!('BannedReason' in user)) user.BannedReason = 'SPAM';
+if (!('afkReason' in user)) user.afkReason = '';
 if (!isNumber(user.antispam)) user.antispam = 0;
 if (!isNumber(user.antispamlastclaim)) user.antispamlastclaim = 0;
 if (!user.premium) user.premium = false;
@@ -174,6 +178,21 @@ if (!('autolevelup' in user)) user.autolevelup = true;
 if (!('role' in user)) user.role = 'Novato';
 if (!isNumber(user.agility)) user.agility = 0;
 if (!isNumber(user.anakanjing)) user.anakanjing = 0;
+if (!isNumber(user.anggur)) user.anggur = 0;
+if (!isNumber(user.apel)) user.apel = 0;
+if (!isNumber(user.bibitanggur)) user.bibitanggur = 0;
+if (!isNumber(user.bibitapel)) user.bibitapel = 0;
+if (!isNumber(user.bibitjeruk)) user.bibitjeruk = 0;
+if (!isNumber(user.bibitmangga)) user.bibitmangga = 0;
+if (!isNumber(user.bibitpisang)) user.bibitpisang = 0;
+if (!isNumber(user.emas)) user.emas = 0;
+if (!isNumber(user.jeruk)) user.jeruk = 0;
+if (!isNumber(user.kayu)) user.kayu = 0;
+if (!isNumber(user.makanan)) user.makanan = 0;
+if (!isNumber(user.mangga)) user.mangga = 0;
+if (!isNumber(user.pisang)) user.pisang = 0;
+if (!isNumber(user.semangka)) user.semangka = 0;
+if (!isNumber(user.stroberi)) user.stroberi = 0;
 if (!isNumber(user.anakcentaur)) user.anakcentaur = 0;
 if (!isNumber(user.anakgriffin)) user.anakgriffin = 0;
 if (!isNumber(user.anakkucing)) user.anakkucing = 0;
@@ -624,6 +643,7 @@ bank: 0,
 banned: false,
 BannedReason: '',
 Banneduser: false,
+lastCommandUsed: '',
 banteng: 0,
 batu: 0,
 bawal: 0,
