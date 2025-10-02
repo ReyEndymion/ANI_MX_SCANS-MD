@@ -15,25 +15,14 @@ try {
 
 let video 
 if (args.join(' ')) {
-//video = (await youtubeSearch(args.join(' ')))//.catch(
 } else {
 video = [await yts.search({text, hl: 'es', gl: 'ES', ...options})];
-console.log('playlist: ', video)
 }
-/**
-if (video && video.video && video.video.length > 0) {
-// Procede con el código para manejar los resultados
-const video = video.video;
-console.log(video);
-} else {
-// Muestra un mensaje si no se encontraron resultados
-console.log('No se encontraron videos para la búsqueda:', args.join(' '));
-} */
 
-const listSections = [];
+const sections = [];
 
 let resp = [...video].map((v, i) => {
-listSections.push(`
+sections.push(`
 ========================
 [${i + 1}]
 ❏ 📌 *Titulo:* ${v.title}
@@ -43,8 +32,7 @@ listSections.push(`
 ❏ 🔗 *Link:* ${v.url}
 `);
 }).filter((v) => v);
-//\n\nCopia y usa el comando\n\n'Video 🎥' => ${usedPrefix}ytmp4 ${v.url}\n\n'Videodoc 🎥' => ${usedPrefix}ytmp4doc ${v.url}\n\n'Audio 🎧', => ${usedPrefix}ytmp3 ${v.url}\n\n'Audiodoc 🎧', => ${usedPrefix}ytmp3doc ${v.url}
-resp += `『*MUSICA RELACIONADA* 』\n\nMusica relacionada con: ${args.join(' ')}\n${listSections}\n`
+resp += `『*MUSICA RELACIONADA* 』\n\nMusica relacionada con: ${args.join(' ')}\n${sections}\n`
 await conn.writing(m.chat, resp)
 let contextInfo = {
 mentionedJid: conn.parseMention(txt),
@@ -52,7 +40,7 @@ mentionedJid: conn.parseMention(txt),
 "showAdAttribution": true,
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
-"title": info.nanie, 
+"title": info.nanipe, 
 "containsAutoReply": true,
 "mediaType": 1, 
 "thumbnail": fs.readFileSync(join(media, `pictures/youtube.jpg`)),
@@ -71,7 +59,7 @@ return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 };
 
-handler.command = /^playlist|playlist2$/i;
+handler.command = /^(playlist(2)?)$/i;
 handler.help = [];
 handler.tags = [];
 handler.menu = [];

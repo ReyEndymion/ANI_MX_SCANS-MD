@@ -1,11 +1,10 @@
 let stopCount = false
-async function handler(m, { conn, args, participants, command, isAdmin, db, usersdb, userdb, senderJid }) {
+async function handler(m, { conn, args, participants, command, isAdmin, db, usersdb, userdb, senderJid, isLidGroup }) {
 const {isNumber} = await import('../lib/functions.js')
 await db.read();
 
 const {lid, userID} = await import('../config.js')
-const groupLid = participants.some((u) => u.id.endsWith(lid))
-let participantsJIDs = new Set(groupLid ? participants.map(u => u.jid) : participants.map(u => u.id));
+let participantsJIDs = new Set(isLidGroup ? participants.map(u => u.phoneNumber) : participants.map(u => u.id));
 for (const jid of Object.keys(usersdb)) {
 if (!participantsJIDs.has(jid)) {
 delete usersdb[jid];

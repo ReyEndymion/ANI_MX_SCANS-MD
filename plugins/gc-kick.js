@@ -1,6 +1,6 @@
 /**comando kick desarrollado por ReyEndymion */
 import { areJidsSameUser } from '@whiskeysockets/baileys'
-let handler = async (m, {text, args, conn, participants, command, usedPrefix, isAdmin, groupMetadata, isBotAdmin, botdb, chatdb, userdb, senderJid}) => {
+let handler = async (m, {text, args, conn, participants, command, usedPrefix, isAdmin, groupMetadata, isBotAdmin, botdb, chatdb, userdb, senderJid, isLidGroup}) => {
 const {formatNumberWA, delay} = await import('../lib/functions.js');
 const {userID, lid, owner} = await import('../config.js');
 let resp, res, consola
@@ -8,7 +8,6 @@ let messageToSend = '';
 if (!botdb.settings.restrict) {
 resp = '*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'
 }
-const groupLid = groupMetadata.addressingMode === 'lid'
 const creator = conn.lidToJid(groupMetadata.owner, m.chat) || '';
 const owners = owner.map(([number]) => (formatNumberWA(number) + userID))
 let usuariosNoRegistrados = [];
@@ -36,7 +35,7 @@ usuariosNoRegistrados.push(numero);
 delete numeros[numero]
 continue;
 }
-let mentionedIsAdmin = participants.find(u => groupLid ? u.jid === (kickUser || m.quoted?.sender) : u.id === (kickUser || m.quoted?.sender)).admin
+let mentionedIsAdmin = participants.find(u => isLidGroup ? u.phoneNumber === (kickUser || m.quoted?.sender) : u.id === (kickUser || m.quoted?.sender)).admin
 if (mentionedIsAdmin === 'admin') {
 usuariosAdmin.push(`@${numero}`)
 if (kickUser.includes(conn.user.jid)) {
@@ -93,7 +92,7 @@ usuariosNoRegistrados.push(numero);
 delete mentioned[kickUser]
 continue;
 }
-let mentionedIsAdmin = participants.find(u => groupLid ? u.jid === (kickUser || m.quoted?.sender) : u.id === (kickUser || m.quoted?.sender)).admin
+let mentionedIsAdmin = participants.find(u => isLidGroup ? u.phoneNumber === (kickUser || m.quoted?.sender) : u.id === (kickUser || m.quoted?.sender)).admin
 if (mentionedIsAdmin === 'superadmin' && creator.includes(kickUser)) {
 if (kickUser.includes(conn.user.jid)) {
 q = await conn.sendEditWritingText(m.chat, "*[❗] NO PUEDO ELIMINARME A MI MISMO, POR FAVOR SACAME MANUALMENTE SI ASI LO DESEAS*", q.key, userdb, m)
@@ -140,7 +139,7 @@ if (/^(kicknum)$/.test(command)) {
 if (!args[0]) return conn.sendWritingText(m.chat, `*[❗] INGRESA EL PREFIJO DE ALGUN PAIS PARA BUSCAR NUMEROS EN ESTE GRUPO DE ESE PAIS, EJEMPLO: ${usedPrefix + command} 52*`, userdb, m) 
 if (isNaN(args[0])) return conn.sendWritingText(m.chat, `*[❗] INGRESA EL PREFIJO DE ALGUN PAIS PARA BUSCAR NUMEROS EN ESTE GRUPO DE ESE PAIS, EJEMPLO: ${usedPrefix + command} 52*`, userdb, m) 
 let lol = args[0].replace(/[+]/g, '')
-let ps = participants.map(u => groupLid ? u.jid : u.id).filter(v => v !== conn.user.jid && v.startsWith(lol)) 
+let ps = participants.map(u => isLidGroup ? u.phoneNumber : u.id).filter(v => v !== conn.user.jid && v.startsWith(lol)) 
 if (ps == '') return conn.sendWritingText(m.chat, `*[❗] EN ESTE GRUPO NO HAY NINGUN NUMERO CON EL PREFIJO +${lol}*`, userdb, m)
 let numeros = ps.map(v=> '⭔ @' + v.replace(/@.+/, ''))
 q = await conn.sendWritingText(m.chat, `*[❗] INICIANDO LA ELIMINACION DE NUMEROS CON EL PREFIJO +${lol}, CADA 20 SEGUNDOS SE ELIMINARA A UN USUARIO*`, userdb, m)            
@@ -160,8 +159,8 @@ q = await conn.sendEditWritingText(m.chat, `Se ha Eliminado del grupo a los sigu
 }
 if (/^kickallusers$/i.test(command)) {
 const groupNoAdmins = participants.filter(p => !p.admin)
-const listUsers = groupNoAdmins.map((v) => groupLid ? `@${v.jid.split('@')[0]}` : `@${v.id.split('@')[0]}`).join(' ')
-const listUsersMaps = groupNoAdmins.map((v) => groupLid ? v.jid : v.id)
+const listUsers = groupNoAdmins.map((v) => isLidGroup ? `@${v.phoneNumber.split('@')[0]}` : `@${v.id.split('@')[0]}`).join(' ')
+const listUsersMaps = groupNoAdmins.map((v) => isLidGroup ? v.phoneNumber : v.id)
 q = await conn.sendWritingText(m.chat, `*[❗] INICIANDO LA ELIMINACION DE TODOS LOS USUAROS NO ADMINS, CADA 20 SEGUNDOS SE ELIMINARA A UN USUARIO*\n\n${listUsers}`, userdb, m)            
 for (let user of listUsersMaps) {
 console.info('kick2: ', groupNoAdmins, listUsers, user)

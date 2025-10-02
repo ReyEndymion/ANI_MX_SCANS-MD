@@ -15,7 +15,7 @@ return await conn.sendWritingText(m.chat, resp, userdb, m);
 }
 let texto = `*[❗] @${senderJid.split`@`[0]} AGUARDE UN MOMENTO EN LO QUE ENVIO SU VIDEO DE TIKTOK*`
 try {
-let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: texto, contextInfo: { externalAdReply: { title: `${info.nanie}`, body: null, thumbnail: fs.readFileSync(imagen1), sourceUrl: `${animxscansmd}` }, mentionedJid: [senderJid]}}}, { quoted: m, userJid: conn.user.jid })
+let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: texto, contextInfo: { externalAdReply: { title: `${info.nanipe}`, body: null, thumbnail: fs.readFileSync(imagen1), sourceUrl: `${animxscansmd}` }, mentionedJid: [senderJid]}}}, { quoted: m, userJid: conn.user.jid })
 const { author: { nickname }, video, description } = await tiktokdl(args[0])//.catch(async _ => await tiktokdlv2(args[0]))
 const url = video.no_watermark_raw || video.no_watermark || video.no_watermark_hd || video.with_watermark
 await conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id, mentions: [senderJid] })

@@ -45,7 +45,7 @@ let info1 = 'hola'
 const resp = `
 hola @${senderJid.split`@`[0]}
 ╠═〘 INFO DEL BOT 〙 ═
-╠${info.nanie} by ${info.author}
+╠${info.nanipe} by ${info.author}
 ╠➥ [🤴🏻] CREADOR: ${ow}
 ╠➥ [🎳] PREFIJO: *${usedPrefix}*
 ╠➥ [🎩] USUARIOS EN CHAT: *${usersInChat} NUMEROS*
@@ -68,7 +68,7 @@ hola @${senderJid.split`@`[0]}
 ╠➥ [🌎] MODO: ${self ? '*privado*' : '*público*'}
 ╠➥ [👨‍🦯] VELOCIDAD: *${speed} MILISEGUNDOS*
 ╠°°° El grupo oficial es:\n${info.urlgofc}
-╠═〘 *${info.nanie}* 〙 ═
+╠═〘 *${info.nanipe}* 〙 ═
 `.trim() 
 await conn.writing(m.chat, resp)
 let res = generateWAMessageFromContent(m.chat, {liveLocationMessage: {degreesLatitude: 19.663571, degreesLongitude: -99.068531, caption: resp, sequenceNumber: "0", contextInfo: {mentionedJid: conn.parseMention(resp)}}}, {userJid: conn.user.jid})

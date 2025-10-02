@@ -44,7 +44,7 @@ return conn.sendWritingText(m.chat, resp, userdb, m)
 let resp = `*[❗INFO❗] EL BOT NO ES ADMINISTRADOR DEL GRUPO, NO PUEDE REALIZAR ESTA ACCIÓN HASTA QUE LOD HAGAS ADMIN*`;
 return conn.sendWritingText(m.chat, resp, userdb, m);
 } else {
-let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCI�N*`;
+let resp = `*[❗INFO❗] SOLO UN ADMINISTRADOR DEL GRUPO PUEDE REALIZAR ESTA ACCIÓN*`;
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 }

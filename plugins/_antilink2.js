@@ -1,8 +1,8 @@
-export async function before(m, {conn, isAdmin, isBotAdmin, text, botdb, chatdb, userdb, db, senderJid}) {
+export async function before(m, {conn, start, info, isAdmin, isBotAdmin, text, botdb, chatdb, userdb, db, senderJid}) {
+const { default: path } = await import('path');
+const { default: fs } = await import('fs')
 let linkRegex = /https:/i
-let { owner, info, temp, newsletterID, sBroadCastID, groupID, media} = await import('../config.js')
-let { configDinamics } = await import('../lib/database.js')
-const start = (await configDinamics()).start
+let { owner, temp, newsletterID, sBroadCastID, groupID, media} = await import('../config.js')
 if (m.isBaileys && m.fromMe)
 return !0
 if (!m.isGroup) return !1
@@ -26,7 +26,7 @@ if (isAdmin) return conn.sendWritingText(m.chat, `*😎 Salvado, usted @${sender
 
 await conn.deleteMessage(m.chat, { remoteJid: m.chat, fromMe: false, id: bang, participant: delet })
 const resp = `*「 ANTI LINKS GENERAL 」*\n*HASTA LA VISTA BABY 👋, ${await this.getName(senderJid)} ROMPISTES LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*${isBotAdmin ? '' : '\n\n'}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [['DESACTIVAR ANTILINKS', `/disable antilink2`]]
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 
@@ -46,5 +46,14 @@ return conn.groupParticipantsUpdate(m.chat, [senderJid], 'remove')
 if (isBotAdmin && settings.restrict) {
 }
 }
-return !0
+}
+export const menuInfo = {
+help: `Elimina numeros que realizan spam de enlaces de otros grupos o que simplemente no se permiten en el grupo\nUsar asi para habilitar: *usedPrefixenable antilink*\nUsar asi para deshabilitar: *usedPrefixdisable antilink*`,
+info: `━━━━━━━━━━━━━━━━━━━━
+┣ *👑 ENABLE aNTILINK2*: usedPrefixenable antilink2
+━━━━━━━━━━━━━━━━━━━━
+┣ *👑 DISABLE aNTILINK2*: usedPrefixdisable antilink2
+`,
+type: 'enable',
+chat: `grupos`
 }

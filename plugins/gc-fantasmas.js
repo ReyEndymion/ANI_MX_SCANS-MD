@@ -1,17 +1,16 @@
 import { plugins, getCommandVariants, wrapText, delay } from '../lib/functions.js'
 let usersToGhost = [];
 let tags = '', isWelcome = false
-let handler = async (m, {conn, db, text, usedPrefix, command, groupMetadata, participants, chatdb, usersdb, userdb, senderJid}) => {
+let handler = async (m, {conn, db, text, usedPrefix, command, groupMetadata, participants, chatdb, usersdb, userdb, senderJid, isLidGroup}) => {
 if (!chatdb.isCountMsgs) return conn.sendWritingText(m.chat, `El contador en este chat está desactivado Es posible Que no existan datos Para los usuarios así que actívelo usando ${usedPrefix}enable countmsg Y Espere a que los usuarios Hagan mensajes`, userdb, m)
 const {lid, userID} = await import('../config.js')
 let resp = ''
-const groupLid = participants.some((u) => u.id.endsWith(lid))
-let participantIds = new Set(groupLid ? participants.map(u => u.jid) : participants.map(u => u.id));
+let participantIds = new Set(groupLid ? participants.map(u => u.phoneNumber) : participants.map(u => u.id));
 var sum = participants.length
 
 for (let participant of participants) {
 if (!participant.id.endsWith(userID)) delete usersdb[participant.id]
-let userId = groupLid ? participant.jid : participant.id;
+let userId = groupLid ? participant.phoneNumber : participant.id;
 if (!(userId in usersdb)) {
 usersdb[userId] = {
 msgcount: {
@@ -77,7 +76,7 @@ try {
 const emottime = ['🕛','🕧','🕐','🕜','🕑','🕝','🕒','🕞','🕓','🕟','🕔','🕠','🕕','🕡','🕖','🕢','🕗','🕣','🕘','🕤','🕙','🕥','🕚','🕦']
 let userCount = 1
 for (let user of usersToGhost) {
-let isAdmin = participants.some(v => (groupLid ? v.jid === user : v.id === user) && v.admin);
+let isAdmin = participants.some(v => (isLidGroup ? v.phoneNumber === user : v.id === user) && v.admin);
 if (isAdmin) {
 await conn.sendEditWritingText(m.chat, `⚠️ El admin @${user.split('@')[0]} no lo puedo eliminar, sacalo por tu cuenta.`, key, userdb, m)
 await delay(1 * 10000)
@@ -90,7 +89,6 @@ await conn.sendReact(m.chat, `⚰️`, key)
 await conn.sendReact(m.chat, `🪦`, key)
 
 let res = await conn.groupParticipantsUpdate(m.chat, [user], 'remove')
-console.log('fantasmas: ', res[0].status)
 await delay(1 * 10000)
 if (res[0].status === "200") {
 await conn.sendReact(m.chat, `✅`, m.key)
@@ -99,7 +97,7 @@ await conn.sendReact(m.chat, `✅`, key)
 } else if (res[0].status === "406") {
 await conn.sendEditWritingText(m.chat, `El creador es inmutable, no se puede eliminar`, key, userdb, m) 
 } else if (res[0].status === "404") {
-await conn.sendEditWritingText(m.chat, `A que puto, se salio antes 👺👎`, key, userdb, null)
+await conn.sendEditWritingText(m.chat, `El usuario ya ha salido del grupo`, key, userdb, null)
 }
 }
 } finally {

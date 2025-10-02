@@ -1,6 +1,6 @@
 let anonymous = {}
 async function handler(m, {conn, start, info, usedPrefix, command, db, userdb, senderJid }) {
-const footerText = info.nanie
+const footer = info.nanipe
 command = command.toLowerCase()
 anonymous = anonymous ? anonymous : {}
 let room = Object.values(anonymous).find(room => room.check(senderJid))
@@ -15,13 +15,13 @@ if (start.buttons) {
 resp += '\n_DA CLICK EN EL SIGUIENTE BOTON_'
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 await conn.sendButton(m.chat, messageContent, null, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 resp += `\nUSA PARA ${cmds}`
-resp += `\n\n${footerText}`
+resp += `\n\n${footer}`
 return this.sendWritingText(m.chat, resp, userdb, m)
 }
 }
@@ -34,13 +34,13 @@ if (start.buttons) {
 resp += `\n_DA CLICK EN EL SIGUIENTE BOTON_`
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 await this.sendButton(room.a, messageContent, null, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 resp += `\nUSA PARA ${cmds}`
-resp += `\n\n${footerText}`
+resp += `\n\n${footer}`
 return this.sendWritingText(m.chat, resp, userdb, m)
 
 }
@@ -59,7 +59,7 @@ if (start.buttons) {
 resp += `\n_DA CLICK EN EL SIGUIENTE BOTON_`
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 await this.sendButton(room.a, messageContent, null, buttons, userdb, m)
 } else {
@@ -78,13 +78,13 @@ const buttons = [['IR A OTRO CHAT', `${usedPrefix}next`]]
 if (start.buttons) {
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 await this.sendButton(room.a, messageContent, null, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 resp += `\nSI DESEAS CAMBIAR DE CHAT USA ${cmds}`
-resp += `\n\n${footerText}`
+resp += `\n\n${footer}`
 await this.sendWritingText(m.chat, resp, userdb, m)
 }
 } else {
@@ -107,13 +107,13 @@ if (start.buttons) {
 resp += `\n_DA CLICK EN EL SIGUIENTE BOTON_`
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 await conn.sendButton(m.chat, messageContent, null, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
 resp += `\nUSA PARA ${cmds}`
-resp += `\n\n${footerText}`
+resp += `\n\n${footer}`
 await this.sendWritingText(m.chat, resp, userdb, m)
 }
 }

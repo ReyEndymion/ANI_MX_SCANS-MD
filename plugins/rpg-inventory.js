@@ -1,134 +1,17 @@
-import { owner, temp, newsletterID, sBroadCastID, groupID, media} from '../config.js'
-import daily from './rpg-daily.js' 
-import weekly from './rpg-weekly.js'
-import monthly from './rpg-monthly.js'
-import adventure from './rpg-adventure.js'
-import { canLevelUp, xpRange } from '../lib/levelling.js'
-import PhoneNumber from 'awesome-phonenumber'
-import {rpg, rpgg, rpgshop, rpgshopp} from '../rpg.js'
-import moment from 'moment-timezone'
-import fs from 'fs'
-const inventory = {
-others: {
-level: true,
-limit: true,
-health: true,
-money: true,
-exp: true
-},
-items: {
-semillasdeuva: true,
-semillasdemango: true,
-semillasdeplatano: true,
-semillasdemanzana: true,
-semillasdenaranja: true,
-potion: true,
-trash: true,
-wood: true,
-rock: true,
-string: true,
-emerald: true,
-diamond: true,
-gold: true,
-iron: true,
-upgrader: true
-},
-durabi: {
-sworddurability: true,
-pickaxedurability: true,
-fishingroddurability: true,
-armordurability: true
-},
-tools: {
-armor: {
-'0': '❌',
-'1': 'Leather Armor',
-'2': 'Iron Armor',
-'3': 'Gold Armor',
-'4': 'Diamond Armor',
-'5': 'Emerald Armor',
-'6': 'Crystal Armor',
-'7': 'Obsidian Armor',
-'8': 'Netherite Armor',
-'9': 'Wither Armor',
-'10': 'Dragon Armor',
-'11': 'Hacker Armor'
-},
-sword: {
-'0': '❌',
-'1': 'Wooden Sword',
-'2': 'Stone Sword',
-'3': 'Iron Sword',
-'4': 'Gold Sword',
-'5': 'Copper Sword',
-'6': 'Diamond Sword',
-'7': 'Emerald Sword',
-'8': 'Obsidian Sword',
-'9': 'Netherite Sword',
-'10': 'Samurai Slayer Green Sword',
-'11': 'Hacker Sword'
-},
-pickaxe: {
-'0': '❌',
-'1': 'Wooden Pickaxe',
-'2': 'Stone Pickaxe',
-'3': 'Iron Pickaxe',
-'4': 'Gold Pickaxe',
-'5': 'Copper Pickaxe',
-'6': 'Diamond Pickaxe',
-'7': 'Emerlad Pickaxe',
-'8': 'Crystal Pickaxe',
-'9': 'Obsidian Pickaxe',
-'10': 'Netherite Pickaxe',
-'11': 'Hacker Pickaxe'
-},
-fishingrod: true
-
-},
-crates: {
-common: true,
-uncoommon: true,
-mythic: true,
-pet: true,
-legendary: true
-},
-pets: {
-horse: 10,
-gato: 10,
-zorro: 10,
-dog: 10,
-robo: 10,
-lion: 10,
-rhinoceros: 10,
-dragon: 10,
-centauro: 10,
-kyubi: 10,
-griffin: 10,
-phonix: 10,
-wolf: 10
-},
-cooldowns: {
-lastclaim: {
-name: 'claim',
-time: daily.cooldown
-},
-lastweekly: {
-name: 'weekly',
-time: weekly.cooldown
-},
-lastmonthly: {
-name: 'monthly',
-time: monthly.cooldown
-},
-lastadventure: {
-name: 'adventure',
-time: adventure.cooldown
-}
-}
-}
-
-let handler = async (m, {conn, start, info, args, command, jid, text, usedPrefix, usersdb, userdb, db, senderJid}) => {
-if (m.chat.endsWith(userID)) return
+let handler = async (m, {conn, start, info, args, command, jid, text, usedPrefix, usersdb, userdb, db, senderJid, objs}) => {
+const {imagen2} = objs
+const daily = await import('./rpg-daily.js') 
+const weekly = await import('./rpg-weekly.js')
+const monthly = await import('./rpg-monthly.js')
+const adventure = await import('./rpg-adventure.js')
+const { canLevelUp, xpRange } = await import('../lib/levelling.js')
+const PhoneNumber = await import('awesome-phonenumber')
+const {rpgg, rpg, rpgshop, rpgshopp} = await import('../rpg.js')
+const {default: moment} = await import('moment-timezone')
+const {menuform, multiplier} = await import('../lib/constants.js')
+const {inventory} = await import('../lib/functionsGames.js')
+const {default: fs} = await import('fs')
+const { owner, temp, newsletterID, sBroadCastID, groupID, media} = await import('../config.js')
 
 //let imgr = flaaa.getRandom()
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.userdb.jid : senderJid
@@ -155,7 +38,7 @@ let griffin = userdb.griffin
 let _griffin = userdb.anakgriffin
 let serigala = userdb.serigala
 let _serigala = userdb.anakserigala
-let { min, max } = xpRange(level, global.multiplier)
+let { min, max } = xpRange(level, multiplier)
 let kuda = userdb.kuda
 let rubah = userdb.rubah
 let kucing = userdb.kucing
@@ -265,22 +148,22 @@ const sections = [
 title: ' ❖ *INVENTARIO* ❖ ',
 rows: [
 {title: "დ INVENTARIO - ARTICULOS", id: usedPrefix + command + ' 1'},
-{title: "დ INVENTARIO - 𝘊𝘖𝘔𝘉𝘈𝘛𝘌", id: usedPrefix + command + ' 2'},
-{title: "დ INVENTARIO - 𝘔𝘐𝘚𝘐𝘖𝘕𝘌𝘚", id: usedPrefix + command + ' 3'},
+{title: "დ INVENTARIO - COMBATE", id: usedPrefix + command + ' 2'},
+{title: "დ INVENTARIO - MISIONES", id: usedPrefix + command + ' 3'},
 {title: "დ INVENTARIO - COMPLETO", id: usedPrefix + command + ' 4'}
 ]
 },{
-title: ' ❖ ALIMENTOS 𝗬 ANIMALES ❖ ',
+title: ' ❖ ALIMENTOS Y ANIMALES ❖ ',
 rows: [
-{title: "ღ INVENTARIO - 𝘈𝘓𝘐𝘔𝘌𝘕𝘛𝘖𝘚 𝘠 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚", id: usedPrefix + 'alimentos'},
-{title: "ღ INVENTARIO - 𝘈𝘕𝘐𝘔𝘈𝘓𝘌𝘚 𝘈𝘛𝘙𝘈𝘗𝘈𝘋𝘖𝘚", id: usedPrefix + 'animales'}
+{title: "ღ INVENTARIO - ALIMENTOS Y ANIMALES", id: usedPrefix + 'alimentos'},
+{title: "ღ INVENTARIO - ANIMALES ATRAPADOS", id: usedPrefix + 'animales'}
 ]}
 ]
-let resp = ``
+let resp = `✨ *AVERIGUA EL INVENTARIO QUE TIENES*\n`
 
 const listMessage = {
-text: `✨ *AVERIGUA EL INVENTARIO QUE TIENES*\n`,
-footer: info.nanie,
+text: resp,
+footer: info.nanipe,
 title: `*»»— ֎ INVENTARIO ֎ —««*`,
 buttonText: `🔖 SELECCIONE AQUÍ 🔖`,
 sections
@@ -288,30 +171,31 @@ sections
 /*
 */
 let bottime = `${name} TIME: ${moment.tz('America/Bogota').format('HH:mm:ss')}`//America/Los_Angeles
-let ftroli = { key: { remoteJid: 'status@broadcast', participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 99, status: 1, surface: 1, message: info.nanie, orderTitle: info.nanie, sellerJid: '0@s.whatsapp.net' } } }
+let ftroli = { key: { remoteJid: 'status@broadcast', participant: '0@s.whatsapp.net' }, message: { orderMessage: { itemCount: 99, status: 1, surface: 1, message: info.nanipe, orderTitle: info.nanipe, sellerJid: '0@s.whatsapp.net' } } }
 let fgif = {
 key: {
 participant : '0@s.whatsapp.net'},
 message: { 
 "videoMessage": { 
-"title": info.nanie,
+"title": info.nanipe,
 "h": `Hmm`,
 'seconds': '999999999', 
 'gifPlayback': 'true', 
 'caption': bottime,
-'jpegThumbnail': fs.readFileSync(anipp)
+'jpegThumbnail': fs.readFileSync(imagen2)
 }
 }
 }
-const buff = info.nanie
-const buttons = [['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓50', `${usedPrefix}buy3 50`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖𝙧 𝙓100', `${usedPrefix}buy3 100`], ['💎 𝘾𝙤𝙢𝙥𝙧𝙖 𝘼𝙗𝙨𝙤𝙡𝙪𝙩𝙖', `${usedPrefix}buyall3`]]
+const buff = info.nanipe
+const buttons = [['💎 Comprar X50', `${usedPrefix}buy3 50`], ['💎 Comprar X100', `${usedPrefix}buy3 100`], ['💎 Compra AbSoluta', `${usedPrefix}buyall3`]]
 if (start.buttons) {
-await conn.sendMessage(m.chat, listMessage, {quoted: fkontak})
-return conn.sendButton(m.chat, resp, buff, img, [
+await conn.sendList(m.chat, listMessage, userdb, fkontak)
+return conn.sendButton(m.chat, {text: resp, footer: buff}, {url: img}, [
 [`🌟 USUARIOS PREMIUM 🌟`, `${usedPrefix}listprem`],
 [`🎟️ MÁS TIEMPO PREMIUM 🎟️`, `${usedPrefix + command} 1`],
-[`😽 DISFRUTAR PREMIUM 😽`, `${usedPrefix}allmenu`]], fkontak, null)
+[`😽 DISFRUTAR PREMIUM 😽`, `${usedPrefix}allmenu`]], userdb, fkontak)
 } else {
+//comando.map(v => v + ' <pencarian>')
 let totalComandos = 0
 if (typeof sections === 'string' && sections.trim().length > 0) {
 resp += sections + '\n\n'
@@ -340,7 +224,7 @@ return conn.sendWritingText(m.chat, resp+listMessage.title, fkontak)
 
 if (args[0] == '1') { // Inventario 1
 let sortedmoney = Object.entries(usersdb).sort((a, b) => b[1].money - a[1].money)
-let sortedlevel = Object.entries(usersdb).sort((a, b) => b[1].Nivel - a[1].level)
+let sortedlevel = Object.entries(usersdb).sort((a, b) => b[1].level - a[1].level)
 let sorteddiamond = Object.entries(usersdb).sort((a, b) => b[1].diamond - a[1].diamond)
 let sortedpotion = Object.entries(usersdb).sort((a, b) => b[1].potion - a[1].potion)
 let sortedsampah = Object.entries(usersdb).sort((a, b) => b[1].sampah - a[1].sampah)
@@ -371,13 +255,13 @@ let userslegendary = sortedlegendary.map(v => v[0])
 let userspet = sortedpet.map(v => v[0])
 
 let str = `
-🏷️ *INVENTARIO | INVENTORY* 
+🏷️ *INVENTARIO* 
 👤» *${name}* ( @${who.split("@")[0]} )\n
 ╭━━━━━━━━━⬣
 ┃ *INVENTARIO DE ARTICULOS* 
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸
 ┃ *${rpg.emoticon('health')} » ${healt}* 
-┃ ${rpgg.emoticon('level')} *Nivel : Nivel » ${level}*
+┃ ${rpgg.emoticon('level')} *Nivel : Level » ${level}*
 ┃ ${rpgg.emoticon('role')} *Rango : Role* 
 ┃ *»* ${rol}
 ┃ *${rpgg.emoticon('premium')} ${userdb.premium ? "✅ VIP : Premium": "Limitado : Free"}*
@@ -392,7 +276,7 @@ let str = `
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ ${rpgg.emoticon('exp')} *Exp » ${exp}*
 ┃ ${rpgg.emoticon('limit')} *Diamante : Diamond » ${dia}*
-┃ ${rpgg.emoticon('money')} *ANICoins: » ${money}*
+┃ ${rpgg.emoticon('money')} *Coins: » ${money}*
 ┃ ${rpgg.emoticon('joincount')} *Token » ${token}*
 ┃ *${rpgshop.emoticon('emerald')} » ${userdb.emerald}*
 ┃ *${rpgshop.emoticon('berlian')} » ${userdb.berlian}*
@@ -406,7 +290,6 @@ let str = `
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
 ┃ SUPERVIVENCIA
-┃ SURVIVAL ITEM
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('potion')} » ${userdb.potion}*
 ┃ *${rpgshop.emoticon('aqua')} » ${userdb.aqua}*
@@ -423,7 +306,6 @@ let str = `
 ┃
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╮
 ┃ OBJETOS MISTERIOSOS
-┃ MYSTERIOUS OBJECTS
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ *${rpgshop.emoticon('eleksirb')} » ${userdb.eleksirb}*
 ┃ *${rpgshop.emoticon('emasbatang')} » ${userdb.emasbatang}*
@@ -444,10 +326,9 @@ let str = `
 ╰━━━━━━━━━⬣
 
 🏆 *RESUMEN EN LOS TOPS* 🏆 
-🚀 *SUMMARY IN THE TOPS* 🚀
 👤» *${name}* ( @${who.split("@")[0]} )\n
 _1.Top Nivel_ *${userslevel.indexOf(senderJid) + 1}* _de_ *${userslevel.length}*
-_2.Top AMXcoins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
+_2.Top Coins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
 _3.Top Diamantes+_ *${usersdiamond.indexOf(senderJid) + 1}* _de_ *${usersdiamond.length}*
 _4.Top Poción_ *${userspotion.indexOf(senderJid) + 1}* _de_ *${userspotion.length}*
 _5.Top Basura_ *${userssampah.indexOf(senderJid) + 1}* _de_ *${userssampah.length}*
@@ -465,19 +346,21 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 *⚠️ Advertido(a) » ${warn}*
 *🚫 Baneado(a) » ${userdb.banned ? '✅' : '❌'}*\n`.trim()
 
-let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}` + str
-const buff = info.nanie
+let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}` + str
+const buff = info.nanipe
 const buttons = [[`🤺 _Inventario de combate_`, `${usedPrefix}inventario 2`], [`🏕️ Aventurar`, `${usedPrefix}adventure`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpgmenu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
+return conn.sendButton( m.chat, {text: resp, footer: buff}, {}, buttons, userdb, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 
 } else if (args[0] == '2') { // Inventario 2
-const pets = Object.keys(inventory.pets).map(v => userdb[v] && `*${rpg.emoticon(v)} » ${userdb[v] >= inventory.pets[v] ? '*Nivel Máximo*' : `Nivel* \n*» ${userdb[v]}*\n`}`).filter(v => v).join('\n').trim()
-const cooldowns = Object.entries(inventory.cooldowns).map(([cd, { name, time }]) => cd in userdb && `*✧ ${name}*: ${new Date() - userdb[cd] >= time ? '✅' : '❌'}`).filter(v => v).join('\n').trim()
+const invent = await inventory(daily, weekly, monthly, adventure)
+const pets = Object.keys(invent.pets).map(v => userdb[v] && `*${rpg.emoticon(v)} » ${userdb[v] >= invent.pets[v] ? '*Nivel Máximo*' : `Nivel* \n*» ${userdb[v]}*\n`}`).filter(v => v).join('\n').trim()
+const cooldowns = Object.entries(invent.cooldowns).map(([cd, { name, time }]) => cd in userdb && `*✧ ${name}*: ${new Date() - userdb[cd] >= time ? '✅' : '❌'}`).filter(v => v).join('\n').trim()
+
 
 const caption = `
 👤» *@${who.split("@")[0]}* 
@@ -604,7 +487,7 @@ const caption = `
 *│${rpg.emoticon('wolf')} » ${serigala == 0 ? '❌' : '' || serigala == 1 ? 'Nivel ✦ 1' : '' || serigala == 2 ? 'Nivel ✦ 2' : '' || serigala == 3 ? 'Nivel ✦ 3' : '' || naga == 4 ? 'Nivel ✦ 4' : '' || serigala == 5 ? 'Nivel ✦ 5 ǁ MAX' : ''}*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭* ${htki} *PROGRESOS* ${htka}
+*╭* ${menuform.htki} *PROGRESOS* ${menuform.htka}
 *╰──┬─┄*
 *╭──┴─────────┄⸙*
 *╰┫ ${rpg.emoticon('level')} » ${userdb.level} ➠${userdb.Nivel + 1}*
@@ -642,7 +525,7 @@ const caption = `
 
 *╭──━• MISIONES*
 *│ ⛏️⚡ Minar EXP » ${new Date - userdb.lastmiming < 600000 ? '❌' : '✅'}*
-*│ ⛏️🪙 Minar ANICoins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
+*│ ⛏️🪙 Minar Coins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
 *│ ⛏️💎 Minar Diamantes » ${new Date - userdb.lastdiamantes < 900000 ? '❌' : '✅'}* 
 *│ ⚗️ Cofre » ${new Date - userdb.lastcofre < 86400000 ? '❌' : '✅'}* 
 *│ 🏹 Caza » ${new Date - userdb.lastberburu < 2700000 ? '❌' : '✅'}* 
@@ -653,14 +536,14 @@ const caption = `
 *│ 📮 Mensual ${new Date - userdb.lastmonthly < 432000000 ? '❌' : '✅'}* 
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*`.trim()
 
-let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}\n`+ caption 
-const buff = info.nanie
+let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}\n`+ caption 
+const buff = info.nanipe
 const buttons = [[`⚜️ _Lista de misiones_`, `${usedPrefix}inventario 3`], [`🏕️ Aventurar`, `${usedPrefix}adventure`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpgmenu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(caption) })
+return conn.sendButton( m.chat, {text: resp, footer: buff}, {}, buttons, userdb, fkontak, { mentions: conn.parseMention(caption) })
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } else if (args[0] == '3') { // Inventario 3
 let sortedmoney = Object.entries(usersdb).sort((a, b) => b[1].money - a[1].money)
@@ -724,7 +607,7 @@ ${readMore}
 ┃ ╸╸╸╸╸╸╸╸╸╸╸╸╸╸╯
 ┃ ${rpgg.emoticon('exp')} *Exp » ${exp}*
 ┃ ${rpgg.emoticon('limit')} *Diamante : Diamond » ${dia}*
-┃ ${rpgg.emoticon('money')} *ANICoins: » ${money}*
+┃ ${rpgg.emoticon('money')} *Coins: » ${money}*
 ┃ ${rpgg.emoticon('joincount')} *Token » ${token}*
 ┃ *${rpgshop.emoticon('emerald')} » ${userdb.emerald}*
 ┃ *${rpgshop.emoticon('berlian')} » ${userdb.berlian}*
@@ -774,10 +657,9 @@ ${readMore}
 ╰━━━━━━━━━⬣
 
 🏆 *RESUMEN EN LOS TOPS* 🏆 
-🚀 *SUMMARY IN THE TOPS* 🚀
 👤» *${name}* ( @${who.split("@")[0]} )\n
 _1.Top Nivel_ *${userslevel.indexOf(senderJid) + 1}* _de_ *${userslevel.length}*
-_2.Top AMXcoins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
+_2.Top Coins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
 _3.Top Diamantes+_ *${usersdiamond.indexOf(senderJid) + 1}* _de_ *${usersdiamond.length}*
 _4.Top Poción_ *${userspotion.indexOf(senderJid) + 1}* _de_ *${userspotion.length}*
 _5.Top Basura_ *${userssampah.indexOf(senderJid) + 1}* _de_ *${userssampah.length}*
@@ -793,8 +675,7 @@ _15.Top Caja Legendaria_ *${userslegendary.indexOf(senderJid) + 1}* _de_ *${user
 _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet.length}*
 
 👤» *@${who.split("@")[0]}* 
-🛣️ ESTRATEGIAS | ANIMALES
-🌄 STRATEGIES | ANIMALS
+🛣️ ESTRATEGIAS | ANIMALES 🌄
 
 ╭━━━━━━━━━⬣
 ┃ *ESTADO DE COMBATE*
@@ -917,7 +798,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 *│${rpg.emoticon('wolf')} » ${serigala == 0 ? '❌' : '' || serigala == 1 ? 'Nivel ✦ 1' : '' || serigala == 2 ? 'Nivel ✦ 2' : '' || serigala == 3 ? 'Nivel ✦ 3' : '' || naga == 4 ? 'Nivel ✦ 4' : '' || serigala == 5 ? 'Nivel ✦ 5 ǁ MAX' : ''}*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭* ${htki} *PROGRESO* ${htka}
+*╭* ${menuform.htki} *PROGRESO* ${menuform.htka}
 *╰──┬─┄*
 *╭──┴─────────┄⸙*
 *╰┫ ${rpg.emoticon('level')} » ${userdb.level} ➠${userdb.Nivel + 1}*
@@ -955,7 +836,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 
 *╭──━• MISIONES*
 *│ ⛏️⚡ Minar EXP » ${new Date - userdb.lastmiming < 600000 ? '❌' : '✅'}*
-*│ ⛏️🪙 Minar ANICoins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
+*│ ⛏️🪙 Minar Coins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
 *│ ⛏️💎 Minar Diamantes » ${new Date - userdb.lastdiamantes < 900000 ? '❌' : '✅'}* 
 *│ ⚗️ Cofre » ${new Date - userdb.lastcofre < 86400000 ? '❌' : '✅'}* 
 *│ 🏹 Caza » ${new Date - userdb.lastberburu < 2700000 ? '❌' : '✅'}* 
@@ -995,7 +876,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 *│🎒 Total inv » ${makananpet + ayamb + ayamg + sapir + ssapi} Comida*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭──━• 𝗙RUTAS Y SEMILLAS*
+*╭──━• FRUTAS Y SEMILLAS*
 *│🥭 Mango » ${mangga}*
 *│🍇 Uva : Grape » ${anggur}*
 *│🍌 Platano : Banana » ${pisang}*
@@ -1073,7 +954,7 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 *│ ⛏️⚡ Minar EXP » ${new Date - userdb.lastmiming < 600000 ? '❌' : '✅'}*
 ${new Date - userdb.lastmiming < 600000 ? `${clockString(userdb.lastmiming + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
-*│ ⛏️🪙 Minar ANICoins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
+*│ ⛏️🪙 Minar Coins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
 ${new Date - userdb.lastcoins < 600000 ? `${clockString(userdb.lastcoins + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️💎 Minar Diamantes » ${new Date - userdb.lastdiamantes < 900000 ? '❌' : '✅'}* 
@@ -1118,10 +999,9 @@ ${new Date - userdb.lastmonthly < 432000000 ? `${clockString(userdb.lastmonthly 
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
 🏆 *RESUMEN EN LOS TOPS* 🏆 
-🚀 *SUMMARY IN THE TOPS* 🚀
 👤» *${name}* ( @${who.split("@")[0]} )\n
 _1.Top Nivel_ *${userslevel.indexOf(senderJid) + 1}* _de_ *${userslevel.length}*
-_2.Top AMXcoins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
+_2.Top Coins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
 _3.Top Diamantes+_ *${usersdiamond.indexOf(senderJid) + 1}* _de_ *${usersdiamond.length}*
 _4.Top Poción_ *${userspotion.indexOf(senderJid) + 1}* _de_ *${userspotion.length}*
 _5.Top Basura_ *${userssampah.indexOf(senderJid) + 1}* _de_ *${userssampah.length}*
@@ -1138,19 +1018,20 @@ _16.Top Caja para Mascota_ *${userspet.indexOf(senderJid) + 1}* _de_ *${userspet
 _17.Top Gold_ *${usersgold.indexOf(senderJid) + 1}* _de_ *${usersgold.length}*
 _18.Top Clock_ *${usersarlok.indexOf(senderJid) + 1}* _de_ *${usersarlok.length}*`
 
-// let ftroli = { key: {participant : '0@s.whatsapp.net'}, message: { orderMessage: { itemCount: 2022, status: 1, surface: 1, message: bottime, orderTitle: info.nanie, sellerJid: '0@s.whatsapp.net' } } } 
-//await conn.sendButton(m.chat, `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}`, str, imgr + 'Inventario', , m, {quoted: fkontak})
-let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}` + '\n' + str 
-const buff = info.nanie
-const buttons = [[`${healt < 40 ? '❤️ _CURARME_' : 'Aventurar 🏕️'}`, `${healt < 40 ? `${usedPrefix}heal` : `${usedPrefix}adventure`}`], ['🏪 Tienda para Comprar | Buy', `${usedPrefix}buy`], ['🏪 Tienda para 𝙑ender', `${usedPrefix}sell`]]
+// let ftroli = { key: {participant : '0@s.whatsapp.net'}, message: { orderMessage: { itemCount: 2022, status: 1, surface: 1, message: bottime, orderTitle: info.nanipe, sellerJid: '0@s.whatsapp.net' } } } 
+//await conn.sendButton(m.chat, `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}`, str, imgr + 'Inventario', , m, {quoted: fkontak})
+let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}` + '\n' + str 
+const buff = info.nanipe
+const buttons = [[`${healt < 40 ? '❤️ _CURARME_' : 'Aventurar 🏕️'}`, `${healt < 40 ? `${usedPrefix}heal` : `${usedPrefix}adventure`}`], ['🏪 Tienda para Comprar | Buy', `${usedPrefix}buy`], ['🏪 Tienda para Vender', `${usedPrefix}sell`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(caption) })
+return conn.sendButton( m.chat, {text: resp, footer: buff}, {}, buttons, userdb, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } else if (args[0] == '4') { // Inventario 4
 
+// let name = m.fromMe ? conn.user : conn.contacts[senderJid]
 let name = senderJid
 let usuario = await conn.getName(name)
 
@@ -1200,7 +1081,7 @@ let str = `
 *│ ⛏️⚡ Minar EXP » ${new Date - userdb.lastmiming < 600000 ? '❌' : '✅'}*
 ${new Date - userdb.lastmiming < 600000 ? `${clockString(userdb.lastmiming + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
-*│ ⛏️🪙 Minar ANICoins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
+*│ ⛏️🪙 Minar Coins » ${new Date - userdb.lastcoins < 600000 ? '❌' : '✅'}*
 ${new Date - userdb.lastcoins < 600000 ? `${clockString(userdb.lastcoins + 600000 - new Date())}` : '*│* ✅ MISION YA DISPONIBLE'}
 *│┈┈┈┈┈┈┈┈┈┈┈┈*
 *│ ⛏️💎 Minar Diamantes » ${new Date - userdb.lastdiamantes < 900000 ? '❌' : '✅'}* 
@@ -1247,7 +1128,7 @@ ${new Date - userdb.lastmonthly < 432000000 ? `${clockString(userdb.lastmonthly 
 🚀🏆 *RESUMEN EN LOS TOPS* 🏆 🚀
 👤» *${usuario}* ( @${who.split("@")[0]} )\n
 _1.Top Nivel_ *${userslevel.indexOf(senderJid) + 1}* _de_ *${userslevel.length}*
-_2.Top AMXcoins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
+_2.Top Coins_ *${usersmoney.indexOf(senderJid) + 1}* _de_ *${usersmoney.length}*
 _3.Top Diamantes+_ *${usersdiamond.indexOf(senderJid) + 1}* _de_ *${usersdiamond.length}*
 _4.Top Poción_ *${userspotion.indexOf(senderJid) + 1}* _de_ *${userspotion.length}*
 _5.Top Basura_ *${userssampah.indexOf(senderJid) + 1}* _de_ *${userssampah.length}*
@@ -1315,14 +1196,14 @@ Serigala: *${serigala == 0 ? 'No tengo' : '' || serigala == 1 ? 'Nivel 1' : '' |
 /*
 */
 
-let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}\n`+ str 
-const buff = info.nanie
-const buttons = [[`🍱 Inventario de alimentos `, `${usedPrefix}alimentos`], [`🎒 Inventario total`, `${usedPrefix}inventario 4`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpgmenu`]]
+let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}\n`+ str 
+const buff = info.nanipe
+const buttons = [[`🍱 Inventario de alimentos `, `${usedPrefix}alimentos`], [`🎒 Inventario total`, `${usedPrefix}inventario 4`], ['💗 _Menu Aventura | RPG_', `${usedPrefix}rpg`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(str) })
+return conn.sendButton( m.chat, {text: resp, footer: buff}, {}, buttons, userdb, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } else if (args[0] == 'alimentos') { // Inventario piscina
 let aineh = `
@@ -1355,7 +1236,7 @@ let aineh = `
 *│🎒 Total inv » ${makananpet + ayamb + ayamg + sapir + ssapi} Comida*
 *╰─⋆─⋆─⋆─⋆─⋆─⋆─⋆─⋆─┄⸙*
 
-*╭──━• 𝗙RUTAS Y SEMILLAS*
+*╭──━• FRUTAS Y SEMILLAS*
 *│🥭 Mango » ${mangga}*
 *│🍇 Uva : Grape » ${anggur}*
 *│🍌 Platano : Banana » ${pisang}*
@@ -1424,14 +1305,14 @@ let aineh = `
 ┃💐 *Caja de Jardinería : Garden boxs » ${userdb.gardenboxs}*
 ╰━━━━━━━━━⬣`.trim()
 
-let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n${info.nanie}` + aineh.trim()
-const buff = info.nanie
+let resp = `*PREMIUM ${userdb.premium ? "✅": "❌"}*\n> ${info.nanipe}` + aineh.trim()
+const buff = info.nanipe
 const buttons = [[`🐈 Inventario de animales`, `${usedPrefix}animales`], [`🎒 Inventario total`, `${usedPrefix}inventario 4`], ['_Menu Aventura | RPG_ 💗', `${usedPrefix}rpgmenu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m, { mentions: conn.parseMention(resp) })
+return conn.sendButton( m.chat, {text: resp, footer: buff}, {}, buttons, userdb, fkontak, { mentions: conn.parseMention(resp) })
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 
@@ -1440,7 +1321,10 @@ handler.help = ['inventory', 'inv']
 handler.tags = ['rpg']
 handler.command = /^(inventory|inv|inventario)$/i
 handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🎒 INVENTARIO", description: `Consulta tu inventario, usa el comando #inventario`, id: `inventario`}
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler

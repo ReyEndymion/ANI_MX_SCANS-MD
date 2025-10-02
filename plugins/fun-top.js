@@ -3,9 +3,9 @@ import path from 'path'
 import fs from 'fs'
 let { default: axios } = await import('axios');
 let user = a => '@' + a.split('@')[0]
-async function handler(m, {conn, groupMetadata, command, text, usedPrefix, db, userdb, senderJid }) {
+async function handler(m, {conn, participants, command, text, usedPrefix, db, userdb, senderJid, isLidGroup }) {
 if (!text) return conn.sendWritingText(m.chat, `Ejemplo de uso:\n.top *texto*`, userdb, m)
-let ps = groupMetadata.participants.map(v => v.id)
+let ps = participants.map(v => isLidGroup ? v.phoneNumber : v.id)
 let a = ps.getRandom()
 let b = ps.getRandom()
 let c = ps.getRandom()

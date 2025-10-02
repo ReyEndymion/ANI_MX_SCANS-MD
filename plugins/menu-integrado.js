@@ -9,7 +9,8 @@ import path, { join } from 'path'
 import { plugins, getCommandVariants, wrapText } from '../lib/functions.js'
 let handler = async (m, {conn, start, info, usedPrefix, usedPrefix: _p, pluginsPath, groupMetadata, text, command, args, isOwner, isAdmin, isROwner, chat, usersdb, userdb, objs, senderJid}) => {
 const {media} = await import('../config.js')
-const footer = info.nanie
+const {multiplier} = await import('../lib/constants.js')
+const footer = info.nanipe
 const {imagen1 } = objs
 const pp = fs.readFileSync(imagen1)
 const vn = fs.readFileSync(path.join(media, 'audios/menu.mp3'))
@@ -24,7 +25,7 @@ let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000)
 console.log('menu: ', pluginsPath)
 let _package = JSON.parse(await promises.readFile(join(pluginsPath, '../package.json')).catch(_ => ({}))) || {}
 let { exp, limit, level, role } = usersdb[senderJid]
-let { min, xp, max } = xpRange(level, global.multiplier)
+let { min, xp, max } = xpRange(level, multiplier)
 let week = d.toLocaleDateString(locale, { weekday: 'long' })
 let date = d.toLocaleDateString(locale, {
 day: 'numeric',
@@ -160,8 +161,8 @@ title: title,
 text: resp,
 buffer: pp,
 buttonText: buttonText,
-footerText: footer,
-listSections: sections,
+footer: footer,
+sections: sections,
 options: {}
 }
 
@@ -345,10 +346,10 @@ let textoFinal = `╔═══════════════════�
 
 const listMessage = {
 text: `${info.kom} ✨${username}✨estos son los audios predeterminados del Bot`,
-footerText: `${footer}`,
+footer: `${footer}`,
 title: `*MENU AUDIOS ${footer}*\npowered by\n*${info.namerepre}*`,
 buttonText: "SELECCIONE AQUÍ",
-listSections: sections }
+sections: sections }
 
 listMessage.title = `*MENU AUDIOS ${footer}* (${totalAudios})\npowered by\n*${info.namerepre}*`
 let str = `${usertag} por si quieres mas informacion aqui unos botones\n`.trim()
@@ -539,8 +540,8 @@ title,
 text: menuText,
 buffer: pp,
 buttonText: '🧾 Ver opciones',
-footerText: footer,
-listSections: sections,
+footer: footer,
+sections: sections,
 options: {}
 }
 return conn.sendList(m.chat, listMessage, userdb, m)

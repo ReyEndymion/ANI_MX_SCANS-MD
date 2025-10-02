@@ -13,7 +13,7 @@ conn.sendFile(m.chat, stikers, null, { asSticker: true }, m, true, { contextInfo
 //await delay(1500)
 }
 } catch { 
-return conn.sendWritingText(m.chat, `*[❗] ERROR, POR 𝙵AVOR VUELVA A INTERNTARLO*`, m)
+return conn.sendWritingText(m.chat, `*[❗] ERROR, POR FAVOR VUELVA A INTERNTARLO*`, m)
 }}
 handler.command = /^stickerpack$/i
 handler.help = [];

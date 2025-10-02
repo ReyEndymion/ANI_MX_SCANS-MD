@@ -2,7 +2,7 @@ let handler = async(m, {conn, db, userdb, senderJid}) => {
 let {prefix} = await import('../lib/functions.js')
 
 prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
-await conn.sendWritingText(m.chat, `[❗INFO❗] PRE𝙵IJO RESTABLECIDO CON EXITO`, userdb, m)
+await conn.sendWritingText(m.chat, `[❗INFO❗] PREFIJO RESTABLECIDO CON EXITO`, userdb, m)
 }
 handler.help = ['resetprefix']
 handler.tags = ['owner']

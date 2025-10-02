@@ -1,8 +1,9 @@
-export async function before(m, {conn, chatdb, db, userdb, senderJid}) {
+export async function before(m, {conn, db, chatdb, userdb, senderJid}) {
+
 if (chatdb.asistente && !chatdb.isBanned) {
 let resp = ''
 if (/aclaración$/i.test(m.text) && !m.fromMe) {
-resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
+let resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY de ingreso para un grupo de parejas y amistad entre gente con gustos en el anime, manga y cultura japonesa y asiática llamado: 
 *ㄖㄒ卂Ҡ凵丂*
 *ㄒㄖᎶ乇ㄒ卄乇尺.*
 *Ser Otaku en Latinoamérica no es lo mismo que ser un Otaku nipón. Quien quiera estar en el grupo principal lo único que se les pide es lo siguiente:*
@@ -33,10 +34,11 @@ resp = `🚨🚨🚨🚨🚨🚨🚨🚨🚨 *Esto no es un GRUPO, es un LOBBY d
 
 *También pueden hacer 10 mensajes a la semana para evitar ser eliminados... En algunos grupos el mínimo son 30 mensajes a la semana además de estar obligados a compartir contenido así que les conviene la propuesta de este grupo...*
 🚨🚨🚨🚨🚨🚨🚨🚨🚨`.trim()
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } 
 
 if (/^ficha$/i.test(m.text) && !m.fromMe) {
-resp = 	
+let resp = 	
 `*ɴᴏᴍʙʀᴇ*:
 
 
@@ -62,9 +64,10 @@ resp =
 
 
 **TODOS ESTOS DATOS PUEDEN SER EN PRIVADO SI QUIEREN CON ALGUNO DE LOS ADMINS ACTIVOS**`
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } 
 if (/^Moonficha|Sailorficha|moon ficha$/i.test(m.text) && !m.fromMe) {
-resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
+let resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏ ʏ ʙᴜᴇɴᴏ ᴀQᴜÍ ᴛɪᴇɴᴇ ᴜɴᴀ ꜰɪᴄʜᴀ ᴅᴇ ᴘʀᴇꜱᴇɴᴛᴀᴄɪÓɴ* 💫
 
 
 1.💜 *ɴᴏᴍʙʀᴇ* 💜:
@@ -89,12 +92,12 @@ resp = `💫 *ʜᴏʟᴀ ʙɪᴇɴᴠᴇɴɪᴅ@ꜱ ᴀʟ ɢʀᴜᴘᴏʏ ʙᴜ�
 
 
 8.💜 *ꜰᴏᴛᴏ o ᴍᴇɴsᴀᴊᴇ ᴅᴇ ᴠᴏᴢ*💜:`.trim()
+return conn.sendWritingText(m.chat, resp, userdb, m)
 } 
 
 if (/^No gracias$/i.test(m.text) && !m.fromMe) {
-resp = `a Bueno @${senderJid.split('@')[0]} te me cuidas`
-
+let resp = `a Bueno @${m.sender.split("@")[0]} te me cuidas`
+return conn.sendWritingText(m.chat, resp, userdb, m)
 } 
-if (resp.length === 0) return
-return conn.sendWritingText(m.chat, resp, userdb, m)}
+}
 }

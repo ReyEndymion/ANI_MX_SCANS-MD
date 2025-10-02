@@ -1,14 +1,13 @@
-let handler = async (m, {conn, participants, groupMetadata, groupsdb, db, userdb, senderJid}) => {
+let handler = async (m, {conn, participants, groupMetadata, groupsdb, db, userdb, senderJid, isLidGroup}) => {
 const {join} = await import('path')
 const {media} = await import('../config.js')
 if (!m.isGroup) return
 const group = groupsdb[m.chat]
 const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null) || join(media, 'pictures/sinFoto.png')
 const { antiToxic, antiTraba, antiviewonce, isBanned, welcome, bye, detect, sWelcome, sBye, sPromote, sDemote, antiLink, antiLink2, modohorny, autosticker, modoadmin, audios, delete: del, anticall, antiprivado, asistente, gruposrol} = group
-const groupLid = groupMetadata.addressingMode === 'lid'
 const groupAdmins = participants.filter(p => p.admin)
-const listAdmin = groupAdmins.map((v, i) => groupLid ? `${i + 1}. @${v.jid.split('@')[0]}` : `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
-const owner = conn.lidToJid(groupMetadata.owner, m.chat) || (groupLid ? groupAdmins.find(p => p.admin === 'superadmin')?.jid : groupAdmins.find(p => p.admin === 'superadmin')?.id) || m.chat.split`-`[0] + '@s.whatsapp.net'
+const listAdmin = groupAdmins.map((v, i) => isLidGroup ? `${i + 1}. @${v.phoneNumber.split('@')[0]}` : `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
+const owner = conn.lidToJid(groupMetadata.owner, m.chat) || (isLidGroup ? groupAdmins.find(p => p.admin === 'superadmin')?.phoneNumber : groupAdmins.find(p => p.admin === 'superadmin')?.id) || m.chat.split`-`[0] + '@s.whatsapp.net'
 let resp = `*「 INFORMACION DEL GRUPO 」*\n
 *IDENTIFICACION DEL GRUPO:* 
 ${groupMetadata.id}

@@ -95,11 +95,11 @@ const sections = [
 {
 title: menuform.htjava + ' 🛥️ LUGARES PARA PESCAR ' + menuform.htjava,
 rows: [
-{title: "🎣 " + mensajeLugar[0], id: usedPrefix + command + ' 1', description: `𝑼𝒏𝒂 𝒑𝒊𝒔𝒄𝒊𝒏𝒂 𝒑𝒂𝒏𝒐𝒓𝒂𝒎𝒊𝒄𝒂 𝒄𝒐𝒏 𝒗𝒂𝒓𝒊𝒂𝒔 𝒆𝒔𝒑𝒆𝒄𝒊𝒆𝒔 𝒎𝒂𝒓𝒊𝒏𝒂𝒔!!\n`},
-{title: "🎣 " + mensajeLugar[1], id: usedPrefix + command + ' 2', description: `𝑨𝒕𝒓𝒆𝒗𝒆𝒕𝒆 𝒂 𝒑𝒆𝒔𝒄𝒂𝒓 𝒆𝒏 𝒍𝒂 𝑳𝒂𝒈𝒖𝒏𝒂 𝒎𝒂𝒔 𝒅𝒊𝒗𝒆𝒓𝒔𝒂 𝒅𝒆𝒍 𝑴𝒖𝒏𝒅𝒐!!\n`}, 
-{title: "🎣 " + mensajeLugar[2], id: usedPrefix + command + ' 3', description: `𝑪𝒐𝒏𝒔𝒊𝒅𝒆𝒓𝒂𝒅𝒂 𝒍𝒂 𝑴𝒂𝒅𝒓𝒆 𝒅𝒆 𝒍𝒐𝒔 𝑳𝒂𝒈𝒐𝒔, 𝒂𝒒𝒖𝒊 𝒕𝒂𝒍 𝒗𝒆𝒛 𝒆𝒔𝒕𝒆𝒏 𝒍𝒐𝒔 𝑪𝒂𝒍𝒂𝒎𝒂𝒓𝒆𝒔!!\n`},
-{title: "🎣 " + mensajeLugar[3], id: usedPrefix + command + ' 4', description: `𝑼𝒏 𝒍𝒂𝒈𝒐 𝒕𝒂𝒏 𝒈𝒓𝒂𝒏𝒅𝒆 𝒒𝒖𝒆 𝒆𝒔 𝒑𝒓𝒐𝒃𝒂𝒃𝒍𝒆 𝒒𝒖𝒆 𝒂𝒃𝒖𝒏𝒅𝒆 𝒎𝒖𝒄𝒉𝒂𝒔 𝒆𝒔𝒑𝒆𝒄𝒊𝒆𝒔 𝒎𝒂𝒓𝒊𝒏𝒂𝒔!!\n`},
-{title: "🎣 " + mensajeLugar[4], id: usedPrefix + command + ' 5', description: `𝑼𝒏 𝑴𝒂𝒓 𝒕𝒂𝒏 𝒈𝒓𝒂𝒏𝒅𝒆 𝒚 𝑷𝒓𝒐𝒇𝒖𝒏𝒅𝒐 𝑷𝒆𝒓𝒇𝒆𝒄𝒕𝒐 𝒑𝒂𝒓𝒂 𝑷𝒆𝒔𝒄𝒂𝒓!!\n`}
+{title: "🎣 " + mensajeLugar[0], id: usedPrefix + command + ' 1', description: `Una piscina panora𝒎ica con varias especies 𝒎arinas!!\n`},
+{title: "🎣 " + mensajeLugar[1], id: usedPrefix + command + ' 2', description: `Atrevete a pescar en la Laguna 𝒎as diversa del Mundo!!\n`}, 
+{title: "🎣 " + mensajeLugar[2], id: usedPrefix + command + ' 3', description: `Considerada la Madre de los Lagos, aqui tal vez esten los Cala𝒎ares!!\n`},
+{title: "🎣 " + mensajeLugar[3], id: usedPrefix + command + ' 4', description: `Un lago tan grande que es probable que abunde 𝒎uchas especies 𝒎arinas!!\n`},
+{title: "🎣 " + mensajeLugar[4], id: usedPrefix + command + ' 5', description: `Un Mar tan grande y Profundo Perfecto para Pescar!!\n`}
 ]}]
 
 const listMessage = {
@@ -115,7 +115,7 @@ footer: `*- - - - - - - - - - - - - - - - - -*
 ➥ *${nivelGancho}* ${rpgshopp.emoticon('pancingan')}
 *- - - - - - - - - - - - - - - - - -*
 *PREMIUM ${userdb.premium ? "✅": "❌"}*
-${info.nanie}`,
+${info.nanipe}`,
 title: `*⎔───ꕤ PESCA ꕤ───⎔*`,
 buttonText: `${rpgshopp.emoticon('pancing')} PESCAR ${rpgshopp.emoticon('pancing')}`,
 sections }
@@ -131,24 +131,24 @@ let usuario = conn.getName(senderJid)
 
 if (userdb.level <= 1) {
 const resp = `${pescarUsuario} NECESITAS TENER EL NIVEL *${nivelUser[0]}*`
-const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanipe
 const buttons = [[`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, null,buttons, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 if (userdb.stamina < 9) {
 const resp = `${pescarUsuario} NO TIENES SUFICIENTE ENERGIA. MINIMO NECESITAS UN *${energia[0]}%* DE ENERGIA ✨`
-const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanie
+const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanipe
 const buttons = [[`COMPRAR ${energia[0]}% ${rpgg.emoticon('stamina')}`, `${usedPrefix}buy stamina 10`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`], [`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, null, buttons, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 if (userdb.pancingan > 0 ) {
@@ -184,26 +184,26 @@ ${rpgg.emoticon('fishingrod')} RESULTADO DE SU PESCA!! ${pescarUsuario}
 
 setTimeout(async () => {
 const resp = `${pescarUsuario} HEY JUEGA DE NUEVO A PESCAR EN ${rpgg.emoticon('fishingrod')} ${mensajeLugar[0]}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 1`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, null, buttons, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 3600000) 
 
 setTimeout(() => {
-const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[0]}\n` + info.nanie
-const buff = info.nanie
+const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[0]}\n` + info.nanipe
+const buff = info.nanipe
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, pesca1, img1, buttons, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 35000)
 
@@ -211,13 +211,13 @@ setTimeout(() => {
 if (psepick > 0 ) {
 userdb.psepick += psepick * 1
 const resp = `🥳 ACABAS DE OBTENER *${psepick}* TRAJE COMUN!! 🧥`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR OTRA VEZ`, `${usedPrefix}pescar`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 }, 33000)
@@ -226,53 +226,53 @@ setTimeout(() => {
 if(psenjata > 0 ) {
 userdb.psenjata += psenjata * 1
 const resp = `🥳 ACABAS DE OBTENER *${psenjata}* TRAJE EPICO!! 🥷`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR OTRA VEZ`, `${usedPrefix}pescar`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 }, 30000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca3}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 1`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, null, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 15000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca2}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 1`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, null, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 8000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 1`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, null, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 0)
 
@@ -290,46 +290,46 @@ userdb.stamina -= 2 * 1
 
 } else {
 const resp = `YA FUE E PESCA POR FAVOR DESCANSE`
-const buff = `TIEMPO DEL DESCANSO:\n${totalTiempo1}\n\n` + info.nanie
+const buff = `TIEMPO DEL DESCANSO:\n${totalTiempo1}\n\n` + info.nanipe
 const buttons = [[`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 } else {
 const resp = `NO TIENE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR 10 CARNADA ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 10`], [`COMPRAR 50 CARNADA ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 50`], [`🏪 TIENDA PARA COMPRAR`, `${usedPrefix}buy`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, info.nanie, buttons, fkontak,m)
+return conn.sendButton( m.chat, resp, info.nanipe, buttons, fkontak,m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `NO TIENE *${rpgshop.emoticon('pancing')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR CAÑA DE PESCAR ${rpgshopp.emoticon('pancing')}`, `${usedPrefix}buy pancing 1`], [`COMPRAR 2 CAÑA DE PESCAR ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancing 2`]]
 if (start.buttons) {
 return conn.sendButton(m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `NO TIENE *${rpgshop.emoticon('pancingan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR UN GANCHO ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 1`], [`COMPRAR 2 GANCHO ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 2`]]
 if (start.buttons) {
 return conn.sendButton(m.chat, resp, buff, null, buttons, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 break
@@ -339,57 +339,57 @@ let __temporizador2 = userdb.lastmancingeasy + 3600000 //1 h
 let tiempoTotal2 = clockString(__temporizador2 - new Date() * 1)
 if (userdb.level <= 3) {
 const resp = `${pescarUsuario} NECESITAS TENER EL NIVEL *${nivelUser[1]}*`
-const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanipe
 const buttons = [[`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, null,buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 if (userdb.stamina < 19) {
 const resp = `${pescarUsuario} NO TIENES SUFICIENTE ENERGIA. MINIMO NECESITAS UN *${energia[1]}%* DE ENERGIA ✨`
-const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanie
+const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanipe
 const buttons = [[`COMPRAR ${energia[1]}% ${rpgg.emoticon('stamina')}`, `${usedPrefix}buy stamina 20`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`], [`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 if (gancho <= 0) {
 const resp = `NO TIENE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR 10 CARNADA ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 10`], [`COMPRAR 50 CARNADA ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 50`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (canaDePescar <= 0) {
 const resp = `NO TIENE *${rpgshop.emoticon('pancing')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR 1 CAÑA DE PESCAR ${rpgshopp.emoticon('pancing')}`, `${usedPrefix}buy pancing 1`], [`COMPRAR 2 CAÑA DE PESCAR ${rpgshopp.emoticon('pancing')}`, `${usedPrefix}buy pancing 2`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (carnadaUser <= 0) {
 const resp = `NO TIENE *${rpgshop.emoticon('pancingan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR UN GANCHO ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 1`], [`COMPRAR 2 GANCHO ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 2`]]
 if (start.buttons) {
 return conn.sendButton(m.chat, resp, buff, buttons, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (new Date - userdb.lastmancingeasy > 3600000) {
@@ -452,65 +452,65 @@ BONO: +1 ${rpgshop.emoticon('tiketcoin')}
 
 setTimeout(() => {
 const resp = `${pescarUsuario} HEY JUEGA DE NUEVO A PESCAR EN ${rpgg.emoticon('fishingrod')} ${mensajeLugar[1]}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 2`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 3600000) 
 
 setTimeout(() => {
-const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[1]}\n` + info.nanie
+const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[1]}\n` + info.nanipe
 const buff = pesca2
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 35000) 
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca3}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, [[null, null]], null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 15000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca2}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, [[null, null]], null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 8000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, [[null, null]], null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 0)
 
@@ -533,46 +533,46 @@ userdb.stamina -= 4 * 1
 
 } else {
 const resp = `MINIMO *${carnada[1]}* DE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR ${carnada[1]} ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 40`], [`COMPRAR 100 ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 100`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpgshop.emoticon('pancingan')}* NECESITAS EL NIVEL *${nivelDelGancho[1]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[1]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 2`], [`SUBIR AL NIVEL ${nivelCanaDePescar[2]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 3`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpg.emoticon('fishingrod')}* NECESITAS EL NIVEL *${nivelCanaDePescar[1]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[1]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 2`], [`SUBIR AL NIVEL ${nivelCanaDePescar[2]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 3`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `YA FUE DE PESCA POR FAVOR DESCANSE`
-const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal2}\n\n` + info.nanie
+const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal2}\n\n` + info.nanipe
 const buttons = [[`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 break
@@ -582,24 +582,24 @@ let __temporizador3 = userdb.lastmancingnormal + 3600000 //1 h
 let tiempoTotal3 = clockString(__temporizador3 - new Date() * 1)
 if (userdb.level <= 4) {
 const resp = `${pescarUsuario} NECESITAS TENER EL NIVEL *${nivelUser[2]}*`
-const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanipe
 const buttons = [[`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (userdb.stamina < 39) {
 const resp = `${pescarUsuario} NO TIENES SUFICIENTE ENERGIA. MINIMO NECESITAS UN *${energia[2]}%* DE ENERGIA ✨`
-const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanie
+const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanipe
 const buttons = [[`COMPRAR ${energia[2]}% ${rpgg.emoticon('stamina')}`, `${usedPrefix}buy stamina 40`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`], [`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 
@@ -662,65 +662,65 @@ BONO: +1 ${rpgshop.emoticon('tiketcoin')}`.trim()
 
 setTimeout(() => {
 const resp = `${pescarUsuario} HEY JUEGA DE NUEVO A PESCAR EN ${rpgg.emoticon('fishingrod')} ${mensajeLugar[2]}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 3600000) 
 
 setTimeout(() => {
-const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[2]}\n` + info.nanie
+const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[2]}\n` + info.nanipe
 const buff = pescar3
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, img3, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 35000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca3}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, null, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 15000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca2}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 8000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
-conn.sendHydrated(m.chat, resp, info.nanie, null, null, null, null, null, buttons, null)
+conn.sendHydrated(m.chat, resp, info.nanipe, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, img2, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 0)
 
@@ -743,46 +743,46 @@ userdb.stamina -= 6 * 1
 
 } else {
 const resp = `MINIMO *${carnada[2]}* DE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR ${carnada[2]} ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 80`], [`COMPRAR 200 ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 200`], [`🏪 TIENDA PARA COMPRAR`, `${usedPrefix}buy`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpgshop.emoticon('pancingan')}* NECESITAS EL NIVEL *${nivelDelGancho[2]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[2]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 3`], [`SUBIR AL NIVEL ${nivelCanaDePescar[3]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 4`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpg.emoticon('fishingrod')}* NECESITAS EL NIVEL *${nivelCanaDePescar[2]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[2]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 3`], [`SUBIR AL NIVEL ${nivelCanaDePescar[3]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 4`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `YA FUE DE PESCA POR FAVOR DESCANSE`
-const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal3}\n\n` + info.nanie
+const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal3}\n\n` + info.nanipe
 const buttons = [[`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, img2, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 break
@@ -795,21 +795,21 @@ const resp = `${pescarUsuario} NECESITAS TENER EL NIVEL *${nivelUser[3]}*`
 const buff = `NIVEL ACTUAL: *${userdb.level}*\n`
 const buttons = [[`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+return conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (userdb.stamina < 59) {
 const resp = `${pescarUsuario} NO TIENES SUFICIENTE ENERGIA. MINIMO NECESITAS UN *${energia[3]}%* DE ENERGIA ✨`
-const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanie
+const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanipe
 const buttons = [[`COMPRAR ${energia[3]}% ${rpgg.emoticon('stamina')}`, `${usedPrefix}buy stamina 60`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`], [`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 
@@ -873,65 +873,65 @@ BONO: +1 ${rpgshop.emoticon('tiketcoin')}
 
 setTimeout(() => {
 const resp = `${pescarUsuario} HEY JUEGA DE NUEVO A PESCAR EN ${rpgg.emoticon('fishingrod')} ${mensajeLugar[3]}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 3600000) 
 
 setTimeout(() => {
-const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[3]}\n` + info.nanie
+const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[3]}\n` + info.nanipe
 const buff = pescar4
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
 conn.sendButton( m.chat, resp, buff, img4, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 35000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca3}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 15000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca2}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 8000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 3`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 0)
 
@@ -954,46 +954,46 @@ userdb.stamina -= 8 * 1
 
 } else {
 const resp = `MINIMO *${carnada[3]}* DE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR ${carnada[3]} ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 150`], [`COMPRAR 400 ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 400`], [`🏪 TIENDA PARA COMPRAR`, `${usedPrefix}buy`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpgshop.emoticon('pancingan')}* NECESITAS EL NIVEL *${nivelDelGancho[3]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[3]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 4`], [`SUBIR AL NIVEL ${nivelCanaDePescar[4]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 5`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpg.emoticon('fishingrod')}* NECESITAS EL NIVEL *${nivelCanaDePescar[3]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[3]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 4`], [`SUBIR AL NIVEL ${nivelCanaDePescar[4]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 5`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `YA FUE E PESCA POR FAVOR DESCANSE`
-const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal4}\n\n` + info.nanie
+const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal4}\n\n` + info.nanipe
 const buttons = [[`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+return conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 break
@@ -1003,24 +1003,24 @@ let __temporizador5 = userdb.lastmancingextreme + 3600000 //1 h
 let tiempoTotal5 = clockString(__temporizador5 - new Date() * 1)
 if (userdb.level <= 9) {
 const resp = `${pescarUsuario} NECESITAS TENER EL NIVEL *${nivelUser[4]}*`
-const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
+const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanipe
 const buttons = [[`ACTUALIZAR MI NIVEL ${rpgg.emoticon('level')}`, `${usedPrefix}nivel`]]
 if (start.buttons) {
 return conn.sendButton( m.chat, resp, buff, null, buttons, fkontak)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 if (userdb.stamina < 90) {
 const resp = `${pescarUsuario} NO TIENES SUFICIENTE ENERGIA. MINIMO NECESITAS UN *${energia[4]}%* DE ENERGIA ✨`
-const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanie
+const buff = `ENERGIA ACTUAL: ${rpgg.emoticon('stamina')} *${userdb.stamina}%*\n` + info.nanipe
 const buttons = [[`COMPRAR ${energia[4]}% ${rpgg.emoticon('stamina')}`, `${usedPrefix}buy stamina 90`], [`🎒 INVENTARIO`, `${usedPrefix}inventario`], [`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+return conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 
@@ -1082,65 +1082,65 @@ BONO: +1 ${rpgshop.emoticon('tiketcoin')}`.trim()
 
 setTimeout(() => {
 const resp = `${pescarUsuario} HEY JUEGA DE NUEVO A PESCAR EN ${rpgg.emoticon('fishingrod')} ${mensajeLugar[4]}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 5`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 3600000) 
 
 setTimeout(() => {
 const resp = `${rpgg.emoticon('fishingrod')} ${mensajeLugar[4]}\n`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`🎒 INVENTARIO`, `${usedPrefix}inventario`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp + info.nanie, pescar5, img5, buttons, null)
+conn.sendButton( m.chat, resp + info.nanipe, pescar5, img5, buttons, null)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 35000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca3}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 5`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
 conn.sendButton( m.chat, resp, buff, null, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 15000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca2}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 5`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 8000)
 
 setTimeout(() => {
 const resp = `${pescarUsuario} ${mensajePesca}`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`${rpgg.emoticon('fishingrod')} PESCAR DE NUEVO`, `${usedPrefix}pescar 5`]]
 if (start.buttons) {
 conn.sendHydrated(m.chat, resp, buff, null, null, null, null, null, buttons, null)
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }, 0)
 
@@ -1163,46 +1163,46 @@ userdb.stamina -= 10 * 1
 
 } else {
 const resp = `MINIMO *${carnada[4]}* DE *${rpgshop.emoticon('umpan')}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`COMPRAR ${carnada[4]} ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 200`], [`COMPRAR 800 ${rpgshopp.emoticon('umpan')}`, `${usedPrefix}buy umpan 800`], [`🏪 TIENDA PARA COMPRAR`, `${usedPrefix}buy`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpgshop.emoticon('pancingan')}* NECESITAS EL NIVEL *${nivelDelGancho[4]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[4]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 5`], [`SUBIR AL NIVEL ${nivelCanaDePescar[5]} ${rpgshopp.emoticon('pancingan')}`, `${usedPrefix}buy pancingan 6`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `SU *${rpg.emoticon('fishingrod')}* NECESITAS EL NIVEL *${nivelCanaDePescar[4]}* PARA PESCAR`
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [[`SUBIR AL NIVEL ${nivelCanaDePescar[4]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 5`], [`SUBIR AL NIVEL ${nivelCanaDePescar[5]} ${rpgg.emoticon('fishingrod')}`, `${usedPrefix}buy pancing 6`]]
 if (start.buttons) {
-conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 }
 } else {
 const resp = `YA FUE E PESCA POR FAVOR DESCANSE`
-const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal5}\n\n` + info.nanie
+const buff = `TIEMPO DEL DESCANSO:\n${tiempoTotal5}\n\n` + info.nanipe
 const buttons = [[`MENU ☘️`, `${usedPrefix}menu`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff + info.nanie, buttons, fkontak, m)
+return conn.sendButton( m.chat, resp, buff + info.nanipe, buttons, fkontak, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanie, m );
+return conn.sendWritingText(m.chat, resp+'\n'+buff+'\n'+cmds+'\n'+info.nanipe, m );
 }
 } 
 break
@@ -1210,7 +1210,7 @@ break
 default:
 let resp = ''
 const img = [img1, img2, img3, img4, img5].getRandom()
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [
 [`🌟 USUARIOS PREMIUM 🌟`, `${usedPrefix}listprem`],
 [`🎟️ MÁS TIEMPO PREMIUM 🎟️`, `${usedPrefix + command} 1`],

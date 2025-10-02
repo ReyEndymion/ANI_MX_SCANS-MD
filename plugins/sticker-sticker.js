@@ -67,7 +67,7 @@ await conn.sendWritingText(m.chat, resp, userdb, m)
 }
 handler.help = ['stiker (caption|reply media)', 'stiker <url>', 'stikergif (caption|reply media)', 'stikergif <url>']
 handler.tags = ['sticker']
-handler.command = /^s(tic?ker)?(gif)?(info.nanie)?$/i
+handler.command = /^s(tic?ker)?(gif)?(info.nanipe)?$/i
 handler.menu = [];
 handler.type = "";
 handler.disabled = false;

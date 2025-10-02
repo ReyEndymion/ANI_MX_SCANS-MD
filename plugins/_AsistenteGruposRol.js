@@ -1,9 +1,8 @@
 export async function before(m, {conn, chatdb, db, userdb, senderJid}) {
 const { info, newsletterID, sBroadCastID } = await import('../config.js')
 if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
-let resp = ''
 if (/ficha$/i.test(m.text) && chatdb.gruposrol && !chatdb.isBanned) {
-resp = 	
+let resp = 	
 `❢◥ ▬▬▬▬▬▬ ◆ ▬▬▬▬▬▬ ◤❢
 *_𐂡MAGIC MEDIEVAL TECNOLOGÍ𐂡_*
 ❢◥ ▬▬▬▬▬▬ ◆ ▬▬▬▬▬▬ ◤❢
@@ -123,10 +122,6 @@ Imagen o descripción
 *_✿:･HISTORIA DE PERSONAJE･:✿_*
 
 ⌦`.trim()
-
+return conn.sendWritingText(m.chat, resp, userdb, m);
 } 
-//console.log('sgr: ', resp.length === 0)
-if (resp.length === 0) return
-return conn.sendWritingText(m.chat, resp, userdb, m)
-
 }

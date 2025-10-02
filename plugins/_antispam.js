@@ -12,7 +12,6 @@ userdb.lastCommandUsed = null;
 userdb.bannedMessageCount = 0
 }
 if (userdb.bannedMessageCount && typeof userdb.bannedMessageTimestamp === 'number') {
-// Si han pasado más de 30 mins desde el último advertencia, reiniciamos contador
 if (Date.now() - userdb.bannedMessageTimestamp > 30 * 60 * 1000) {
 userdb.bannedMessageCount = 0;
 userdb.bannedMessageTimestamp = 0;

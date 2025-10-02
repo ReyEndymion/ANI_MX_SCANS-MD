@@ -1,51 +1,54 @@
-
-let handler = async (m, {conn, userdb, db, senderJid}) => {
+let handler = async (m, {conn, text, info, usersdb, userdb, senderJid}) => {
+const {multiplier, readMore} = await import('../lib/constants.js')
 let { canLevelUp, xpRange } = await import('../lib/levelling.js')
 let { levelup } = await import( '../lib/levelling.js')
 const {userID} = await import('../config.js')
-
-if (m.chat.endsWith(userID)) return
-let name = senderJid.split`@`[0]//conn.getName(senderJid)
-if (!canLevelUp(userdb.level, userdb.exp, global.multiplier)) {
-let { min, xp, max } = xpRange(userdb.level, global.multiplier)
-let resp =`
+let userjid = senderJid.split`@`[0]
+let { exp, limit, level, role } = userdb
+let { min, xp, max } = xpRange(level, multiplier)
+if (!canLevelUp(userdb.level, exp, multiplier)) {
+return conn.sendWritingText(m.chat, `
 ┌───⊷ *NIVEL*
-▢ Nombre : *@${name}*
-▢ Nivel : *${userdb.level}*
-▢ XP : *${userdb.exp - min}/${xp}*
+▢ Nombre: *@${userjid}*
+▢ Nivel: *${level}*
+▢ Rango: *${role}*
+▢ XP: *${exp - min}/${xp}*
+▢ 💎: *${limit}*
 └──────────────
 
-Te falta *${max - userdb.exp}* de *XP* para subir de nivel
-`.trim()
-return conn.sendWritingText(m.chat, resp, userdb, m)
+Te falta *${max - exp}* de *XP* para subir de nivel\n\n> ${info.nanipe}`.trim(), userdb, m)
 }
-let before = userdb.level * 1
-while (canLevelUp(userdb.level, userdb.exp, global.multiplier)) userdb.level++
-if (before !== userdb.level) {
+let before = level * 1
+while (canLevelUp(level, exp, multiplier)) level++
+if (before !== level) {
 let teks = `🎊 Bien hecho @${senderJid.split`@`[0]}Nivel:`
 let str = `
 ┌─⊷ *LEVEL UP*
 ▢ Nivel anterior : *${before}*
-▢ Nivel actual : *${userdb.level}*
+▢ Nivel actual : *${level}*
+▢ Rango: *${role}*
+▢ Fecha: *${new Date().toLocaleString('id-ID')}*
 └──────────────
 
-*_Cuanto más interactúes con los bots, mayor será tu nivel_*
+*_Cuanto más interactúes con @${conn.user.jid.split('@')[0]}, mayor será tu nivel_*\n*_Actualiza tú rango con el comando ${usedPrefix}rol!!_*\n\n> ${info.nanipe}*
 `.trim()
 try {
-const img = await levelup(teks, userdb.level)
-return conn.sendImageWriting(m.chat, img, str, m );
+const img = await levelup(teks, level)
+return conn.sendImageWriting(m.chat, img, str, userdb, m)
 } catch (e) {
-return conn.sendWritingText(m.chat, `Error: ${e.stack}`, userdb, m)}
+return conn.sendWritingText(m.chat, str, userdb, m)
 }
 }
-
+}
 handler.help = ['levelup']
 handler.tags = ['xp']
 
 handler.command = ['nivel', 'lvl', 'levelup', 'level'] 
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🎉 LEVEL UP", description: `Sube de nivel al interactuar con el bot, usa el comando #levelup`, id: `levelup`}
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler

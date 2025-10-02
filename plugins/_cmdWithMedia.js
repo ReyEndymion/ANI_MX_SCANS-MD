@@ -1,6 +1,5 @@
-export async function before(m, {conn, chatUpdate, botdb, db}) {
-const {proto, generateWAMessage, areJidsSameUser} = (await import('@whiskeysockets/baileys')).default
-//console.log('cmdW: ', m.msg)
+export async function before(m, {conn, chatUpdate, botdb, db, senderJid}) {
+const {proto, generateWAMessage, areJidsSameUser} = (await import('@whiskeysockets/baileys'))
 if (m.isBaileys) return
 if (!m.message) return
 if (!m.msg.fileSha256) return
@@ -19,7 +18,7 @@ messages.pushName = m.pushName
 if (m.isGroup) messages.participant = senderJid
 let msg = {
 ...chatUpdate,
-messages: [proto.WebMessageInfo.fromObject(messages)],
+messages: [proto.WebMessageInfo.create(messages)],
 type: 'append'
 }
 conn.ev.emit('messages.upsert', msg)

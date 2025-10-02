@@ -3,7 +3,7 @@ import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '.
 import { getRandom } from '../lib/functions.js'
 import fs from 'fs'
 import fetch from 'node-fetch'
-import { googleImage } from '../lib/googlePictures.js'
+import { googleImage } from '../lib/googleMedia.js'
 let handler = async (m, {text, usedPrefix, command, conn, db, userdb, senderJid}) => {
 try {
 if (!text) return conn.sendWritingText(m.chat, `*[❗] INGRESE EL NOMBRE DEL PAQUETE QUE DESEE BUSCAR*`, userdb, m)
@@ -23,7 +23,7 @@ var document = doc[Math.floor(Math.random() * doc.length)]
 let buttonMessage= {
 'document': { url: `https://github.com/ReyEndymion/ANI_MX_SCANS-MD` },
 'mimetype': `application/${document}`,
-'fileName': `「𝑯𝒆𝒍𝒍𝒐 𝑾𝒐𝒓𝒍𝒅 」`,
+'fileName': `「Hello World 」`,
 'fileLength': 99999999999999,
 'pageCount': 200,
 'contextInfo': {
@@ -34,7 +34,7 @@ let buttonMessage= {
 'mediaType': 2,
 'previewType': 'pdf',
 'title': `• Resultados Encontrados🔎`,
-'body': info.nanie,
+'body': info.nanipe,
 'thumbnail': sfoto,
 'sourceUrl': 'https://www.youtube.com/channel/UCSTDMKjbm-EmEovkygX-lCA'}},
 'caption': res,

@@ -2,74 +2,92 @@ const items = [
 'limit', 'exp',
 ]
 let confirmation = {}
-async function handler(m, { conn, args, usedPrefix, command, db, userdb, senderJid }) {
-let resp
-let user = global.user
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : args[2] ? (args[2].replace(/[@ .+-]/g, '') + '@s.whatsapp.net') : ''
+async function handler(m, { conn, info, start, args, usedPrefix, command, usersdb, userdb, senderJid }) {
+const {userID} = await import('../config.js')
+const {isNumber} = await import('../lib/functions.js')
+if (confirmation[senderJid]) return conn.sendWritingText(m.chat, `estas haciendo una transferencia`, userdb, m)
+
+const item = items.filter(v => v in userdb && typeof userdb[v] == 'number')
+let lol = `✳️ Uso del comamdo 
+*${usedPrefix + command}*[tipo] [cantidad] [@user]
+📌 Ejemplo : ${usedPrefix + command} exp 65 @${senderJid.split('@')[0]}
+
+
+📍 Artículos transferibles
+┌──────────────
+▢ *limit* = diamante
+▢ *exp* = experiencia
+└──────────────
+`.trim()
 const type = (args[0] || '').toLowerCase()
-const item = items.filter(v => v in user && typeof user[v] == 'number')
+if (!item.includes(type)) return conn.sendWritingText(m.chat, lol, userdb, m)
 const count = Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, (isNumber(args[1]) ? parseInt(args[1]) : 1))) * 1
-if (!item.includes(type)) {resp = `✳️ Uso del comamdo\n\n*${usedPrefix + command}* [tipo] [cantidad] [@user]\n\n📌 Ejemplo : ${usedPrefix + command} exp 65 @${me[0][0]}\n\n📍 Artículos transferibles\n┌──────────────\n▢ *limit* = diamante\n▢ *exp* = experiencia\n└──────────────`.trim()
-} else if (!who) {resp = '✳️ Taguea al usuario'
-} else if (!(who in global._user)) {resp = `✳️ Usuario ${who} no está en la database`
-} else if (user[type] * 1 < count) {resp = `✳️ *${type}* insuficiente para transferir`
-} else if (confirmation[senderJid]) {resp = 'Estas haciendo una transferencia'
-} else {
-let c = `FG - dylux-bot, sin botones por ${info.nanie} `
-resp = `¿Está seguro de que desea transferir *${count}* ${type} a *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}* ?\n\nResponde *si* para aceptar o *no* para cancelar, Tienes *60* s\n\n${c}`.trim()
-}
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : args[2] ? (args[2].replace(/[@ .+-]/g, '') + userID) : ''
+if (!who) return conn.sendWritingText(m.chat, `✳️ Taguea al usuario`, userdb, m)
+if (!(who in usersdb)) return conn.sendWritingText(m.chat, `✳️ Usuario ${who} no está en ladatabase`, userdb, m)
+if (userdb[type] * 1 < count) return conn.sendWritingText(m.chat, `✳️*${type}*insuficiente para transferir`, userdb, m)
+let text = `¿Está seguro de que desea transferir *${count}* ${type} a *@${who.split('@')[0]}* ?\n\nTienes *60s*`.trim()
+const footer = `\n> ${info.nanie}`
+const buttons = [['si', 'si'], ['no', `no`], ['Menu Principal ⚡', `${usedPrefix}menu`]]
 confirmation[senderJid] = {
 sender: senderJid,
 to: who,
 message: m,
 type,
 count,
-timeout: setTimeout(async () => (
-resp = 'Se acabó el tiempo'
-, delete confirmation[senderJid]), 60 * 1000)
+timeout: setTimeout(() => ( conn.sendWritingText(m.chat, `Se acabó el tiempo`, userdb, m), delete confirmation[senderJid]), 60 * 1000)
 }
-return conn.sendWritingText(m.chat, resp, userdb, m)
+if (!start.buttons) {
+return conn.sendButton(m.chat, {text, footer}, {}, buttons, userdb, m)  
+} else {
+text += `\n\nResponde *si* para aceptar o *no* para cancelar`
+return conn.sendWritingText(m.chat, `${text+footer}`, userdb, m)
+return conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
+conn.sendMessage(m.chat, { text: confirm, mentions: conn.parseMention(confirm)}, {quoted: m, ephemeralExpiration: {}, disappearingMessagesInChat: {}}, [['si'], ['no']])
 }
-handler.before = async (m, {conn, db, userdb, senderJid}) => {
-let resp
+
+}
+
+handler.before = async (m, {conn, usersdb, userdb, senderJid}) => {
+const {userID} = await import('../config.js')
 if (m.isBaileys) return
 if (!(senderJid in confirmation)) return
 if (!m.text) return
 let { timeout, sender, message, to, type, count } = confirmation[senderJid]
 if (m.id === message.id) return
-let user = global.user
-let _user = global._user[to]
+let user = usersdb[sender]
+let _user = usersdb[to]
 if (/no?/g.test(m.text.toLowerCase())) {
 clearTimeout(timeout)
 delete confirmation[sender]
-resp = 'Cancelado'
+return conn.sendWritingText(m.chat, `Cancelado`, userdb, m)
 }
 if (/si?/g.test(m.text.toLowerCase())) {
 let previous = user[type] * 1
 let _previous = _user[type] * 1
 user[type] -= count * 1
 _user[type] += count * 1
-if (previous > user[type] * 1 && _previous < _user[type] * 1) {resp = `✅ transferencia exitosa de \n\n*${count}* *${type}* a @${(to || '').replace(/@s\.whatsapp\.net/g, '')}`}
-else {
+if (previous > user[type] * 1 && _previous < _user[type] * 1) {
+await conn.sendWritingText(m.chat, `✅ transferencia exitosa de:\n\n*${count}* *${type}* a @${to.split('@')[0]}`, userdb, m)
+} else {
 user[type] = previous
 _user[type] = _previous
-resp = `Error al transferir *${count}* ${type} to *@${(to || '').replace(/@s\.whatsapp\.net/g, '')}*`
+await m.sendWritingText(m.chat, `Error al transferir *${count}* ${type} a *@${to.split('@')[0]}*`, userdb, m)
 }
 clearTimeout(timeout)
 delete confirmation[sender]
 }
-return conn.sendWritingText(m.chat, resp, userdb, m)
-
 }
 
 handler.help = ['transfer'].map(v => v + ' [tipo] [cantidad] [@tag]')
 handler.tags = ['xp']
 handler.command = ['payxp', 'transfer', 'darxp', 'transferir'] 
-handler.groups = true
 handler.disabled = false
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{ title: "💸 TRANSFERIR", description: `Transfiere XP o 💎 a otro usuario, usa el comando #transferir [tipo] [cantidad] [@usuario]`, id: `transfer` }
+];
+handler.type = "rpg";
 
 export default handler
 

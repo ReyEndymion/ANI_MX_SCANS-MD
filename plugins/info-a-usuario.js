@@ -5,7 +5,7 @@ let resp = info.paypal
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 if (/terminos/.test(command)) {
-const resp = `Los t_rminos y condiciones del bot ${info.nani} son los siguientes:
+const resp = `Los términos y condiciones del bot ${info.nanip} son los siguientes:
 
 1. Uso Educativo: Este bot est_ dise_ado exclusivamente para fines educativos y de ciberseguridad, permitiendo realizar pruebas de penetración en WhatsApp.
 
@@ -19,7 +19,7 @@ const resp = `Los t_rminos y condiciones del bot ${info.nani} son los siguientes
 
 6. Consentimiento: Al utilizar el bot, aceptas cumplir con estos términos y condiciones.
 
-`//Si deseas más información detallada, te recomiendo que consultes el enlace de los t_rminos y condiciones que te proporcion_ anteriormente. Si tienes m_s preguntas, _aqu_ estoy para ayudarte!
+`
 
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }

@@ -7,24 +7,23 @@ const {clockString} = await import('../lib/functions.js')
 let _uptime = process.uptime() * 1000
 let uptime = clockString(_uptime)
 if (/^bot$/i.test(m.text) && (!chatdb.isBanned || !chatdb.modoadmin)) { 
-let resp = `*HOLA, ¿COMO TE PUEDO AYUDAR?*`//\n\nMENU DE COMANDOS\n=> *#menu*\n\n${info.nanie}
-const footerText = info.nanie
+let resp = `*HOLA, ¿COMO TE PUEDO AYUDAR?*`
+const footer = info.nanipe
 const buttons = [['MENÚ DE COMANDOS', `#menu`]]
 let q
 const estiloProduct = { key: {fromMe: m.key.fromMe, participant: senderJid, ...(m.chat ? { remoteJid: m.chat } : {}) }, message: {orderMessage: { itemCount : -999999, status: 1, surface : 1, message: uptime, orderTitle: 'Bang', thumbnail: fs.readFileSync(imagen1), sellerJid: '0@s.whatsapp.net'}}}
 if (start.buttons) {
 const messageContent = {
 text: resp,
-footer: footerText
+footer: footer
 }
 
 q = {key: {remoteJid: m.chat, fromMe: true, id: m.key.id}, message: {extendedTextMessage: {text: await conn.langResponse(resp, userdb)}}}
 await conn.sendButton(m.chat, messageContent, {}, buttons, userdb, m)
 } else {
 const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-q = await conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+footerText, userdb, m )
+q = await conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+footer, userdb, m )
 }
-console.log('bot: ', q)
 let vn = path.join(media, 'audios/bot.mp3')
 const estiloaudio = { key: {fromMe: m.key.fromMe, participant: senderJid, remoteJid: m.chat }, message: {"audioMessage": { "mimetype":"audio/ogg; codecs=opus", "seconds": _uptime, "ptt": "true"}}}
 return conn.sendAudioRecording(m.chat, vn, q)

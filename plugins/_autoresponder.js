@@ -1,6 +1,6 @@
 import { userID } from '../config.js';
 
-export async function before (m, {conn, info, chatdb, db, objs, userdb, senderJid, isROwner}) {
+export async function before (m, {conn, info, chatdb, db, objs, userdb, senderJid, isROwner, isLidGroup}) {
 if (m.fromMe) return
 const fs = await import('fs')
 let { sticker } = await import('../lib/sticker.js')
@@ -11,11 +11,10 @@ const stk = fs.readFileSync(stickerAMX)
 const normalizetext = await conn.textTagsLidToJid(m.text, m.chat)
 const isMentionBot = normalizetext.includes('@' + conn.user.jid.split('@')[0])
 if (isMentionBot && m.isGroup && !chatdb.isBanned && chatdb.autoreac && !m.fromMe) {
-return conn.sendSticker(m.chat, stk, {packname: info.kom, wm: info.gitAuthor, contextInfo: {externalAdReply: { title: info.nanie, body: info.repoProyect, sourceUrl: info.repoProyect, thumbnail: stk}}}, m)
+return conn.sendSticker(m.chat, stk, {packname: info.kom, wm: info.gitAuthor, contextInfo: {externalAdReply: { title: info.nanipe, body: info.repoProyect, sourceUrl: info.repoProyect, thumbnail: stk}}}, m)
 }
 const isMentionOwner = m.mentionedJid.some(ment => owner.some(([number, nameOw, boolean]) => {
 ment.endsWith(lid) ? ment = conn.lidToJid(ment, m.chat) : ment
-//console.log('autoresp: ', ment.endsWith(lid), ment === number+userID, ment, number)
 
 if (ment === number+userID) return true 
 else return false
@@ -30,8 +29,7 @@ let join = `*< UNE EL BOT A TU GRUPO />*\n\n*HOLA @${senderJid.split`@`[0]}*\n\n
 let contextInfo = {
 mentionedJid: conn.parseMention(join),
 "externalAdReply": {
-"title": info.nanie, 
-//"showAdAttribution": true,
+"title": info.nanipe, 
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
 "containsAutoReply": true,

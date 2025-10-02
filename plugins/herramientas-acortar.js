@@ -3,12 +3,24 @@ let handler = async(m, {conn, text, usedPrefix, xteamkey, db, userdb, senderJid}
 let { default: fs } = await import('fs');
 let { default: fetch } = await import('node-fetch');
 if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] INGRESE UN ENLACE / URL EL CUAL DESEA ACORTAR*`, userdb, m)
-let json = await (await fetch(`https://api.xteam.xyz/shorturl/tinyurl?url=${text}&apikey=cb15ed422c71a2fb`)).json()
-if (!json.status) throw json
-let hasil = `*LINK ACORTADO CORECTAMENTE!!*\n\n*LINK ANTERIOR:*\n${text}\n*LINK ACORTADO:*\n*${json.result}*`.trim() 
-//m.reply(hasil)
+try {
+let res = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(text)}`);
+let shortUrl = await res.text();
 
-await conn.sendWritingText(m.chat, hasil, userdb, m); 
+console.error('info:', res);
+if (!shortUrl.startsWith('http')) 
+throw new Error('No se pudo acortar el enlace');
+
+let hasil = `**LINK ACORTADO CORRECTAMENTE!!**\n\n` +
+`*LINK ANTERIOR:*\n${text}\n` +
+`*LINK ACORTADO:*\n${shortUrl}`;
+
+return conn.sendWritingText(m.chat, hasil, userdb, m);
+
+} catch (e) {
+console.error(e);
+await conn.sendWritingText(m.chat, `⚠️ Ocurrió un error al intentar acortar el enlace`, userdb, m);
+}
 }
 
 handler.help = ['tinyurl','acortar'].map(v => v + ' <link>')

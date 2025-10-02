@@ -1,4 +1,4 @@
-/* By https://github.com/GataNina-Li/${info.nanie} */
+/* By https://github.com/GataNina-Li */
 /*viewOnce by rey Endymion*/
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
 import { lesbi as asupan } from '../src/enlaces.js'
@@ -13,7 +13,7 @@ console.log("Enlaces accesibles:", validLinks);
 });
 conn.sendFile (m.chat, res, null, '*DISFRUTA DEL VIDEO 🥵*', m, null, {viewOnce: true})
 await delay(1 * 10000)
-//await conn.sendMessage(m.chat, { text: `*DISFRUTA DEL VIDEO 🥵*`, info.nanie, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
+//await conn.sendMessage(m.chat, { text: `*DISFRUTA DEL VIDEO 🥵*`, info.nanipe, [['🔄 SIGUIENTE 🔄', `/${command}`]], m)
 }
 handler.help = ['videoxxxlesbi']
 handler.tags = ['random']

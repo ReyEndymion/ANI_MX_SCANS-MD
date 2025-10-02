@@ -2,7 +2,7 @@
 //By @NeKosmic || https://github.com/NeKosmic/
 //
 
-export async function before(m, { conn, isAdmin, isBotAdmin, usedPrefix, botdb, chatdb , db, userdb, senderJid}) {
+export async function before(m, { conn, start, info, isAdmin, isBotAdmin, usedPrefix, botdb, chatdb , db, userdb, senderJid}) {
 if (m.isBaileys && m.fromMe)
 return !0
 if (!m.isGroup) return !1
@@ -10,18 +10,15 @@ let settings = botdb.settings || {}
 let delet = m.key.participant
 let bang = m.key.id
 let name = await conn.getName(m.sender)
-let { configDinamics } = await import('../lib/database.js')
-const start = (await configDinamics()).start
-const {info} = await import('../config.js')
-let fakemek = {key: {participant: senderJid,"remoteJid": senderJid},"message": {"groupInviteMessage": {"groupJid": m.chat,"inviteCode": "m","groupName": conn.getName(m.chat), "caption": info.nanie, 'jpegThumbnail': null}}}
+let fakemek = {key: {participant: senderJid,"remoteJid": senderJid},"message": {"groupInviteMessage": {"groupJid": m.chat,"inviteCode": "m","groupName": conn.getName(m.chat), "caption": info.nanipe, 'jpegThumbnail': null}}}
 let resp = '', eliminado
-if (chatdb.antiTraba && m.text.length > 2000) { //Cantidad máxima de caracteres aceptados en un mensaje//
+if (chatdb.antiTraba && m.text.length > 2000) {
 if (!settings.restrict) {return conn.sendWritingText(m.chat, '[ ! ] Para realizar acciones de eliminación, mi dueño tiene que encender el modo restringido!', userdb, m)
 } else {
 if (isBotAdmin) {
 if (isAdmin) return conn.sendWritingText(m.chat, `El administrador @${senderJid.split("@")[0]} acaba de enviar un texto que contiene muchos caracteres -.-!`, userdb, fakemek)
 eliminado = true
-conn.deleteMessage(m.chat, { remoteJid: m.chat, fromMe: false, id: bang, participant: delet })
+await conn.deleteMessage(m.chat, { remoteJid: m.chat, fromMe: false, id: bang, participant: delet })
 resp = `*[ ! ] Se detecto un mensaje que contiene muchos caracteres [ ! ]*\n`
 await conn.sendWritingText(m.chat, resp, userdb, m );
 setTimeout(() => { 
@@ -39,7 +36,7 @@ return conn.sendWritingText(m.chat, resp, userdb, m );
 resp = 'No soy administrador, no puedo hacer nada 😕'
 return conn.sendWritingText(m.chat, resp, userdb, m );
 }
-const buff = info.nanie
+const buff = info.nanipe
 const buttons = [['DESACTIVAR ANTI TRABAS ]', '/disable antitraba']]
 if (eliminado) {
 if (start.buttons) {

@@ -464,12 +464,39 @@ return conn.sendWritingText(m.chat, `
 ${Object.keys(msgs).map(v => '*👉🏻 ' + v).join('*\n*')}*
 `.trim(), userdb, m)
 }
+if (/^(set|add|cmd)(cmd|add|set)$/i.test(command)) {
+if (/^(setset|addadd|cmdcmd)$/i.test(command)) return
+if (!m.quoted) return conn.sendWritingText(m.chat, `'*[❗INFO❗] RESPONDE AL STICKER O IMAGEN AL CUAL DESEA AGREGAR UN COMANDO O TEXTO*'`, userdb, m)
+if (!m.quoted.fileSha256) return conn.sendWritingText(m.chat, `'*[❗INFO❗] SOLO PUEDES ASIGNAR COMANDOS O TEXTOS A STICKERS E IMÁGENES*'`, userdb, m)
+if (!text) return conn.sendWritingText(m.chat, `*[❗INFO❗] ERROR DE USO, TEXTO FALTANTE*\n\n*USO CORRECTO DEL COMANDO:*\n*—◉ ${usedPrefix + command} <texto> <responder a sticker o imagen>*\n\n*EJEMPLO DE USO DEL COMANDO:*\n*—◉ ${usedPrefix + command} <#menu> <responder a sticker o imagen>*`, userdb, m)
+let sticker = botdb.sticker
+let hash = m.quoted.fileSha256.toString('base64')
+if (sticker[hash] && sticker[hash].locked) return conn.sendWritingText(m.chat, `'*[❗INFO❗] SOLO EL OWNER PUEDE REALIZAR La MODIFICACIÓN*'`, userdb, m)
+sticker[hash] = { text, mentionedJid: m.mentionedJid, creator: senderJid, at: + new Date, locked: false }
+return conn.sendWritingText(m.chat, `*[ ✔ ] EL TEXTO/COMANDO ASIGNADO AL STICKER/IMAGEN FUE AGREGADO A La BASE DE DATOS CORRECTAMENTE*`, userdb, m)
+}
+if (/^(del(ete)?cmd)$/i.test(command)) {
+let hash = text
+if (m.quoted && m.quoted.fileSha256) hash = m.quoted.fileSha256.toString('hex')
+if (!hash) return conn.sendWritingText(m.chat, `*[❗INFO❗] SOLO SE PUEDEN ASIGNAR TEXTOS O COMANDOS ASIGNADOS A STICKERS O IMÁGENES, PARA OBTENER EL CÓDIGO ASIGNADO USE EL COMANDO ${usedPrefix}listcmd*`, m)
+let sticker = botdb.sticker
+if (sticker[hash] && sticker[hash].locked) return conn.sendWritingText(m.chat, `*[❗INFO❗] SOLO EL OWNER PUEDE REALIZAR LA ELIMINACIÓN*`, userdb, m)
+delete sticker[hash]
+return conn.sendWritingText(m.chat, `*[ ✔ ] EL TEXTO/COMANDO ASIGNADO AL STICKER/IMAGEN FUE ELIMINADO DE LA BASE DE DATOS CORRECTAMENTE*`, userdb, m)
+}
+if (/^(list(a)?|cmd)(list|cmd)$/i.test(command)) {
+if (/^(list(a)?list(a)?|cmdcmd)$/i.test(command)) return
+let resp = `*< LISTA DE COMANDOS / TEXTOS ASIGNADOS />*\n${Object.entries(botdb.sticker).map(([key, value], index) => `*${index + 1}.-*\n*CODIGO:* ${value.locked ? `*(bloqueado)* ${key}` : key}\n*COMANDO/TEXTO* ${value.text}`).join('\n\n')}
+`.trim()
+await conn.writing(m.chat, resp)
+return conn.sendMessage(m.chat, { text: resp, mentions: Object.values(botdb.sticker).map(x => x.mentionedJid).reduce((a, b) => [...a, ...b], []) }, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} );
+}
 };
 handler.help = ['banchatAll']
 
 handler.tags = ['owner']
-
-handler.command = /^((un)?ban((chat|user)(s(privs|groups|all))?))|^(banlist(users|privs|groups)?)|^((agregar|eliminar|ver|lista)(vn|msg|video|audio|img|sticker))$/i
+//
+handler.command = /^((un)?ban((chat|user)(s(privs|groups|all))?))|^(banlist(users|privs|groups)?)|^((agregar|eliminar|ver|lista)(vn|msg|video|audio|img|sticker))|^((set|add)cmd)|^(set|add|cmd|list(a)?|del(ete)?(cmd|add|set))$/i
 handler.owner = true
 handler.menu = [
 {title: "👑 BANCHAT", description: "#banchat ", id: `banchat`}, 
@@ -484,49 +511,37 @@ handler.menu = [
 {title: "👑 UNBANCHATSPRIVS", description: "#unbanchatsprivs <time>*\n*(Usa #help unbanchatsprivs Para más información)", id: `unbanchatsprivs`}, 
 {title: "👑 BANCHATSGROUPS", description: "#banchatsgroups <time>*\n*(Usa #help banchatsgroups Para más información)", id: `banchatsgroups`}, 
 {title: "👑 UNBANCHATSGROUPS", description: "#unbanchatsgroups <time>*\n*(Usa #help unbanchatsgroups Para más información)", id: `unbanchatsgroups`}, 
-{title: "BANLIST", description: "Muestra la lista de usuarios y grupos baneados usando #banlist", id: `banlist`},
+{title: "👑 BANLIST", description: "Muestra la lista de usuarios y grupos baneados usando #banlist", id: `banlist`},
 {title: "👑 BANLISTUSERS", description: "Muestra solamente los usuarios baneados Usando #banuser", id: `banuser`}, 
-{title: "👑 BANLISTPRIVS", description: "Muestra solamente los Chats privados baneados usando #banlistprivs", id: `banlistprivs`}, 
-{title: "👑 BANLISTGROUPS", description: "Muestra sólo los grupos Baneados usando #banlistgroups", id: `banlistgroups`}, 
-{title: `AGREGAR A LA LISTA`,
-rows: [
-{title: "🗳️ AGREGAR MENSAJE", description: "#agregarmsg *<texto/comando/palabra clave>* (responde a un texto) ", id: `agregarmsg`},
+{title: "👑 BANLISTPRIVS", description: "Muestra solamente los chats privados baneados usando #banlistprivs", id: `banlistprivs`}, 
+{title: "👑 BANLISTGROUPS", description: "Muestra sólo los grupos baneados usando #banlistgroups", id: `banlistgroups`}, 
+{header: `AGREGAR A LA LISTA`, title: "🗳️ AGREGAR MENSAJE", description: "#agregarmsg *<texto/comando/palabra clave>* (responde a un texto) ", id: `agregarmsg`},
 {title: "🗳️ AGREGAR VN", description: "#agregarvn *<texto/comando/palabra clave>* (responde a una nota de voz) ", id: `agregarvn`},
 {title: "🗳️ AGREGAR VIDEO", description: "#agregarvideo *<texto/comando/palabra clave>* (responde a un video) ", id: `agregarvideo`},
 {title: "🗳️ AGREGAR AUDIO", description: "#agregaraudio *<texto/comando/palabra clave>* (responde a un audio) ", id: `agregaraudio`},
 {title: "🗳️ AGREGAR IMAGEN", description: "#agregarimg *<texto/comando/palabra clave>* (responde a una imagen) ", id: `agregarimg`},
-{title: "🗳️ AGREGAR STICKER", description: "#agregarsticker *<texto/comando/palabra clave>* (responde a un sticker) ", id: `agregarsticker`}
-]
-},
-{title: `ELIMINAR DE LA LISTA`,
-rows: [
-{title: "🗳️ ELIMINAR MENSAJE", description: "#eliminarmsg *<texto/comando/palabra clave>* ", id: `eliminarmsg`},
+{title: "🗳️ AGREGAR STICKER", description: "#agregarsticker *<texto/comando/palabra clave>* (responde a un sticker) ", id: `agregarsticker`},
+{header: `ELIMINAR DE LA LISTA`, title: "🗳️ ELIMINAR MENSAJE", description: "#eliminarmsg *<texto/comando/palabra clave>* ", id: `eliminarmsg`},
 {title: "🗳️ ELIMINAR VN", description: "#eliminarvn *<texto/comando/palabra clave>* ", id: `eliminarvn`},
 {title: "🗳️ ELIMINAR VIDEO", description: "#eliminarvideo *<texto/comando/palabra clave>* ", id: `eliminarvideo`},
 {title: "🗳️ ELIMINAR AUDIO", description: "#eliminaraudio *<texto/comando/palabra clave>* ", id: `eliminaraudio`},
 {title: "🗳️ ELIMINAR IMAGEN", description: "#eliminarimg *<texto/comando/palabra clave>* ", id: `eliminarimg`},
-{title: "🗳️ ELIMINAR STICKER", description: "#eliminarsticker *<texto/comando/palabra clave>* ", id: `eliminarsticker`}
-]
-},
-{title: `VER TEXTOS O ARCHIVOS`,
-rows: [
-{title: "🗳️ VER MENSAJE", description: "#vermsg *<texto/comando/palabra clave>* ", id: `vermsg`},
+{title: "🗳️ ELIMINAR STICKER", description: "#eliminarsticker *<texto/comando/palabra clave>* ", id: `eliminarsticker`},
+{header: `VER TEXTOS O ARCHIVOS`, title: "🗳️ VER MENSAJE", description: "#vermsg *<texto/comando/palabra clave>* ", id: `vermsg`},
 {title: "🗳️ VER VN", description: "#vervn *<texto/comando/palabra clave>* ", id: `vervn`},
 {title: "🗳️ VER VIDEO", description: "#vervideo *<texto/comando/palabra clave>* ", id: `vervideo`},
 {title: "🗳️ VER AUDIO", description: "#veraudio *<texto/comando/palabra clave>* ", id: `veraudio`},
 {title: "🗳️ VER IMAGEN", description: "#verimg *<texto/comando/palabra clave>* ", id: `verimg`},
-{title: "🗳️ VER STICKER", description: "#versticker *<texto/comando/palabra clave>* ", id: `versticker`}
-]},
-{title: 'LISTAR MENSAJES',
-rows: [
-{title: "🗳️ LISTA MENSAJE", description: "#listamsg ", id: `listamsg`},
+{title: "🗳️ VER STICKER", description: "#versticker *<texto/comando/palabra clave>* ", id: `versticker`},
+{header: 'LISTAR MENSAJES', title: "🗳️ LISTA MENSAJE", description: "#listamsg ", id: `listamsg`},
 {title: "🗳️ LISTA VN", description: "#listavn ", id: `listavn`},
 {title: "🗳️ LISTA VIDEO", description: "#listavideo ", id: `listavideo`},
 {title: "🗳️ LISTA AUDIO", description: "#listaaudio ", id: `listaaudio`},
 {title: "🗳️ LISTA IMAGEN", description: "#listaimg ", id: `listaimg`},
-{title: "🗳️ LISTA STICKER", description: "#listasticker ", id: `listasticker`}
-]
-}
+{title: "🗳️ LISTA STICKER", description: "#listasticker ", id: `listasticker`},
+{header: 'COMANDOS EN MULTIMEDIA', title: 'ADDCMD', description: ' agrega comandos a un sticker o a una imagen', id: 'addcmd'},
+{title: 'DELCMD', description: ' Elimina comandos de un sticker o a una imagen', id: 'delcmd'},
+{title: 'LISTCMD', description: 'Lista comandos asignados de stickers he imagenes guardadas', id: 'listcmd'}
 ];
 handler.type = "owners";
 

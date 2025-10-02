@@ -9,7 +9,7 @@ if (/^reset/g.test(command)) resp = `*[❗] MENSAJE DE ${/resetbye/i.test(comman
 return conn.sendWritingText(m.chat, resp, userdb, m)
 } else {
 if (/^setbye$/i.test(command)) chatdb.sBye = text
-if (/^setwelcome$/) chatdb.sWelcome = text
+if (/^setwelcome$/i.test(command)) chatdb.sWelcome = text
 let resp
 if (/^set/g.test(command)) resp = `*[❗] MENSAJE DE ${/setbye/i.test(command) ? 'DESPEDIDA' : 'BIENVENIDA'} CONFIGURADO CORRECTAMENTE PARA ESTE GRUPO*`
 return conn.sendWritingText(m.chat, resp, userdb, m)
@@ -17,7 +17,7 @@ return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 handler.help = ['setbye <text>']
 handler.tags = ['group']
-handler.command = /^(set|reset)(bye|welcome)$/
+handler.command = /^((set|reset)(bye|welcome))$/
 handler.admin = true
 handler.menu = [
 {title:"💎 CAMBIAR LA BIENVENIDA DEL BOT", description: "edita la bienvenida del BOT usando #setwelcome", id: `setwelcome`}, 

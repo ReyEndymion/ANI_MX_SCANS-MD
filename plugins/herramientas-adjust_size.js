@@ -18,8 +18,10 @@ return conn.sendMessage(m.chat, { video: {url: url}, caption: `Aqui tienes`, fil
 handler.tags = ['tools']
 handler.help = ['tamaño <cantidad>']
 handler.command = /^(length|filelength|edittamaño|totamaño|tamaño)$/i
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 AJUSTAR TAMAÑO", description: "ajusta el tamaño de una imagen o video usando #tamaño <cantidad>", id: `tamaño`}
+];
+handler.type = "herramientas";
 handler.disabled = false;
 
 export default handler

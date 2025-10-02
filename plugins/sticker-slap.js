@@ -1,6 +1,6 @@
 let handler = async (m, {conn, text, db, userdb, senderJid}) => {
 const fetch = await import('node-fetch')
-const { googleMotions } = await import('../lib/googlePictures.js')
+const { googleMotions } = await import('../lib/googleMedia.js')
 const { sticker, createSticker } = await import('../lib/sticker.js')
 try {
 const bofGif = (await googleMotions('bofetada slap gif'))

@@ -7,7 +7,12 @@ if (!args[0]){
 let resp = '*[❗INFO❗] ERROR, POR FAVOR VUELVA A INTENTARLO*\n\n*- CORROBORE QUE EL ENLACE SEA SIMILAR A:*\n*◉ https://drive.google.com/file/d/1dmHlx1WTbH5yZoNa_ln325q5dxLn1QHU/view*' 
 
 return await conn.sendWritingText(m.chat, resp, userdb, m);
-} try {
+} 
+if (!(args[0] && args[0].match(/drive\.google/i))) return conn.sendWritingText(m.chat, `Invalid URL`, userdb, m)
+let id = (args[0].match(/\/?id=(.+)/i) || args[0].match(/\/d\/(.*?)\//))[1]
+if (!id) return conn.sendWritingText(m.chat, `ID Not Found`, userdb, m)
+
+try {
 GDriveDl(args[0]).then(async (res) => {
 let resp = '_Descargando su archivo, espere un momento..._\n\n_El tiempo de espera puede variar dependiendo del peso del archivo, si el peso supera los 100 MB puede que su archivo no sea enviado'
 
@@ -15,6 +20,7 @@ await conn.sendWritingText(m.chat, resp, userdb, m);
 //conn.sendWritingText(m.chat,  , userdb, m)
 if (!res) throw res
 await conn.sendFile(m.chat, res.downloadUrl, res.fileName, '', m, null, { mimetype: res.mimetype, asDocument: true })
+if (!res.downloadUrl) return conn.sendWritingText(m.chat, `Link Download Limit!`, userdb, m)
 
 })
 } catch(e) {
@@ -34,9 +40,7 @@ handler.disabled = false;
 export default handler
 async function GDriveDl(url) {
 let id
-if (!(url && url.match(/drive\.google/i))) return conn.sendWritingText(m.chat, `Invalid URL`, userdb, m)
 id = (url.match(/\/?id=(.+)/i) || url.match(/\/d\/(.*?)\//))[1]
-if (!id) return conn.sendWritingText(m.chat, `ID Not Found`, userdb, m)
 let res = await fetch(`https://drive.google.com/uc?id=${id}&authuser=0&export=download`, {
 method: 'post',
 headers: {
@@ -48,8 +52,10 @@ headers: {
 'x-client-data': 'CKG1yQEIkbbJAQiitskBCMS2yQEIqZ3KAQioo8oBGLeYygE=',
 'x-drive-first-party': 'DriveWebUi',
 'x-json-requested': 'true' }})
+
 let { fileName, sizeBytes, downloadUrl } = JSON.parse((await res.text()).slice(4))
-if (!downloadUrl) return conn.sendWritingText(m.chat, `Link Download Limit!`, userdb, m)
+
 let data = await fetch(downloadUrl)
 if (data.status !== 200) throw data.statusText
-return { downloadUrl, fileName, fileSize: formatSize(sizeBytes), mimetype: data.headers.get('content-type')}}
+return { downloadUrl, fileName, fileSize: formatSize(sizeBytes), mimetype: data.headers.get('content-type')}
+}

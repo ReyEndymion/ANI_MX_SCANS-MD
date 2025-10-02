@@ -157,7 +157,6 @@ if (!fs.existsSync(pathBotDBs)) fs.mkdirSync(pathBotDBs, { recursive: true })
 const botRespPath = path.join(authFolderRespald, nameFolderBot)
 if (!fs.existsSync(botRespPath)) fs.mkdirSync(botRespPath, { recursive: true })
 const pathDB = path.join(pathBotDBs, `SubBot-database.json`)
-console.log('jadibotCheck: ', pathDB)
 const db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile(pathDB));
 const dbGFAPFile = path.join(pathBotDBs, 'groupFetchAllParticipatingJson.json')
 const createJson = new JSONFile(dbGFAPFile)
@@ -244,7 +243,7 @@ timestamp.connect = new Date
 const { connection, lastDisconnect, isNewLogin, qr } = update
 if (isNewLogin) sock.isInit = false
 if (qr && !mcode) {
-const resp = `*${info.nanie}*
+const resp = `*${info.nanipe}*
 *SER SUB-BOT*
 
 *Escanea este codigo QR para convertirte en un Bot (SubBot), puedes usar otro dispositivo para escanear*
@@ -255,7 +254,7 @@ const resp = `*${info.nanie}*
 *3.- Escanee este codigo QR*
 *El codigo QR expira en 60 segundos!!*
 
-*—◉ ${info.nanie} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+*—◉ ${info.nanipe} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
 
 if (!m && m.fromMe) return
@@ -264,7 +263,6 @@ if (lastQr) {
 await new Promise(resolve => setTimeout(resolve, 20000));
 await lastQr.delete() 
 }
-//lastQr = await conn.sendImageWriting(m.chat, imagen, resp, userdb, q)
 errorCount++
 } else if (qr && mcode) {
 const resp = `*${info.nanie}*
@@ -281,7 +279,7 @@ O lo puede intentar:
 *2.- Haga click en los 3 puntos ubicados en la esquina superior derecha en el inicio de su WhatsApp. Toca en donde dice dispositivos vinculados, vincular nuevo dispositivo y elegir vincular con el numero de telefono y el codigo que copio lo pegas en las casillas*
 *El codigo expira en 60 segundos!!*
 
-*—◉ ${info.nanie} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+*—◉ ${info.nanipe} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 let q = await conn.sendWritingText(m.chat, resp, userdb, m)
 await wait(5000)
 const code8 = await sock.requestPairingCode((senderJid.split`@`[0]))
@@ -371,7 +369,6 @@ if (!m && m.fromMe) return
 if (conn.messageJdb) {
 resp = `*[❗] reconectado con exito, se paciente los mensajes se estan cargando...*`
 q = await conn.sendWritingText(m.chat, resp, userdb, m)
-console.log('jadibotCheck: ', conn.messageJdb, resp)
 } else {
 resp = `*[❗] Ya estas conectado, se paciente los mensajes se estan cargando...*\n\n*—◉ Para detener tu Bot debes usar el comando:*\n\n*—◉ ${usedPrefix + 'stop'}*\n\n*—◉ Para dejar de ser Bot puedes usar:*\n\n*◉ ${usedPrefix + 'deletebot'}*\n\n*Nota:* Primero tienes que utilizar el comando ${usedPrefix + 'stop'} para detener tú Bot, y posteriormente debes borrar desde dispositivos vinculados la sesión abierta de WhatsApp\n\n*—◉ Para volver a ser Bot y reescanear el codigo QR puedes usar:*\n\n*◉ ${usedPrefix + command}*\n\n*Nota:* tienes que haber hecho ya el procedimiento para borrar la sesión anterior\n\n*—◉ Si deseas solicitar tu token para conectarlo desde cualquier número puedes usar:*\n*◉ ${usedPrefix + 'codetoken'}*\n\nPara volver a conectarte usa ${usedPrefix + command}*\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub-bots se apagaran\n\nPuede iniciar sesión sin el codigo qr con el siguiente mensaje, envialo cuando no funcione el bot....` + `\n\n${timestamp.connect = new Date}`
 q = await conn.sendWritingText(m.chat, resp, userdb, m)
@@ -419,6 +416,7 @@ global.conns.splice(i, 1)
 
 libstore.bind(sock)
 		 
+const oldChats = (Object.assign(sock.chats, inMstore.chats));
 let handler = await import('../handler.js')
 let creloadHandler = async function (restatConn) {
 try {
@@ -431,8 +429,7 @@ console.error(e)
 if (restatConn) {
 try { sock.ws.close() } catch { }
 sock.ev.removeAllListeners()
-const oldChats = sock.chats;
-sock = makeWASocket(connectionOptions, {storeFile, inMstore, libstore, chats: oldChats })
+sock = makeWASocket(connectionOptions, Object.assign(options, {chats: oldChats }));
 sock.uptime = Date.now();
 isInit = true
 }

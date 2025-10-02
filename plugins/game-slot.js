@@ -1,12 +1,15 @@
 /* CREDITOS A https://github.com/FG98F */
 
-let handler = async (m, {args, usedPrefix, command, userdb, db, senderJid}) => {
+let handler = async (m, {conn, args, usedPrefix, command, userdb, db, senderJid}) => {
+let resp
 let fa = `
 *[❗] INGRESA LA CANTIDAD QUE DESEA APOSTAR* 
 
 *📌 EJEMPLO:*
 *${usedPrefix + command} 100*`.trim()
-if (!args[0] && isNaN(args[0])) {resp = fa} else {
+if (!args[0] && isNaN(args[0])) {
+resp = fa
+} else {
 let apuesta = parseInt(args[0])
 let time = userdb.lastslot + 10000
 if (new Date - userdb.lastslot < 10000) return conn.sendWritingText(m.chat, `*⏳ ESPERE ${msToTime(time - new Date())} PARA VOLVER A APOSTAR*`, userdb, m)

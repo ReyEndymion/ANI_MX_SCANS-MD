@@ -5,7 +5,6 @@ const fs = await import('fs')
 let {__filename, plugins, opts, prefix } = await import('../lib/functions.js');
 const {pluginsPath} = objs
 
-console.log('testELPlugins: ', plugins)
 if (/^listinfoplugin$/i.test(command)) {
 const isHandler = []
 const filter = args[0]?.toLowerCase(); 
@@ -193,7 +192,7 @@ conn.sendWritingText(m.chat, `❌ Error al cargar el plugin:\n${e.message}` , us
 }
 handler.help = ['editinfoplugin'];
 handler.tags = ['owner'];
-handler.command = /^(edit|list)?(info|upload|cargar)plugin$/i;
+handler.command = /^((edit|list)?(info|upload|cargar)plugin)$/i;
 handler.rowner = true;
 handler.menu = [
 {title: 'EDITAR PROPIEDADES DE PLUGINS', description: 'añade o edita propiedades faltantes para la administracion y edicion del plugin', id: 'editinfoplugin'},

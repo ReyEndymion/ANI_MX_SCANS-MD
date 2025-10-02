@@ -26,13 +26,13 @@ return conn.sendWritingText(m.chat, resp, m )
 
 } catch(err) {
 console.error('La carpeta o archivo de sesion no existen ', err)
-let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${info.nanie}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+let resp = `Usted ya no es un miembro de los Sub-Bots de este Bot(${info.nanipe}).\n\nPara poder ser Sub-bot use el comando *${usedPrefix + 'jadibot'}*\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
 }
 }
 } else {
 if (m.fromMe) return
-let resp = `Es posible que la sesion no exista o este es el bot principal de (${info.nanie}).\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
+let resp = `Es posible que la sesion no exista o este es el bot principal de (${info.nanipe}).\n\n En caso de que tu sesion no la puedas iniciar otra vez, borra la sesion creada en dispositivos vinculados y usa el comando *${usedPrefix + 'deletebot'}* para poder solicitar una nueva sesion`
 return conn.sendWritingText(m.chat, resp, m )
 
 }

@@ -1,10 +1,10 @@
 import TicTacToe from '../lib/tictactoe.js'
-import { owner, info, temp, newsletterID, sBroadCastID, userID, groupID, media } from '../config.js'
-import { googleImage } from '../lib/googlePictures.js'
+import { owner, temp, newsletterID, sBroadCastID, userID, groupID, media } from '../config.js'
+import { googleImage } from '../lib/googleMedia.js'
 import { format } from 'util'
 let game = {}
-let handler = async (m, {conn, start, usedPrefix, command, text, db, userdb, senderJid}) => {
-const buff = info.nanie
+let handler = async (m, {conn, start, info, usedPrefix, command, text, db, userdb, senderJid}) => {
+const buff = info.nanipe
 if (/^(tictactoe|ttc|ttt|xo)$/i.test(command)) {
 //conn.game = conn.game ? conn.game : {}
 if (Object.values(game).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(senderJid))) return conn.sendWritingText(m.chat, `*[❗] AÚN ESTÁS EN UN JUEGO CON ALGUIEN*`, userdb, m) 

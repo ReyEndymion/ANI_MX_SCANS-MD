@@ -2,7 +2,7 @@ import { API } from '../api.js'
 import fetch from 'node-fetch'
 import { lyrics, lyricsv2 } from '../lib/lyricsscraper.js'
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
-import { googleImage } from '../lib/googlePictures.js'
+import { googleImage } from '../lib/googleMedia.js'
 let handler = async (m, {conn, text, usedPrefix, command, db, userdb, senderJid}) => {
 let { configDinamics } = await import('../lib/database.js')
 const {start} = await configDinamics()
@@ -16,7 +16,7 @@ if (!res.ok) throw await res.text()
 let json = await res.json()
 if (!json.thumbnail.genius) throw json
 let linkresult = monospace + result.link + monospace
-let resp =`TITULO: *${result.title}*\nAUTOR *${result.author}*\nLETRA${result.lyrics}\nURL: ${linkresult}\n${info.nanie}, json.thumbnail.genius, [['🎵 DESCARGAR AUDIO 🎵', '#play.1 ${text}'], ['🎥 DESCARGAR VIDEO 🎥', '#play.2 ${text}'`.trim()
+let resp =`TITULO: *${result.title}*\nAUTOR *${result.author}*\nLETRA${result.lyrics}\nURL: ${linkresult}\n> ${info.nanipe}, json.thumbnail.genius, [['🎵 DESCARGAR AUDIO 🎵', '#play.1 ${text}'], ['🎥 DESCARGAR VIDEO 🎥', '#play.2 ${text}'`.trim()
 return conn.sendWritingText(m.chat, resp, userdb, m)
 
 } catch (e) {

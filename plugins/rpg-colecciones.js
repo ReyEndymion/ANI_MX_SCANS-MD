@@ -1,4 +1,4 @@
-let handler = async (m, {command, usedPrefix, DevMode, args, conn, db, userdb, senderJid}) => {
+let handler = async (m, {conn, command, usedPrefix, DevMode, args, db, userdb, senderJid}) => {
 const valoracion = { valorar1: 'Muy Alta 80% - 100%', valorar2: 'Alta 60% - 79%', valorar3: 'Media 40% - 59%', valorar4: 'Baja 20% - 39%', valorar5: 'Muy Baja 0% - 19%' }
 
 const categorias = {
@@ -19,17 +19,16 @@ utilidad: 'Medianamente alta',
 abundancia: 'Medianamente poca' 
 }
 }
-let resp = categorias.exp.utilidad
-
-return conn.sendWritingText(m.chat, resp, userdb, m)
-
+return conn.sendWritingText(m.chat, categorias.exp.utilidad, userdb, m)
 }
 handler.command = /^(colección|coleccion|inforpg|set|collection)$/i
 
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "📚 COLECCIONES", description: `Consulta las colecciones de RPG, usa el comando #colección`, id: `colección`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler

@@ -1,4 +1,4 @@
-let handler = async (m, {conn, command, args, usedPrefix, text, isBotAdmin, isAdmin, groupMetadata, participants, chatdb, userdb, senderJid}) => {
+let handler = async (m, {conn, command, args, usedPrefix, text, isBotAdmin, isAdmin, groupMetadata, participants, chatdb, userdb, senderJid, isLidGroup}) => {
 const { formatNumberWA, splitInternationalNumbers } = await import('../lib/functions.js');
 const {userID, lid, owner, groupID} = await import('../config.js');
 const _text = (await conn.textTagsLidToJid(text, m.chat)).replace(/\s/g, '')
@@ -15,19 +15,18 @@ if((!text) && (m.quoted?.sender == undefined) && m.mentionedJid.length === 0 ) {
 let resp = `*[❗] USO APROPIADO*\n\n*┯┷*\n*┠≽ ${usedPrefix + command} @tag o el numero*\n*NOTA: Si desea ${/^(promote|daradmin|darpoder)$/i.test(command) ? 'promover a' :'quitar de'} administradores a varios separe cada @tag o numero por una coma*\n*┠≽ ${usedPrefix + command} -> responder a un mensaje*\n*┷┯*`
 return conn.sendWritingText(m.chat, resp, userdb, m);
 } else if ((text) || m.quoted?.sender !== undefined || m.mentionedJid.length > 0 ) {
-const groupLid = groupMetadata.addressingMode === 'lid'
 const creator = groupMetadata.owner || '';
 const owners = owner.map(([number]) => (formatNumberWA(number) + userID))
 
 let numeros = args.length > 0 ? splitInternationalNumbers(args.map(n => n.replace(/@/g, '')).join(' ').replace(/\s/g, '').split('@' || ' ')[0]).map(n => formatNumberWA(n.replace(/\+/g, ''))) : [m.quoted?.sender.split('@')[0]];
 q = await conn.sendWritingText(m.chat, `Un Momento espere...`, userdb, m)
 
-const participant = participants.sort(p => groupLid ? p.jid : p.id)
+const participant = participants.sort(p => isLidGroup ? p.phoneNumber : p.id)
 if (/^(demote|quitarpoder|quitaradmin)$/i.test(command)) {
 for (const numero of numeros) {
 let userJid = formatNumberWA(numero) + userID
 
-const participantes = participants.find(u => u.id.endsWith(lid) ? u.jid === (userJid || m.quoted?.sender) : u.id === (userJid || m.quoted?.sender))
+const participantes = participants.find(u => isLidGroup ? u.phoneNumber === (userJid || m.quoted?.sender) : u.id === (userJid || m.quoted?.sender))
 let [isRegistered] = await conn.onWhatsApp(numero);
 if (!isRegistered?.exists) {
 usuariosNoRegistrados.push(numero);
@@ -41,7 +40,6 @@ continue
 }
 let mentionedIsAdmin = participantes.admin
 
-console.log('AdmAdmins: ', numero, userJid)
 
 if (mentionedIsAdmin === 'superadmin') {
 if (userJid.includes(conn.user.jid)) {
@@ -117,7 +115,7 @@ continue;
 }
 if (!participant) continue
 
-let mentionedIsAdmin = groupMetadata.participants.find(u => u.id.endsWith(lid) ? u.jid === (userJid || m.quoted?.sender) : u.id === (userJid || m.quoted?.sender)).admin
+let mentionedIsAdmin = groupMetadata.participants.find(u => isLidGroup ? u.phoneNumber === (userJid || m.quoted?.sender) : u.id === (userJid || m.quoted?.sender)).admin
 if (mentionedIsAdmin === 'admin') {
 yaAdmins.push(`@${numero}`)
 if (userJid.includes(conn.user.jid)) {

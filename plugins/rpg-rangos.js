@@ -1,79 +1,26 @@
 import { xpRange } from '../lib/levelling.js'
 import PhoneNumber from 'awesome-phonenumber'
-import { promises } from 'fs'
+import fs, { promises } from 'fs'
 import { join } from 'path'
-let handler = async (m, {conn, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, text, isAdmin, isROwner, usersdb, userdb, db, senderJid}) => {
-
+let handler = async (m, {conn, info, start, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, isAdmin, isROwner, db, userdb, senderJid, objs}) => {
+const {multiplier} = await import('../lib/constants.js')
+const {imagen2} = objs
 
 const { levelling } = '../lib/levelling.js'
-//let handler = async (m, {conn, usedPrefix, usedPrefix: _p, pluginsPath, text, db, userdb, senderJid}) => {
 
 let { exp, limit, level, role } = userdb
-let { min, xp, max } = xpRange(level, global.multiplier)
+let { min, xp, max } = xpRange(level, multiplier)
 
-let d = new Date(new Date + 3600000)
-let locale = 'es'
-let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
-let week = d.toLocaleDateString(locale, { weekday: 'long' })
-let date = d.toLocaleDateString(locale, {
-day: 'numeric',
-month: 'long',
-year: 'numeric' 
-})
-let dateIslamic = Intl.DateTimeFormat(locale + '-TN-u-ca-islamic', {
-day: 'numeric',
-month: 'long',
-year: 'numeric'
-}).format(d)
-let time = d.toLocaleTimeString(locale, {
-hour: 'numeric',
-minute: 'numeric',
-second: 'numeric'
-})
-let _uptime = process.uptime() * 1000
-let _muptime
-if (process.send) {
-process.send('uptime')
-_muptime = await new Promise(resolve => {
-process.once('message', resolve)
-setTimeout(resolve, 1000)
-}) * 1000
-}
-let { money } = userdb
-let muptime = clockString(_muptime)
-let uptime = clockString(_uptime)
-let totalreg = Object.keys(usersdb).length
-let rtotalreg = Object.values(usersdb).filter(user => user.registered == true).length
-let replace = {
-'%': '%',
-p: _p, uptime, muptime,
-me: conn.getName(conn.user.jid),
+let usertag = `@${senderJid.split('@')[0]}`
 
-exp: exp - min,
-maxexp: xp,
-totalexp: exp,
-xp4levelup: max - exp,
+userdb.registered = false
 
-level, limit, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
-readmore: readMore
-}
-text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-
-
-//let name = await conn.getName(senderJid)
-let pp = './media/menus/Menuvid3.mp4'
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
-let mentionedJid = [who]
-let username = conn.getName(who)
-//let user = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid]
-//user.registered = false
-
-let menu = `
-╭━━━〔 RANGOS | ROL 〕━━━⬣
+let text = `
+╭━━━〔 RANGOS 〕━━━⬣
 NOMBRE
-${username}
+${usertag}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-TU RANGO ACTUAL
+TU  RANGO ACTUAL
 ${role}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 👑 *∞ ÉLITE GLOBAL I* 💎🏁
@@ -118,11 +65,11 @@ ${role}
 *SUPER PRO IV* 🎩
 *SUPER PRO V* 🎩
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-*PRO EN ${info.nanie} I* ${amsicon}
-*PRO EN ${info.nanie} II* ${amsicon}
-*PRO EN ${info.nanie} III* ${amsicon}
-*PRO EN ${info.nanie} IV* ${amsicon}
-*PRO EN ${info.nanie} V* ${amsicon}
+*PRO EN ${info.nanipe} I* ${info.amsicon.getRandom()}
+*PRO EN ${info.nanipe} II* ${info.amsicon.getRandom()}
+*PRO EN ${info.nanipe} III* ${info.amsicon.getRandom()}
+*PRO EN ${info.nanipe} IV* ${info.amsicon.getRandom()}
+*PRO EN ${info.nanipe} V* ${info.amsicon.getRandom()}
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 *DIAMANTE I* 💎
 *DIAMANTE II* 💎
@@ -172,44 +119,42 @@ ${role}
 *NOVATO(A) IV* 🪤
 *NOVATO(A) V* 🪤
 ╰━━━━━━━━━━━━━━━━━━━⬣
-Tops | Ranking 🏆: ${usedPrefix}top
+Tops 🏆: ${usedPrefix}top
 `.trim()
 
 
-let contextInfo = { 
-mentionedJid: conn.parseMention(txt), 
-"externalAdReply": { 
-"showAdAttribution": true, 
+let contextInfo = {  
+mentionedJid: conn.parseMention(text),  
+"externalAdReply": {  
 "containsAutoReply": true,
-"renderLargerThumbnail": true, 
-"title": info.nanie,
-"containsAutoReply": true, 
-"mediaType": 1,
-"thumbnail": fs.readFileSync(imagen1),//apii.res.url, 
-"mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`, 
-"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0` 
-} 
-} 
+"renderLargerThumbnail": true,  
+"title": info.nanie,   
+"containsAutoReply": true,  
+"mediaType": 2,   
+"thumbnail": fs.readFileSync(imagen2),//apii.res.url,  
+"mediaUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`,  
+"sourceUrl": `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`  
+}  
+}  
 
-conn.sendMessage(m.chat, {text: txt.trim(), contextInfo: contextInfo, mentions: conn.parseMention(txt)}, { quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
-
+const footer = `\n> ${info.nanie}`
+const buttons = [['Menú RPG 💫', `${usedPrefix}rpg`], ['Tops 🏆', `${usedPrefix}top`], ['Menu Principal ⚡', `${usedPrefix}menu`]]
+if (start.buttons) {
+return conn.sendButton(m.chat, {text, footer}, {url: imagen2, contextInfo}, buttons, userdb, m)  
+} else {
+return conn.sendWritingTextCI(m.chat, `${text+footer}`, contextInfo, userdb, m)
 }
-
+}
 handler.help = ['infomenu'].map(v => v + 'able <option>')
 handler.tags = ['group', 'owner']
 handler.command = /^(rol|rango|roles|rangos)$/i
-//handler.register = true
+handler.register = true
 handler.exp = 50
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🎭 ROLES | RANGOS", description: `Consulta los roles o rangos del bot, usa el comando #rol`, id: `rol`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler
 
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
-function clockString(ms) {
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}

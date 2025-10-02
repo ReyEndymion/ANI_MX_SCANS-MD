@@ -1,4 +1,5 @@
-let handler = async (m, {conn, usedPrefix, usersdb, userdb, db, senderJid}) => {
+let handler = async (m, {conn, start, info, usedPrefix, usersdb, userdb, senderJid}) => {
+const {clockString} = await import('../lib/functions.js')
 let randomaku1 = `${Math.floor(Math.random() * 5)}`
 let randomaku2 = `${Math.floor(Math.random() * 5)}`
 let randomaku4 = `${Math.floor(Math.random() * 5)}`
@@ -47,15 +48,6 @@ let ar9 = `${['🪚','⛏️','🧨','💣','🔫','🔪','🗡️','🏹','🦾
 let ar10 = `${['🪚','⛏️','🧨','💣','🔫','🔪','🗡️','🏹','🦾','🥊','🧹','🔨','🛻'].getRandom()}`
 let ar11 = `${['🪚','⛏️','🧨','💣','🔫','🔪','🗡️','🏹','🦾','🥊','🧹','🔨','🛻'].getRandom()}`
 let ar12 = `${['🪚','⛏️','🧨','💣','🔫','🔪','🗡️','🏹','🦾','🥊','🧹','🔨','🛻'].getRandom()}`
-let hsl = `
-*✧ Resultados de la caza ${conn.getName(senderJid)} ✧*
-
-*🐂 ${ar1} ${anti1}*			 *🐃 ${ar7} ${anti7}*
-*🐅 ${ar2} ${anti2}*			 *🐮 ${ar8} ${anti8}*
-*🐘 ${ar3} ${anti3}*			 *🐒 ${ar9} ${anti9}*
-*🐐 ${ar4} ${anti4}*			 *🐗 ${ar10} ${anti10}*
-*🐼 ${ar5} ${anti5}*			 *🐖 ${ar11} ${anti11}*
-*🐊 ${ar6} ${anti6}*		*🐓 ${ar12} ${anti12}*`.trim()
 userdb.banteng += rbrb1
 userdb.harimau += rbrb2
 userdb.gajah += rbrb3
@@ -69,62 +61,63 @@ userdb.babihutan += rbrb10
 userdb.cerdo += rbrb11
 userdb.pollo += rbrb12
 	
-let time = userdb.lastberburu + 2700000 //45 Minutos
-if (new Date - userdb.lastberburu < 2700000){ 
-let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}\n${info.nanie}\n\nPara:\n\n🏞️ ANIMALES CAPTURADOS usa: *${usedPrefix}kandang*\n🎒 INVENTARIO usa: *${usedPrefix}inventario*`
-
+let time = usersdb[senderJid].lastberburu + 2700000 //45 Minutos
+if (new Date - usersdb[senderJid].lastberburu < 2700000){ 
+let resp = `POR FAVOR DESCANSA UN MOMENTO PARA SEGUIR CAZANDO\n\n⫹⫺ TIEMPO ${clockString(time - new Date())}`
+const buttons = [['🏞️ Animales capturados ', `${usedPrefix}kandang`], [`🎒 Inventario`, `${usedPrefix}inventario`]]
+if (start.buttons) {
+const msgObj = {
+text: resp,
+footer: info.nanipe
+}
+return conn.sendButton(m.chat, msgObj, {}, buttons, userdb, m)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+resp += `\n\n*${cmds}*\n> ${info.nanipe}`
 return conn.sendWritingText(m.chat, resp, userdb, m);
 }
+}
+let q
 setTimeout(async () => {
+let resp = `@${senderJid.split("@")[0]} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`
+q = await conn.sendWritingText(m.chat, resp, userdb, m);
+}, 0)
 
-return conn.sendWritingText(m.chat, resp, userdb, m);
-
-//conn.sendMessage(m.chat, {text: hsl + '\n\n' + info.nanie + '\n\n' + null + '\n\n' + info.repoProyect + '\n\n' +`GITHUB` + '\n\n' + null + '\n\n' + null}[[null, null]], null)
-}, 20000)
-	
 setTimeout(async () => {
-let resp = `@${senderJid.split("@s.whatsapp.net")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`
+let resp = `@${senderJid.split("@")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`
+q = await conn.sendEditWritingText(m.chat, resp, q.key, userdb, m);
 
-return conn.sendWritingText(m.chat, resp, userdb, m);
+}, 15000)
+setTimeout(async () => {
+let resp = `@${senderJid.split("@")[0]} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`
+q = await conn.sendEditWritingText(m.chat, resp, q.key, userdb, m);
 
-//conn.sendWritingText(m.chat, txt, null, { mentions: [senderJid]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-//conn.sendHydrated(m.chat, `${conn.getName(senderJid)} *${['OBJETIVO FIJADO`${conn.getName(senderJid)} *${['OBJETIVO FIJADO 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*` 🎯','Carnada en Marcha 🍫 🍇 🍖','ANIMALES DETECTADOS!! 🐂 🐅 🐘 🐼','ANIMALES DETECTADOS!! 🐖 🐃 🐮 🐒'].getRandom()}*`, info.nanie, null, null, null, null, null, [
-//[null, null]], null)
 }, 18000)
 
 setTimeout(async () => {
-let resp = `@${senderJid.split("@s.whatsapp.net")[0]} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`
+let hsl = `
+*✧ Resultados de la caza ${conn.getName(senderJid)} ✧*
 
-return conn.sendWritingText(m.chat, resp, userdb, m);
-//conn.sendWritingText(m.chat, resp, null, { mentions: [senderJid]}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100})
-//conn.sendHydrated(m.chat, `${conn.getName(senderJid)} *${['Armas lista para la Caza!!','Probando Armas 🔫 💣 🪓 🏹','CARROS PARA LA CAZA!! 🚗 🏍️ 🚜','TIEMPO BUENO PARA LA CAZA 🧤'].getRandom()}*`, info.nanie, null, null, null, null, null, [
-//[null, null]], null)
-}, 15000)
+*🐂 ${ar1} ${anti1}*			 *🐃 ${ar7} ${anti7}*
+*🐅 ${ar2} ${anti2}*			 *🐮 ${ar8} ${anti8}*
+*🐘 ${ar3} ${anti3}*			 *🐒 ${ar9} ${anti9}*
+*🐐 ${ar4} ${anti4}*			 *🐗 ${ar10} ${anti10}*
+*🐼 ${ar5} ${anti5}*			 *🐖 ${ar11} ${anti11}*
+*🐊 ${ar6} ${anti6}*		    *🐓 ${ar12} ${anti12}*`.trim()
+return conn.sendEditWritingText(m.chat, hsl, q.key, userdb, m);
 
-setTimeout(async () => {
-let resp = `@${senderJid.split("@s.whatsapp.net")[0]} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`
+}, 20000)
 
-return conn.sendWritingText(m.chat, resp, userdb, m);
-//conn.sendWritingText(m.chat, resp, m, m.mentionedJid ? { mentions: [senderJid] } : {})
-//conn.sendHydrated(m.chat, `${conn.getName(senderJid)} *${['Buscando implementos de caza...','Alistando todo para la caza!!','Estableciendo Lugar de la Caza...','PREPARANDO LUGAR DE CAZA!!'].getRandom()}*`, info.nanie, null, null, null, null, null, [
-//[null, null]], null)
-}, 0)	
 userdb.lastberburu = new Date * 1	
-							 
 }
 handler.help = ['berburu']
 handler.tags = ['rpg']
 handler.command = /^(hunt|berburu|caza(r)?)$/i
-//handler.group = true
-handler.menu = [];
-handler.type = "";
+handler.group = true
+handler.menu = [
+{title: "🐾 CAZA", description: `Caza animales y gana recursos, usa el comando #berburu`, id: `berburu`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler
-
-function clockString(ms) {
-let h = Math.floor(ms / 3600000)
-let m = Math.floor(ms / 60000) % 60
-let s = Math.floor(ms / 1000) % 60
-console.log({ms,h,m,s})
-return [h, m, s].map(v => v.toString().padStart(2, 0) ).join(':')}

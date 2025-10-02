@@ -1,11 +1,13 @@
-import fetch from 'node-fetch'
-let handler = async (m, {isPrems, conn, db, userdb, senderJid}) => {
+import fs from 'fs'
+let handler = async (m, {conn, info, start, isPrems, usedPrefix, db, userdb, senderJid, objs}) => {
+const {imagen1, imagen2} = objs
+const {rpgg, rpg, rpgshop, rpgshopp} = await import('../rpg.js')
+const {pickRandom, clockString} = await import('../lib/functions.js')
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
-let img = [fs.readFileSync(imagen1), fs.readFileSync(fs.readFileSync(imagen2)), fs.readFileSync(imagen3), fs.readFileSync(imagen2)]
+let img = [fs.readFileSync(imagen1), fs.readFileSync(imagen2)]
 
-let user = db.data.bot[conn.user.jid].chats.groups[m.chat].users[senderJid]
-let premium = user.premium
+let premium = userdb.premium
 
 let exp = `${pickRandom([1000, 1800, 2500, 3000, 3700, 4400, 5000, 5500, 6000, 6500])}` * 1
 let exppremium = `${pickRandom([3000, 4500, 6600, 8500, 9999, 10500, 11600, 12650, 13479, 15000])}` * 1
@@ -38,47 +40,43 @@ uncoommon: premium ? uncoommonpremium : uncoommon,
 mythic: premium ? mythicpremium : mythic,
 }
 
-let time = user.lastweekly + 259200000 //259200000 3 dias
-if (new Date - user.lastweekly < 259200000) {
-let resp = `Ya recibiste tu recompensa semanal ⛅`+ '\n' + info.nanie + `\n\nVuelve en:\n${clockString(time - new Date() * 1)}`+ '\n' + author
-
-return await conn.sendWritingText(m.chat, resp, userdb, fkontak);
+let time = userdb.lastweekly + 259200000 //259200000 3 dias
+if (new Date - userdb.lastweekly < 259200000) {
+let resp = `Ya recibiste tu recompensa semanal ⛅\n\nVuelve en:\n${clockString(time - new Date() * 1)}\n> ${info.nanie}`
+return conn.sendWritingText(m.chat, resp, userdb, m);
 }
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
-if (!(reward in user)) continue
-user[reward] += recompensas[reward]
-texto += `*+${recompensas[reward]}* ${global.rpgshop.emoticon(reward)}\n`}
+if (!(reward in userdb)) continue
+userdb[reward] += recompensas[reward]
+texto += `*+${recompensas[reward]}* ${rpgshop.emoticon(reward)}\n`
+}
+const image = img.getRandom()
 let text = `
 ╭━━⛅━☃️━⛈️━━⬣
 ┃ ☀️ Recompensa semanal!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
 ╰━━💫━🌈━🌛━━⬣`
-let resp = text + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
-await conn.writing(m.chat, resp)
-await conn.sendMessage(m.chat, { image: img.getRandom(), caption: resp, mentions: conn.parseMention(resp) }, {quoted: fkontak, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100} ); 
-
-user.lastweekly = new Date * 1
+let resp = text + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}`
+let footer = texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n> ${info.nanie}`
+const buttons = [['🌅 ENTREGA DEL MES 🌠', `${usedPrefix}monthly`], ['Volver al Menú ☘️', `${usedPrefix}menu`]]
+userdb.lastweekly = new Date * 1
+if (!start.buttons) {
+return conn.sendButton(m.chat, {title: resp, text, footer}, {url: image}, buttons, userdb, fkontak)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+resp = `${text}\n\n${texto}\n> ${info.nanie}\n\n${cmds}`
+return conn.sendImageWriting(m.chat, image, resp, userdb, fkontak);  
+}
 }
 handler.command = ['weekly', 'semana', 'semanal', 'cadasemana', 'entregasemanal'] 
 handler.level = 7
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "⛅ SEMANAL", description: `Recompensa semanal, usa el comando #weekly`, id: `weekly`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler
-
-function pickRandom(list) {
-return list[Math.floor(Math.random() * list.length)]}
-
-function clockString(ms) {
-let ye = isNaN(ms) ? '--' : Math.floor(ms / 31104000000) % 10
-let mo = isNaN(ms) ? '--' : Math.floor(ms / 2592000000) % 12
-let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000) % 30
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return ['┃⇢ ', ye, ' *🗓️ Años : Year*\n', '┃⇢ ', mo, ' *⛅ Mes : Month*\n', '┃⇢ ', d, ' *☀️ Días : Days*\n', '┃⇢ ', h, ' *⏰ Horas : Hours*\n', '┃⇢ ', m, ' *🕐 Minutos : Minutes*\n', '┃⇢ ', s, ' *⏱️ Segundos : Seconds*'].map(v => v.toString().padStart(2, 0)).join('')
-}

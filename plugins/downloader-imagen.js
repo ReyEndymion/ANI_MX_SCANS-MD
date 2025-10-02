@@ -1,4 +1,4 @@
-import { googleImage } from '../lib/googlePictures.js'
+import { googleImage } from '../lib/googleMedia.js'
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
 import {getCommandVariants} from '../lib/functions.js'
 let confirmations = {}
@@ -41,7 +41,7 @@ if (start.buttons) {
 return conn.sendButton(m.chat, messageObj, {url: image}, buttons, userdb, m)
 } else {
 captionn += `\n\nPara 🔄 SIGUIENTE 🔄 usa: *${usedPrefix}imagen ${text}*`
-return conn.sendMessage(m.chat, { image:{url: image}, caption: captionn}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, wmbc , link, m)
+return conn.sendMessage(m.chat, { image:{url: image}, caption: captionn}, {quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100}, info.nbcde , link, m)
 }
 }
 handler.before = async function before(m, {conn, info, start, userdb, senderJid}) {

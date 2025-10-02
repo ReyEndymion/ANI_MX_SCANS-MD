@@ -38,9 +38,9 @@ let resp = '*[❗INFO❗] LO SIENTO, ALGO FALLO.. CORROBORE QUE HAYA RESPONDIDO 
 return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 }}
-handler.help = ['info.nanie <gt>|<author>']
+handler.help = ['info.nanipe <gt>|<author>']
 handler.tags = ['sticker']
-handler.command = /^take|nuestro|info.nanie$/i
+handler.command = /^take|nuestro|info.nanipe$/i
 handler.menu = [];
 handler.type = "";
 handler.disabled = false;

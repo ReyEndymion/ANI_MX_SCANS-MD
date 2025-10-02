@@ -22,7 +22,7 @@ return conn.sendWritingText(m.chat, resp, userdb, m)
 }
 user.warn += 1 
 {
-let what = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `*@${who.split`@`[0]}*`} RECIBIO UNA ADVERTENCIA EN ESTE GRUPO!\n\n*ADVERTENCIAS ${user.warn}/3*\n\n${info.nanie}\n\n📋 LISTA DE ADVERTENCIAS 📋\n => *${usedPrefix}listwarn*`
+let what = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `*@${who.split`@`[0]}*`} RECIBIO UNA ADVERTENCIA EN ESTE GRUPO!\n\n*ADVERTENCIAS ${user.warn}/3*\n\n> ${info.nanipe}\n\n📋 LISTA DE ADVERTENCIAS 📋\n => *${usedPrefix}listwarn*`
 
 await conn.sendImageWriting(m.chat, pp, what, userdb, m);
 } 
@@ -43,7 +43,7 @@ if (!who) {
 return conn.sendWritingText(m.chat, warntext, userdb, m)
 }
 user.warn -= 1
-let resp = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `♻️ *@${who.split`@`[0]}*`} SE TE QUITO UNA ADVERTENCIA\n\n*ADVERTENCIAS:*\n⚠️ *Antes: ${user.warn + 1}/3*\n⚠️ *Ahora: ${user.warn}/3*\n\n${info.nani}\n\n📋 LISTWARN 📋\n => *${usedPrefix}listwarn*`
+let resp = `${user.warn == 1 ? `*@${who.split`@`[0]}*` : `♻️ *@${who.split`@`[0]}*`} SE TE QUITO UNA ADVERTENCIA\n\n*ADVERTENCIAS:*\n⚠️ *Antes: ${user.warn + 1}/3*\n⚠️ *Ahora: ${user.warn}/3*\n\n${info.nanip}\n\n📋 LISTWARN 📋\n => *${usedPrefix}listwarn*`
 return conn.sendImageWriting(m.chat, pp, resp, userdb, m);
 }
 if (/^(listwarn(ing)?)$/i.test(command)) {
@@ -57,7 +57,7 @@ let caption = `⚠️ USUARIOS ADVERTIDOS\n
 return conn.sendImageWriting(m.chat, pp, caption, m )
 }
 }
-handler.command = /^(un|del|list)?(advert(ir|encia)|warn(ing)?)$/i
+handler.command = /^((un|del|list)?(advert(ir|encia)|warn(ing)?))$/i
 handler.group = true
 handler.admin = true
 handler.botAdmin = true

@@ -68,8 +68,6 @@ let resp = 'Respuesta incorrecta!'
 await conn.sendWritingText(m.chat, resp, userdb, m);
 }
 }
-//return !0
-
 }
 handler.help = ['acertijo']
 handler.tags = ['game']

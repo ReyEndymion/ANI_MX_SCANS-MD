@@ -2,13 +2,16 @@ import { xpRange } from '../lib/levelling.js'
 import PhoneNumber from 'awesome-phonenumber'
 import { promises } from 'fs'
 import { join } from 'path'
-let handler = async (m, {conn, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, text, isAdmin, isROwner, usersdb, userdb, db, senderJid}) => {
+let handler = async (m, {conn, info, start, usedPrefix, command, args, usedPrefix: _p, pluginsPath, isOwner, text, isAdmin, isROwner, usersdb, userdb, db, senderJid}) => {
+const {clockString} = await import('../lib/functions.js')
+const {multiplier} = await import('../lib/constants.js')
+const more = String.fromCharCode(8206)
+const readMore = more.repeat(4001)
 
-
-const { levelling } = '../lib/levelling.js'
+const { levelling } = await import('../lib/levelling.js')
 
 let { exp, limit, level, role } = userdb
-let { min, xp, max } = xpRange(level, global.multiplier)
+let { min, xp, max } = xpRange(level, multiplier)
 
 let d = new Date(new Date + 3600000)
 let locale = 'es'
@@ -59,7 +62,6 @@ readmore: readMore
 }
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
 
-//let name = await conn.getName(senderJid)
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
 let pp = dirP + 'src/sinFoto.png';
 try {
@@ -69,21 +71,20 @@ let apii = await conn.getFile(pp)
 let username = conn.getName(who)
 
 
-let menu = `
-╭━〔 *${info.nanie}* 〕━⬣
+let menu = `╭━〔 *${info.nanipe}* 〕━⬣
 ┃ ✪ *NOMBRE* 
 ┃ ${username}
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-┃ ✪ *EXPERIENCIA | EXP* 
+┃ ✪ *EXPERIENCIA(xp)* 
 ┃ ➥ *${userdb.exp - min}/${xp}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-┃ ✪ *NIVEL | LEVEL*
+┃ ✪ *NIVEL*
 ┃ ➥ *${level}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *ROL*
 ┃ ➥ ${role}
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-┃ ✪ *${info.nanie}coins*
+┃ ✪ *COINS*
 ┃ ➥ *${money}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ┃ ✪ *TOKENS*
@@ -95,28 +96,28 @@ let menu = `
 ┃ ✪ *FECHA*
 ┃ ➥ *${week}, ${date}*
 ┃┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
-┃ ✪ *USUARIOS | USERS*
+┃ ✪ *USUARIOS*
 ┃ ➥ *${Object.keys(usersdb).length}* 
-╰━━━〔 *${info.nanie}* 〕━━━⬣`.trim()
-return conn.sendImageWriting(m.chat, pp, menu, m );
-
+╰━〔 *${info.nanipe}* 〕━⬣`.trim()
+const buttons = [['⚡/💎 Exp por Diamante', `${usedPrefix}buy`], ['💰/💎 Coins por Diamante', `${usedPrefix}buy2`], ['🏆 Tops/Ranking', `${usedPrefix}top`]]
+if (start.buttons) {
+return conn.sendButton(m.chat, {text: menu, footer: info.nanipe}, {url: pp}, buttons, userdb, m,)
+} else {
+const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
+menu += `\n\n*Mas opciones:*\n${cmds}`
+return conn.sendImageWriting(m.chat, pp, menu, userdb, m );
+}
 }
 
 handler.help = ['infomenu'].map(v => v + 'able <option>')
 handler.tags = ['group', 'owner']
-handler.command = /^(xp|experiencia|esperiencia|esperiensia|experiensia|exp|coinsgata|coins)$/i
+handler.command = /^(xp|e(x|s)perien(c|s)ia|exp|coins)$/i
 handler.group = true
 handler.exp = 10
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "💰 EXPERIENCIA", description: `Consulta la información de la Experiencia, usa el comando #xp`, id: `experiencia`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler
-
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
-function clockString(ms) {
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')}

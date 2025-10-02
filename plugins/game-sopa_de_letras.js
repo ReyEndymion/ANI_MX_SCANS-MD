@@ -13,7 +13,7 @@ const buttons = [
 if (start.buttons) {
 const messageObj = {
 text: resp,
-footer: info.nanie
+footer: info.nanipe
 }
 return conn.sendButton( m.chat, messageObj, {}, buttons, userdb, m)
 } else {

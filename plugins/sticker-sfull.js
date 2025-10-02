@@ -24,7 +24,7 @@ const {mp4ToWebp} = await import('../lib/fileTo.js')
 let img = await q.download?.()
 stiker = await mp4ToWebp(img, { pack: gt, author: author })
 } else if (args[0] && isUrl(args[0])) {
-stiker = await createSticker(false, args[0], '', info.nanie, 20)
+stiker = await createSticker(false, args[0], '', info.nanipe, 20)
 } else {
 let resp = `Responda a una imagen/video/sticker con el comando ${usedPrefix + command}`
 let txt = '';

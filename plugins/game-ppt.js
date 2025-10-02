@@ -1,7 +1,7 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let pptUsage = {}
 let handler = async (m, {conn, info, start, text, command, usedPrefix, args, db, userdb, senderJid}) => {
-const buff = info.nanie
+const buff = info.nanipe
 
 if (pptUsage[senderJid] && pptUsage[senderJid].bannedUntil > Date.now()) {
 let timeLeft = Math.ceil((pptUsage[senderJid].bannedUntil - Date.now()) / 1000 / 60)

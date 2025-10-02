@@ -1,5 +1,5 @@
 let confirmacion = {}
-let handler = async (m, {conn, start, info, usedPrefix, command, args, isOwner, isAdmin, isROwner, text, botdb, chatdb, userdb, db, objs, senderJid}) => {
+let handler = async (m, {conn, start, info, usedPrefix, command, args, isOwner, isAdmin, isROwner, text, botdb, chatdb, usersdb, userdb, db, objs, senderJid}) => {
 const {func, imagen1, imagen2} = objs
 const { fail } = func;
 const {opts} = await import('../lib/functions.js');
@@ -45,6 +45,14 @@ fail('admin', m, conn, userdb)
 throw false
 }
 chatdb.isCountMsgs = isEnable
+if (isEnable) {
+const now = Date.now();
+for (let jid in usersdb) {
+if (usersdb[jid].msgcount.time || usersdb[jid].msgcount.time === 0) {
+usersdb[jid].msgcount.time = now;
+}
+}
+}
 break
 case 'detect':
 if (!m.isGroup) {
@@ -363,7 +371,7 @@ resp = `🗂️ OPCIÓN: *${type}*\n🎚️ ESTADO: ${isEnable ? '*ACTIVADO*' : 
 if (start.buttons) {
 const messageObject = {
 text: resp.trim(),
-footer: info.nanie
+footer: info.nanipe
 }
 const buttons = [[`${isEnable ? '✖️ DESACTIVAR ✖️' : '✔️ ACTIVAR ✔️'}`, `${isEnable ? `.disable ${type}` : `.enable ${type}`}`], ['👾 MENÚ PRINCIPAL 👾', '.menu']]
 return conn.sendButton(m.chat, messageObject, {}, buttons, userdb, m)
@@ -391,8 +399,8 @@ title: `*MENU CONFIGURACION*`,
 text: resp+lineaFinal,
 buffer: img,
 buttonText: '🧾 Ver opciones',
-footerText: info.nanie,
-listSections: sections,
+footer: info.nanipe,
+sections: sections,
 options: {}
 }
 
@@ -405,7 +413,7 @@ mentionedJid: conn.parseMention(resp),
 "externalAdReply": {
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
-"title": info.nanie, 
+"title": info.nanipe, 
 "containsAutoReply": true,
 "mediaType": 1, 
 "thumbnail": fs.readFileSync(imagen2),

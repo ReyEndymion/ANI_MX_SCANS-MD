@@ -82,7 +82,7 @@ messages.key.participant = messages.participant = m.sender
 }
 const msg = {
 ...chatUpdate,
-messages: [proto.WebMessageInfo.fromObject(messages)],
+messages: [proto.WebMessageInfo.create(messages)],
 type: 'append',
 }
 this.ev.emit('messages.upsert', msg)

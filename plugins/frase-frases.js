@@ -3,14 +3,13 @@
 🍀 • ⚘Alberto Y Ashly⚘
 -----------------------------------------------------------------------------------------*/
 
-import translate from '@vitalets/google-translate-api'
+import {translate} from '@vitalets/google-translate-api'
 import fetch from 'node-fetch'
 let handler = async (m, {conn, command, db, userdb, senderJid}) => {
 try {
 
 if (command == 'consejo') {
 let res = await fetch("https://zenzapis.xyz/randomtext/motivasi?apikey=hdiiofficial")
-//let res = await fetch("https://supra-api.herokuapp.com/api/conselho?apikey=supraz")
 let json = await res.json()
 let frase = json.result.message
 let frase1 = await translate(frase, { to: 'es', autoCorrect: true })
@@ -34,8 +33,8 @@ conn.sendWritingText(m.chat, `᭥🫐᭢ Título: ${titletime.text}
 ────────────────
 ${storytime.text}`, m)}
 
-} catch {
-return conn.sendWritingText(m.chat, `*[❗] OCURRIO UN ERROR, posiblemente la página (API) DE AYUDA ESTE CAÍDA TEMPORALMENTE, INTÉNTELO MÁS TARDE*`, m)
+} catch (e) {
+return conn.sendWritingText(m.chat, `*[❗] OCURRIO UN ERROR, posiblemente la página (API) DE AYUDA ESTE CAÍDA TEMPORALMENTE, INTÉNTELO MÁS TARDE*\n\nerror: ${e.stack}`, userdb, m)
 }}
 handler.tags = ['frases']
 handler.command = handler.help = ['consejo', 'fraseromantica', 'historiaromantica']

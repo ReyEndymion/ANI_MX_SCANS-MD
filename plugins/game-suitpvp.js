@@ -5,7 +5,7 @@ let poin_bot = 200
 let suit = {}
 let handler = async (m, {conn, info, start, usedPrefix, text, command, db, userdb, senderJid}) => {
 const {userID, lid} = await import('../config.js')
-const buff = info.nanie
+const buff = info.nanipe
 const isActivedButons = start.buttons
 if (Object.values(suit).find(room => room.id.startsWith('suit') && [room.p, room.p2].includes(senderJid))) return conn.sendWritingText(m.chat, `*[❗] TERMINA TU PARTIDA ANTES DE INICIAR OTRA*`, userdb, m)
 let textquien = `*A QUIÉN QUIERES DESAFIAR? ETIQUETA A UNA PERSONA*\n\n*—◉ EJEMPLO:*\n${usedPrefix+command} @${conn.user.jid.split('@')[0]}`
@@ -16,7 +16,6 @@ const mention = m.mentionedJid[0].endsWith(lid) ? conn.lidToJid(m.mentionedJid[0
 let caption = `🎮 *JUEGO - PVP* 🎮\n\n(PIEDRA PAPEL O TIJERAS)\n\n—◉ @${senderJid.split`@`[0]} DESAFÍA A @${mention.split`@`[0]} EN UN JUEGO DE PIEDRA, PAPEL O TIJERA`.trim()
 let footer = `◉ ESCRIBE "aceptar" PARA ACEPTAR\n◉ ESCRIBE "rechazar" PARA RECHAZAR`
 let imgplaygame = `https://www.merca2.es/wp-content/uploads/2020/05/Piedra-papel-o-tijera-0003318_1584-825x259.jpeg`
-console.log('pvp: ', senderJid, mention)
 const messageObj = {
 text: caption,
 footer: buff
@@ -37,7 +36,7 @@ delete suit[id]
 handler.before = async function before(m, {conn, info, start, db, usersdb, userdb, senderJid}) {
 const {userID} = await import('../config.js')
 const isActivedButons = start.buttons
-const buff = info.nanie
+const buff = info.nanipe
 if (userdb.suit < 0) userdb.suit = 0
 let room = Object.values(suit).find(room => room.id && room.status && [room.p, room.p2].includes(senderJid))
 if (room) {
@@ -91,7 +90,7 @@ await conn.sendImageWriting(room.p2, imgplay, resp+'\n'+cmds+'\n'+'\n'+buff, use
 }
 room.waktu_milih = setTimeout(async () => {
 if (!room.pilih && !room.pilih2) 
-conn.sendMessage(m.chat, { text: `[❗] NINGÚN JUGADOR TOMÓ LA INICIATIVA DE EMPEZAR EL JUEGO, EL PVP SE HA CANCELADO`}, wmbc, null, [['MENÚ PRINCIPAL', '#menu']], m)
+conn.sendMessage(m.chat, { text: `[❗] NINGÚN JUGADOR TOMÓ LA INICIATIVA DE EMPEZAR EL JUEGO, EL PVP SE HA CANCELADO`}, info.nbcde, null, [['MENÚ PRINCIPAL', '#menu']], m)
 else if (!room.pilih || !room.pilih2) {
 win = !room.pilih ? room.p2 : room.p 
 let textnull = `*[❗] @${(room.pilih ? room.p2 : room.p).split`@`[0]} NO ELEGISTE NINGUNA OPCIÓN, FIN DEL PVP*`

@@ -1,8 +1,8 @@
-import { rpg } from "../rpg.js"
-import { owner, temp, newsletterID, sBroadCastID, groupID, media} from '../config.js'
-let handler = async (m, {conn, start, info, usedPrefix, userdb, db, senderJid}) => {
-
-const fkontak = {
+let handler = async (m, {conn, info, start, usedPrefix, db, userdb, senderJid}) => {
+const {inventory, menuform} = await import('../lib/constants.js')
+const {rpg} = await import('../rpg.js')
+ 
+ const fkontak = {
 "key": {
 "participants":"0@s.whatsapp.net",
 "remoteJid": "status@broadcast",
@@ -30,9 +30,9 @@ let babihutan = userdb.babihutan
 let cerdo = userdb.cerdo
 let pollo = userdb.pollo
 
-const anim = `
-*${htki} ANIMALES ${htka}*
-
+let anim = `
+*${menuform.htki} ANIMALES ${menuform.htka}*
+ 
 *${rpg.emoticon('toro')} ➡️ ${banteng}*
 *${rpg.emoticon('tiger')} ➡️ ${harimau}*
 *${rpg.emoticon('elefante')} ➡️ ${gajah}*
@@ -45,24 +45,24 @@ const anim = `
 *${rpg.emoticon('Jabali')} ➡️ ${babihutan}*
 *${rpg.emoticon('cerdo')} ➡️ ${cerdo}*
 *${rpg.emoticon('pollo')} ➡️ ${pollo}*`.trim()
-
-const resp = `🔖 Animales listos para cocinar\n${anim}`
-//await conn.sendButton(m.chat, ndy, , null, , fkontak, m)
-const buff = `NIVEL ACTUAL: *${userdb.level}*\n` + info.nanie
-const buttons = [['Volver al menú ☘️', `${usedPrefix}menu'`], [`🎒 Inventario `, `${usedPrefix}inventario`]]
+const footer = `🔖 Animales listos para Cocinar\n> ${info.nanipe}`
+const buttons = [['Volver al Menú ☘️', '/menu'], [`🎒 Inventario`, `.inventario`]]
 if (start.buttons) {
-return conn.sendButton( m.chat, resp, buff, buttons, fkontak, m)
+return conn.sendButton(m.chat, {text: anim, footer}, {}, buttons, userdb, fkontak)
 } else {
-const cmds = buttons.map(([a, b]) => `${a}:\n${b}`).join('\n')
-return conn.sendWritingText(m.chat, resp+'\n'+cmds+'\n'+info.nanie, fkontak );
+const cmds = buttons.map(([a, b]) => `${a}: ${b}`).join('\n')
+anim += `\n${cmds} ${footer}`
+return conn.sendWritingText(m.chat, anim, userdb, fkontak)
 }
 }
 handler.help = ['kandang']
 handler.tags = ['rpg']
 handler.command = /^(kandang|animales|animals)$/i
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🐾 ANIMALES", description: `Consulta los animales que tienes en tu inventario, usa el comando #animales`, id: `animales`},
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler

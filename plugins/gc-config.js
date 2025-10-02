@@ -2,14 +2,13 @@
 Mejorado el timer y unificado por https://github.com/ReyEndymion
 */
 var groupTimers = {}
-let handler = async (m, {conn, isAdmin, isOwner, args, text, usedPrefix, command, chatdb, userdb, groupMetadata, isBotAdmin, senderJid, objs}) => {
+let handler = async (m, {conn, isAdmin, isOwner, args, text, usedPrefix, command, chatdb, userdb, groupMetadata, isBotAdmin, senderJid, objs, isLidGroup}) => {
 const {clockString, parseDuration, ajusteTiempo} = await import('../lib/functions.js')
 const {func} = objs
 if (!(isAdmin || isOwner)) {
 func.dfail('admin', m, conn)
 throw false
 }
-const isLidGroup = groupMetadata.addresingMode === 'lid'
 if (/^(gr(oup|upo)(time|config)?|gctime)$/i.test(command)) {
 let isConfig = {
 'open': 'not_announcement',

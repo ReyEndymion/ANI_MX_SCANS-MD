@@ -1,19 +1,19 @@
 
-async function handler(m, { conn, groupMetadata, botdb, chatdb, usedPrefix, command, args, isAdmin, isBotAdmin, isOwner, isROwner, objs, userdb, senderJid }) {
+async function handler(m, { conn, participants, botdb, chatdb, usedPrefix, command, args, isAdmin, isBotAdmin, isOwner, isROwner, objs, userdb, senderJid, isLidGroup }) {
 const {dataBases} = await import('../config.js') 
 if (!botdb.settings.restrict) {return conn.sendWritingText(m.chat, `'*[ ⚠️ ] EL OWNER TIENE RESTRINGIDO (_enable restrict_ / _disable restrict_) EL USO DE ESTE COMANDO*'`, userdb, m)
 } else {
 if (isBotAdmin) {
-const participants = groupMetadata.participants.map((p) => p.id);
+const participantsMap = participants.map((p) => isLidGroup ? p.phoneNumber : p.id);
 
-if (participants.length < 2) {
+if (participantsMap.length < 2) {
 return console.log('Debe haber al menos 2 participantes en el grupo para jugar a la ruleta rusa.');
 }
 
-const a = participants.getRandom();
+const a = participantsMap.getRandom();
 let b;
 do {
-b = participants.getRandom();
+b = participantsMap.getRandom();
 } while (b === a);
 
 const toMention = (id) => `@${id.split('@')[0]}`;
@@ -46,7 +46,7 @@ await conn.sendWritingText(m.chat, teks, userdb, m)
 let { generateWAMessageFromContent, prepareWAMessageMedia, proto } = (await import('@whiskeysockets/baileys')).default
 const inviteMessage = `We regresa al grupo (${groupName}), si no, no se completa mi magia XD`
 var messaa = await prepareWAMessageMedia({ image: jpegThumbnail }, { upload: conn.waUploadToServer })
-var groupInvite = generateWAMessageFromContent(m.chat, proto.Message.fromObject({ groupInviteMessage: { groupJid: m.chat,inviteCode: invite_code, inviteExpiration: invite_code_exp, groupName: groupName, caption: inviteMessage, jpegThumbnail: messaa }}), { userJid: jid })
+var groupInvite = generateWAMessageFromContent(m.chat, proto.Message.create({ groupInviteMessage: { groupJid: m.chat,inviteCode: invite_code, inviteExpiration: invite_code_exp, groupName: groupName, caption: inviteMessage, jpegThumbnail: messaa }}), { userJid: jid })
 
 return conn.relayMessage(jid, groupInvite.message, { messageId: groupInvite.key.id })
 }

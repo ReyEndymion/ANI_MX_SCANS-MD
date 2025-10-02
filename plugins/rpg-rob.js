@@ -82,4 +82,4 @@ global.crimen = [
 /*****************************************
 *CREADO POR https://github.com/DIEGO-OFC*
 *****************************************/
-/*adptado para animxscans por ReyEndymion*/
+/*adaptado para ANIMXSCANS por ReyEndymion*/

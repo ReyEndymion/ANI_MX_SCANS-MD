@@ -16,7 +16,7 @@ const message = {
 'forwardingScore': 0,
 'isForwarded': false,
 'externalAdReply': {
-'title': `Bot promocional del proyecto ${info.nani}`,
+'title': `Bot promocional del proyecto ${info.nanip}`,
 //"showAdAttribution": true,
 "renderLargerThumbnail": true,
 "containsAutoReply": true,

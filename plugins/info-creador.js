@@ -1,9 +1,9 @@
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-let handler = async (m, {conn, info, usedPrefix, participants, db, objs, userdb, senderJid}) => {
+let handler = async (m, {conn, info, usedPrefix, db, objs, userdb, senderJid}) => {
 const fs = await import('fs')
 const {imagen1} = objs
 const {owner} = await import('../config.js') 
-let ow = owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `${participants.some(p => jid === p.jid) ? `(${conn.getName(jid)}) wa.me/` : `@`}${jid.split`@`[0]}`).join` y `
+let ow = owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).slice(0).map(({jid}) => `@${jid}`).join` y `
 let me = `@${conn.user.jid.split`@`[0]}`
 var doc = [`pdf`,`zip`,`vnd.openxmlformats-officedocument.presentationml.presentation`,`vnd.openxmlformats-officedocument.spreadsheetml.sheet`,`vnd.openxmlformats-officedocument.wordprocessingml.document`]
 var document = doc[Math.floor(Math.random() * doc.length)]
@@ -32,7 +32,7 @@ mediaUrl: 'https://github.com/ReyEndymion',
 mediaType: 2,
 previewType: 'pdf',
 title: 'Bot exclusivo de:',
-body: info.nanie,
+body: info.nanipe,
 thumbnail: thumbnailUrl,
 sourceUrl: sourceUrl
 },

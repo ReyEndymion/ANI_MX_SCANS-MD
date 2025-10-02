@@ -36,7 +36,7 @@ mediaUrl: html_url,
 mediaType: 2,
 previewType: 'pdf',
 title: `Bot exclusivo de: ${author}`,
-body: info.nanie,
+body: info.nanipe,
 thumbnail: fs.readFileSync(imagen1),
 sourceUrl: `https://api.whatsapp.com/send/?phone=5215625406730&text=.serbot&type=phone_number&app_absent=0`
 },

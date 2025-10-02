@@ -50,7 +50,7 @@ mythic: premium ? legendarypremium : legendary,
 }
 
 let time = userdb.lastpago + 432000000 //432000000 5 dias
-if (new Date - userdb.lastpago < 432000000) return await conn.sendButton(m.chat, `💰 SU SIGUIENTE PAGO ES EN ...`, info.nanie + `\n\nVUELVE EN : COME BAC𝙆 IN\n${clockString(time - new Date() * 1)}`, null, [['M E N U ☘️', '/menu']], fkontak, m)
+if (new Date - userdb.lastpago < 432000000) return await conn.sendButton(m.chat, `💰 SU SIGUIENTE PAGO ES EN ...`, info.nanipe + `\n\nVUELVE EN : COME BACK IN\n${clockString(time - new Date() * 1)}`, null, [['M E N U ☘️', '/menu']], fkontak, m)
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
 if (!(reward in user)) continue
@@ -62,7 +62,7 @@ let text = `
 ┃ ✅ PAGO AUTORIZADO
 ┃ ✅ PAGO REALIZADO
 ╰━━💰━💰━💰━━⬣`
-const buff = `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
+const buff = `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n> ${info.nanipe}`
 userdb.lastpago = new Date * 1
 if (start.buttons) {
 return conn.sendButton(m.chat, text, buff, null, [['Volver al menú ☘️', `${usedPrefix}menu`]

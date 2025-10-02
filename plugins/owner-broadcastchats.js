@@ -1,12 +1,12 @@
 import fs from 'fs'
-let handler = async (m, {conn, info, usedPrefix, command, text, db, privsdb, userdb, senderJid, objs}) => {
+let handler = async (m, {conn, info, usedPrefix, command, text, db, privsdb, userdb, senderJid, objs, isLidGroup}) => {
 const {dbGroups, imagen1, imagen2} = objs
 await dbGroups.read()
 const {delay, parseDuration} = await import('../lib/functions.js')
 const path = await import('path')
 const {media, groupID, userID, lid} = await import('../config.js')
 if (!text && !m.quoted?.text) return conn.sendWritingText(m.chat, ` Ingres Un texto el cual será el comunicado o conteste a un mensaje con un texto que desee comunicar a los chats`, userdb, m)
-let q = { key: {participant: `0@s.whatsapp.net`, remoteJid: `0@s.whatsapp.net`},message: {"videoMessage": { "title": info.nanie, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': info.namerepre, 'jpegThumbnail': false }}}
+let q = { key: {participant: `0@s.whatsapp.net`, remoteJid: `0@s.whatsapp.net`},message: {"videoMessage": { "title": info.nanipe, "h": `Hmm`,'seconds': '99999', 'gifPlayback': 'true', 'caption': info.namerepre, 'jpegThumbnail': false }}}
 if (/^(b(road)?c(ast)?p(rivs)?)$/i.test(command)) {
 let chats = Object.entries(privsdb).filter(([jid, data]) => !jid.includes(conn.user.jid) && !jid.endsWith('@g.us') && data.user).map(v => v[0])
 let _text = m.quoted?.text ? m.quoted.text : text
@@ -17,7 +17,7 @@ const contextInfo = {
 mentionedJid: conn.parseMention(resp),
 externalAdReply: {
 title: '*COMUNICADO OFICIAL A LOS CHATS PRIVADOS*',
-body: info.nanie, 
+body: info.nanipe, 
 sourceUrl: info.hp_otkstogthr, 
 thumbnail: fs.readFileSync(imagen2) }}
 await conn.sendWritingTextCI(id, resp, contextInfo, userdb, q)
@@ -40,7 +40,7 @@ mentionedJid: metadata.participants.map(p => groupLid ? p.jid : p.id),
 groupMentions: await conn.parseGroupMention(resp),
 externalAdReply: {
 title: '*COMUNICADO OFICIAL A GRUPOS*',
-body: info.nanie, 
+body: info.nanipe, 
 sourceUrl: info.urlgofc, 
 thumbnail: fs.readFileSync(imagen1) 
 }
@@ -69,7 +69,7 @@ mentionedJid: id.endsWith(groupID) ? metadata.participants.map(p => groupLid ? p
 groupMentions: id.endsWith(groupID) ? await conn.parseGroupMention(resp) : [],
 externalAdReply: {
 title: 'COMUNICADO OFICIAL A TODOS LOS CHATS',
-body: info.nanie, 
+body: info.nanipe, 
 sourceUrl: info.hp_otkstogthr, 
 thumbnail: fs.readFileSync(imagen2)
 }

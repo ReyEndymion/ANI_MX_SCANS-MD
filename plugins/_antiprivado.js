@@ -18,3 +18,13 @@ return conn.updateBlockStatus(m.chat, 'block');
 }
 
 }
+export const menuInfo = {
+help: `Si se activa esta configuracion, es capaz de bloquear a usuarios que no tienen permiso para usar el bot en su privado\nUsar asi para habilitar: *usedPrefixenable antiprivado*\nUsar asi para deshabilitar: *usedPrefixdisable antiprivado*`,
+info: `━━━━━━━━━━━━━━━━━━━━
+┣ *👑 ENABLE ANTIPRIVADO*: usedPrefixenable antiprivado
+━━━━━━━━━━━━━━━━━━━━
+┣ *👑 DISABLE ANTIPRIVADO*: usedPrefixdisable antiprivado
+`,
+type: 'enable',
+chat: `privados`
+}

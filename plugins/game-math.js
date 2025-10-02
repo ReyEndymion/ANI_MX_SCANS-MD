@@ -3,7 +3,7 @@ let handler = async (m, {conn, info, start, args, usedPrefix, command, db, userd
 const { genMath } = await import('../lib/functions.js')
 const {  modesMath  } = await import('../lib/constants.js');
 const {userID} = await import('../config.js')
-const buff = info.nanie
+const buff = info.nanipe
 let resp =  `*[❗INFO❗] INGRESE LA DIFICULTAD CON LA QUE DESEA JUGAR*\n\n*DIFICULTADES DISPONIBLES: ${Object.keys(modesMath).join(' | ')}*\n\n*EJEMPLO DE USO: ${usedPrefix}mates medium*\n\nMates disponibles:\n- Mates Easy: ${usedPrefix + command} easy\n- Mates Medium: ${usedPrefix + command} medium\n- Mates Hard: ${usedPrefix + command} hard`.trim();
 if (args.length < 1 || !(args[0].toLowerCase() in modesMath)) {
 const buttons = [
@@ -61,7 +61,7 @@ math.usedPrefix = usedPrefix
 };
 handler.before = async (m, {conn, info, start, userdb, db, senderJid}) => {
 const {userID} = await import('../config.js')
-const buff = info.nanie
+const buff = info.nanipe
 let id = m.chat
 if (!m.quoted) return
 if (m.quoted.sender != conn.user.jid) return

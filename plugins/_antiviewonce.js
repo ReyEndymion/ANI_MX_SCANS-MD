@@ -1,7 +1,7 @@
 let { downloadContentFromMessage } = (await import('@whiskeysockets/baileys'));
 
-import { info, newsletterID, sBroadCastID } from '../config.js'
-export async function before(m, {conn, isAdmin, isBotAdmin, botdb, chatdb , db, userdb, senderJid}) {
+export async function before(m, {conn, info, isAdmin, isBotAdmin, botdb, chatdb , db, userdb, senderJid}) {
+const { newsletterID, sBroadCastID } = await import('../config.js')
 if (m.chat == sBroadCastID || m.chat.endsWith(newsletterID)) return
 let settings = botdb.settings || {}
 if (/^[.~#/\$,](read)?viewonce/.test(m.text)) return

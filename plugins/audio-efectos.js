@@ -41,7 +41,7 @@ console.warn('No se pudo borrar')
 }
 }
 })
-} else return conn.sendWritingText(m.chat, `*[❗INFO❗] RESPONDA AL AUDIO O NOTA DE VOZ EL CUAL SERA MODIFICADO, USADO EL COMANDO ${usedPrefix + command}*`, m)
+} else return conn.sendWritingText(m.chat, `*[❗INFO❗] RESPONDA AL AUDIO O NOTA DE VOZ EL CUAL SERA MODIFICADO, USADO EL COMANDO ${usedPrefix + command}*`, userdb, m)
 } catch (e) {
 throw e
 }}

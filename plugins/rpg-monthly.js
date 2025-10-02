@@ -51,7 +51,7 @@ let time = userdb.lastmonthly + 432000000 //432000000 5 dias
 if (new Date - userdb.lastmonthly < 432000000) {
 let resp = `Ya recibiste tu recompensa mensual 🌅\n\n`
 resp += `Vuelve en:\n${clockString(time - new Date() * 1)}\n\n`
-resp += info.nanie 
+resp += info.nanipe 
 return conn.sendWritingText(m.chat, resp, userdb, q);
 }
 let texto = ''
@@ -64,7 +64,7 @@ let resp = `
 ┃ 🏅 RECOMPENSA MENSUAL!!!
 ┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
 ╰━━🧘‍♂️━🤺━🚴‍♀️━━⬣\n`
-resp += text + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
+resp += text + texto + `\n\n🎟️ P R E M I U M ⇢ ${premium ? '✅' : '❌'}\n> ${info.nanipe}`
 userdb.lastmonthly = new Date * 1
 return conn.sendWritingText(m.chat, resp, userdb, q);
 }

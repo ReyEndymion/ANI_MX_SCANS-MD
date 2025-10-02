@@ -1,14 +1,12 @@
-import { fstat } from 'fs'
-import { rpgshop } from '../rpg.js'
 import fetch from 'node-fetch'
-let handler = async (m, {isPrems, conn, userdb, db, senderJid}) => {
+let handler = async (m, {conn, info, isPrems, db, userdb, senderJid, objs}) => {
+const {imagen1} = objs
+const {rpgshop} = await import('../rpg.js')
+const {default: fs} = await import('fs')
+const {pickRandom, clockString} = await import('../lib/functions.js')
 let resp, imagen
 let fkontak = { "key": { "participants":"0@s.whatsapp.net", "remoteJid": "status@broadcast", "fromMe": false, "id": "Halo" }, "message": { "contactMessage": { "vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${senderJid.split('@')[0]}:${senderJid.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, "participant": "0@s.whatsapp.net" 
 }
-let grupos = [info.hp_animxscans, info.repoProyect, urlgofc, paypal]
-//let enlace = { contextInfo: { externalAdReply: {title: info.nanie + amsicon, body: 'support group' , sourceUrl: grupos.getRandom(), thumbnail: await(await fetch(img.getRandom())).buffer() }}}
-//let enlace2 = { contextInfo: { externalAdReply: { showAdAttribution: true, mediaUrl: yt, mediaType: 'VIDEO', description: '', title: info.nanie, body: info.nanie, thumbnailUrl: await(await fetch(global.img)).buffer(), sourceUrl: yt }}}
-//let dos = [enlace, enlace2]
 
 let premium = userdb.premium
 
@@ -43,11 +41,12 @@ uncoommon: premium ? uncoommonpremium : uncoommon,
 mythic: premium ? mythicpremium : mythic,
 }
 
-let time = userdb.halloween + 18000000 //18000000 5 horas
-if (new Date - userdb.halloween < 18000000) {resp = `Ya recibiste tu recompensa 🎃\n\nVuelve en:\n${clockString(time - new Date() * 1)}`
+let time = userdb.halloween + 18000000
+if (new Date - userdb.halloween < 18000000) {
+resp = `Ya recibiste tu recompensa 🎃\n\nVuelve en:\n${clockString(time - new Date() * 1)}`
+return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 } else {
-const {imagen1} = await import('..config.js')
-imagen = [imagen1].getRandom()
+imagen = [fs.readFileSync(imagen1)].getRandom()
 let texto = ''
 for (let reward of Object.keys(recompensas)) {
 if (!(reward in userdb)) continue
@@ -56,37 +55,20 @@ texto += `*+${recompensas[reward]}* ${rpgshop.emoticon(reward)}\n`}
 resp = `
 ╭━━👻━🏰━🎃━━⬣
 ┃ 🔮 RECOMPENSA SEMANAL!!
-┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*
-╰━━🕯️━🍬━🕸️━━⬣\n\n🎟️ PREMIUM ⇢ ${premium ? '✅' : '❌'}\n${info.nanie}`
-}
-if (resp && imagen) {
-const fs = await import('fs')
-const readImage = fs.readFileSync(imagen)
+┃ *${premium ? '🎟️ Recompensa Premium' : '🆓 Recompensa Gratis'}*\n\n${texto}
+╰━━🕯️━🍬━🕸️━━⬣\n\n🎟️ PREMIUM ⇢ ${premium ? '✅' : '❌'}\n> ${info.nanie}`
 userdb.halloween = new Date * 1
-return conn.sendImageWriting(m.chat, readImage, resp, fkontak);
-} else {
-return conn.sendWritingText(m.chat, resp, m );
+return conn.sendImageWriting(m.chat, imagen, resp, userdb, fkontak)
 }
 }
 handler.command = ['halloween'] 
-//handler.level = 7
+handler.level = 7
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🎃 HALLOWEEN", description: `Recibe tu recompensa semanal de Halloween, usa el comando #halloween`, id: `halloween`}
+];
+handler.type = "rpg";
 handler.disabled = false;
 
 export default handler
-
-function pickRandom(list) {
-return list[Math.floor(Math.random() * list.length)]}
-
-function clockString(ms) {
-let ye = isNaN(ms) ? '--' : Math.floor(ms / 31104000000) % 10
-let mo = isNaN(ms) ? '--' : Math.floor(ms / 2592000000) % 12
-let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000) % 30
-let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
-let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
-return ['┃⇢ ', ye, ' *🗓️ Años : Year*\n', '┃⇢ ', mo, ' *⛅ Mes : Month*\n', '┃⇢ ', d, ' *☀️ Días : Days*\n', '┃⇢ ', h, ' *⏰ Horas : Hours*\n', '┃⇢ ', m, ' *🕐 Minutos : Minutes*\n', '┃⇢ ', s, ' *⏱️ Segundos : Seconds*'].map(v => v.toString().padStart(2, 0)).join('')
-}

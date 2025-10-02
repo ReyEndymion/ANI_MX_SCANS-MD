@@ -20,8 +20,8 @@ userdb.warn = 0
 let resp = `Hola *@${senderJid.split`@`[0]}*, superaste las 5 advertencias serás bloqueado y eliminado de este grupo`
 await conn.sendWritingText(m.chat, resp, userdb, m);
 userdb.banned = true
-return this.groupParticipantsUpdate(m.chat, [senderJid], 'remove')
-//await this.updateBlockStatus(senderJid, 'block')
+await conn.groupParticipantsUpdate(m.chat, [senderJid], 'remove')
+return conn.updateBlockStatus(senderJid, 'block')
 }
 }
 export const menuInfo = {

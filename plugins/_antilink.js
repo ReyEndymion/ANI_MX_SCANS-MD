@@ -24,7 +24,7 @@ await conn.deleteMessage(m.chat, {remoteJid: m.chat, fromMe: false, id: bang, pa
 let resp = `*「 ANTI LINKS WHATSAPP 」*\n*HASTA LA VISTA BABY 👋, ${await conn.getName(senderJid)} ROMPISTE LAS REGLAS DEL GRUPO, SERAS EXTERMINADO...!!*`
 await conn.sendWritingText(m.chat, resp, m );
 return await conn.groupParticipantsUpdate(m.chat, [senderJid], 'remove') 
-} else if (isBotAdmin && !bot.restrict) {
+} else if (isBotAdmin && !settings.restrict) {
 let resp = `*[❗INFO❗] EL PROPIETARIO DEL BOT NO TIENE HABILITADO LAS RESTRICCIONES *(#_enable restrict_)* CONTACTE CON EL PARA QUE LO HABILITE*`
 return conn.sendWritingText(m.chat, resp, m );
 } else if (!isBotAdmin) {

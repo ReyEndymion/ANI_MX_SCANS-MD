@@ -16,7 +16,7 @@ try { conn.ws.close() } catch (e) { console.log(e)}
 conn.ev.removeAllListeners()
 }/****/
 return conn.sendWritingText(m.chat, resp, userdb, m)} else if (!conn.user.jid) {
-resp = `Este numero no es un Sub-Bot de ${info.nanie}, por lo tanto no lo puedo detener`
+resp = `Este numero no es un Sub-Bot de ${info.nanipe}, por lo tanto no lo puedo detener`
 return conn.sendWritingText(m.chat, resp, userdb, m)} else if (global.userBot == (m.chat || senderJid)) {
 resp = `El bot principal no se apaga asi`
 return conn.sendWritingText(m.chat, resp, userdb, m)} else {

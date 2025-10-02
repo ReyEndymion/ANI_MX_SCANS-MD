@@ -1,14 +1,13 @@
 let handler = async (m, {conn, args, db, __dirname, userdb, senderJid}) => {
 const { generateWAMessageFromContent } = (await import('@whiskeysockets/baileys')).default;
 let { default: fetch } = await import('node-fetch');
-const {  join  } = await import('path');
+const { join } = await import('path');
 let { default: fs } = await import('fs');
 let groupInvitations = [];
 for (let [jid, chat] of Object.entries(conn.chats).filter(([jid, chat]) => jid.endsWith('@g.us') && chat.isChats)) {
 let name = await conn.getName(jid);
 let link;
 let img;
-console.log('invitame: ' + jid, chat.metadata)
 
 try {
 link = 'https://chat.whatsapp.com/' + await conn.groupInviteCode(jid);
@@ -62,8 +61,9 @@ handler.admin = false;
 handler.group = false;
 handler.botAdmin = false;
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title:"💎 INVITAR A GRUPOS", description: "invita a los grupos donde el bot esta usando #invitame", id: `invitame`}];
+handler.type = "gadmin";
 handler.disabled = false;
 
 export default handler;

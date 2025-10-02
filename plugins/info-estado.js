@@ -1,5 +1,5 @@
 import { clockString } from '../lib/functions.js'
-let handler = async (m, {conn, info, command, usedPrefix, participants, db, objs, userdb, senderJid}) => {
+let handler = async (m, {conn, info, command, usedPrefix, db, objs, userdb, senderJid}) => {
 const fs = await import('fs')
 const {owner} = await import('../config.js')
 const {imagen1} = objs
@@ -16,9 +16,8 @@ let uptime = clockString(_uptime)
 const used = process.memoryUsage()
 const toMB = bytes => (bytes / 1024 / 1024).toFixed(2) + ' MB';
 const memory = Object.entries(used).map(([key, value]) => `│      ${key}: ${toMB(value)}`).join('\n')
-console.log('estado: ', used)
 let estado =`
-╭─[ *${info.nani}* ]
+╭─[ *${info.nanip}* ]
 │ *➤ HOLA @${senderJid.split`@`[0]}*
 │
 │ *ESTADO DE @${conn.user.jid.split('@')[0]}:*
@@ -27,15 +26,14 @@ let estado =`
 │ *=> TIEMPO ACTIVO: ${uptime}*
 │ *=> MEMORIA USADA:*\n${memory}
 ╰───────────────
-${info.hp_animxscans}\n\n${info.nanie}
+${info.hp_animxscans}\n\n> ${info.nanipe}
 `.trim()
 let contextInfo = {
 mentionedJid: conn.parseMention(estado),
 "externalAdReply": {
-//"showAdAttribution": true,
 "containsAutoReply": true,
 "renderLargerThumbnail": true,
-"title": info.nanie, 
+"title": info.nanipe, 
 "containsAutoReply": false,
 "mediaType": 2, 
 "thumbnail": picture,

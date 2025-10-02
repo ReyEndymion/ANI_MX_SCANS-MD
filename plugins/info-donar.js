@@ -6,7 +6,7 @@ const {owner} = await import('../config.js')
 const {imagen1} = objs
 let ow = owner.filter(entry => typeof entry[0] === `string` && !isNaN(entry[0])).map(entry => ({ jid: entry[0] })).map(({jid}) => `@${jid.split`@`[0]}`).join` y `
 let userm = `@${senderJid.split`@`[0]}`
-let estado = {key: {participant: "0@s.whatsapp.net", "remoteJid": "0@s.whatsapp.net", id: m.key.id, fromMe: false}, "message": {"groupInviteMessage": {"groupJid": m.chat, "inviteCode": "m", "groupName": "P", "caption": info.nanie, 'jpegThumbnail': fs.readFileSync(imagen1)}}}
+let estado = {key: {participant: "0@s.whatsapp.net", "remoteJid": "0@s.whatsapp.net", id: m.key.id, fromMe: false}, "message": {"groupInviteMessage": {"groupJid": m.chat, "inviteCode": "m", "groupName": "P", "caption": info.nanipe, 'jpegThumbnail': fs.readFileSync(imagen1)}}}
 let donar =`
 *┏ ┅ ━━━━━━━━━ ┅ ━*
 *┇「 DONAR 」*
@@ -22,7 +22,7 @@ let donar =`
 *┃ ${ow}*
 *┗ ┅ ━━━━━━━━━ ┅ ━*\n\n
 Usa el comando : *${usedPrefix}paypal* para mostrar el enlace completo\n\n
-${info.nanie}
+${info.nanipe}
 `.trim()
 return conn.sendWritingText(m.chat, donar, userdb, estado) 
 }

@@ -97,7 +97,7 @@ return caption.trim()
 let info
 try {
 let res = text ? null : await conn.groupMetadata(m.chat)
-info = await MetadataGroupInfo(res) // Si el bot esta en el grupo
+info = await MetadataGroupInfo(res) 
 console.log('Método de metadatos')
 } catch {
 const inviteUrl = text?.match(/(?:https:\/\/)?(?:www\.)?(?:chat\.|wa\.)?whatsapp\.com\/(?:invite\/|joinchat\/)?([0-9A-Za-z]{22,24})/i)?.[1]
@@ -105,7 +105,7 @@ let inviteInfo
 if (inviteUrl) {
 try {
 inviteInfo = await conn.groupGetInviteInfo(inviteUrl)
-info = await inviteGroupInfo(inviteInfo) // Para cualquier enlace de grupo/comunidad
+info = await inviteGroupInfo(inviteInfo)
 console.log(info)
 console.log('🌸 Método de enlace')
 } catch (e) {
@@ -135,7 +135,7 @@ if (!newsletterInfo) return conn.sendWritingText(m.chat, "🚩 No se encontró i
 const buf = newsletterInfo.content?.[0]?.content;
 let data = null;
 try {
-data = JSON.parse(buf.toString()); // ahora es un objeto válido
+data = JSON.parse(buf.toString()); 
 } catch (e) {
 console.error("Error parseando newsletterInfo:", e);
 }
@@ -164,7 +164,6 @@ reportError(e)
 }}}
 
 }
-// Seguir un canal de WhatsApp 
 if (/^(seguircanal)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return await conn.reply(m.chat, `🚩 No tienes permiso para usar este comando.`, m, fake)
 ch
@@ -184,7 +183,6 @@ reportError(e)
 }
 
 }
-// Dejar de seguir un canal de WhatsApp 
 if (/^(noseguircanal)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return await conn.reply(m.chat, `🚩 No tienes permiso para usar este comando.`, m, fake)
 ch
@@ -202,7 +200,6 @@ await conn.reply(m.chat, `🚩 El bot ha dejado de seguir el canal *${chtitle}*.
 reportError(e)
 }
 }
-// Silenciar un canal de WhatsApp 
 if (/^(silenciarcanal)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 ch
@@ -221,7 +218,6 @@ reportError(e)
 }
 
 }
-// Dejar de sileciar un canal de WhatsApp 
 if (/^(nosilenciarcanal)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 ch
@@ -240,7 +236,6 @@ reportError(e)
 }
 
 }
-// Modificar la imagen del canal
 if (/^(nuevafotochannel)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 if (!text) return await conn.reply(m.chat, `🚩 Ingrese el ID o enlace de un canal de WhatsApp respondiendo a una imagen jpg/jpeg/png o agregue un enlace de imagen\n
@@ -280,7 +275,6 @@ ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).c
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterUpdatePicture(ch, media)
-// await conn.reply(m.chat, `🚩 El bot ha cambiando la imagen del canal *${chtitle}* con éxito.`, m) 
 await conn.sendMessage(ch, { text: `🚩He cambiando la imagen del canal *${chtitle}* con éxito.`, contextInfo: {
 externalAdReply: {
 title: "【 🔔 NOTIFICACIÓN 🔔 】",
@@ -296,7 +290,6 @@ reportError(e)
 }
 
 }
-// Eliminar la imagen del canal
 if (/^(eliminarfotochannel)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 ch
@@ -309,7 +302,6 @@ ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).c
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterRemovePicture(ch)
-//await conn.reply(m.chat, `🚩 El bot ha eliminado la imagen del canal *${chtitle}* con éxito.`, m) 
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha eliminado la imagen del canal *${chtitle}* con éxito.`, contextInfo: {
 externalAdReply: {
 title: "【 🔔 NOTIFICACIÓN 🔔 】",
@@ -325,7 +317,6 @@ reportError(e)
 }
 
 }
-// Recibir notificaciones de actualizaciones del canal en tiempo real
 if (/^(avisoschannel|resiviravisos)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 ch
@@ -344,7 +335,6 @@ reportError(e)
 }
 
 }
-// Establece el modo de reacciones en un canal de WhatsApp 
 if (/^(reactioneschannel|reaccioneschannel)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 ch
@@ -402,7 +392,6 @@ ch = await conn.newsletterMetadata("invite", ch).then(data => data.id).catch(e =
 try {
 const chtitle = await conn.newsletterMetadata(ch.includes("@newsletter") ? "jid" : "invite", ch.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterReactionMode(ch, mode)
-//await conn.reply(m.chat, `🚩 El bot ha establecido el modo de reacciones como \`"${mode}"\` para el canal *${chtitle}*`, m,rcanal)
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha establecido el modo de reacciones como \`"${mode}"\` para el canal *${chtitle}*`, contextInfo: {
 externalAdReply: {
 title: "【 🔔 NOTIFICACIÓN 🔔 】",
@@ -418,7 +407,6 @@ reportError(e)
 }
 
 }
-// Modificar nombre del canal
 if (/^(nuevonombrecanal)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 if (!text) return await conn.reply(m.chat, `🚩 Ingrese el ID o enlace de un canal de WhatsApp para que el bot modifique el nombre del canal.*\n\n
@@ -438,7 +426,6 @@ ch = await conn.newsletterMetadata("invite", channelUrl).then(data => data.id).c
 try {
 const chtitle = await conn.newsletterMetadata(text.includes("@newsletter") ? "jid" : "invite", text.includes("@newsletter") ? ch : channelUrl).then(data => data.name).catch(e => null)
 await conn.newsletterUpdateName(ch, name)
-//await conn.reply(m.chat, `🚩 El bot ha cambiado el nombre del canal *${name}*\n\n*Anterior nombre:* ${chtitle}\n*Nuevo nombre:* ${name}`, m) 
 await conn.sendMessage(ch, { text: `🚩 HutaoProyect ha cambiado el nombre del canal *${name}*\n\n*Anterior nombre:* ${chtitle}\n*Nuevo nombre:* ${name}`, contextInfo: {
 externalAdReply: {
 title: "【 🔔 NOTIFICACIÓN 🔔 】",
@@ -454,7 +441,6 @@ reportError(e)
 }
 
 }
-// Modificar la descripción del canal
 if (/^(nuevadescchannel)\b$/i.test(command)) {
 if (!isOwner || !isROwner) return conn.sendWritingText(m.chat, `🚩 No tienes permiso para usar este comando.`, userdb, m)
 if (!text) return await conn.reply(m.chat, `🚩 Ingrese el ID o enlace de un canal de WhatsApp para que el bot modifique la descripción del canal.\n\n

@@ -12,7 +12,7 @@ const imgpre = [
 'https://www.logotypes101.com/logos/824/A62623847AE4496B7293312FD32E379F/premium-gas-stoves.png',
 ];
 const img = imgpre[Math.floor(Math.random() * imgpre.length)]
-const buff = `😻 *Ahora tiene Premium por lo tanto no va tener límites.*\n\n${info.nanie}`
+const buff = `😻 *Ahora tiene Premium por lo tanto no va tener límites.*\n\n> ${info.nanipe}`
 let template = (args[0] || '').toLowerCase() 
 if (/prem1/i.test(command)) {
 var tiempoPremium = 5 * text //tiempo total 
@@ -346,7 +346,7 @@ rows: [
 
 const listMessage = {
 text: `🌟 COMPRA UN TIPO DE PASE PARA SER USUARIO(A) PREMIUM!!!`,
-footer: info.nanie,
+footer: info.nanipe,
 title: `${htki} *🎟️ PREMIUM 🎟️* ${htka}`,
 buttonText: `🎟️ SER PREMIUM 🌟`,
 sections
@@ -359,7 +359,6 @@ return conn.sendButton(m.chat, resp, buff, img, [
 [`🎟️ MÁS TIEMPO PREMIUM 🎟️`, `${usedPrefix + command} 1`],
 [`😽 DISFRUTAR PREMIUM 😽`, `${usedPrefix}allmenu`]], fkontak, null)
 } else {
-//comando.map(v => v + ' <pencarian>')
 let totalComandos = 0
 if (typeof sections === 'string' && sections.trim().length > 0) {
 resp += sections + '\n\n'

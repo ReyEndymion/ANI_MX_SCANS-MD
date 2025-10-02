@@ -3,11 +3,10 @@ const {idiomas} = await import('../lib/constants.js')
 const {info} = await import('../config.js')
 const codeIdiomas = idiomas.map(([nombre, codigo]) => [codigo.toLowerCase()])
 const lista = idiomas.map(([nombre, codigo], index) => `${index+1}. ${nombre} -> (${codigo})`).join('\n')
-//const idiomasText =  nameIdiomas.normalize("NFD").replace(/[\u300-\u36f]/g, '')
 const user = senderJid.split('@')[0]
 let resp = ''
 if (!args[0]) {
-resp = `Hola @${user}\nBienvenido al menú de idiomas del bot ${info.nani}\nHello @${user}\nWelcome to the ${info.nani} bot language menu\n\n Mi idioma es español por defecto, si deseas que te responda en un idioma específico por favor usa este comando con el indicador (codigo de idioma) de la siguiente lista:\n\nMy language is Spanish by default, if you want me to respond in a specific language please use this command with the indicator (language code) from the following list:\n\nEjemplo/Example\n${usedPrefix+command} es\n\n${lista}`
+resp = `Hola @${user}\nBienvenido al menú de idiomas del bot ${info.nanip}\nHello @${user}\nWelcome to the ${info.nanip} bot language menu\n\n Mi idioma es español por defecto, si deseas que te responda en un idioma específico por favor usa este comando con el indicador (codigo de idioma) de la siguiente lista:\n\nMy language is Spanish by default, if you want me to respond in a specific language please use this command with the indicator (language code) from the following list:\n\nEjemplo/Example\n${usedPrefix+command} es\n\n${lista}`
 resp = await conn.langResponse(resp, userdb)
 } else {
 const idiomasMap = Object.fromEntries(idiomas.map(([nombre, codigo]) => [nombre.toLowerCase().normalize("NFD").replace(/[\u300-\u36f]/g, '')]))

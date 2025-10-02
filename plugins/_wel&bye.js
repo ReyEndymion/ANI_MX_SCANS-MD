@@ -6,7 +6,7 @@ const { default: fs } = await import('fs')
 if (!m.isGroup) return
 let stikerwelgc = path.join(media, "stickers/welgc.webp")
 let stikerbyegc = path.join(media, "stickers/byegc.webp")
-const metadatos = {packname: info.packname, wm: info.nanie}
+const metadatos = {packname: info.packname, wm: info.nanipe}
 if (command == 'welcomegc') {
 return conn.sendSticker(m.chat, stikerwelgc, metadatos, m)
 }

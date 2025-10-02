@@ -2,7 +2,7 @@
 import fs from 'fs'
 import fetch from 'node-fetch'
 import { owner, info, temp, newsletterID, sBroadCastID, groupID, media } from '../config.js'
-import { googleImage } from '../lib/googlePictures.js'
+import { googleImage } from '../lib/googleMedia.js'
 let handler = async (m, {text, usedPrefix, command, conn, db, userdb, senderJid}) => {
 if (!text) return conn.sendWritingText(m.chat, `*[❗] INGRESE EL NOMBRE DEL PAQUETE QUE DESEE BUSCAR*`, userdb, m)
 try {
