@@ -283,6 +283,7 @@ await verifyBot(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: nul
 }
 }
 await global.reloadHandler()
+if (!conn.user) return
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
 console.log(chalk.whiteBright(`\n▣────────[ BACKUP_CREDS ]───────────···\n│\n▣─❧ RESPALDO EXITOSO ✅\n│\n▣────────────────────────────────────···\n`))
