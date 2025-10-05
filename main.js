@@ -283,6 +283,8 @@ await verifyBot(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: nul
 }
 }
 await global.reloadHandler()
+_quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
+watchPluginsDirs(pluginFolder, conn)
 if (!conn.user) return
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
@@ -293,8 +295,7 @@ purgeOldFiles(authFolder)
 console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
 
-_quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
-return watchPluginsDirs(pluginFolder, conn)
+return conn
 }
 
 async function enterCode(conn, registration) {

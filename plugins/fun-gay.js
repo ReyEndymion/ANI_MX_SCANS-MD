@@ -2,7 +2,7 @@ import path, { join } from 'path'
 import fs from 'fs'
 let handler = async (m, {conn, db, userdb, senderJid}) => {
 let { default: fetch } = await import('node-fetch');
-let { default: Jimp } = await import('jimp');
+let { Jimp } = await import('jimp');
 function randomString(length) {
 var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 if (!length) {

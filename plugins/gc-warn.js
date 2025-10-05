@@ -2,7 +2,7 @@ import path, { join } from 'path'
 import fs from 'fs'
 let handler = async (m, {conn, text, command, isOwner, usedPrefix, botdb, usersdb, userdb, senderJid}) => {
 let { default: fetch } = await import('node-fetch');
-let { default: Jimp } = await import('jimp');
+let { Jimp } = await import('jimp');
 if (!m.isGroup) return !1
 const { temp, media, userID, lid } = await import('../config.js')
 let who
