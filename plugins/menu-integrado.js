@@ -67,7 +67,7 @@ level, limit, username, weton, week, date, time, totalreg, rtotalreg, role,
 text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
 let { money, joincount } = usersdb[senderJid]
 let mentionedJid = [who]
-if (/^(asistente|audioefect|buscar|cajafuerte|chatanonimo|convert|descargas|facebook|fun|gadmin|herramientas|info|juegos|logosefectos|owners|random|rpg|nsfw|stickermenu|youtube)$/i.test(command)) {
+if (/^(asistente|audioefect|buscar|cajafuerte|chatanonimo|convert|descargas|facebook|fun|gadmin|herramientas|info|juegos|logosefectos|owners|random|rpg|nsfw|stickermenu|youtube|menubots)$/i.test(command)) {
 const aliasToType = {
 audioefect: 'audio efectos',
 buscar: 'buscar',
@@ -81,6 +81,7 @@ herramientas: 'herramientas',
 info: 'informacion',
 juegos: 'juegos',
 logosefectos: 'logos y efectos',
+menubots: 'serbotmenu',
 owners: 'owners',
 random: 'random',
 rpg: 'rpg',
@@ -472,6 +473,7 @@ herramientas: {title:`🛠️ *HERRAMIENTAS*`, description: `Comando: ${usedPref
 info: {title:`😉 *INFORMACION*`, description: `Para saber la información disponible para el Bot use Comando: ${usedPrefix}info`, id: `${usedPrefix}info`},
 juegos: {title: `🎖️ *JUEGOS* `, description: `Comando: ${usedPrefix}juegos (menu de juegos)`, id: `${usedPrefix}juegos`},
 logosefectos: {title:`🖍️*EFECTOS Y LOGOS*`, description: `Comando: ${usedPrefix}logosefectos (para optener efectos y logos)`, id: `${usedPrefix}logosefectos`},
+menubots: {title: '🤖 MENU SUBBOTS', description: `Comando: ${usedPrefix}menubots (para uso de los subbots)`, id: `${usedPrefix}menubots`},
 nsfw: {title:`🔞 *NSFW +18*`, description: `Comando: ${usedPrefix}nsfw `, id: `${usedPrefix}nsfw`},
 owners: {title: `💎*DUEÑO (OWNERs)*`, description: `Comando: ${usedPrefix}owners (Solo owners)`, id: `${usedPrefix}owners`},
 ramdom: {title:`👾*RANDOM*`, description: `Comando: ${usedPrefix}random `, id: `${usedPrefix}random`},
@@ -623,7 +625,7 @@ return conn.sendWritingText(m.chat, resp.trim(), userdb, m)
 
 handler.help = ['']
 handler.tags = ['menus']
-handler.command = ['asistente', 'audioefect', 'audios', 'buscar', 'cajafuerte', 'chatanonimo', 'convert', 'descargas', 'facebook', 'fun', 'gadmin', 'herramientas', 'info', 'infoyo', 'juegos', 'logosefectos', 'menu', 'owners', 'random', 'rpg', 'nsfw', 'stickermenu', 'youtube']
+handler.command = ['asistente', 'audioefect', 'audios', 'buscar', 'cajafuerte', 'chatanonimo', 'convert', 'descargas', 'facebook', 'fun', 'gadmin', 'herramientas', 'info', 'infoyo', 'juegos', 'logosefectos', 'menu', 'menubots', 'owners', 'random', 'rpg', 'nsfw', 'stickermenu', 'youtube']
 handler.exp = 50
 handler.register = false
 handler.menu = [
