@@ -50,8 +50,10 @@ bots = bots.trim();
 const resp = `Bots actuales:\n${bots}`
 return conn.sendWritingText(m.chat, resp, userdb, m)}
 }
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT-LIST', description: 'Utiliza Este comando para Mostrar la lista de subbots\nComando: #bots', id: 'bots'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler

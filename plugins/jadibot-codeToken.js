@@ -27,8 +27,10 @@ handler.botAdmin = false
 
 handler.fail = null
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT-TOKEN', description: 'Utiliza Este comando Para crear un token De tu sesión para tu subbot\nDicho token es compatible con algunos bots y puedes trasladar tu sesión', id: 'codetoken'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler

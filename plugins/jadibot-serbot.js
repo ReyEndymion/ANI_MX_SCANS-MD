@@ -138,8 +138,10 @@ limpCarpetas()
 
 }
 }
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT/JADIBOT', description: 'Utiliza tu número Para hacerte subbot', id: 'serbot --code'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler
@@ -414,7 +416,6 @@ delete global.conns[i]
 global.conns.splice(i, 1)
 }}, 60000)
 
-libstore.bind(sock)
 		 
 const oldChats = (Object.assign(sock.chats, inMstore.chats));
 let handler = await import('../handler.js')
@@ -427,12 +428,10 @@ if (Object.keys(Handler || {}).length) handler = Handler
 console.error(e)
 }
 if (restatConn) {
-try { sock.ws.close() } catch { }
+try { 
 sock.ev.removeAllListeners()
-sock = makeWASocket(connectionOptions, Object.assign(options, {chats: oldChats }));
-sock.uptime = Date.now();
-isInit = true
-}
+sock.ws.close() 
+} catch {
 if (!isInit) {
 sock.ev.off('messages.upsert', sock.handler)
 sock.ev.off('group-participants.update', sock.participantsUpdate)
@@ -441,6 +440,11 @@ sock.ev.off('message.delete', sock.onDelete)
 sock.ev.off('call', sock.onCall)
 sock.ev.off('connection.update', sock.connectionUpdate)
 sock.ev.off('creds.update', sock.credsUpdate)
+}
+}
+sock = makeWASocket(connectionOptions, Object.assign(options, {chats: oldChats }));
+sock.uptime = Date.now();
+isInit = true
 }
 
 let func = {}
@@ -467,6 +471,7 @@ sock.ev.on('connection.update', sock.connectionUpdate)
 sock.ev.on('creds.update', sock.credsUpdate)
 isInit = false
 wait(3000)
+libstore.bind(sock)
 return true
 }
 inMstore.bind(conn.ev, {

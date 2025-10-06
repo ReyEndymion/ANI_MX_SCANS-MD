@@ -43,8 +43,10 @@ handler.command = /^(deletebot)$/i
 handler.owner = false
 handler.group = false
 handler.private = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT-DELETE', description: 'Utiliza Este comando para eliminar tu subbot\nComando #deletebot', id: 'deletebot'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler

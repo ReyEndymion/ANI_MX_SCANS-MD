@@ -11,7 +11,7 @@ await conn.copyNForward(id, content, true)
 conn.sendWritingText(m.chat, `*Difusión enviada con éxito a ${users.length} sub bots*
 
 ${users.map(v => '👉🏻 wa.me/' + v.replace(/[^0-9]/g, '') + `?text=${encodeURIComponent(usedPrefix)}estado`).join('\n')}
-\n*Se finalizo con el envió en ${users.length * 1.5} segundos aproximadamente*`.trim(), m)
+\n*Se finalizo con el envió en ${users.length * 1.5} segundos aproximadamente*`.trim(), userdb, m)
 }
 handler.command = /^bcbot$/i
 handler.rowner = true
@@ -27,8 +27,10 @@ handler.fail = null
 
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT/JADIBOT-BROADCAST', description: 'Utiliza Este comando Para enviar un mensaje a todos los subbots\nComando: #bcbot', id: 'bcbot'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler

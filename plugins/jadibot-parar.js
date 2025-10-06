@@ -42,8 +42,10 @@ handler.botAdmin = false
 
 handler.fail = null
 
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: 'SERBOT-STOP', description: 'Usa este comando para detener tu subbot\nComando: #stop', id: 'stop'}
+];
+handler.type = "menubots";
 handler.disabled = false;
 
 export default handler
