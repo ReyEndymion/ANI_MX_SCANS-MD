@@ -130,7 +130,7 @@ const { Boom } = await import('@hapi/boom');
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
-conn.logger.error(`[ ⚠ ] Sesión incorrecta, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
+conn.logger.error(`[ ⚠ ] Sesión incorrecta, realizando reconexion`);
 return global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.preconditionRequired){
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
