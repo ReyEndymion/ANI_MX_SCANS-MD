@@ -89,9 +89,6 @@ handler.help = ['simi', 'bot'].map(v => v + ' <teks>')
 handler.tags = ['fun']
 handler.command = /^((sim)?simi|bot|botcomedia)$/i
 handler.before = async function before(m, {conn, isROwner, db, userdb, senderJid}) {
-let sender = senderJid.split`@`[0]
-// Evitar que el bot se responda a sí mismo
-//const text = m.text
 const confirmationBot = (Object.keys(responseBot)[0]) === conn.user.jid;
 const confirmationUser = (Object.keys(responseUser)[0]) === senderJid;
 if (m.isBaileys) return;
