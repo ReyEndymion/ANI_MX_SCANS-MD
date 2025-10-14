@@ -112,7 +112,6 @@ let users = chat.users
 if (typeof users !== 'object')
 db.data.bot[this.user.jid].chats.groups[m.chat].users = {};
 if (users) {
-if (groupMetadata.isCommunity || groupMetadata.isCommunityAnnounce) return
 for (let p of participants) {
 let jid = isLidGroup ? this.decodeJid(p.phoneNumber) : this.decodeJid(p.id)
 if (!jid) continue
