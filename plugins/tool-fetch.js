@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import { format } from 'util'
 
-let handler = async (m, {text, db, userdb, senderJid}) => {
+let handler = async (m, {conn, text, db, userdb, senderJid}) => {
 if (!text) return conn.sendWritingText(m.chat, `Masukkan url`, userdb, m)
 let { href: url, origin } = new URL(text)
 let res = await fetch(url, { headers: { 'referer': origin }})
@@ -21,8 +21,10 @@ handler.tags = ['tools']
 handler.alias = ['get', 'fetch']
 handler.command = /^(fetch|get)$/i
 handler.rowner = true
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{ title: "?? Fetch", description: "Obtiene el contenido de una URL", id: `fetch` }
+];
+handler.type = "herramientas";
 handler.disabled = false;
 
 export default handler

@@ -9,13 +9,16 @@ let json = await res.json()
 let { url } = json
 const { sticker } = await import('../lib/sticker.js')
 let stiker = await sticker(null, url, `+${senderJid.split('@')[0]} le dio besos a ${m.mentionedJid.map((user)=>(user === senderJid)? 'alguien ': `+${user.split('@')[0]}`).join(', ')}`)
-conn.sendFile(m.chat, stiker, null, { asSticker: true })
+conn.sendMessage(m.chat, {sticker: {url: stiker}? stiker : {url: stiker},mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
+ 
 } catch (e) { }}
 handler.command = /^(kiss|skiss|kis|besos|beso)$/i
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "?? BESOS", description: `Envía un beso a alguien`, id: `kiss`},
+];
+handler.type = "stickermenu";
 handler.disabled = false;
 
 export default handler

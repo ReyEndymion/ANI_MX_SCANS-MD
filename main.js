@@ -24,7 +24,7 @@ protoType();
 serialize();
 const { timestamp } = await import('./lib/constants.js');
 const { proto } = (await import('@whiskeysockets/baileys')).default;
-const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = await import('@whiskeysockets/baileys');
+const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, WAMessageKey, getHistoryMsg, isJidNewsletter } = await import('@whiskeysockets/baileys');
 
 const nameFolderBot = path.basename(folderPath)
 
@@ -66,7 +66,7 @@ version,
 syncFullHistory: false,
 markOnlineOnConnect: true,
 connectTimeoutMs: 60_000,
-getMessage: async (key) => (inMstore.loadMessage(key.remoteJid, key.id) || libstore.loadMessage(key.id) || {}).message || null,
+getMessage: async (key = WAMessageKey) => (inMstore.loadMessage(key.remoteJid, key.id) || libstore.loadMessage(key.id) || {}).message || null,
 cachedGroupMetadata: async (jid) => msgRetryCounterCache.get(jid),
 auth: {
 creds: state.creds,
@@ -80,7 +80,8 @@ const options = {
 storeFile,
 inMstore,
 libstore,
-dbGroups
+dbGroups,
+folderPath,
 }
 
 let conn = makeWASocket(connectionOptions, options)
@@ -131,6 +132,7 @@ let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (connection == 'close') {
 if (reason === DisconnectReason.badSession) {
 conn.logger.error(`[ ⚠ ] Sesión incorrecta, realizando reconexion`);
+await purgeOldFiles(folderPath)
 return global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.preconditionRequired){
 conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
@@ -263,9 +265,7 @@ conn.ev.on('message.delete', conn.onDelete);
 conn.ev.on('call', conn.onCall);
 conn.ev.on('connection.update', conn.connectionUpdate);
 conn.ev.on('creds.update', conn.credsUpdate);
-inMstore.bind(conn.ev, {
-groupMetadata: conn.groupMetadata
-})
+inMstore.bind(conn)
 
 isInit = false;
 return conn;
@@ -283,8 +283,6 @@ await verifyBot(bot, {conn, args: '', usedPrefix: '/', command: 'serbot', m: nul
 }
 }
 await global.reloadHandler()
-_quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
-watchPluginsDirs(pluginFolder, conn)
 if (!conn.user) return
 setInterval(async () => {
 backupCreds(authFolder, botDirRespald)
@@ -295,7 +293,8 @@ purgeOldFiles(authFolder)
 console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES ]───────────···\n│\n▣─❧ ARCHIVOS ELIMINADOS ✅\n│\n▣────────────────────────────────────···\n`))
 }, 1000 * 60 * 60)
 
-return conn
+_quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
+return watchPluginsDirs(pluginFolder, conn)
 }
 
 async function enterCode(conn, registration) {

@@ -72,7 +72,7 @@ const total = rewards.reward[rewardItem].getRandom()
 user[rewardItem] += total * 1
 if (total) text += `\n» ${rpg.emoticon(rewardItem)} ${total}`
 }
-let resp = `${htki} AVENTURA ${htka}\n\n${text.trim()}\n\n🎒 INVENTARIO usa el comando: *${usedPrefix}inventory*`
+let resp = `${menuform.htki} AVENTURA ${menuform.htka}\n\n${text.trim()}\n\n🎒 INVENTARIO usa el comando: *${usedPrefix}inventory*`
 let img = `https://static-maps.yandex.ru/1.x/?lang=id-ID&ll=${kt[1][0].longitude},${kt[1][0].latitude}&z=12&l=map&size=600,300`
 const buttons = [[`🎒 inventario`, `${usedPrefix}inventory`], [`🔔 reclamo diario`, `${usedPrefix}daily`]]
 if (start.buttons) {

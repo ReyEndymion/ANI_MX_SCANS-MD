@@ -8,7 +8,7 @@ const path = await import('path')
 const exec = promisify(_exec).bind(cp);
 const ar = [...plugins.keys()];
 const ar1 = ar.map((v) => path.basename(v).replace('.js', ''));
-const bannedPlugins = ['jadibot-serbot', '_pruebasConsoleHandler', '_pruebasConsoleBefore', 'gc_invitamegGC', '_textos'];///jadibot-serbot|_pruebasConsoleHandler|_pruebasConsoleBefore|gc_invitamegGC|_textos$/ig.test(text):*\n*◉* ${ar1.map((v) => ' ' + v).join`\n*◉*`}
+const bannedPlugins = ['jadibot-serbot', '_pruebasConsoleHandler', '_pruebasConsoleBefore', 'gc_invitamegGC', '_textos'];
 if (!text) {
 let resp = `*[❗] Ingresa el nombre de algún plugin (archivo) existente*\n\n*—◉ por ejemplo*\n*◉ ${usedPrefix + command}* info-infobot\n\n—◉ Para la lista de plugins (archivos) existentes usa el comando\n*${usedPrefix}listinfoplugin*\nNota: solo el nombre sin la extensión (.js)`;
 return conn.sendWritingText(m.chat, resp, userdb, m)
@@ -40,7 +40,7 @@ mentionedJid: conn.parseMention(resp),
 //"showAdAttribution": true, 
 "containsAutoReply": true,
 "renderLargerThumbnail": true, 
-"title": info.nanie,
+"title": info.nanipe,
 "containsAutoReply": true, 
 "mediaType": 2,
 "thumbnail": fs.readFileSync(imagen1),//apii.res.url, path.basename()

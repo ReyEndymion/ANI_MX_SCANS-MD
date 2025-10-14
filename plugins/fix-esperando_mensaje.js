@@ -7,13 +7,12 @@ const fs = await import('fs');
 if (global.userBot !== conn.user.jid) {
 return conn.sendWritingText(m.chat, '*[❗] Utiliza este comando directamente en el número principal del Bot*', userdb, m);
 }
-const chatId = m.isGroup ? [m.chat, senderJid] : [senderJid];
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid
+const chatId = m.isGroup ? [m.chat, who] : [who];
 const {authFolder, authFolderRespald} = objs
-const sessionPath = authFolder;
 try {
 const files = fs.readdirSync(authFolder);
 let filesDeleted = 0;
-//purgeOldFiles(sessionPath)
 for (const file of files) {
 for (const id of chatId) {
 if (file.includes(id.split('@')[0])) {

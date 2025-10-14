@@ -16,18 +16,19 @@ let stickerText = `${conn.getName(senderJid)} le dio palmaditas a ${mentionedNam
 const { sticker } = await import('../lib/sticker.js')
 let stiker = await sticker(null, url, stickerText)
 
-//let stiker = await sticker(null, url, `${conn.getName(senderJid)} le dio palmaditas a ${m.mentionedJid.map((user)=>(user === senderJid)? 'alguien ': `+${user.split('@')[0]}`).join(', ')}`)
-//conn.sendFile(m.chat, stiker, null, { asSticker: true })
-conn.sendMessage(m.chat, {sticker: {url: stiker}? stiker : {url: stiker},mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
+conn.sendMessage(m.chat, {sticker: {url: stiker}? stiker : {url: stiker},  mimetype: 'image/webp', asSticker: true}, { quoted: m, ephemeralExpiration: 24 * 60 * 1000 });
 } catch (e) {
 let resp = `Se detecto un error al realizar la solicitud: ${e}`
-return conn.sendWritingText(m.chat, resp, userdb, m) }
+return conn.sendWritingText(m.chat, resp, userdb, m);
+}
 }
 handler.command = /^(pat|palmaditas|cariños|mimos|patt)$/i
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{title: "🤗 PALMADITAS", description: `Envía palmaditas a alguien`, id: `pat`},
+];
+handler.type = "stickermenu";
 handler.disabled = false;
 
 export default handler

@@ -16,8 +16,10 @@ conn.sendSticker(m.chat, dir, null, m);
 handler.command = ['dado', 'dados', 'dadu'] 
 handler.help = [];
 handler.tags = [];
-handler.menu = [];
-handler.type = "";
+handler.menu = [
+{ title: "?? DADO", description: `Tira un dado y obtén un resultado aleatorio`, id: `dado` }
+];
+handler.type = "stickermenu";
 handler.disabled = false;
 
 export default handler

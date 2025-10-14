@@ -11,7 +11,7 @@ let text = `Hola @${senderJid.split`@`[0]} soy ${me}
 *—◉ EL NUMERO DE MI OWNER ES: ${ow}*
 `.trim() 
 
-const documentUrl = 'https://www.facebook.com/groups/otakustogether';
+const documentUrl = info.gitAuthor;
 const mimetype = `application/${document}`;
 const fileName = info.namerepre;
 const thumbnailUrl = fs.readFileSync(imagen1);
@@ -28,13 +28,13 @@ contextInfo: {
 forwardingScore: 200,
 isForwarded: false,
 externalAdReply: {
-mediaUrl: 'https://github.com/ReyEndymion',
+mediaUrl: info.gitAuthor,
 mediaType: 2,
-previewType: 'pdf',
-title: 'Bot exclusivo de:',
-body: info.nanipe,
+previewType: document,
+title: info.namerepre,
+body: info.nani,
 thumbnail: thumbnailUrl,
-sourceUrl: sourceUrl
+sourceUrl: info.gitAuthor
 },
 mentionedJid: conn.parseMention(text)
 }
