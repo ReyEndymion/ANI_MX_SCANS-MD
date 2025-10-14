@@ -57,11 +57,11 @@ const isCommunityAnnounce = groupMetadata?.isCommunityAnnounce
 const isAnnounce = groupMetadata?.announce 
 
 
-const userB = m.isGroup ? participantFind || {} : {}; // User Data()
+const userFind = m.isGroup ? participantFind || {} : {}; // User Data()
 const botGroup = (m.isGroup ? isLidGroup ? participants.find((u) => this.decodeJid(u.id).split('@')[0] == this.user.lid.split(':')[0]) : participants.find(p => this.decodeJid(p.id) === this.user.jid) : {}) || {}; // Your Data
-const senderJid = m.isGroup ? isLidGroup ? m.sender === userB.id ? userB.jid : botGroup.id === m.sender ? botGroup.jid : m.sender : m.sender === userB.id ? userB.id : botGroup.id === m.sender ? botGroup.id : m.sender : m.fromMe ? m.sender : m.chat
-const isRAdmin = m.isGroup ? userB?.admin === 'superadmin' || false : false
-const isAdmin = m.isGroup ? isRAdmin || userB?.admin === 'admin' || false : false // Is User Admin?
+const senderJid = m.isGroup ? isLidGroup ? m.sender === userFind.id ? userFind.jid : botGroup.id === m.sender ? botGroup.jid : m.sender : m.sender === userFind.id ? userFind.id : botGroup.id === m.sender ? botGroup.id : m.sender : m.fromMe ? m.sender : m.chat
+const isRAdmin = m.isGroup ? userFind?.admin === 'superadmin' || false : false
+const isAdmin = m.isGroup ? isRAdmin || userFind?.admin === 'admin' || false : false // Is User Admin?
 const isBotAdmin = m.isGroup ? botGroup?.admin === 'admin' || botGroup?.admin === 'superadmin' || false : false; // Are you Admin or SuperAdmin?
 const isROwner = m.isGroup ? isLidGroup ? [ this.decodeJid(this.user.jid), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(m.sender) : [ this.decodeJid(this.user.id), ...owner.map(([number]) => number), ].map((v) => v.replace(/[^0-9]/g, '') + userID).includes(senderJid);
 const isOwner = isROwner || m.fromMe;
@@ -301,7 +301,7 @@ text: textAjustedTags,
 groupMetadata,
 participants,
 participantFind,
-userB,
+userFind,
 botGroup,
 isROwner,
 isOwner,
