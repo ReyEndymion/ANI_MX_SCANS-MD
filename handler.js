@@ -561,18 +561,20 @@ let users = chat[grupo].users
 if (typeof users != 'object') db.data.bot[this.user.jid].chats.groups[grupo].users = {}
 if (users) {
 for (let participant of participants) {
-if (participant.endsWith(lid)) participant = this.lidToJid(participant, id)
-if (!participant.endsWith(userID)) continue
-const user = users[participant]
-if (typeof user !== 'object') users[participant] = {}
+const phoneNumber = participant.phoneNumber
+
+if (!phoneNumber.endsWith(userID)) continue
+const user = users[phoneNumber]
+if (typeof user !== 'object') users[phoneNumber] = {}
 if (action === ('add'|'promote'|'daradmin'|'darpoder'|'demote'|'quitarpoder'|'quitaradmin')) {
 if (!user) {
-await dataGroupUsers(this, db, grupo, participant)
+await dataGroupUsers(this, db, grupo, phoneNumber)
 }
 } else if (action === 'remove') {
-delete users[participant]
-if (!participant.endsWith(userID)) delete users[participant]
+delete users[phoneNumber]
+if (!phoneNumber.endsWith(userID)) delete users[phoneNumber]
 await db.write();
+console.log(`Usuario ${phoneNumber} eliminado de la base de datos.`);
 }
 }
 } else {
