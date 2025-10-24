@@ -3,7 +3,7 @@ const {func} = objs
 const {owner, userID} = await import('../config.js')
 if (/^((un)?block)$/i.test(command)) {
 let why = `*[❗] USO ERRONEO, EJEMPLO:*\n*—◉ ${usedPrefix + command} @${senderJid.split("@")[0]}*`
-let who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : false
+let who = m.mentionedJid[0] ? m.mentionedJid[0] : !m.quoted?.fromMe && m.quoted?.sender ? m.quoted.sender : false
 if (!who) {
 
 return conn.sendWritingText(m.chat, why, userdb, m)
@@ -28,7 +28,7 @@ return conn.sendWritingText(m.chat, why, userdb, m)
 break
 }
 if (res[0]) {
-let resp = `*[❗] SE USO CON EXITO EL COMANDO ${command} PARA EL USUARIO/A ${res ? `${res.map(v => '@' + v.split("@")[0])}` : ''}*`
+let resp = `*[❗] SE USO CON EXITO EL COMANDO ${command} PARA EL USUARIO/A:*\n ${res ? `${res.map(v => '@' + v.split("@")[0])}` : ''}`
 
 return conn.sendWritingText(m.chat, resp, userdb, m)
 }
