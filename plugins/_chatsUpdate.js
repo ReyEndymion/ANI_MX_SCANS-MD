@@ -8,19 +8,20 @@ const {findJidInAllGroups} = await import('../lib/functions.js')
 if (Object.entries(isApproval).length !== 0) {
 const text = (m.message?.templateButtonReplyMessage?.selectedDisplayText || m.message?.listResponseMessage?.title || m.message?.interactiveResponseMessage?.body?.text || m.text || '').toLowerCase();
 if (/^si$/.test(text) && isAdmin) {
-await conn.groupRequestParticipantsUpdate(m.chat, [isApproval[m.chat].user], 'approve');
+await conn.groupRequestParticipantsUpdate(m.chat, [isApproval[m.chat].phoneNumber], 'approve');
 delete isApproval[m.chat];
 } else if (/^no$/.test(text) && isAdmin) {
-await conn.groupRequestParticipantsUpdate(m.chat, [isApproval[m.chat].user], 'reject');
+await conn.groupRequestParticipantsUpdate(m.chat, [isApproval[m.chat].phoneNumber], 'reject');
 delete isApproval[m.chat];
 }
 }
 
 if (!m.messageStubType || m.messageStubType === 2 || !m.isGroup || chatdb.isBanned) return
+const messsageParams = JSON.parse(m.messageStubParameters[0])
+const phoneNumber = isLidGroup ? messsageParams?.phoneNumber  : messsageParams?.id
 const user = isLidGroup ? await findJidInAllGroups(conn, inMstore, dbGroups, m.messageStubParameters[0]) || await conn.lidToJidPromises(m.messageStubParameters[0], m.chat) : m.messageStubParameters[0]
-const messsageParams = !m.messageStubParameters[0].endsWith(lid) || m.messageStubParameters[0].endsWith(userID) ? m.messageStubParameters[0] : null
 let who = senderJid.split`@`[0]
-let sender = user ? user.split`@`[0] : who
+let sender = phoneNumber ? phoneNumber.split`@`[0] : who
 let usertag = `@${sender}`
 let whotag = `@${who}`
 let contact, parti
@@ -86,7 +87,7 @@ resp = `AHORA ES ADMIN EN ESTE GRUPO ${usertag}\n\n🌎🫵ACCIÓN REALIZADA POR
 return conn.sendWritingText(m.chat, resp, userdb, fkontak);
 }
 if (m.messageStubType === 30) {
-if (user === conn.user.jid) {
+if (phoneNumber === conn.user.jid) {
 resp = `Se me quitó el poder 💀\n\n🌎🫵ACCION REALIZADA POR: ${whotag}`
 } else {
 resp = `DEJA DE SER ADMIN EN ESTE GRUPO ${usertag}\n\n🌎🫵ACCION REALIZADA POR: ${whotag}`
@@ -134,15 +135,15 @@ delete isApproval[m.chat]
 }
 }
 let fkontak = { key: { participants: user, remoteJid: m.chat, fromMe: false, id: '' }, message: { contactMessage: { vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${sender}:${sender}\nitem1.X-ABLabel:Ponsel\nEND:VCARD` }}, participant: user}
+let pp = await conn.profilePictureUrl(phoneNumber, 'image').catch(_ => null) || path.join(media, 'pictures/sinFoto.png');
 if (chatdb.welcome) {
-let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => null) || path.join(media, 'pictures/sinFoto.png');
 if (m.messageStubType == 27) {
 let inv = /\d+@g.us/.test(m.sender) ? 'DESDE EL ENLACE SE' : `${whotag}`;
 let welcomeUsers = '';
 for (let param of m.messageStubParameters) {
-if (param.endsWith(lid)) param = conn.lidToJid(param, m.chat)//.catch(await conn.lidToJidPromises(param, m.chat))
-welcomeUsers += `@${param.split('@')[0]}, `;
-chatdb.users[param]
+const msgParam = JSON.parse(param)
+welcomeUsers += `@${msgParam.phoneNumber.split('@')[0]}, `;
+chatdb.users[msgParam.phoneNumber]
 db.write()
 }
 welcomeUsers = welcomeUsers.slice(0, -2);
