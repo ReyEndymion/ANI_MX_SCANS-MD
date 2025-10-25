@@ -523,9 +523,9 @@ console.warn(`⚠️ storeFile de ${storeFile} excede ${MAX_STORE_SIZE_MB} MB. R
 Object.keys(inMstore.chats).forEach(key => delete inMstore.chats[key])
 Object.keys(inMstore.messages).forEach(key => delete inMstore.messages[key])
 
-inMstore.writeToFile(storeFile)
+//inMstore.writeToFile(storeFile)
 } else {
-inMstore.writeToFile(storeFile)
+//inMstore.writeToFile(storeFile)
 }
 } catch (error) {
 inMstore.writeToFile(storeFile)
