@@ -528,7 +528,7 @@ Object.keys(inMstore.messages).forEach(key => delete inMstore.messages[key])
 //inMstore.writeToFile(storeFile)
 }
 } catch (error) {
-inMstore.writeToFile(storeFile)
+//inMstore.writeToFile(storeFile)
 }
 }
 
