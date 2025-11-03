@@ -1,8 +1,9 @@
 import fs from 'fs'
+import chalk from 'chalk'
 import path from 'path'
 import {question, clearTmp, purgeOldFiles, actualizarNumero, waitTwoMinutes, validateJSON, cleanupOnConnectionError, respaldCreds, backupCreds, credsStatus, backupCredsStatus, wait, formatNumberWA} from './lib/functions.js';
 import { creds } from './lib/constants.js';
-import { temp, dataBases, authFolderRespald } from './config.js';
+import { temp, dataBases, authFolderRespald, info } from './config.js';
 import { onBot, authFolder, sessionNameAni, jadibts } from './main.js';
 
 if (!fs.existsSync(authFolder)) {
@@ -69,20 +70,24 @@ process.send('reset')
 } else {
 let { configDinamics } = await import('./lib/database.js')
 
-const start = (await configDinamics()).start
+const {start} = await configDinamics()
 if (!start.aniJdbts) {
-const bienvenida = await question('Bienvenido a ANIMXSCANS\n\n¿Deseas iniciar el bot con el codigo de emparejamiento para conectarte? Marca 1\n¿Deseas usar el QR clasico para conectarte? Marca 2\n\nRespuesta: ', (answer) => ['1', '2'].includes(answer));	
+const textBB = `${chalk.bold.magenta('Bienvenido a')} ${chalk.bold.cyan(info.nanip)}
+\n${chalk.gray('──────────────────────────────────────────────')}\n\n${chalk.white('Por favor sigue las instrucciones')}\n\n${chalk.yellow('¿Deseas iniciar el bot con el código de emparejamiento para conectarte?')} ${chalk.green.bold('Marca 1')}\n${chalk.yellow('¿Deseas usar el QR clásico para conectarte?')} ${chalk.green.bold('Marca 2')}\n\n${chalk.gray('──────────────────────────────────────────────')}\n${chalk.bold.cyan('Respuesta: ')}`
+start.usePairingCode = false
+//const sayAply = say(textBB, {fonts: 'chrome', align: 'center', gradient: ['cyan', 'magenta'], space: false, lineHeight: 1})
+const bienvenida = await question(textBB, (answer) => ['1', '2'].includes(answer));	
 if (bienvenida === '1') {
 console.log('Iniciando las preguntas para el emparejamiento...');
-start.usePairingCode = true
+await configDinamics({start: {usePairingCode: true, qrTerminal: false}})
 onBot(authFolder)
 } else if (bienvenida === '2') {
 console.log('Iniciando el codigo QR...');
-start.qrTerminal = true
+await configDinamics({start: {usePairingCode: false, qrTerminal: true}})
 onBot(authFolder)
 } else {
 console.log('No has seleccionado una opcion valida, reiniciando...');
-//await bienvenida()
+//await bienvenida()colors: ['cyan', 'magenta'],.string 
 //process.exit(0)
 }
 } else {

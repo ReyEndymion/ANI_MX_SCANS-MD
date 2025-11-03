@@ -60,7 +60,7 @@ return message;
 }
 
 const connectionOptions = {
-printQRInTerminal: start.qrTerminal,
+//printQRInTerminal: start.qrTerminal,
 logger,
 version,
 syncFullHistory: false,
@@ -87,7 +87,6 @@ folderPath,
 let conn = makeWASocket(connectionOptions, options)
 conn.isInit = false;
 conn.well = false;
-terminalQuestion(conn)
 if (!opts['test']) {
 if (db) {
 setInterval(async () => {
@@ -107,6 +106,9 @@ let consecutiveCloseCount = 0
 
 async function connectionUpdate(update) {
 const { CONNECTING } = await import('ws');
+const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
+conn.logger.error('El terminal de código QR no se agregó como dependencia');
+});
 const { connection, lastDisconnect, isNewLogin } = update;
 if (isNewLogin) conn.isInit = true;
 const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
@@ -114,18 +116,13 @@ if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState == null |
 await global.reloadHandler(true).catch(console.error);
 timestamp.connect = new Date;
 }
-if (db.data == null) await loadDatabase(db);
 if (start.qrTerminal && update.qr != 0 && update.qr != undefined) {
 console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
-const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
-conn.logger.error('El terminal de código QR no se agregó como dependencia');
-});
 QR === null || QR === void 0 ? void 0 : QR.generate(update.qr, { small: true });
 }
 if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
-if (connection === undefined) return //conn.ev.removeAllListeners();
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 const { Boom } = await import('@hapi/boom');
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
@@ -182,7 +179,7 @@ await wait(CLOSE_CHECK_INTERVAL);
 }
 if (connection == 'open') {
 global.userBot = conn.user.jid
-loadDatabase(db);
+if (db.data == null) await loadDatabase(db);
 console.log(chalk.yellow(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${path.basename(folderPath)}\n│\n▣─────────────────────────────···`))
 if (update.receivedPendingNotifications) { 
 actualizarNumero() 
@@ -210,6 +207,7 @@ sock.ev.removeAllListeners()
 sock.ws.close()
 }
 
+//if (!conn.user && start.usePairingCode) return terminalQuestion(conn)
 
 const oldChats = (Object.assign(conn.chats, inMstore.chats));
 const pluginFolder = dirname(path.join(raizPath, './plugins/index'));

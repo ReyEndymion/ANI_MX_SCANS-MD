@@ -2,7 +2,7 @@
 "name": "@reyendymion/ani_mx_scans-md",
 "version": "2.2.0",
 "description": "Bot promocional del proyecto 🌎ANI MX SCANS🌎",
-"nameProyect": "🌎ANI MX SCANS🌎",
+"nameProyect": "ANI MX SCANS",
 "main": "index.js",
 "type": "module",
 "directories": {

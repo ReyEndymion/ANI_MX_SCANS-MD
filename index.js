@@ -1,5 +1,5 @@
-console.log('✅ㅤIniciando...')
-import { join, dirname } from 'path'
+import chalk from 'chalk'
+import path, { join, dirname } from 'path'
 import { createRequire } from "module";
 import { fileURLToPath } from 'url'
 import { setupMaster, fork } from 'cluster'
@@ -7,23 +7,14 @@ import { watchFile, unwatchFile } from 'fs'
 import cfonts from 'cfonts';
 import { createInterface } from 'readline'
 import yargs from 'yargs'
+import { runAnimation } from './lib/functions.js';
+const { child, spawn, exec, execSync } = await import('child_process');
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const require = createRequire(__dirname) // Bring in the hability to create the 'require' method
-const { name, author, description } = require(join(__dirname, './package.json')) // https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/
-const { say } = cfonts
+const { name, nameProyect, author, description } = require(join(__dirname, './package.json')) // https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/
+const { say, render } = cfonts
 const rl = createInterface(process.stdin, process.stdout)
-
-say('🌎ANI MX SCANS🌏\nWhatsApp - Bot - MD', {
-font: 'chrome',
-align: 'center',
-gradient: ['red', 'magenta']
-})
-say(`'${name}' By @${author.name || author}`, {
-font: 'console',
-align: 'center',
-gradient: ['red', 'magenta']
-})
-
+await runAnimation(name, nameProyect, author, description)
 var isRunning = false
 
 /**
@@ -33,7 +24,7 @@ var isRunning = false
 function start(file) {
 let args = [join(__dirname, file), ...process.argv.slice(2)]
 
-say(`${description}\n\nPor favor sigue las instrucciones`, {
+say(`${description}`, {
 font: 'console',
 align: 'center',
 gradient: ['red', 'magenta']
