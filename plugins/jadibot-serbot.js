@@ -51,11 +51,8 @@ let resp = `*[❗INFO❗] ESTE COMANDO ESTA INHABILITADO POR EL ACTUAL OWNER / P
 return conn.sendWritingText(m.chat, resp, userdb, m)}
 verifyBot(bot, data)
 }
-handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
-handler.tags = ['jadibot']
-handler.command = /^(jadibot|serbot|rentbot)/i
 handler.before = async function before(m, {conn, info, isOwner, userdb, senderJid, db, objs}) {
-const {jadibts} = objs
+const {jadibts, sessionNameAni} = objs
 if (m.text.match(/^initbot/i) && isOwner) {
 const args = m.text.split(/initbot/i)
 const datas = {conn, m, args: args[0], usedPrefix: '/', command: 'serbot', userdb, senderJid, info, objs}
@@ -81,7 +78,7 @@ if (readBotPath.includes(creds)) {
 const filePathCreds = path.join(botPath, creds)
 try {
 const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
-const userJid = readCreds && readCreds.me && readCreds.me.jid.split('@')[0]
+const userJid = Object.values(readCreds && readCreds.me && readCreds.me || {}).find(me => typeof me === 'string' && /@s\.whatsapp\.net$/.test(me) && !/:\d+@s\.whatsapp\.net$/.test(me)).split('@')[0]//.jid
 const currentFolderName = path.basename(botPath);
 const botDirRespald = path.join(authFolderRespald, userJid)
 const newBotPath = path.join(path.dirname(botPath), userJid);
@@ -125,19 +122,25 @@ continue
 console.log('errorInicializacion: ', error.stack)
 const botRespPath = path.join(authFolderRespald, path.basename(botPath))
 const fileRespPathCreds = path.join(botRespPath, creds)
-if (backupCredsStatus(botRespPath) && validateJSON(fileRespPathCreds)) {
+const backUpOKData = await backupCredsStatus(botRespPath)
+const validateJsonData = validateJSON(fileRespPathCreds)
+if (backUpOKData.statusCredsBackup && validateJsonData.validate) {
+console.log('errorInicializacion: ', error.stack, backupCredsStatus(botRespPath))
 respaldCreds(botPath, botRespPath)
 } else {
 deleteSesionSB(botPath, botRespPath)
 }
 }
 } else {
-limpCarpetas()
+limpCarpetas(botPath)
 }
 }
 
 }
 }
+handler.help = ['jadibot', 'serbot', 'getcode', 'rentbot']
+handler.tags = ['jadibot']
+handler.command = /^(jadibot|serbot|rentbot)/i
 handler.menu = [
 {title: 'SERBOT/JADIBOT', description: 'Utiliza tu número Para hacerte subbot', id: 'serbot --code'}
 ];
@@ -198,7 +201,12 @@ return message;
 function getRandomProperty(obj) {
 const keys = Object.keys(obj);
 const randomKey = keys[Math.floor(Math.random() * keys.length)];
-return obj[randomKey];
+const value = obj[randomKey];
+const [os, browser, version] = value
+const browserNames = ["Chrome", "Firefox", "Edge", "Opera", "Brave", "Safari"];
+const cleanBrowser = `${browserNames[Math.floor(Math.random() * browserNames.length)]}`;
+
+return [os, cleanBrowser, version];
 }
 const browserInfo = Object.entries(Browsers).reduce((acc, [browser, getInfo]) => {
 acc[browser] = getInfo(browser);
@@ -256,7 +264,7 @@ const resp = `*${info.nanipe}*
 *3.- Escanee este codigo QR*
 *El codigo QR expira en 60 segundos!!*
 
-*—◉ ${info.nanipe} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+*—◉ ${info.nanip} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 const imagen = await qrcode.toBuffer(qr, { scale: 8 })
 
 if (!m && m.fromMe) return
@@ -267,7 +275,7 @@ await lastQr.delete()
 }
 errorCount++
 } else if (qr && mcode) {
-const resp = `*${info.nanie}*
+const resp = `*${info.nanipe}*
 *SER SUB-BOT*
 
 *El codigo a continuacion se usara para convertirte en un Bot (SubBot)*
@@ -281,7 +289,7 @@ O lo puede intentar:
 *2.- Haga click en los 3 puntos ubicados en la esquina superior derecha en el inicio de su WhatsApp. Toca en donde dice dispositivos vinculados, vincular nuevo dispositivo y elegir vincular con el numero de telefono y el codigo que copio lo pegas en las casillas*
 *El codigo expira en 60 segundos!!*
 
-*—◉ ${info.nanipe} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
+*—◉ ${info.nanip} no se hace respondable del uso, numeros, mensajes, multimedias, etcétera enviado, usado o gestionado por ustedes o el Bot*`
 let q = await conn.sendWritingText(m.chat, resp, userdb, m)
 await wait(5000)
 const code8 = await sock.requestPairingCode((senderJid.split`@`[0]))
@@ -315,11 +323,12 @@ await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.loggedOut) {
 sock.logger.error(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 const resp = `◉sesion cerrada...\nSe usara deletebot automaticamente:\n\n* ${usedPrefix + 'deletebot'}*`
+//if (!m) return
+await conn.sendWritingText(m.chat, resp, userdb, m)
 sock.ev.removeAllListeners()
 delete global.conns[i]
 deleteSesionSB(folderPath, botRespPath)
-if (!m) return
-await conn.sendWritingText(m.chat, resp, userdb, m)
+jddt(folderPath, data)
 } else if (code === DisconnectReason.restartRequired) {
 sock.logger.info(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Reinicio necesario, reinicie el servidor si presenta algún problema.`);
 global.conns.splice(i, 1)
@@ -471,12 +480,9 @@ sock.ev.on('connection.update', sock.connectionUpdate)
 sock.ev.on('creds.update', sock.credsUpdate)
 isInit = false
 wait(3000)
-libstore.bind(sock)
 return true
 }
-inMstore.bind(conn.ev, {
-groupMetadata: conn.groupMetadata
-})
+inMstore.bind(conn)
 creloadHandler(false)
 }
 
@@ -497,11 +503,10 @@ const readBotPath = fs.readdirSync(filePath)
 if (readBotPath.includes(creds)) {
 const filePathCreds = path.join(filePath, creds)
 const readCreds = JSON.parse(fs.readFileSync(filePathCreds));
-const userJid = readCreds && readCreds.me && readCreds.me.jid.split('@')[0]
+const userJid = Object.values(readCreds && readCreds.me && readCreds.me || {}).find(me => typeof me === 'string' && /@s\.whatsapp\.net$/.test(me) && !/:\d+@s\.whatsapp\.net$/.test(me)).split('@')[0]//.jid
 const currentFolderName = path.basename(filePath);
 const botDirRespald = path.join(authFolderRespald, userJid)
 const newBotPath = path.join(path.dirname(filePath), userJid);
-
 if (userJid && currentFolderName !== userJid && currentFolderName !== sessionNameAni) {
 if (!fs.existsSync(newBotPath)) {
 fs.mkdirSync(newBotPath);

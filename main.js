@@ -60,7 +60,6 @@ return message;
 }
 
 const connectionOptions = {
-//printQRInTerminal: start.qrTerminal,
 logger,
 version,
 syncFullHistory: false,
@@ -105,14 +104,22 @@ const RESET_INTERVAL = 2 * 60 * 1000; // 2 minutes
 let consecutiveCloseCount = 0
 
 async function connectionUpdate(update) {
+const { Boom } = await import('@hapi/boom');
 const { CONNECTING } = await import('ws');
 const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
 conn.logger.error('El terminal de código QR no se agregó como dependencia');
 });
 const { connection, lastDisconnect, isNewLogin } = update;
 if (isNewLogin) conn.isInit = true;
-const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode;
-if (code && code !== DisconnectReason.loggedOut && conn?.ws.readyState == null || undefined || CONNECTING) {
+let code, output, payload
+if (lastDisconnect && lastDisconnect.error) {
+const err = new Boom(lastDisconnect?.error)
+output = err?.output
+payload = output?.payload
+code = err?.output?.statusCode || payload?.statusCode;
+}
+const {loggedOut, connectionLost, timedOut, multideviceMismatch, connectionClosed, connectionReplaced, badSession, restartRequired} = DisconnectReason
+if (code && code !== loggedOut && conn?.ws.readyState == null || undefined || CONNECTING) {
 await global.reloadHandler(true).catch(console.error);
 timestamp.connect = new Date;
 }
@@ -124,48 +131,49 @@ if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
-const { Boom } = await import('@hapi/boom');
-let reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
 if (connection == 'close') {
-if (reason === DisconnectReason.badSession) {
-conn.logger.error(`[ ⚠ ] Sesión incorrecta, realizando reconexion`);
-await purgeOldFiles(folderPath)
-return global.reloadHandler(true).catch(console.error)
-} else if (reason === DisconnectReason.preconditionRequired){
-conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando por precondicion...`);
-return global.reloadHandler(true).catch(console.error)
-} else if (reason === DisconnectReason.connectionClosed) {
-conn.logger.warn(`[ ⚠ ] Conexión cerrada, reconectando...`);
-return global.reloadHandler(true).catch(console.error)
-//428
-} else if (reason === DisconnectReason.connectionLost) {
-conn.logger.warn(`[ ⚠ ] Conexión perdida con el servidor, reconectando...`);
-return global.reloadHandler(true).catch(console.error)// process.send('reset');
-} else if (reason === DisconnectReason.connectionReplaced) {
-conn.logger.error(`[ ⚠ ] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
-stopConn(conn)
-} else if (reason === DisconnectReason.loggedOut) {
-conn.logger.error(`[ ⚠ ] Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
+if (code === loggedOut) {//401
+conn.logger.error(`[ ⚠  ${loggedOut} ] Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 cleanupOnConnectionError(folderPath, botDirRespald)
-} else if (reason === DisconnectReason.restartRequired) {
-conn.logger.info(`[ ⚠ ] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
-} else if (reason === DisconnectReason.timedOut) {
-conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
-process.send('reset');
-} else if (reason === 403) {
-conn.logger.warn(`[ ⚠ ] Razón de desconexión: revisión de whatsapp o soporte. ${reason || ''}: ${connection || ''}`);
+} else if (code === 403) {//soportr
+conn.logger.warn(`[ ⚠ ${code}] Razón de desconexión: revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
 cleanupOnConnectionError(folderPath, botDirRespald)
 global.reloadHandler(true).catch(console.error)
-} else if (reason === 405) {
-conn.logger.warn(`[ ⚠ ] No alojado. ${reason || ''}: ${connection || ''}`);
+} else if (code === 405) {//metodo no disponible
+conn.logger.warn(`[ ⚠ ${code}] No alojado. ${code || ''}: ${connection || ''}`);
 if (!conn.authState.creds.registered) {
 conn.ws.close()
 cleanupOnConnectionError(folderPath, botDirRespald)
 }
 global.reloadHandler(true).catch(console.error)
-} else if (code === 503){
+} else if (code === timedOut) {//408
+conn.logger.warn(`[ ⚠ ] Tiempo de conexión agotado, reconectando...`);
+process.send('reset');
+} else if (code === connectionLost) {//408
+conn.logger.warn(`[ ⚠ ] Conexión perdida con el servidor, reconectando...`);
+return global.reloadHandler(true).catch(console.error)// process.send('reset');
+} else if (code === multideviceMismatch) {//411
+conn.logger.warn(`[ ⚠ ${multideviceMismatch}] Conexión cerrada por desajuste o incompatibilidad, limpiando y reconectando...`);
+purgeSession(folderPath)
+return global.reloadHandler(true).catch(console.error)
+} else if (code === 428 && payload?.error === 'Precondition Required') {//428
+conn.logger.warn(`[ ⚠  ${payload.error}] Conexión cerrada, reconectando por precondicion...`);
+return global.reloadHandler(true).catch(console.error)
+} else if (code === connectionClosed) {//428
+conn.logger.warn(`[ ⚠  ${connectionClosed}] Conexión cerrada, reconectando...`);
+return global.reloadHandler(true).catch(console.error)
+} else if (code === connectionReplaced) {//440
+conn.logger.error(`[ ⚠  ${connectionReplaced}] Conexión reemplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
+return global.reloadHandler(true).catch(console.error)
+} else if (code === badSession) {//500
+conn.logger.error(`[ ⚠ ${badSession}] Sesión incorrecta, realizando reconexion`);
+await purgeOldFiles(folderPath)
+return global.reloadHandler(true).catch(console.error)
+} else if (code === restartRequired) {//515
+conn.logger.info(`[ ⚠ ${restartRequired}] Reinicio necesario, reinicie el servidor si presenta algún problema.`);
+} else if (code === 503) {
 } else {
-conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${reason || ''}: ${connection || ''}`);
+conn.logger.warn(`[ ⚠ ] Razón de desconexión desconocida. ${code || ''}: ${connection || ''}`);
 consecutiveCloseCount++;
 console.log(chalk.yellow(`🚩ㅤConexion cerrada, por favor borre la carpeta ${folderPath} y reescanee el codigo QR`));
 }
@@ -207,7 +215,6 @@ sock.ev.removeAllListeners()
 sock.ws.close()
 }
 
-//if (!conn.user && start.usePairingCode) return terminalQuestion(conn)
 
 const oldChats = (Object.assign(conn.chats, inMstore.chats));
 const pluginFolder = dirname(path.join(raizPath, './plugins/index'));
@@ -293,52 +300,4 @@ console.log(chalk.cyanBright(`\n▣────────[ AUTO_PURGE_OLDFILES
 
 _quickTest().then(() => conn.logger.info(`CARGANDO．．．\n`)).catch(console.error)
 return watchPluginsDirs(pluginFolder, conn)
-}
-
-async function enterCode(conn, registration) {
-try {
-const code = await question('Please enter the one time code:\n');
-const response = await conn.register(code.replace(/["']/g, '').trim().toLowerCase());
-console.log('Registró con éxito su número de teléfono.');
-console.log(response);
-rl.close();
-} catch (error) {
-console.error('No se pudo registrar su número de teléfono.Inténtalo de nuevo.\n', error);
-await askForOTP(conn, registration);
-}
-}
-
-async function enterCaptcha(conn, registration) {
-const response = await conn.requestRegistrationCode({ ...registration, method: 'captcha' });
-const path = raizPath + '/captcha.png';
-fs.writeFileSync(path, Buffer.from(response.image_blob, 'base64'));
-
-open(path);
-const code = await question('Ingrese el código Captcha:\n');
-fs.unlinkSync(path);
-registration.captcha = code.replace(/["']/g, '').trim().toLowerCase();
-}
-
-async function askForOTP(conn, registration) {
-if (!registration.method) {
-let code = await question('¿Cómo le gustaría recibir el código único para el registro?"SMS" o "voz"\n');
-code = code.replace(/["']/g, '').trim().toLowerCase();
-if (code !== 'sms' && code !== 'voice') {return await askForOTP(conn, registration);
-}
-
-registration.method = code;
-}
-
-try {
-await conn.requestRegistrationCode(registration);
-await enterCode(conn, registration);
-} catch (error) {
-console.error('No se pudo solicitar el código de registro. Inténtalo de nuevo.\n', error);
-
-if (error?.reason === 'code_checkpoint') {
-await enterCaptcha(conn, registration);
-}
-
-await askForOTP(conn, registration);
-}
 }

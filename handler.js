@@ -560,9 +560,9 @@ if (typeof chat[grupo] !== 'object') chat[grupo] = {}
 let users = chat[grupo].users
 if (typeof users != 'object') db.data.bot[this.user.jid].chats.groups[grupo].users = {}
 if (users) {
-for (let participant of participants) {
-const phoneNumber = participant.phoneNumber
-
+for (let data of participants) {
+const {id, phoneNumber, admin} = data
+console.log('participantsUpdate: ', nameProcess, id, phoneNumber, admin)
 if (!phoneNumber.endsWith(userID)) continue
 const user = users[phoneNumber]
 if (typeof user !== 'object') users[phoneNumber] = {}

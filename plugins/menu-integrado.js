@@ -413,9 +413,7 @@ let str = `
 ╭〘 ✯✯✯✯✯✯✯✯✯✯ 〙╮
 ║ ◉— ${footer} —◉
 ║≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡≡║
-║➤ *Owner:* ${author}
-║➤ *Numero:* wa.me/5215517489568\nwa.me/5215533827255
-║➤ *Bot ofc:* wa.me/5215535705067
+║➤ *Owner:* ${info.author}
 ║➤ *PayPal:* https://www.paypal.me/AMxScan
 ║➤ *Fecha:* ${date}
 ║➤ *Tiempo activo:* ${uptime}
