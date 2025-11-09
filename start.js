@@ -75,7 +75,6 @@ if (!start.aniJdbts) {
 const textBB = `${chalk.bold.magenta('Bienvenido a')} ${chalk.bold.cyan(info.nanip)}
 \n${chalk.gray('──────────────────────────────────────────────')}\n\n${chalk.white('Por favor sigue las instrucciones')}\n\n${chalk.yellow('¿Deseas iniciar el bot con el código de emparejamiento para conectarte?')} ${chalk.green.bold('Marca 1')}\n${chalk.yellow('¿Deseas usar el QR clásico para conectarte?')} ${chalk.green.bold('Marca 2')}\n\n${chalk.gray('──────────────────────────────────────────────')}\n${chalk.bold.cyan('Respuesta: ')}`
 start.usePairingCode = false
-//const sayAply = say(textBB, {fonts: 'chrome', align: 'center', gradient: ['cyan', 'magenta'], space: false, lineHeight: 1})
 const bienvenida = await question(textBB, (answer) => ['1', '2'].includes(answer));	
 if (bienvenida === '1') {
 console.log('Iniciando las preguntas para el emparejamiento...');
@@ -87,8 +86,6 @@ await configDinamics({start: {usePairingCode: false, qrTerminal: true}})
 onBot(authFolder)
 } else {
 console.log('No has seleccionado una opcion valida, reiniciando...');
-//await bienvenida()colors: ['cyan', 'magenta'],.string 
-//process.exit(0)
 }
 } else {
 onBot(authFolder)
