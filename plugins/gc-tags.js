@@ -14,6 +14,8 @@ const groupAdmins = participants.filter(p => p.admin)
 const listAdmin = groupAdmins.map((v, i) => isLidGroup ? `${i + 1}. @${v.phoneNumber.split('@')[0]}` : `${i + 1}. @${v.id.split('@')[0]}`).join('\n')
 let pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => fs.readFileSync(join(media, 'pictures/sinFotoG.png')));
 const profilePicture = await Jimp.read(await (await fetch(pp)).buffer());
+let msg = args.join` `
+let oi = `*MENSAJE:* ${msg}`
 
 if (/^((@)?adm(ins)?)$/i.test(command)) {
 const lettersImage = await Jimp.read(fs.readFileSync(path.join(media, 'pictures/invAdmins.png')));
@@ -23,16 +25,14 @@ const img = path.join(temp, `${randomString(5)}.jpg`);
 await profilePicture.writeAsync(img);
 
 
-let msg = args.join` `
-let oi = `*MENSAJE:* ${msg}`
 let text = `*━「*INVOCANDO ADMINS*」━*\n\n${oi}\n\n*ADMINS:*\n${listAdmin}\n\n*[ ⚠ ️] USAR ESTE COMANDO SOLO CUANDO SE TRATE DE UNA EMERGENCIA!!*\n\n${info.nanipe}`.trim()
 return conn.sendImageWriting(m.chat, img, text, userdb, m );
 }
 if (/^ownergroup$/i.test(command)) {
-const owner = groupMetadata?.owner
+const owner = groupMetadata?.ownerPn && groupMetadata?.owner ? groupMetadata.owner.endsWith(lid) ? groupMetadata.ownerPn : groupMetadata.owner : false
 let text = '', ownertag
 if (owner) {
-const isOwnerGroup = groupAdmins.find(p => owner.endsWith(lid) ? owner === p.phoneNumber : owner === p.id)
+const isOwnerGroup = participants.find(p => isLidGroup ? owner === p.phoneNumber : owner === p.id)
 if (isOwnerGroup) {
 ownertag = owner.split('@')[0]
 if (isOwnerGroup.admin === 'superadmin') {
@@ -42,7 +42,7 @@ if (isOwnerGroup.admin === 'admin') {
 text = `*EL CREADOR DEL GRUPO* @${ownertag} esta presente, pero da lo mismo que hablar con otro admin ya que no es inmutable`
 }
 } else {
-text = `EL CREADOR DEL GRUPO esta ausente, pero el admin que ha hecho cambios al grupo @${(groupMetadata.subjectOwner.endsWith(lid) ? conn.lidToJid(groupMetadata.subjectOwner, m.chat) : groupMetadata.subjectOwner).split('@')[0]} u otro admin pueden ayudarte`
+text = `EL CREADOR DEL GRUPO esta ausente, pero el admin que ha hecho cambios al grupo @${(groupMetadata.subjectOwner.endsWith(lid) ? groupMetadata.subjectOwnerPn : groupMetadata.subjectOwner).split('@')[0]} u otro admin pueden ayudarte`
 }
 } else {
 text = `EL CREADOR DEL GRUPO *no existe*\n\nPide ayuda a cualquiera de los siguientes admins:\n${listAdmin}`

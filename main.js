@@ -17,14 +17,13 @@ const imagen1 = path.join(media,`pictures/Menu.png`)
 const imagen2 = path.join(media,`pictures/Menu2.jpg`)
 const stickerAMX = path.join(media,`stickers/ANIMXSCANS.webp`)
 export async function onBot(folderPath) {
-let { loadDatabase, registrerBot, configDinamics, groupFetchAllParticipatingJson } = await import('./lib/database.js')
 const { makeWASocket, protoType, serialize } = await import('./lib/simple.js');
-const {start, info} = (await configDinamics())
 protoType();
 serialize();
 const { timestamp } = await import('./lib/constants.js');
-const { proto } = (await import('@whiskeysockets/baileys')).default;
-const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, WAMessageKey, getHistoryMsg, isJidNewsletter } = await import('@whiskeysockets/baileys');
+const { proto, DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, WAMessageKey, getHistoryMsg, isJidNewsletter } = await import('@whiskeysockets/baileys');
+let { loadDatabase, registrerBot, groupFetchAllParticipatingJson, configDinamics } = await import('./lib/database.js')
+const {start, info} = (await configDinamics())
 
 const nameFolderBot = path.basename(folderPath)
 
@@ -73,7 +72,6 @@ keys: makeCacheableSignalKeyStore(state.keys, logger),
 },
 patchMessageBeforeSending,
 browser: start.usePairingCode ? ["Ubuntu", "Chrome", "20.0.04"] : ['ANI MX SCANS','Edge','1.0.0'],
-defaultQueryTimeoutMs: undefined,
 };
 const options = {
 storeFile,
@@ -86,6 +84,7 @@ folderPath,
 let conn = makeWASocket(connectionOptions, options)
 conn.isInit = false;
 conn.well = false;
+terminalQuestion(conn)
 if (!opts['test']) {
 if (db) {
 setInterval(async () => {
@@ -125,17 +124,21 @@ timestamp.connect = new Date;
 }
 if (start.qrTerminal && update.qr != 0 && update.qr != undefined) {
 console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
+const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
+conn.logger.error('El terminal de código QR no se agregó como dependencia');
+});
 QR === null || QR === void 0 ? void 0 : QR.generate(update.qr, { small: true });
 }
 if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {
 console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
 }
-console.log(chalk.red(`La conexión se esta estableciendo: ${connection}`));
+if (connection === undefined) return 
+console.log(chalk.red(`${sessionNameAni} La conexión se esta estableciendo: ${connection}`));
 if (connection == 'close') {
 if (code === loggedOut) {//401
 conn.logger.error(`[ ⚠  ${loggedOut} ] Conexion cerrada, por favor elimina la carpeta ${folderPath} y escanea nuevamente.`);
 cleanupOnConnectionError(folderPath, botDirRespald)
-} else if (code === 403) {//soportr
+} else if (code === 403) {//soport
 conn.logger.warn(`[ ⚠ ${code}] Razón de desconexión: revisión de whatsapp o soporte. ${code || ''}: ${connection || ''}`);
 cleanupOnConnectionError(folderPath, botDirRespald)
 global.reloadHandler(true).catch(console.error)
@@ -190,8 +193,6 @@ global.userBot = conn.user.jid
 if (db.data == null) await loadDatabase(db);
 console.log(chalk.yellow(`▣─────────────────────────────···\n│\n│❧ ${state.creds.me.hasOwnProperty('jid') ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} CONECTADO CORRECTAMENTE AL WHATSAPP ✅\n│✅Sesión: ${path.basename(folderPath)}\n│\n▣─────────────────────────────···`))
 if (update.receivedPendingNotifications) { 
-actualizarNumero() 
-waitTwoMinutes()
 return conn.groupAcceptInvite(info.ganisubbots.replace('https://chat.whatsapp.com/', ''));
 }
 const now = Date.now(); 

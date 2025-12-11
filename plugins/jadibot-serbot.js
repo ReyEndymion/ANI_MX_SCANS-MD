@@ -119,7 +119,6 @@ deleteSesionSB(botPath, botDirRespald)
 }
 continue
 } catch (error) {
-console.log('errorInicializacion: ', error.stack)
 const botRespPath = path.join(authFolderRespald, path.basename(botPath))
 const fileRespPathCreds = path.join(botRespPath, creds)
 const backUpOKData = await backupCredsStatus(botRespPath)
@@ -315,8 +314,7 @@ if (!m) return
 await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.connectionReplaced) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión remplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
-sock.ws.close()
-global.conns.splice(i, 1)
+await creloadHandler(true).catch(console.error)
 const resp = code + " remplazando conexión actual..."
 if (!m) return
 await conn.sendWritingText(m.chat, resp, userdb, m)

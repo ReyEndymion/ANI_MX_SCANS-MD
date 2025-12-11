@@ -36,8 +36,6 @@ if (cmd.test(body)) isCommand = true;
 if (cmd.some(entry => (entry instanceof RegExp ? entry.test(body) : entry === body))) isCommand = true;
 }
 }
-//userdb.lastCommandUsed === undefined ? userdb.lastCommandUsed = false : null, !plugin.command
-console.log('antispamani: ', isCommand , userdb.banned , !isROwner, body, userdb.lastCommandUsed, userdb.bannedMessageCount, timestamp)
 if ((chatdb.antispam||settings.antispam) && isCommand && userdb && userdb.lastCommandTime && (Date.now() - userdb.lastCommandTime) < 5000 && body === userdb.lastCommandUsed && !isROwner) {
 if (userdb.commandCount === 2) {
 const remainingTime = Math.ceil((userdb.lastCommandTime + 5000 - Date.now()) / 1000);

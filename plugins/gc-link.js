@@ -1,7 +1,7 @@
 /**
  * Comando unificado Para control del link
  */
-const { generateWAMessageFromContent } = (await import('@whiskeysockets/baileys')).default
+const { generateWAMessageFromContent } = await import('@whiskeysockets/baileys')
 import fetch from 'node-fetch'
 import path, { join } from 'path'
 import fs from 'fs'
@@ -17,7 +17,7 @@ var img = await (await fetch(pp)).buffer()
 var img = fs.readFileSync(join(media, 'pictures/sinFotoG.jpg'))
 }
 let prep = generateWAMessageFromContent(m.chat, { extendedTextMessage: { text: `*${link}*`, contextInfo: { externalAdReply: { 
-body: false, 
+body: null, 
 containsAutoReply: true, 
 mediaType: 1, 
 mediaUrl: link,
@@ -26,7 +26,7 @@ showAdAttribution: false,
 sourceId: name, 
 sourceUrl: link, 
 thumbnail: img, 
-thumbnailUrl: img, 
+thumbnailUrl: link, 
 title: name
 }}}}, {userJid: conn.user.jid, quoted: m, ephemeralExpiration: 24*60*100, disappearingMessagesInChat: 24*60*100 })
 await conn.writing(m.chat, link)

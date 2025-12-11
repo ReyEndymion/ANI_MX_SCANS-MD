@@ -40,7 +40,7 @@
 "@adiwajshing/keyed-db": "^0.2.4",
 "@sasmeee/igdl": "npm:@sasmeee/igdl",
 "@vitalets/google-translate-api": "^9.2.1",
-"@whiskeysockets/baileys": "^7.0.0-rc.6",
+"@whiskeysockets/baileys": "^7.0.0-rc.8",
 "acrcloud": "^1.4.0",
 "aptoide-scraper": "^1.0.1",
 "awesome-phonenumber": "^2.68.0",
