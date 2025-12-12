@@ -13,7 +13,6 @@ import NodeCache from "node-cache"
 import fs from "fs"
 import path, { join } from 'path';
 import pino from 'pino';
-const { Boom } = await import('@hapi/boom');
 import util from 'util' 
 let ws = await import('ws');
 import chalk from 'chalk';
@@ -192,7 +191,7 @@ const logger = pino({ level: `silent`})
 const inMstore = libstore.makeInMemoryStore({ logger })
 const storeFile = path.join(pathBotDBs, `${nameFolderBot}-${opts._[0] || 'data'}.store.json`)
 inMstore.readFromFile(storeFile)
-async function patchMessageBeforeSending(message) {
+function patchMessageBeforeSending(message) {
 const requiresPatch = !!( message.buttonsMessage || message.temlateMessage || message.listMessage );
 if (requiresPatch) { message = { viewOnceMessage: { message: { messageContextInfo: { deviceListMetadataVersion: 2, deviceListMetadata: {}, }, ...message, },},};}
 return message;
@@ -218,7 +217,10 @@ const connectionOptions = {
 version,
 printQRInTerminal: mcode ? false : true,
 logger: logger,
-auth: state,
+auth: {
+creds: state.creds,
+keys: makeCacheableSignalKeyStore(state.keys, logger),
+},
 browser: browser,
 msgRetry,
 syncFullHistory: false,
@@ -226,13 +228,14 @@ markOnlineOnConnect: false,
 receivedPendingNotifications: false,
 getMessage: async (key) => (inMstore.loadMessage(key.remoteJid, key.id) || libstore.loadMessage(key.id) || {}).message || null,
 cachedGroupMetadata: async (jid) => msgRetryCounterCache.get(jid),connectTimeoutMs: 60_000,
-defaultQueryTimeoutMs: 0,
 patchMessageBeforeSending,
 }
 const options = {
 storeFile,
 inMstore,
-libstore
+libstore,
+dbGroups,
+folderPath
 }
 let sock = makeWASocket(connectionOptions, options)
 sock.isInit = false
@@ -247,6 +250,7 @@ let lastQr, shouldSendLogin, errorCount = 0;
 
 async function connectionUpdate(update) {
 let qrcode = await import("qrcode")
+const { Boom } = await import('@hapi/boom');
 let i = global.conns.indexOf(sock)
 timestamp.connect = new Date
 const { connection, lastDisconnect, isNewLogin, qr } = update
@@ -314,7 +318,8 @@ if (!m) return
 await conn.sendWritingText(m.chat, resp, userdb, m)
 } else if (code === DisconnectReason.connectionReplaced) {
 sock.logger.warn(`[ ⚠ ] ${code} ${state.creds.me.jid ? state.creds.me.jid.split('@')[0] : state.creds.me.id.split(':')[0]} Conexión remplazada, se ha abierto otra nueva sesión. Por favor, cierra la sesión actual primero.`);
-await creloadHandler(true).catch(console.error)
+sock.ws.close()
+delete global.conns[i]
 const resp = code + " remplazando conexión actual..."
 if (!m) return
 await conn.sendWritingText(m.chat, resp, userdb, m)
