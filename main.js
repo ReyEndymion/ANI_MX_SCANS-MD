@@ -82,9 +82,10 @@ folderPath,
 }
 
 let conn = makeWASocket(connectionOptions, options)
+const userJid = state && state.creds && state.creds.me && state.creds.me.jid.split('@')[0]
 conn.isInit = false;
 conn.well = false;
-terminalQuestion(conn)
+if (!conn.user) await terminalQuestion(conn)
 if (!opts['test']) {
 if (db) {
 setInterval(async () => {
@@ -124,9 +125,6 @@ timestamp.connect = new Date;
 }
 if (start.qrTerminal && update.qr != 0 && update.qr != undefined) {
 console.log(chalk.yellow('🚩ㅤEscanea este codigo QR, el codigo QR expira en 60 segundos.'));
-const QR = await import('qrcode-terminal').then(m => m.default || m).catch(() => {
-conn.logger.error('El terminal de código QR no se agregó como dependencia');
-});
 QR === null || QR === void 0 ? void 0 : QR.generate(update.qr, { small: true });
 }
 if (conn?.ws?.readyState === CONNECTING || conn?.ws?.readyState === undefined) {

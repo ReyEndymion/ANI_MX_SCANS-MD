@@ -3,7 +3,7 @@ El codigo de este archivo esta totalmente hecho por:
 - ReyEndymion (https://github.com/ReyEndymion)
 */
 import fs from "fs"
-let handler = async (m, { conn, usedPrefix , db}, args, command, senderJid) => {
+let handler = async (m, { conn, info, usedPrefix , db}, args, command, senderJid) => {
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : senderJid || m.sender
 	let uniqid = `${who.split`@`[0]}`
 try {
