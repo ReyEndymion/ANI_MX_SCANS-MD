@@ -253,6 +253,10 @@ https://github.com/clhuang/heroku-buildpack-webp-binaries.git
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?skip_quickstart=true&machine=basicLinux32gb&repo=ReyEndymion/ANI_MX_SCANS-MD&ref=main&geo=UsEast)
 
 ----- 
+### 🌌 **ACTIVAR EN CODEANYWHERE**
+[![Open in Codeanywhere](https://codeanywhere.com/img/open-in-codeanywhere-btn.svg)](https://app.codeanywhere.com/#https://github.com/reyendymion/ani_mx_scans-md)
+
+----- 
 ### ⏏️ **ACTIVAR EN KOYEB**
 [![Deploy to Koyeb](https://binbashbanana.github.io/deploy-buttons/buttons/remade/koyeb.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/ReyEndymion/ANI_MX_SCANS-MD&branch=master&name=ANI_MX_SCANS-MD)
 
