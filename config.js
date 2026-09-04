@@ -1,27 +1,27 @@
-import { watchFile, unwatchFile } from 'fs'
-import chalk from 'chalk'
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath, pathToFileURL } from 'url'
-import moment from 'moment-timezone'
-import { platform } from 'process'
+import { watchFile, unwatchFile } from 'fs';
+import chalk from 'chalk';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
+import moment from 'moment-timezone';
+import { platform } from 'process';
 import { createRequire } from "module";
 import lodash from 'lodash';
-import { dirname, __filename } from './lib/functions.js'
-const raizPath = dirname(import.meta.url)
-const require = createRequire(raizPath)
-export const { name, nameProyect, author, description, repository } = require(path.join(raizPath, './package.json'))
+import { dirname, __filename } from './lib/functions.js';
+const raizPath = dirname(import.meta.url);
+const require = createRequire(raizPath);
+export const { name, nameProyect, author, description, repository } = require(path.join(raizPath, './package.json'));
 /***************GLOBAL CONFIG****************/
-export const raiz = `./`
-export const authFolderRespald = path.join(raizPath, `sesionRespaldo`)
-export const dataBases = path.join(raizPath, 'dataBases')
-export const temp = path.join(raizPath, 'tmp')
-export const media = path.join(raizPath, 'media')
+export const raiz = `./`;
+export const authFolderRespald = path.join(raizPath, `sesionRespaldo`);
+export const dataBases = path.join(raizPath, 'dataBases');
+export const temp = path.join(raizPath, 'tmp');
+export const media = path.join(raizPath, 'media');
 /**********OWNER***********************/
 export const owner = [
 ['5215517489568','𝓢𝓾𝓹𝓻𝓮𝓶𝓮 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👁️', false],
 ['5215533827255', '𝓡𝓮𝔂 𝓔𝓷𝓭𝔂𝓶𝓲𝓸𝓷 - Creador 👑', true]
-] // Cambia los numeros que quieras
+]; // Cambia los numeros que quieras
 /**********GLOBAL INFO*****************/
 export const info = {
 packname: '(☞ﾟ∀ﾟ)☞',

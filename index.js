@@ -16,9 +16,9 @@ const rl = createInterface({input: process.stdin, output: process.stdout})
 const mainStart = [{name: 'ANIMXSCANS', path: 'start.js', message: 'Proceso arrancando...'}]
 
 /**
- * Start a js file
- * @param {String} file `path/to/file`
- */
+* Start a js file
+* @param {String} file `path/to/file`
+*/
 const processes = new Map()
 
 function existsAndAlive(name) {
